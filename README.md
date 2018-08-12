@@ -1,3 +1,3 @@
 # chivingtoninc.github.io
 
-View my repos: https://github.com/chivingtoninc
+Check out my repos: https://github.com/chivingtoninc
