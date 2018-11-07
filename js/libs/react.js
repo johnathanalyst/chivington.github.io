@@ -8,3 +8,5 @@ function React() {
     }
   }
 }
+
+module.exports = { React }

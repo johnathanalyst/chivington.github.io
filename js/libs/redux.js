@@ -47,3 +47,4 @@ function Redux() {
     }
   }
 }
+ module.exports = { Redux }

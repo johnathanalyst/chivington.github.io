@@ -4,7 +4,7 @@ Menu = imports("Menu");
 Router = imports("Router");
 
 // define app component
-function App(props, dispatch, children) {
+function Shell(props, dispatch, children) {
   const styles = {
     app: `
       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;

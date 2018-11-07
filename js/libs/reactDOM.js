@@ -8,3 +8,5 @@ function ReactDOM() {
     }
   }
 }
+
+module.exports = { ReactDOM }

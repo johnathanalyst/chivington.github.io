@@ -3,7 +3,7 @@ function Menu(props, dispatch) {
     menuOpen: `
       position: absolute; top: 2.8em; left: 0; bottom: 0; width: 7em; padding: 0.25em 1em 0 0;
       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-      background-color: rgba(104,156,73,1); border-right: 1px solid #000; animation: menuOpen 0.25s 1;
+      background-color: rgba(20, 20, 60, 1); border-right: 1px solid #000; animation: menuOpen 0.25s 1;
     `,
     menuClosed: `
       display: none;
