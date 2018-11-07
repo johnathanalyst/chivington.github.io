@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <!-- Themes, icons, etc. -->
+  <head>
+    <meta charset="utf-8" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="./imgs/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./imgs/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./imgs/icons/favicon-32x32.png">
+    <link rel="mask-icon" href="./imgs/icons/safari-pinned-tab.svg" color="#006699">
+    <meta name="msapplication-TileColor" content="#006699">
+    <meta name="theme-color" content="#006699">
+    <title>AR Manual</title>
+  </head>
+
+  <!-- Styling -->
+  <style media="screen">
+    * { font-family: sans-serif; margin: 0; padding: 0; }
+    #AppNoJS {
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+      position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #ded;
+    }
+    #HeaderNoJS {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+      height: 2.75em; padding: 0 0 0 0.5em; border-bottom: 1px solid #000; background-color: #eee;
+    }
+    #IconNoJS {
+      height: 2em; width: 2em;
+    }
+    #TitleNoJS {
+      margin-left: 0.25em; color: #222; font-size: 1.5em;
+    }
+    #WellNoJS {
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      margin: 5em auto; padding: 2em 7em; border: 1px solid #047; border-radius: 7px; background-color: #ddd; text-align: center;
+    }
+    .loading {
+      width: 4em; height: 4em; margin: 0 0 1em 0; animation: float 1.5s infinite;
+    }
+    @keyframes float {
+      0% 100% { transform: translateY(0); }
+      50% { transform: translateY(-1em); }
+    }
+    @keyframes menuOpen {
+      0% { transform: translateX(-7em); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+
+  <!-- No Javascript Message -->
+  <body>
+    <div id="AppRoot">
+      <div id="AppNoJS">
+        <div id="HeaderNoJS">
+          <img id="IconNoJS" src="./favicon.ico" alt="chivingtoninc Icon">
+          <h1 id="TitleNoJS">chivingtoninc</h1>
+        </div>
+        <div id="WellNoJS">
+          <img class="loading" src="./favicon.ico" alt="chivingtoninc Icon">
+          <h3 style="margin: 0 0 0.5em 0;">Loading AR Manual</h3>
+          <p>If this takes more than 2-3 seconds, Javascript is likely disabled.<br/> You will need Javascript to use the AR Manual.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <!-- Utils -->
+  <script src="./js/utils/imports.js" charset="utf-8"></script>
+
+  <!-- Libs -->
+  <script src="./js/libs/react.js" charset="utf-8"></script>
+  <script src="./js/libs/reactDOM.js" charset="utf-8"></script>
+  <script src="./js/libs/redux.js" charset="utf-8"></script>
+
+  <!-- Reducers -->
+  <script src="./js/includes/reducers.js" charset="utf-8"></script>
+
+  <!-- Components -->
+  <script src="./js/components/Header.js" charset="utf-8"></script>
+  <script src="./js/components/Menu.js" charset="utf-8"></script>
+  <script src="./js/components/Router.js" charset="utf-8"></script>
+  <script src="./js/components/Procedure.js" charset="utf-8"></script>
+  <script src="./js/components/App.js" charset="utf-8"></script>
+
+  <!-- Views -->
+  <script src="./js/views/Home.js" charset="utf-8"></script>
+  <script src="./js/views/Sales.js" charset="utf-8"></script>
+
+  <!-- Main -->
+  <script src="./js/app.js" charset="utf-8"></script>
+</html>
