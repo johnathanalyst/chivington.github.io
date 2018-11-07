@@ -1,7 +1,7 @@
 // import components
-Header = imports("Header");
-Menu = imports("Menu");
-Router = imports("Router");
+Header = require("Header");
+Menu = require("Menu");
+Router = require("Router");
 
 // define app component
 function Shell(props, dispatch, children) {
