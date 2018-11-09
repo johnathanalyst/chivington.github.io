@@ -1,9 +1,9 @@
 // import libs
-// React = require("./libs/React.js");
+React = require("./libs/React.js");
 // ReactDOM = require("./libs/ReactDOM.js");
 // Redux = require("./libs/Redux.js");
 
-console.log("React: ");
+console.log("React: ", React);
 
 // // import app
 // Shell = require("./Shell.js");
