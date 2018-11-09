@@ -1,5 +1,5 @@
 // import libs
-// React = require("./libs/React.js");
+React = require("./libs/React.js");
 // ReactDOM = require("./libs/ReactDOM.js");
 // Redux = require("./libs/Redux.js");
 
