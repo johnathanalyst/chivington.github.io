@@ -117,6 +117,11 @@ Reducers = {
 
 // Header(null, store.dispatch), Menu({menuState}, store.dispatch), Router(null, store.dispatch)
 
+// Initialize Libs
+React = React();
+ReactDOM = ReactDOM();
+Redux = Redux();
+
 // combine reducers and create store
 const InitialState = Redux.combineReducers(Reducers);
 const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
