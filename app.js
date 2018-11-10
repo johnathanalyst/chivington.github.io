@@ -71,10 +71,6 @@ function Redux() {
   }
 }
 
-console.log("React: ", React);
-console.log("ReactDOM: ", ReactDOM);
-console.log("Redux: ", Redux);
-
 
 // App Components
 Components = {
@@ -97,8 +93,8 @@ Components = {
 Reducers = {
   viewState: function (state = "HOME", action) {
     const viewChoices = {
-      "CHANGE_VIEW": () => action.view,
-      "NAV_TO": () => action.view,
+      "CHANGE_VIEW": () => action.payload,
+      "NAV_TO": () => action.payload,
       "DEFAULT": () => state
     }
     return viewChoices[action.type] ? viewChoices[action.type]() : viewChoices["DEFAULT"]();
@@ -126,7 +122,7 @@ Redux = Redux();
 const InitialState = Redux.combineReducers(Reducers);
 const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
 
-console.log("ReduxStore: ", ReduxStore);
+ReduxStore.dispatch({type: "NAV_TO", payload: "HOME"})
 
 // // initial render
 // ReactDOM.render({
