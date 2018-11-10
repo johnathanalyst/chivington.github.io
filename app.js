@@ -111,28 +111,25 @@ Reducers = {
 }
 
 
-// Header(null, store.dispatch), Menu({menuState}, store.dispatch), Router(null, store.dispatch)
-
 // Initialize Libs
 React = React();
 ReactDOM = ReactDOM();
 Redux = Redux();
 
-// combine reducers and create store
+// Combine reducers & create store
 const InitialState = Redux.combineReducers(Reducers);
 const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
 
-ReduxStore.dispatch({type: "NAV_TO", payload: "HOME"})
 
-// // initial render
-// ReactDOM.render({
-//   elem: Components.Shell,
-//   props: {store: ReduxStore},
-//   dispatch: ReduxStore.dispatch,
-//   children: [null]
-// }, document.getElementById("AppRoot"));
-//
-// // subscribe render method
+// initial render
+ReactDOM.render({
+  elem: Components.Shell,
+  props: {store: ReduxStore},
+  dispatch: ReduxStore.dispatch,
+  children: [null]
+}, document.getElementById("AppRoot"));
+
+// subscribe render method
 // ReduxStore.subscribe({
 //   func: ReactDOM.render,
 //   params: [{
