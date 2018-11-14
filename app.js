@@ -177,6 +177,5 @@ ReduxStore.subscribe({
     children: [{func: Components.Header, params: [
       {store: ReduxStore}, ReduxStore.dispatch, [null]
     ]}]
-  },
-  document.getElementById("AppRoot");
-]});
+  }, document.getElementById("AppRoot")]
+});
