@@ -158,24 +158,24 @@ const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
 
 
 // Initial render
-ReactDOM.render({
-  elem: Components.Shell,
-  props: {store: ReduxStore},
-  dispatch: ReduxStore.dispatch,
-  children: [{func: Components.Header, params: [
-    {store: ReduxStore}, ReduxStore.dispatch, [null]
-  ]}]
-}, document.getElementById("AppRoot"));
-
-// Subscribe render method
-ReduxStore.subscribe({
-  func: ReactDOM.render,
-  params: [{
-    elem: Components.Shell,
-    props: {store: ReduxStore},
-    dispatch: ReduxStore.dispatch,
-    children: [{func: Components.Header, params: [
-      {store: ReduxStore}, ReduxStore.dispatch, [null]
-    ]}]
-  }, document.getElementById("AppRoot")]
-});
+// ReactDOM.render({
+//   elem: Components.Shell,
+//   props: {store: ReduxStore},
+//   dispatch: ReduxStore.dispatch,
+//   children: [{func: Components.Header, params: [
+//     {store: ReduxStore}, ReduxStore.dispatch, [null]
+//   ]}]
+// }, document.getElementById("AppRoot"));
+//
+// // Subscribe render method
+// ReduxStore.subscribe({
+//   func: ReactDOM.render,
+//   params: [{
+//     elem: Components.Shell,
+//     props: {store: ReduxStore},
+//     dispatch: ReduxStore.dispatch,
+//     children: [{func: Components.Header, params: [
+//       {store: ReduxStore}, ReduxStore.dispatch, [null]
+//     ]}]
+//   }, document.getElementById("AppRoot")]
+// });
