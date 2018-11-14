@@ -1,10 +1,10 @@
 // Libs
 function React() {
   return {
-    createElement: function(elem, props, children) {
+    createElement: function(elem, attrs, childNodes) {
       const element = document.createElement(elem);
-      if (props) Object.keys(props).forEach(k => element.setAttribute(k, props[k]));
-      if (children[0]) children.forEach(child => element.appendChild((typeof child == "string") ? document.createTextNode(child) : child));
+      if (attrs) Object.keys(attrs).forEach(k => element.setAttribute(k, attrs[k]));
+      if (childNodes[0]) childNodes.forEach(child => element.appendChild((typeof child == "string") ? document.createTextNode(child) : child));
       return element;
     }
   }
@@ -72,13 +72,19 @@ function Redux() {
 }
 
 
+// Initialize/import Libs
+React = React();
+ReactDOM = ReactDOM();
+Redux = Redux();
+
+
 // App Components
 Components = {
-  Shell: function (props, dispatch, children) {
+  Shell: function(props, dispatch, children) {
     const styles = {
       app: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #cdc;
+        position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
       `
     }
 
@@ -86,6 +92,30 @@ Components = {
     const menuState = store.getState().menuState;
 
     return React.createElement("div", {style: styles.app}, children);
+  },
+  Header: function(props, dispatch, children) {
+    const styles = {
+      header: `
+        position: absolute; top: 0; left: 0; right: 0;
+        display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+        height: 2.75em; padding: 0 0 0 0.5em; border-bottom: 1px solid #000; background-color: #eee;
+      `,
+      icon: `height: 2em; width: 2em;`,
+      title: `margin-left: 0.25em; color: #222; font-size: 1.5em;`
+    }
+
+    const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "c.ai Icon"}, [null]);
+    icon.addEventListener("click", function(e) {
+      dispatch({type: "TOGGLE_MENU"})
+    });
+
+    const title = React.createElement("h1", {style: styles.title}, ["c.ai"]);
+    title.addEventListener("click", function() {
+      dispatch({type: "CLOSE_MENU"});
+      dispatch({type: "NAV_TO", view: "HOME"})
+    });
+
+    return React.createElement("div", {style: styles.header}, [icon, title]);
   }
 }
 
@@ -107,36 +137,46 @@ Reducers = {
       "DEFAULT": () => state
     }
     return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
+  },
+  headerState: function (state = "VISIBLE", action) {
+    const menuChoices = {
+      "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
+      "SHOW_MENU": () => "VISIBLE",
+      "CLOSE_MENU": () => "HIDDEN",
+      "DEFAULT": () => state
+    }
+    return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   }
 }
 
-
-// Initialize Libs
-React = React();
-ReactDOM = ReactDOM();
-Redux = Redux();
 
 // Combine reducers & create store
 const InitialState = Redux.combineReducers(Reducers);
 const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
 
+// Initial render data
 
-// initial render
+
+// Initial render
 ReactDOM.render({
   elem: Components.Shell,
   props: {store: ReduxStore},
   dispatch: ReduxStore.dispatch,
-  children: [null]
+  children: [{func: Components.Header, params: [
+    {store: ReduxStore}, ReduxStore.dispatch, [null]
+  ]}]
 }, document.getElementById("AppRoot"));
 
-// subscribe render method
-// ReduxStore.subscribe({
-//   func: ReactDOM.render,
-//   params: [{
-//     elem: Components.Shell,
-//     props: {store: ReduxStore},
-//     dispatch: ReduxStore.dispatch,
-//     children: [null]
-//   },
-//   document.getElementById("AppRoot")
-// ]});
+// Subscribe render method
+ReduxStore.subscribe({
+  func: ReactDOM.render,
+  params: [{
+    elem: Components.Shell,
+    props: {store: ReduxStore},
+    dispatch: ReduxStore.dispatch,
+    children: [{func: Components.Header, params: [
+      {store: ReduxStore}, ReduxStore.dispatch, [null]
+    ]}]
+  },
+  document.getElementById("AppRoot");
+]});
