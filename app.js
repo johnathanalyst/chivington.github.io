@@ -9,7 +9,7 @@
  * -- UI & state "framework" objects/constructors                                   *
  * -------------------------------------------------------------------------------- */
 // React - for creating elements and diffing/maintaining vdom tree
-React = {
+const React = {
   createElement: function(elem, attrs, children) {
     const element = document.createElement(elem);
 
@@ -25,7 +25,7 @@ React = {
 }
 
 // ReactDOM - for rendering/updating dom based on vdom tree
-ReactDOM = {
+const ReactDOM = {
   render: function(component, root) {
     while (root.children[0]) root.removeChild(root.children[0]);
     root.appendChild(component.elem(component.props, component.dispatch, component.children));
@@ -33,7 +33,7 @@ ReactDOM = {
 }
 
 // Redux - for maintaining application state
-Redux = {
+const Redux = {
   createStore: function(stateReducer, middlewares) {
     var state = {}, listeners = [];
 
@@ -86,8 +86,20 @@ Redux = {
  * -- Components can be entire views, important/reused parts of views, or more      *
  *  abstract/hidden devices like Shell & Router.                                    *
  * -------------------------------------------------------------------------------- */
-Components = {
-  // Shell Component - contains the header, menu, and router.
+ const Views = {
+   Home: function(props, dispatch, children) {},
+   About: function(props, dispatch, children) {},
+   Projects: function(props, dispatch, children) {},
+   Cover: function(props, dispatch, children) {},
+   Resume: function(props, dispatch, children) {}
+ }
+
+/* ----------------------------------- Components --------------------------------- *
+ * -- Components can be entire views, important/reused parts of views, or more      *
+ *  abstract/hidden devices like Shell & Router.                                    *
+ * -------------------------------------------------------------------------------- */
+const Components = {
+  // Shell - contains the header, menu, and router.
   Shell: function(props, dispatch, children) {
     const styles = {
       shell: `
@@ -106,7 +118,7 @@ Components = {
       ...children
     ]);
   },
-  // Header Component - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
+  // Header - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
   Header: function(props, dispatch, children) {
     const styles = {
       header: `
@@ -132,7 +144,7 @@ Components = {
     const header = React.createElement("div", {style: styles.header}, [icon, title]);
     return header;
   },
-  // Menu Component - layered/collapsible full-route menu.
+  // Menu - layered/collapsible full-route menu.
   Menu: function(props, dispatch, children) {
     const styles = {
       menuOpen: `
@@ -168,10 +180,22 @@ Components = {
       dispatch({type: "NAV_TO", payload: "PROJECTS"});
     });
 
+    const cover = React.createElement("a", {style: styles.link}, ["Cover"]);
+    cover.addEventListener("click", function () {
+      dispatch({type: "CLOSE_MENU"});
+      dispatch({type: "NAV_TO", payload: "COVER"});
+    });
 
-    return React.createElement("div", {style: menuStyle}, [home, about, projects, ...children]);
+    const resume = React.createElement("a", {style: styles.link}, ["Resume"]);
+    resume.addEventListener("click", function () {
+      dispatch({type: "CLOSE_MENU"});
+      dispatch({type: "NAV_TO", payload: "RESUME"});
+    });
+
+
+    return React.createElement("div", {style: menuStyle}, [home, about, projects, cover, resume, ...children]);
   },
-  // Router Component - maintains view routes. (viewing, tabs, minimized...)
+  // Router - maintains view routes. (viewing, tabs, minimized...)
   Router: function(props, dispatch, children) {
     const styles = {
       router: `
@@ -192,6 +216,28 @@ Components = {
     });
 
     return router;
+  },
+  // View - contains, positions, maintains an entire view; i.e. the whole screen.
+  View: function(props, dispatch, children) {
+    const styles = {
+      view: `
+        position: absolute; top: 2.75em; left: 0; bottom: 0; right: 0;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        background-color: #07e;
+      `
+    }
+
+    const viewName = props.store.getState().viewState;
+
+    const view = React.createElement("div", {style: styles.view}, [
+      { elem: , props: props, dispatch: dispatch, children: ["View Child"] }
+    ]);
+
+    view.addEventListener("click", function(){
+      dispatch({type: "CLOSE_MENU"});
+    });
+
+    return view;
   }
 }
 
@@ -199,11 +245,10 @@ Components = {
 /* -------------------------------- State Reducers -------------------------------- *
  * -- Functions that reduce state into stucture/object based on several choices.    *
  * -------------------------------------------------------------------------------- */
-Reducers = {
+const Reducers = {
   // initializes/maintains view state
   viewState: function (state = "HOME", action) {
     const viewChoices = {
-      "CHANGE_VIEW": () => action.payload,
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
     }
