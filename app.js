@@ -150,7 +150,7 @@ const Components = {
       menuOpen: `
         position: absolute; top: 2.8em; left: 0; bottom: 0; width: 7em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-color: rgba(0, 55, 100, 1); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
+        background-color: rgba(0, 55, 125, 0.8); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
         display: none;
@@ -218,27 +218,27 @@ const Components = {
     return router;
   },
   // View - contains, positions, maintains an entire view; i.e. the whole screen.
-  View: function(props, dispatch, children) {
-    const styles = {
-      view: `
-        position: absolute; top: 2.75em; left: 0; bottom: 0; right: 0;
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        background-color: #07e;
-      `
-    }
-
-    const viewName = props.store.getState().viewState;
-
-    const view = React.createElement("div", {style: styles.view}, [
-      { elem: , props: props, dispatch: dispatch, children: ["View Child"] }
-    ]);
-
-    view.addEventListener("click", function(){
-      dispatch({type: "CLOSE_MENU"});
-    });
-
-    return view;
-  }
+  // View: function(props, dispatch, children) {
+  //   const styles = {
+  //     view: `
+  //       position: absolute; top: 2.75em; left: 0; bottom: 0; right: 0;
+  //       display: flex; flex-direction: column; justify-content: center; align-items: center;
+  //       background-color: #07e;
+  //     `
+  //   }
+  //
+  //   const viewName = props.store.getState().viewState;
+  //
+  //   const view = React.createElement("div", {style: styles.view}, [
+  //     { elem: , props: props, dispatch: dispatch, children: ["View Child"] }
+  //   ]);
+  //
+  //   view.addEventListener("click", function(){
+  //     dispatch({type: "CLOSE_MENU"});
+  //   });
+  //
+  //   return view;
+  // }
 }
 
 
