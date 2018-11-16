@@ -5,7 +5,9 @@
  * --------------------------------------------------------------------------------- */
 
 
-/* ------------------------------------- Libs ------------------------------------- */
+/* ------------------------------------- Libs ------------------------------------- *
+ * -- UI & state "framework" objects/constructors                                   *
+ * -------------------------------------------------------------------------------- */
 // React - for creating elements and diffing/maintaining vdom tree
 React = {
   createElement: function(elem, attrs, children) {
@@ -80,7 +82,10 @@ Redux = {
 }
 
 
-/* -------------------------------- App Components -------------------------------- */
+/* ----------------------------------- Components --------------------------------- *
+ * -- Components can be entire views, important/reused parts of views, or more      *
+ *  abstract/hidden devices like Shell & Router.                                    *
+ * -------------------------------------------------------------------------------- */
 Components = {
   // Shell Component - contains the header, menu, and router.
   Shell: function(props, dispatch, children) {
@@ -109,7 +114,7 @@ Components = {
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
         height: 2.75em; padding: 0 0 0 0.5em; border-bottom: 1px solid #000; background-color: #eee;
       `,
-      icon: `height: 2em; width: 2em;`,
+      icon: `height: 2em; width: 2em; cursor: pointer;`,
       title: `margin-left: 0.25em; color: #222; font-size: 1.5em;`
     }
 
@@ -125,10 +130,6 @@ Components = {
     });
 
     const header = React.createElement("div", {style: styles.header}, [icon, title]);
-    // header.addEventListener("click", function(){
-    //   dispatch({type: "CLOSE_MENU"});
-    // });
-
     return header;
   },
   // Menu Component - layered/collapsible full-route menu.
@@ -143,7 +144,7 @@ Components = {
         display: none;
       `,
       link: `
-        padding: 0.5em; border-bottom: 0.25px solid #222; color: #fff;
+        padding: 0.5em; border-bottom: 0.25px solid #222; color: #fff; cursor: pointer;
       `
     }
 
@@ -180,9 +181,10 @@ Components = {
       `
     }
 
-    const view = props.store.getState().viewState;
-    const stl = `color: #fff; font-family: sans-serif;`;
-    const msg = React.createElement("a", {style: stl, href:"https://github.com/chivingtoninc"}, ["https://github.com/chivingtoninc"]);
+    const view = props.store.getState().viewState.toLowerCase();
+    const stl = `color: #fff; font-family: sans-serif;`, url = "https://github.com/chivingtoninc";
+    const ln = `${url}${view == "projects" ? "?tab=repositories": ""}`;
+    const msg = React.createElement("a", {style: stl, href: ln}, [ln]);
 
     const router = React.createElement("div", {style: styles.router}, [view, msg]);
     router.addEventListener("click", function(){
@@ -194,9 +196,11 @@ Components = {
 }
 
 
-/* -------------------------------- State Reducers -------------------------------- */
+/* -------------------------------- State Reducers -------------------------------- *
+ * -- Functions that reduce state into stucture/object based on several choices.    *
+ * -------------------------------------------------------------------------------- */
 Reducers = {
-  // maintains view state
+  // initializes/maintains view state
   viewState: function (state = "HOME", action) {
     const viewChoices = {
       "CHANGE_VIEW": () => action.payload,
@@ -205,7 +209,7 @@ Reducers = {
     }
     return viewChoices[action.type] ? viewChoices[action.type]() : viewChoices["DEFAULT"]();
   },
-  // maintains menu state
+  // initializes/maintains menu state
   menuState: function (state = "CLOSED", action) {
     const menuChoices = {
       "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
@@ -215,7 +219,7 @@ Reducers = {
     }
     return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   },
-  // maintains header state
+  // initializes/maintains header state
   headerState: function (state = "VISIBLE", action) {
     const menuChoices = {
       "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
@@ -227,12 +231,22 @@ Reducers = {
   }
 }
 
-// -- Combine reducers & create store
+/* -- Combine reducers into one function & create store. Initializes state based
+  on default params or "DEFAULT" choices of reducer functions. */
 const InitialState = Redux.combineReducers(Reducers);
 const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
 
 
-/* ---------------------------------- Rendering ----------------------------------- */
+/* ---------------------------------- Rendering ----------------------------------- *
+ *  -- Render to the DOM once, passing in Redux Store. App renders based on state   *
+ * of the Redux Store. Then subscribe Render method to the Redux Store. Any change  *
+ * in the store state and the UI "React"s accordingly.                              *
+ * -------------------------------------------------------------------------------- */
+
+ /* -- Currently results in refresh of entire app. Soon to add app/ui state diffing
+   to only refresh a particular "branch/sub-branch of ui tree" based on corresponding
+   changes in the "app state tree" or subtree of. */
+
 // Initial render
 ReactDOM.render({
   elem: Components.Shell,
