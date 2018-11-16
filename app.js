@@ -206,9 +206,11 @@ const Components = {
     }
 
     const view = props.store.getState().viewState.toLowerCase();
-    const stl = `color: #fff; font-family: sans-serif;`, url = "https://github.com/chivingtoninc";
-    const ln = `${url}${view == "projects" ? "?tab=repositories": ""}`;
-    const msg = React.createElement("a", {style: stl, href: ln}, [ln]);
+    var stl = `color: #fff; font-family: sans-serif;`, url = "https://github.com/chivingtoninc";
+    if (view == "projects") url += "/?tab=repositories";
+    if (view == "cover") url += "/chivingtoninc.github.io/raw/master/j.Chivington.Cover.docx";
+    if (view == "resume") url += "/chivingtoninc.github.io/raw/master/j.Chivington.Resume.pdf";
+    const msg = React.createElement("a", {style: stl, href: url}, ["Click to View"]);
 
     const router = React.createElement("div", {style: styles.router}, [view, msg]);
     router.addEventListener("click", function(){
