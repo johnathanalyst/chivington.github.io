@@ -138,13 +138,13 @@ Components = {
       menuOpen: `
         position: absolute; top: 2.8em; left: 0; bottom: 0; width: 7em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-color: rgba(20, 20, 60, 1); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
+        background-color: rgba(0, 55, 100, 1); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
         display: none;
       `,
       link: `
-        padding: 0.5em; border-bottom: 0.25px solid #222; color: #fff; cursor: pointer;
+        padding: 0.5em; border-bottom: 0.5px solid #ddd; color: #fff; cursor: pointer;
       `
     }
 
