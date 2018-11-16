@@ -1,15 +1,24 @@
-// Libs
+/* --------------------------------------------------------------------------------- *
+ * Name: Johnathan Chivington                                                        *
+ * Project: GitHub Web App                                                           *
+ * Description: Single page GitHub app, modeled after Redux/React.                   *
+ * --------------------------------------------------------------------------------- */
+
+
+/* ------------------------------------- Libs ------------------------------------- */
+// React - for creating elements and diffing/maintaining vdom tree
 function React() {
   return {
     createElement: function(elem, attrs, childNodes) {
       const element = document.createElement(elem);
       if (attrs) Object.keys(attrs).forEach(k => element.setAttribute(k, attrs[k]));
-      if (childNodes[0]) childNodes.forEach(child => element.appendChild((typeof child == "string") ? document.createTextNode(child) : child));
+      if (childNodes[0]) childNodes.forEach(child => element.appendChild((typeof child == "string") ? document.createTextNode(child) : document.createTextNode("meh")));
       return element;
     }
   }
 }
 
+// ReactDOM - for rendering/updating dom based on vdom tree
 function ReactDOM() {
   return {
     render: function(component, root) {
@@ -21,6 +30,7 @@ function ReactDOM() {
   }
 }
 
+// Redux - for maintaining application state
 function Redux() {
   return {
     createStore: function(stateReducer, middlewares) {
@@ -71,18 +81,18 @@ function Redux() {
   }
 }
 
-
-// Initialize/import Libs
+// -- Initialize/import Libs
 React = React();
 ReactDOM = ReactDOM();
 Redux = Redux();
 
 
-// App Components
+/* -------------------------------- App Components -------------------------------- */
 Components = {
+  // Shell Component - contains the header, menu, and router.
   Shell: function(props, dispatch, children) {
     const styles = {
-      app: `
+      shell: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
       `
@@ -91,8 +101,9 @@ Components = {
     const store = props.store;
     const menuState = store.getState().menuState;
 
-    return React.createElement("div", {style: styles.app}, children);
+    return React.createElement("div", {style: styles.shell}, children);
   },
+  // Header Component - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
   Header: function(props, dispatch, children) {
     const styles = {
       header: `
@@ -116,11 +127,21 @@ Components = {
     });
 
     return React.createElement("div", {style: styles.header}, [icon, title]);
+  },
+  // Menu Component - layered/collapsible full-route menu.
+  Menu: function(props, dispatch, children) {
+    // Menu code here
+  },
+  // Router Component - maintains view routes. (viewing, tabs, minimized...)
+  Router: function(props, dispatch, children) {
+    // Router code here
   }
 }
 
-// State Reducers
+
+/* -------------------------------- State Reducers -------------------------------- */
 Reducers = {
+  // maintains view state
   viewState: function (state = "HOME", action) {
     const viewChoices = {
       "CHANGE_VIEW": () => action.payload,
@@ -129,6 +150,7 @@ Reducers = {
     }
     return viewChoices[action.type] ? viewChoices[action.type]() : viewChoices["DEFAULT"]();
   },
+  // maintains menu state
   menuState: function (state = "CLOSED", action) {
     const menuChoices = {
       "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
@@ -138,6 +160,7 @@ Reducers = {
     }
     return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   },
+  // maintains header state
   headerState: function (state = "VISIBLE", action) {
     const menuChoices = {
       "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
@@ -149,25 +172,23 @@ Reducers = {
   }
 }
 
-
-// Combine reducers & create store
+// -- Combine reducers & create store
 const InitialState = Redux.combineReducers(Reducers);
 const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
 
-// Initial render data
 
-
+/* ---------------------------------- Rendering ----------------------------------- */
 // Initial render
 ReactDOM.render({
   elem: Components.Shell,
   props: {store: ReduxStore},
   dispatch: ReduxStore.dispatch,
   children: [{func: Components.Header, params: [
-    {store: ReduxStore}, ReduxStore.dispatch, []
+    {store: ReduxStore}, ReduxStore.dispatch, null
   ]}]
 }, document.getElementById("AppRoot"));
 
-// // Subscribe render method
+// Subscribe render method to ReduxStore
 // ReduxStore.subscribe({
 //   func: ReactDOM.render,
 //   params: [{
