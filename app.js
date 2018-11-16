@@ -163,7 +163,7 @@ ReactDOM.render({
   props: {store: ReduxStore},
   dispatch: ReduxStore.dispatch,
   children: [{func: Components.Header, params: [
-    {store: ReduxStore}, ReduxStore.dispatch, [null]
+    {store: ReduxStore}, ReduxStore.dispatch, []
   ]}]
 }, document.getElementById("AppRoot"));
 
