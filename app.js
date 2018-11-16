@@ -9,10 +9,16 @@
 // React - for creating elements and diffing/maintaining vdom tree
 function React() {
   return {
-    createElement: function(elem, attrs, childNodes) {
+    createElement: function(elem, attrs, children) {
       const element = document.createElement(elem);
+
       if (attrs) Object.keys(attrs).forEach(k => element.setAttribute(k, attrs[k]));
-      if (childNodes[0]) childNodes.forEach(child => element.appendChild((typeof child == "string") ? document.createTextNode(child) : document.createTextNode("meh")));
+
+      if (children.length >= 1) children.forEach(child => element.appendChild((typeof child == "string")
+        ? document.createTextNode(child)
+        : (child.elem) ? child.elem(child.props, child.dispatch, child.children) : child
+      ));
+
       return element;
     }
   }
@@ -22,10 +28,8 @@ function React() {
 function ReactDOM() {
   return {
     render: function(component, root) {
-      while (root.children[0])
-        root.removeChild(root.children[0]);
-
-      root.appendChild(component.elem(component.props, component.dispatch, component.children), root);
+      while (root.children[0]) root.removeChild(root.children[0]);
+      root.appendChild(component.elem(component.props, component.dispatch, component.children));
     }
   }
 }
@@ -101,7 +105,10 @@ Components = {
     const store = props.store;
     const menuState = store.getState().menuState;
 
-    return React.createElement("div", {style: styles.shell}, children);
+    return React.createElement("div", {style: styles.shell}, [
+      { elem: Components.Header, props: { store }, dispatch: dispatch, children: [] },
+      ...children
+    ]);
   },
   // Header Component - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
   Header: function(props, dispatch, children) {
@@ -115,7 +122,7 @@ Components = {
       title: `margin-left: 0.25em; color: #222; font-size: 1.5em;`
     }
 
-    const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "c.ai Icon"}, [null]);
+    const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "c.ai Icon"}, []);
     icon.addEventListener("click", function(e) {
       dispatch({type: "TOGGLE_MENU"})
     });
@@ -183,9 +190,7 @@ ReactDOM.render({
   elem: Components.Shell,
   props: {store: ReduxStore},
   dispatch: ReduxStore.dispatch,
-  children: [{func: Components.Header, params: [
-    {store: ReduxStore}, ReduxStore.dispatch, null
-  ]}]
+  children: []
 }, document.getElementById("AppRoot"));
 
 // Subscribe render method to ReduxStore
