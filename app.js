@@ -345,10 +345,10 @@ const Components = {
       header: `
         position: absolute; top: 0; left: 0; right: 0; z-index: 10;
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: #eee;
+        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: rgba(225,225,255,0.7);
       `,
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
-      title: `margin-left: 0.25em; color: #222; font-size: 2.15em; cursor: pointer;`,
+      title: `margin-left: 0.25em; color: #333; font-size: 2.15em; cursor: pointer;`,
       superScript: `font-size: 0.3em; margin-left: 1px;`
     }
 
@@ -375,7 +375,7 @@ const Components = {
       menuOpen: `
         position: absolute; top: 4em; left: 0; bottom: 0; width: 7em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-color: rgba(0, 55, 125, 0.8); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
+        background-color: rgba(225,225,255,0.2); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
         display: none;
@@ -424,7 +424,7 @@ const Components = {
   Router: function(props, dispatch, children) {
     const styles = {
       router: `
-        position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+        position: absolute; top: -4em; left: 0; bottom: 0; right: 0;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: #07e;
       `
