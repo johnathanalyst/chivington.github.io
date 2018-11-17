@@ -514,7 +514,7 @@ const Reducers = {
     return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "COVER", action) {
+  viewState: function (state = "HOME", action) {
     const viewChoices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
