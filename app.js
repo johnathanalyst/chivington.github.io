@@ -82,28 +82,249 @@ const Redux = {
 }
 
 
-/* ----------------------------------- Components --------------------------------- *
- * -- Components can be entire views, important/reused parts of views, or more      *
- *  abstract/hidden devices like Shell & Router.                                    *
+/* ------------------------------------- Views ------------------------------------ *
+ * -- Views are a type of Component that group several individual Components into   *
+ *  one device-screen-sized object to render.                                       *
  * -------------------------------------------------------------------------------- */
  const Views = {
-   Home: function(props, dispatch, children) {},
-   About: function(props, dispatch, children) {},
-   Projects: function(props, dispatch, children) {},
-   Cover: function(props, dispatch, children) {},
-   Resume: function(props, dispatch, children) {}
+   Home: function(props, dispatch, children) {
+     // HomeView Styles
+     const styles = {
+       view: `
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+       `,
+       wp: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
+       `,
+       filter: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
+         display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+         background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+       `,
+       link: `
+        color: #fff; font-family: sans-serif; cursor: pointer; text-decoration: underline;
+       `
+     }
+
+     // HomeView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- Create a wallpaper (img element) for the view
+     const wpName = store.getState().wallpaperState.name;
+     const wpRoute = store.getState().wallpaperState.route;
+     const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
+     // addEventListener
+
+     //  -- Create contents (link element) to place in the view/filter
+     const link = React.createElement("a", {style: styles.link, href: "https://github.com/chivingtoninc/chivingtoninc.github.io"}, ["chivingtoninc.github.io repo"]);
+     // addEventListener
+
+     // -- Create wallpaper filter
+     const filter = React.createElement("div", {style: styles.filter}, [link]);
+
+     // -- Create view element, passing children
+     const HomeView = React.createElement("div", {style: styles.view}, [wp, filter]);
+     HomeView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return HomeView;
+   },
+   About: function(props, dispatch, children) {
+     // AboutView Styles
+     const styles = {
+       view: `
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+       `,
+       wp: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
+       `,
+       filter: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
+         display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+         background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+       `,
+       p: `
+        color: #fff; font-family: sans-serif; cursor: pointer;
+       `
+     }
+
+     // AboutView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- Create a wallpaper (img element) for the view
+     const wpName = store.getState().wallpaperState.name;
+     const wpRoute = store.getState().wallpaperState.route;
+     const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
+     // addEventListener
+
+     //  -- Create contents (p element) to place in the view/filter
+     const p = React.createElement("p", {style: styles.p}, [viewName]);
+     // addEventListener
+
+     // -- Create wallpaper filter
+     const filter = React.createElement("div", {style: styles.filter}, [p]);
+
+     // -- Create view element, passing children
+     const AboutView = React.createElement("div", {style: styles.view}, [wp, filter]);
+     AboutView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return AboutView;
+   },
+   Projects: function(props, dispatch, children) {
+     // ProjectsView Styles
+     const styles = {
+       view: `
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+       `,
+       wp: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
+       `,
+       filter: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
+         display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+         background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+       `,
+       p: `
+        color: #fff; font-family: sans-serif; cursor: pointer;
+       `
+     }
+
+     // ProjectsView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- Create a wallpaper (img element) for the view
+     const wpName = store.getState().wallpaperState.name;
+     const wpRoute = store.getState().wallpaperState.route;
+     const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
+     // addEventListener
+
+     //  -- Create contents (p element) to place in the view/filter
+     const p = React.createElement("p", {style: styles.p}, [viewName]);
+     // addEventListener
+
+     // -- Create wallpaper filter
+     const filter = React.createElement("div", {style: styles.filter}, [p]);
+
+     // -- Create view element, passing children
+     const ProjectsView = React.createElement("div", {style: styles.view}, [wp, filter]);
+     ProjectsView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return ProjectsView;
+   },
+   Cover: function(props, dispatch, children) {
+     // CoverView Styles
+     const styles = {
+       view: `
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+       `,
+       wp: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
+       `,
+       filter: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
+         display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+         background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+       `,
+       p: `
+        color: #fff; font-family: sans-serif; cursor: pointer;
+       `
+     }
+
+     // CoverView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- Create a wallpaper (img element) for the view
+     const wpName = store.getState().wallpaperState.name;
+     const wpRoute = store.getState().wallpaperState.route;
+     const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
+     // addEventListener
+
+     //  -- Create contents (p element) to place in the view/filter
+     const p = React.createElement("p", {style: styles.p}, [viewName]);
+     // addEventListener
+
+     // -- Create wallpaper filter
+     const filter = React.createElement("div", {style: styles.filter}, [p]);
+
+     // -- Create view element, passing children
+     const CoverView = React.createElement("div", {style: styles.view}, [wp, filter]);
+     CoverView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return CoverView;
+   },
+   Resume: function(props, dispatch, children) {
+     // ResumeView Styles
+     const styles = {
+       view: `
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+       `,
+       wp: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
+       `,
+       filter: `
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
+         display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+         background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+       `,
+       p: `
+        color: #fff; font-family: sans-serif; cursor: pointer;
+       `
+     }
+
+     // ResumeView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- Create a wallpaper (img element) for the view
+     const wpName = store.getState().wallpaperState.name;
+     const wpRoute = store.getState().wallpaperState.route;
+     const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
+     // addEventListener
+
+     //  -- Create contents (p element) to place in the view/filter
+     const p = React.createElement("p", {style: styles.p}, [viewName]);
+     // addEventListener
+
+     // -- Create wallpaper filter
+     const filter = React.createElement("div", {style: styles.filter}, [p]);
+
+     // -- Create view element, passing children
+     const ResumeView = React.createElement("div", {style: styles.view}, [wp, filter]);
+     ResumeView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return ResumeView;
+   }
  }
 
 /* ----------------------------------- Components --------------------------------- *
  * -- Components can be entire views, important/reused parts of views, or more      *
- *  abstract/hidden devices like Shell & Router.                                    *
+ *  abstract/hidden devices like Shell & Router that contain multiple views or      *
+ *  more complex infrastructure.                                                    *
  * -------------------------------------------------------------------------------- */
 const Components = {
   // Shell - contains the header, menu, and router.
   Shell: function(props, dispatch, children) {
     const styles = {
       shell: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
         position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
       `
     }
@@ -122,20 +343,24 @@ const Components = {
   Header: function(props, dispatch, children) {
     const styles = {
       header: `
-        position: absolute; top: 0; left: 0; right: 0;
+        position: absolute; top: 0; left: 0; right: 0; z-index: 10;
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-        height: 2.75em; padding: 0 0 0 0.5em; border-bottom: 1px solid #000; background-color: #eee;
+        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: #eee;
       `,
-      icon: `height: 2em; width: 2em; cursor: pointer;`,
-      title: `margin-left: 0.25em; color: #222; font-size: 1.5em;`
+      icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
+      title: `margin-left: 0.25em; color: #222; font-size: 2.15em; cursor: pointer;`,
+      superScript: `font-size: 0.3em; margin-left: 1px;`
     }
 
-    const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "c.ai Icon"}, []);
+    const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "chivingtoninc Icon"}, []);
     icon.addEventListener("click", function(e) {
       dispatch({type: "TOGGLE_MENU"})
     });
 
-    const title = React.createElement("h1", {style: styles.title}, ["c.ai"]);
+    const view = props.store.getState().viewState.toLowerCase();
+    const superScript = React.createElement("sup", {style: styles.superScript}, [view])
+
+    const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript ]);
     title.addEventListener("click", function() {
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "HOME"})
@@ -148,7 +373,7 @@ const Components = {
   Menu: function(props, dispatch, children) {
     const styles = {
       menuOpen: `
-        position: absolute; top: 2.8em; left: 0; bottom: 0; width: 7em; padding: 0.25em 1em 0 0; z-index: 10;
+        position: absolute; top: 4em; left: 0; bottom: 0; width: 7em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         background-color: rgba(0, 55, 125, 0.8); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
       `,
@@ -199,20 +424,25 @@ const Components = {
   Router: function(props, dispatch, children) {
     const styles = {
       router: `
-        position: absolute; top: 2.75em; left: 0; bottom: 0; right: 0;
+        position: absolute; top: 0; left: 0; bottom: 0; right: 0;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: #07e;
       `
     }
 
-    const view = props.store.getState().viewState.toLowerCase();
-    var stl = `color: #fff; font-family: sans-serif;`, url = "https://github.com/chivingtoninc";
-    if (view == "projects") url += "/?tab=repositories";
-    if (view == "cover") url += "/chivingtoninc.github.io/raw/master/includes/j.Chivington.Cover.docx";
-    if (view == "resume") url += "/chivingtoninc.github.io/raw/master/includes/j.Chivington.Resume.docx";
-    const msg = React.createElement("a", {style: stl, href: url}, ["Click to View"]);
+    const views = {
+      "HOME": Views.Home,
+      "ABOUT": Views.About,
+      "PROJECTS": Views.Projects,
+      "COVER": Views.Cover,
+      "RESUME": Views.Resume,
+      "DEFAULT": Views.Home
+    }
 
-    const router = React.createElement("div", {style: styles.router}, [view, msg]);
+    const name = props.store.getState().viewState;
+    const view = views[name] ? views[name](props, dispatch, children) : views["DEFAULT"](props, dispatch, children);
+
+    const router = React.createElement("div", {style: styles.router}, [view]);
     router.addEventListener("click", function(){
       dispatch({type: "CLOSE_MENU"});
     });
@@ -220,27 +450,6 @@ const Components = {
     return router;
   },
   // View - contains, positions, maintains an entire view; i.e. the whole screen.
-  // View: function(props, dispatch, children) {
-  //   const styles = {
-  //     view: `
-  //       position: absolute; top: 2.75em; left: 0; bottom: 0; right: 0;
-  //       display: flex; flex-direction: column; justify-content: center; align-items: center;
-  //       background-color: #07e;
-  //     `
-  //   }
-  //
-  //   const viewName = props.store.getState().viewState;
-  //
-  //   const view = React.createElement("div", {style: styles.view}, [
-  //     { elem: , props: props, dispatch: dispatch, children: ["View Child"] }
-  //   ]);
-  //
-  //   view.addEventListener("click", function(){
-  //     dispatch({type: "CLOSE_MENU"});
-  //   });
-  //
-  //   return view;
-  // }
 }
 
 
@@ -248,13 +457,15 @@ const Components = {
  * -- Functions that reduce state into stucture/object based on several choices.    *
  * -------------------------------------------------------------------------------- */
 const Reducers = {
-  // initializes/maintains view state
-  viewState: function (state = "HOME", action) {
-    const viewChoices = {
-      "NAV_TO": () => action.payload,
+  // initializes/maintains header state
+  headerState: function (state = "VISIBLE", action) {
+    const menuChoices = {
+      "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
+      "SHOW_MENU": () => "VISIBLE",
+      "CLOSE_MENU": () => "HIDDEN",
       "DEFAULT": () => state
     }
-    return viewChoices[action.type] ? viewChoices[action.type]() : viewChoices["DEFAULT"]();
+    return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   },
   // initializes/maintains menu state
   menuState: function (state = "CLOSED", action) {
@@ -266,15 +477,21 @@ const Reducers = {
     }
     return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   },
-  // initializes/maintains header state
-  headerState: function (state = "VISIBLE", action) {
-    const menuChoices = {
-      "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
-      "SHOW_MENU": () => "VISIBLE",
-      "CLOSE_MENU": () => "HIDDEN",
+  // initializes/maintains view state
+  viewState: function (state = "HOME", action) {
+    const viewChoices = {
+      "NAV_TO": () => action.payload,
       "DEFAULT": () => state
     }
-    return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
+    return viewChoices[action.type] ? viewChoices[action.type]() : viewChoices["DEFAULT"]();
+  },
+  // initializes/maintains wallpaper state
+  wallpaperState: function (state = {name: "fragmented", route: "./imgs/wp/fragmented.jpg"}, action) {
+    const wpChoices = {
+      "CHANGE_WP": () => action.payload,
+      "DEFAULT": () => state
+    }
+    return wpChoices[action.type] ? wpChoices[action.type]() : wpChoices["DEFAULT"]();
   }
 }
 

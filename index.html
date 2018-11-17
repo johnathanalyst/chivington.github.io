@@ -7,38 +7,43 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/imgs/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/imgs/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/imgs/icons/favicon-16x16.png">
-    <link rel="mask-icon" href="/imgs/icons/safari-pinned-tab.svg" color="#0077ee">
-    <meta name="msapplication-TileColor" content="#222244">
-    <meta name="theme-color" content="#222244">
+    <link rel="mask-icon" href="/imgs/icons/safari-pinned-tab.svg" color="#07e">
+    <meta name="msapplication-TileColor" content="#224">
+    <meta name="theme-color" content="#224">
     <title>c.ai</title>
   </head>
 
   <style media="screen">
-    * { font-family: sans-serif; margin: 0; padding: 0; }
-    #AppNoJS {
-      display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+    * { font-family: sans-serif; margin: 0; padding: 0; text-decoration: none; }
+    #AppNoJs {
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
       position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
     }
-    #HeaderNoJS {
-      position: absolute; top: 0; left: 0; right: 0;
+    #HeaderNoJs {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 10;
       display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-      height: 2.75em; padding: 0 0 0 0.5em; border-bottom: 1px solid #000; background-color: #eee;
+      height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: #eee;
     }
-    #IconNoJS {
-      height: 2em; width: 2em;
+    #IconNoJs {
+      height: 2.25em; width: 2.25em;
     }
-    #TitleNoJS {
-      margin-left: 0.25em; color: #222; font-size: 1.5em;
+    #TitleNoJs {
+      margin-left: 0.25em; color: #222; font-size: 2.15em;
+    }
+    #ViewNoJs {
+      position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
     }
     #WpNoJs {
-      position: absolute; top: 2.75em; left: 0; right: 0; bottom: 0;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
     }
-    #WellNoJS {
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      margin: 5em auto; padding: 2em 7em; border: 1px solid #024; border-radius: 7px; background-color: rgba(100,100,100,0.2); text-align: center;
+    #FilterNoJs {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+      background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
     }
     .loading {
-      width: 4em; height: 4em; margin: 0 0 1em 0; animation: float 1.5s infinite;
+      width: 17em; height: 17em; margin: -10em 0 1em 0; animation: float 5.5s infinite;
     }
     @keyframes float {
       0% 100% { transform: translateY(0); }
@@ -52,25 +57,29 @@
 
   <body>
     <div id="AppRoot">
-      <div id="AppNoJS">
-        <div id="HeaderNoJS">
-          <img id="IconNoJS" src="./favicon.ico" alt="c.ai Icon">
-          <h1 id="TitleNoJS">c.ai</h1>
+      <div id="AppNoJs">
+        <div id="HeaderNoJs">
+          <img id="IconNoJs" src="./favicon.ico" alt="c.ai Icon">
+          <h1 id="TitleNoJs">chivingtoninc<sup style="font-size: 0.3em; margin-left: 1px;">work</sup></h1>
         </div>
 
-        <img id="WpNoJs" src="./imgs/wp/geoSphere-lg.png" alt="c.ai Wallpaper">
+        <div id="ViewNoJs">
+          <img id="WpNoJs" src="./imgs/wp/fragmented.jpg" alt="c.ai Wallpaper">
 
-        <div id="WellNoJS">
-          <img class="loading" src="./favicon.ico" alt="c.ai Icon">
-          <h3 style="margin: 0 0 0.5em 0;">c.ai</h3>
-          <p>Back soon...</p>
-          <a src="https://github.com/chivingtoninc/chivingtoninc.github.io">chivingtoninc.github.io</a>
-          <!-- <p>If this takes more than 2-3 seconds, Javascript is likely disabled.<br/> You will need Javascript to use <b>c.ai</b>.</p> -->
+          <div id="FilterNoJs">
+            <img class="loading" src="./imgs/icons/safari-pinned-tab.svg" alt="c.ai Icon">
+            <a src="https://github.com/chivingtoninc/chivingtoninc.github.io" style="cursor: pointer;text-decoration: underline;">
+              chivingtoninc.github.io repo
+            </a>
+            <p style="margin: 0.75em; font-size: 0.8em; font-style: italic;">
+              If this takes more than 1-2 seconds to load, Javascript is likely disabled. <br/> You will need Javascript to use this app.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </body>
 
   <script src="./app.js" charset="utf-8"></script>
-  <script src="./js/math/lines.js" charset="utf-8"></script>
+  <!-- <script src="./js/math/lines.js" charset="utf-8"></script> -->
 </html>
