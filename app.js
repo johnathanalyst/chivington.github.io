@@ -115,11 +115,11 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListener
+     // addEventListeners
 
      //  -- Create contents (link element) to place in the view/filter
      const link = React.createElement("a", {style: styles.link, href: "https://github.com/chivingtoninc/chivingtoninc.github.io"}, ["chivingtoninc.github.io repo"]);
-     // addEventListener
+     // addEventListeners
 
      // -- Create wallpaper filter
      const filter = React.createElement("div", {style: styles.filter}, [link]);
@@ -160,11 +160,11 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListener
+     // addEventListeners
 
      //  -- Create contents (p element) to place in the view/filter
      const p = React.createElement("p", {style: styles.p}, [viewName]);
-     // addEventListener
+     // addEventListeners
 
      // -- Create wallpaper filter
      const filter = React.createElement("div", {style: styles.filter}, [p]);
@@ -205,11 +205,11 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListener
+     // addEventListeners
 
      //  -- Create contents (p element) to place in the view/filter
      const p = React.createElement("p", {style: styles.p}, [viewName]);
-     // addEventListener
+     // addEventListeners
 
      // -- Create wallpaper filter
      const filter = React.createElement("div", {style: styles.filter}, [p]);
@@ -233,12 +233,21 @@ const Redux = {
          position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
        `,
        filter: `
-         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
-         display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 5;
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5;
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
+       cover: `
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5;
+         margin: 2em 4em 1em; padding: 1em 2em;
+         background-color: rgba(100,100,100,0.9); text-align: center; color: #fff;
+         border: 1px solid #000; border-radius: 5px;
+       `,
        p: `
-        color: #fff; font-family: sans-serif; cursor: pointer;
+         padding: 1em; background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+       `,
+       download: `
+         color: #fff; font-family: sans-serif; cursor: pointer;
        `
      }
 
@@ -250,14 +259,40 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListener
+     // addEventListeners
 
-     //  -- Create contents (p element) to place in the view/filter
-     const p = React.createElement("p", {style: styles.p}, [viewName]);
-     // addEventListener
+     //  -- Create cover letter
+     const cover = React.createElement("div", {style: styles.cover},[
+       React.createElement("p", {style: styles.p}, [
+         `I am seeking entry-level Deep Learning roles, internships, or co-ops. I am a strong software engineer, proficient in object-oriented C, algorithmic design, parallel computing with CUDA, rapid prototyping, and Recurrent/Convolutional Neural Network architectures for NLP & CV.`
+       ]),
+       React.createElement("p", {style: styles.p}, [
+         `I am a Computer Science student at Bellevue College and have recently completed and received certification for Andrew Ng's Stanford Machine Learning course on Coursera. I have also completed four of five of deeplearning.AI’s Deep Learning Specialization on Coursera. These great courses have given me valuable skills, which are enabling me to build useful Deep Learning projects.`
+       ]),
+       React.createElement("p", {style: styles.p}, [
+         `I am focused on creating efficient AI applications, platforms and tools for CV, NLP, and SLAM on embedded & cloud-based systems for applications in automated manufacturing, intelligent robotics, and other areas. AI is revolutionizing many industries and I am learning to leverage it’s capabilities for enhancing daily life. My primary career field interests are in automated manufacturing, food production and sustainable technologies, and/or transportation.`
+       ]),
+       React.createElement("p", {style: styles.p}, [
+         `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`
+       ]),
+       React.createElement("p", {style: styles.p}, [
+         `Thank you for your time and consideration. I look forward to hearing from you.`
+       ]),
+       React.createElement("p", {style: styles.p}, [
+         `Sincerely,`
+       ]),
+       React.createElement("p", {style: styles.p}, [
+         `Johnathan Chivington`
+       ])
+     ]);
+     // addEventListeners
+
+     //  -- Create cover.docx download link
+     const download = React.createElement("a", {style: styles.download, href: "./includes/j.Chivington.Cover.docx", download: ""}, ["Download Cover Letter (.docx)"]);
+     // addEventListeners
 
      // -- Create wallpaper filter
-     const filter = React.createElement("div", {style: styles.filter}, [p]);
+     const filter = React.createElement("div", {style: styles.filter}, [cover, download]);
 
      // -- Create view element, passing children
      const CoverView = React.createElement("div", {style: styles.view}, [wp, filter]);
@@ -282,7 +317,7 @@ const Redux = {
          display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
-       p: `
+       link: `
         color: #fff; font-family: sans-serif; cursor: pointer;
        `
      }
@@ -295,14 +330,14 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListener
+     // addEventListeners
 
-     //  -- Create contents (p element) to place in the view/filter
-     const p = React.createElement("p", {style: styles.p}, [viewName]);
-     // addEventListener
+     //  -- Create contents (a element) to place in the view/filter
+     const link = React.createElement("a", {style: styles.link, href: "./includes/j.Chivington.Resume.docx", download: ""}, ["Download Resume (.docx)"]);
+     // addEventListeners
 
      // -- Create wallpaper filter
-     const filter = React.createElement("div", {style: styles.filter}, [p]);
+     const filter = React.createElement("div", {style: styles.filter}, [link]);
 
      // -- Create view element, passing children
      const ResumeView = React.createElement("div", {style: styles.view}, [wp, filter]);
@@ -313,6 +348,7 @@ const Redux = {
      return ResumeView;
    }
  }
+
 
 /* ----------------------------------- Components --------------------------------- *
  * -- Components can be entire views, important/reused parts of views, or more      *
@@ -478,7 +514,7 @@ const Reducers = {
     return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "HOME", action) {
+  viewState: function (state = "COVER", action) {
     const viewChoices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
