@@ -5,9 +5,9 @@
  * --------------------------------------------------------------------------------- */
 
 
-/* ------------------------------------- Libs ------------------------------------- *
- * -- UI & state "framework" objects/constructors                                   *
- * -------------------------------------------------------------------------------- */
+/* ------------------------------------- Libs -------------------------------------- *
+ * -- UI & state "framework" objects/constructors                                    *
+ * --------------------------------------------------------------------------------- */
 // React - for creating elements and diffing/maintaining vdom tree
 const React = {
   createElement: function(elem, attrs, children) {
@@ -16,8 +16,7 @@ const React = {
     if (attrs) Object.keys(attrs).forEach(k => element.setAttribute(k, attrs[k]));
 
     if (children.length >= 1) children.forEach(child => element.appendChild((typeof child == "string")
-      ? document.createTextNode(child)
-      : (child.elem) ? child.elem(child.props, child.dispatch, child.children) : child
+      ? document.createTextNode(child) : (child.elem) ? child.elem(child.props, child.dispatch, child.children) : child
     ));
 
     return element;
@@ -87,6 +86,7 @@ const Redux = {
  *  one device-screen-sized object to render.                                       *
  * -------------------------------------------------------------------------------- */
  const Views = {
+   // Home View - description.
    Home: function(props, dispatch, children) {
      // HomeView Styles
      const styles = {
@@ -132,6 +132,7 @@ const Redux = {
 
      return HomeView;
    },
+   // About View - description.
    About: function(props, dispatch, children) {
      // AboutView Styles
      const styles = {
@@ -177,6 +178,7 @@ const Redux = {
 
      return AboutView;
    },
+   // Projects View - description.
    Projects: function(props, dispatch, children) {
      // ProjectsView Styles
      const styles = {
@@ -222,6 +224,7 @@ const Redux = {
 
      return ProjectsView;
    },
+   // Cover View - description.
    Cover: function(props, dispatch, children) {
      // CoverView Styles
      const styles = {
@@ -238,70 +241,109 @@ const Redux = {
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
        cover: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5;
-         margin: 2em 4em 1em; padding: 1em 2em;
-         background-color: rgba(100,100,100,0.9); text-align: center; color: #fff;
-         border: 1px solid #000; border-radius: 5px;
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+         margin: 0.25em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
        `,
-       p: `
-         padding: 1em; background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+       coverHeader: `
+         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+         padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
+       `,
+       coverHeaderLeft: `
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+       `,
+       coverImg: `
+         margin: 0 0 0.25em 0; height: 8em; width: 8em; border: 1px solid #333; border-radius: 100%;
+       `,
+       coverName: `
+         font-size: 1.25em;
+       `,
+       coverTitle: `
+         font-size: 0.75em;
+       `,
+       coverHeaderRight: `
+         display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+       `,
+       coverHeaderRow: `
+         display: flex; flex-direction: row; justify-content: center; align-items: center; margin: 0.35em;
+       `,
+       coverHeaderIcon: `
+         height: 0.9em; width: 0.9em; margin: 0 0.35em 0 0;
+       `,
+       coverHeaderLink: `
+         text-decoration: underline; cursor: pointer; font-size: 0.8em;
+       `,
+       coverBody: `
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+         padding: 1em 3em; background-color: #fff; color: #222;
+       `,
+       coverLine: `
+         padding: 0.5em; text-align: center;
+       `,
+       coverDownloadRow: `
+         display: flex; flex-direction: row; justify-content: flex-end; align-items: center;
        `,
        download: `
-         color: #fff; font-family: sans-serif; cursor: pointer;
+         margin: 0.25em; color: #000; font-family: sans-serif; cursor: pointer;
        `
      }
 
      // CoverView Globals
      const store = props.store;
      const viewName = store.getState().viewState.toLowerCase();
+     const E = React.createElement;
 
      // -- Create a wallpaper (img element) for the view
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
-     const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
+     const wp = E("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
      // addEventListeners
 
      //  -- Create cover letter
-     const cover = React.createElement("div", {style: styles.cover},[
-       React.createElement("p", {style: styles.p}, [
-         `I am seeking entry-level Deep Learning roles, internships, or co-ops. I am a strong software engineer, proficient in object-oriented C, algorithmic design, parallel computing with CUDA, rapid prototyping, and Recurrent/Convolutional Neural Network architectures for NLP & CV.`
+     const cover = E("div", {style: styles.cover}, [
+       E("div", {style: styles.coverHeader}, [
+         E("div", {style: styles.coverHeaderLeft}, [
+           E("img", {style: styles.coverImg, src: "./imgs/me/me.jpg", alt: "my beautiful face"}, []),
+           E("h2", {style: styles.coverName}, ["Johnathan Chivington"]),
+           E("p", {style: styles.coverTitle}, ["Deep Learning & AI Engineer"])
+         ]),
+         E("div", {style: styles.coverHeaderRight}, [
+           ["./imgs/icons/sm/phone.svg", "phone icon", "303.900.2861"],
+           ["./imgs/icons/sm/email.svg", "email icon", "j.chivington@bellevuecollege.edu"],
+           ["./imgs/icons/sm/li.svg", "linkedin icon", "linkedin.com/in/chivingtoninc"],
+           ["./imgs/icons/sm/git.svg", "gihub icon", "github.com/chivingtoninc"],
+           ["./imgs/icons/sm/twt.svg", "twitter icon", "twitter.com/chivingtoninc"]
+         ].map(r => E("div", {style: styles.coverHeaderRow}, [
+           E("img", {style: styles.coverHeaderIcon, src: r[0], alt: r[1]}, []),
+           E("a", {style: styles.coverHeaderLink}, [r[2]])
+         ])))
        ]),
-       React.createElement("p", {style: styles.p}, [
-         `I am a Computer Science student at Bellevue College and have recently completed and received certification for Andrew Ng's Stanford Machine Learning course on Coursera. I have also completed four of five of deeplearning.AI’s Deep Learning Specialization on Coursera. These great courses have given me valuable skills, which are enabling me to build useful Deep Learning projects.`
-       ]),
-       React.createElement("p", {style: styles.p}, [
-         `I am focused on creating efficient AI applications, platforms and tools for CV, NLP, and SLAM on embedded & cloud-based systems for applications in automated manufacturing, intelligent robotics, and other areas. AI is revolutionizing many industries and I am learning to leverage it’s capabilities for enhancing daily life. My primary career field interests are in automated manufacturing, food production and sustainable technologies, and/or transportation.`
-       ]),
-       React.createElement("p", {style: styles.p}, [
-         `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`
-       ]),
-       React.createElement("p", {style: styles.p}, [
+       E("div", {style: styles.coverBody}, [
+         E("div", {style: styles.coverDownloadRow}, [
+           E("a", {style: styles.download, href: "./includes/j.Chivington.Cover.docx", download: ""}, [
+             E("img", {style: styles.coverHeaderIcon, src: "./imgs/icons/sm/dl.svg", alt: "Download Cover Letter (.docx)"}, [])
+           ])
+         ]), ...[
+         `I am seeking entry-level Deep Learning roles, internships, or co-ops. I am a strong software engineer, proficient in object-oriented C, algorithmic design, parallel computing with CUDA, rapid prototyping, and Recurrent/Convolutional Neural Network architectures for NLP & CV.`,
+         `I am a Computer Science student at Bellevue College and have recently completed and received certification for Andrew Ng's Stanford Machine Learning course on Coursera. I have also completed four of five of deeplearning.AI’s Deep Learning Specialization on Coursera. These great courses have given me valuable skills, which are enabling me to build useful Deep Learning projects.`,
+         `I am focused on creating efficient AI applications, platforms and tools for CV, NLP, and SLAM on embedded & cloud-based systems for applications in automated manufacturing, intelligent robotics, and other areas. AI is revolutionizing many industries and I am learning to leverage it’s capabilities for enhancing daily life. My primary career field interests are in automated manufacturing, food production and sustainable technologies, and/or transportation.`,
+         `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`,
          `Thank you for your time and consideration. I look forward to hearing from you.`
-       ]),
-       React.createElement("p", {style: styles.p}, [
-         `Sincerely,`
-       ]),
-       React.createElement("p", {style: styles.p}, [
-         `Johnathan Chivington`
-       ])
+       ].map(l => E("p", {style: styles.coverLine}, [l]))])
      ]);
      // addEventListeners
 
-     //  -- Create cover.docx download link
-     const download = React.createElement("a", {style: styles.download, href: "./includes/j.Chivington.Cover.docx", download: ""}, ["Download Cover Letter (.docx)"]);
-     // addEventListeners
-
      // -- Create wallpaper filter
-     const filter = React.createElement("div", {style: styles.filter}, [cover, download]);
+     const filter = E("div", {style: styles.filter}, [cover]);
 
      // -- Create view element, passing children
-     const CoverView = React.createElement("div", {style: styles.view}, [wp, filter]);
+     const CoverView = E("div", {style: styles.view}, [wp, filter]);
      CoverView.addEventListener("click", function(){
        dispatch({type: "CLOSE_MENU"});
      });
 
      return CoverView;
    },
+   // Resume View - description.
    Resume: function(props, dispatch, children) {
      // ResumeView Styles
      const styles = {
@@ -381,7 +423,7 @@ const Components = {
       header: `
         position: absolute; top: 0; left: 0; right: 0; z-index: 10;
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: rgba(225,225,255,0.7);
+        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: rgba(225,225,255,0.8);
       `,
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
       title: `margin-left: 0.25em; color: #333; font-size: 2.15em; cursor: pointer;`,
@@ -409,9 +451,10 @@ const Components = {
   Menu: function(props, dispatch, children) {
     const styles = {
       menuOpen: `
-        position: absolute; top: 4em; left: 0; bottom: 0; width: 7em; padding: 0.25em 1em 0 0; z-index: 10;
+        position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-color: rgba(225,225,255,0.2); border-right: 1px solid #000; animation: menuOpen 0.15s 1;
+        background-image: linear-gradient(to bottom right, rgba(100,100,125,1), rgba(75,75,100,1));
+        border-right: 1px solid #000; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
         display: none;
@@ -484,8 +527,7 @@ const Components = {
     });
 
     return router;
-  },
-  // View - contains, positions, maintains an entire view; i.e. the whole screen.
+  }
 }
 
 
@@ -514,7 +556,7 @@ const Reducers = {
     return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "HOME", action) {
+  viewState: function (state = "COVER", action) {
     const viewChoices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
