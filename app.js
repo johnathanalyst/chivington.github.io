@@ -236,7 +236,7 @@ const Redux = {
          position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
        `,
        filter: `
-         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 5;
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 5; overflow-x: scroll;
          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5;
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
@@ -246,6 +246,10 @@ const Redux = {
        `,
        coverHeader: `
          display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+         padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
+       `,
+       coverHeaderMobile: `
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
          padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
        `,
        coverHeaderLeft: `
@@ -262,6 +266,9 @@ const Redux = {
        `,
        coverHeaderRight: `
          display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+       `,
+       coverHeaderRightMobile: `
+         display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin: 0.5em 0 0 0 ;
        `,
        coverHeaderRow: `
          display: flex; flex-direction: row; justify-content: center; align-items: center; margin: 0.35em;
@@ -289,7 +296,9 @@ const Redux = {
 
      // CoverView Globals
      const store = props.store;
-     const viewName = store.getState().viewState.toLowerCase();
+     const state = store.getState();
+     const currentMode = state.windowState;
+     const viewName = state.viewState.toLowerCase();
      const E = React.createElement;
 
      // -- Create a wallpaper (img element) for the view
@@ -300,13 +309,13 @@ const Redux = {
 
      //  -- Create cover letter
      const cover = E("div", {style: styles.cover}, [
-       E("div", {style: styles.coverHeader}, [
+       E("div", {style: window.innerWidth < 900 ? styles.coverHeaderMobile : styles.coverHeader}, [
          E("div", {style: styles.coverHeaderLeft}, [
            E("img", {style: styles.coverImg, src: "./imgs/me/me.jpg", alt: "my beautiful face"}, []),
            E("h2", {style: styles.coverName}, ["Johnathan Chivington"]),
            E("p", {style: styles.coverTitle}, ["Deep Learning & AI Engineer"])
          ]),
-         E("div", {style: styles.coverHeaderRight}, [
+         E("div", {style: window.innerWidth < 900 ? styles.coverHeaderRightMobile : styles.coverHeaderRight}, [
            ["./imgs/icons/sm/phone.svg", "phone icon", "303.900.2861"],
            ["./imgs/icons/sm/email.svg", "email icon", "j.chivington@bellevuecollege.edu"],
            ["./imgs/icons/sm/li.svg", "linkedin icon", "linkedin.com/in/chivingtoninc"],
@@ -326,8 +335,7 @@ const Redux = {
          `I am seeking entry-level Deep Learning roles, internships, or co-ops. I am a strong software engineer, proficient in object-oriented C, algorithmic design, parallel computing with CUDA, rapid prototyping, and Recurrent/Convolutional Neural Network architectures for NLP & CV.`,
          `I am a Computer Science student at Bellevue College and have recently completed and received certification for Andrew Ng's Stanford Machine Learning course on Coursera. I have also completed four of five of deeplearning.AI’s Deep Learning Specialization on Coursera. These great courses have given me valuable skills, which are enabling me to build useful Deep Learning projects.`,
          `I am focused on creating efficient AI applications, platforms and tools for CV, NLP, and SLAM on embedded & cloud-based systems for applications in automated manufacturing, intelligent robotics, and other areas. AI is revolutionizing many industries and I am learning to leverage it’s capabilities for enhancing daily life. My primary career field interests are in automated manufacturing, food production and sustainable technologies, and/or transportation.`,
-         `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`,
-         `Thank you for your time and consideration. I look forward to hearing from you.`
+         `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`
        ].map(l => E("p", {style: styles.coverLine}, [l]))])
      ]);
      // addEventListeners
@@ -407,14 +415,15 @@ const Components = {
       `
     }
 
+    // Shell Globals
     const store = props.store;
-    const menuState = store.getState().menuState;
+    const state = store.getState();
+    const menuState = state.menuState;
 
     return React.createElement("div", {style: styles.shell}, [
       { elem: Components.Header, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Menu, props: { store }, dispatch: dispatch, children: [] },
-      { elem: Components.Router, props: { store }, dispatch: dispatch, children: [] },
-      ...children
+      { elem: Components.Router, props: { store }, dispatch: dispatch, children: [] }
     ]);
   },
   // Header - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
@@ -423,7 +432,7 @@ const Components = {
       header: `
         position: absolute; top: 0; left: 0; right: 0; z-index: 10;
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: rgba(225,225,255,0.8);
+        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: rgba(225,225,255,0.9);
       `,
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
       title: `margin-left: 0.25em; color: #333; font-size: 2.15em; cursor: pointer;`,
@@ -535,41 +544,49 @@ const Components = {
  * -- Functions that reduce state into stucture/object based on several choices.    *
  * -------------------------------------------------------------------------------- */
 const Reducers = {
+  // initializes/maintains window state
+  windowState: function (state = "TABLET", action) {
+    const choices = {
+      "SWITCH_MODE": () => action.payload,
+      "DEFAULT": () => state
+    }
+    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+  },
+  // initializes/maintains view state
+  viewState: function (state = "COVER", action) {
+    const choices = {
+      "NAV_TO": () => action.payload,
+      "DEFAULT": () => state
+    }
+    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+  },
   // initializes/maintains header state
   headerState: function (state = "VISIBLE", action) {
-    const menuChoices = {
+    const choices = {
       "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
       "SHOW_MENU": () => "VISIBLE",
       "CLOSE_MENU": () => "HIDDEN",
       "DEFAULT": () => state
     }
-    return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
+    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains menu state
   menuState: function (state = "CLOSED", action) {
-    const menuChoices = {
+    const choices = {
       "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
       "OPEN_MENU": () => "OPEN",
       "CLOSE_MENU": () => "CLOSED",
       "DEFAULT": () => state
     }
-    return menuChoices[action.type] ? menuChoices[action.type]() : menuChoices["DEFAULT"]();
-  },
-  // initializes/maintains view state
-  viewState: function (state = "COVER", action) {
-    const viewChoices = {
-      "NAV_TO": () => action.payload,
-      "DEFAULT": () => state
-    }
-    return viewChoices[action.type] ? viewChoices[action.type]() : viewChoices["DEFAULT"]();
+    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains wallpaper state
   wallpaperState: function (state = {name: "fragmented", route: "./imgs/wp/fragmented.jpg"}, action) {
-    const wpChoices = {
+    const choices = {
       "CHANGE_WP": () => action.payload,
       "DEFAULT": () => state
     }
-    return wpChoices[action.type] ? wpChoices[action.type]() : wpChoices["DEFAULT"]();
+    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   }
 }
 
