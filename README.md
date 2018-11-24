@@ -19,18 +19,19 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 <br/>
 
 ## Features
- * **Mobile 1st / Responsive**
- * **Offline App**
- * **"Add To Desktop/Homescreen"** compatibility for iOS, Android, Mac, Linux & Windows
- * **Pure Javascript**
+ * Mobile 1st / Responsive
+ * Offline App
+ * "Add To Desktop/Homescreen" compatibility for iOS, Android, Mac, Linux & Windows
+ * Pure Javascript
+ * ...probably more.
 
 ## Prerequisites
   * A web browser.
 
 ## Installation
 ```
-  cd /path/to/where/you/want/it
-  git clone https://github.com/chivingtoninc/chivingtoninc.github.io.git
+  1. cd /path/to/where/you/want/it
+  2. git clone https://github.com/chivingtoninc/chivingtoninc.github.io.git
 ```
 
 ## Testing
