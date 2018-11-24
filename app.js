@@ -282,14 +282,8 @@ const Redux = {
        coverBody: `
          padding: 1em 3em; background-color: #fff; color: #222;
        `,
-       coverDownloadRow: `
-         display: flex; flex-direction: row; justify-content: flex-end; align-items: center;
-       `,
-       downloadButton: `
-         margin: 0.15em; color: #000; font-family: sans-serif; cursor: pointer;
-       `,
        coverLine: `
-         margin: 0.5em; text-align: center;
+         margin: 1em auto; text-align: center;
        `
      }
 
@@ -327,16 +321,11 @@ const Redux = {
          ])))
        ]),
        E("div", {style: styles.coverBody}, [
-         E("div", {style: styles.coverDownloadRow}, [
-           E("a", {style: styles.downloadButton, href: "./includes/j.Chivington.Cover.docx", download: ""}, [
-             E("img", {style: styles.coverHeaderIcon, src: "./imgs/icons/sm/dl.svg", alt: "Download Cover Letter (.docx)"}, [])
-           ])
-         ]), ...[
          `I am an experienced software engineer, proficient in object-oriented, algorithmic design in C, Python, Java, and Js. I am seeking entry-level Deep Learning roles in Computer Vision, working with Object Detection & Tracking .`,
          `I am a Computer Science student at Bellevue College and have recently completed Stanford's Machine Learning course on Coursera, as well as four of five courses in deeplearning.AI’s Deep Learning Specialization on Coursera. I am currently building useful Deep Learning projects, using the skills learned in these courses.`,
          `I am focused on creating efficient AI applications, platforms and tools for CV, NLP, and SLAM on embedded & cloud-based systems for applications in automated manufacturing, intelligent robotics, and other areas. AI is revolutionizing many industries and I am learning to leverage it’s capabilities for enhancing daily life. My primary career field interests are in automated manufacturing, food production and sustainable technologies, and/or transportation.`,
          `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`
-       ].map(l => E("p", {style: styles.coverLine}, [l]))])
+       ].map(l => E("p", {style: styles.coverLine}, [l])))
      ]);
      // addEventListeners
 
