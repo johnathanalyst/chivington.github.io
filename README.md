@@ -43,7 +43,7 @@ Navigate to an example in the chivingtoninc.github.io directory and compile/run.
 
 ## Usage
 Only real use is for learning about complex User Interfaces or if you want to view my work and/or hire me. That said, feel free to clone, copy/paste, alter, etc. as you wish for your usage.
-<br/><br/><br/>
+<br/><br/>
 
 
 ## Authors
