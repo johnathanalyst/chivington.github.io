@@ -317,7 +317,7 @@ const Redux = {
            ["./imgs/icons/sm/dl.svg", "Download Cover Letter (.docx)", "./includes/j.Chivington.Cover.docx", "Download Cover Letter (.docx)"]
          ].map(r => E("div", {style:  window.innerWidth < 900 ? styles.coverHeaderRowMobile : styles.coverHeaderRow}, [
            E("img", {style: styles.coverHeaderIcon, src: r[0], alt: r[1]}, []),
-           E("a", {style: styles.coverHeaderLink, href: r[2]}, [r[3]])
+           E("a", {style: styles.coverHeaderLink, href: r[2], target: "_blank"}, [r[3]])
          ])))
        ]),
        E("div", {style: styles.coverBody}, [
