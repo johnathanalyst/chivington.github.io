@@ -18,7 +18,7 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 <br/>
 
 ## Prerequisites
-  * Some C compiler.
+  * A web browser.
 
 ## Installation
 ```
@@ -29,28 +29,24 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 ## Testing
 Navigate to an example in the chivingtoninc.github.io directory and compile/run.
 ```
-  cd /path/to/chivingtoninc.github.io/someExample
-  gcc dogfram.c -o dogfram
-  ./dogfram
+  1. cd /path/to/chivingtoninc.github.io
+  2. Open "index.html" in a web browser that supports Javascript.
 ```
 
 ## Usage
-Follow the instructions in [Testing](https://github.com/chivingtoninc/chivingtoninc.github.io#testing). See [Troubleshooting](https://github.com/chivingtoninc/chivingtoninc.github.io#troubleshooting) for help. Usage instructions are provided in the program.
-<br/>
-
-## Troubleshooting
-Coming soon.
+Only real use is for learning about complex User Interfaces or if you want to view my work and/or hire me. That said, feel free to clone, copy/paste, alter, etc. as you wish for your usage.
 <br/><br/><br/>
 
+
 ## Authors
-* **Johnathan Chivington:** [GitHub](https://github.com/chivingtoninc) | [Twitter](https://twitter.com/chivingtoninc) | [Facebook](https://facebook.com/chivingtoninc) | [LinkedIn](https://www.linkedin.com/in/johnathan-chivington/)
+* **Johnathan Chivington:** [Web](https://chivingtoninc.github.io) [GitHub](https://github.com/chivingtoninc) | [Twitter](https://twitter.com/chivingtoninc) | [Facebook](https://facebook.com/chivingtoninc) | [LinkedIn](https://www.linkedin.com/in/johnathan-chivington/)
 
 ## Contributing
 Not currently accepting outside contributors, but feel free to clone, fork, modify and use as you wish.
 
 ## Acknowledgments
-Thanks to those who charge for tools like this. You shall go unnamed here.
+Thanks to [Dan Abramov](https://github.com/gaearon) for Redux as well as his brilliant Egghead courses [Getting Started with Redux](https://egghead.io/courses/getting-started-with-redux) & [Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)
 
 ## License
-This project is licensed under the DO_WHATEVER_YOU_WANT License - see the [LICENSE](https://github.com/chivingtoninc/chivingtoninc.github.io/blob/master/LICENSE) file for details
+This project is licensed under the DO_WHATEVER_YOU_WANT License - see the [LICENSE](https://github.com/chivingtoninc/Data-Structures-C/blob/master/LICENSE) file for details
 <br/><br/>
