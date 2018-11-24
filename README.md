@@ -7,6 +7,7 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 <br/><br/>
 
 ## Contents
+* [Features](https://github.com/chivingtoninc/chivingtoninc.github.io#features)
 * [Prerequisites](https://github.com/chivingtoninc/chivingtoninc.github.io#prerequisites)
 * [Installation](https://github.com/chivingtoninc/chivingtoninc.github.io#installation)
 * [Testing](https://github.com/chivingtoninc/chivingtoninc.github.io#testing)
@@ -16,6 +17,12 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 * [Acknowledgments](https://github.com/chivingtoninc/chivingtoninc.github.io#acknowledgments)
 * [License](https://github.com/chivingtoninc/chivingtoninc.github.io#license)
 <br/>
+
+## Features
+ * Mobile 1st / Responsive
+ * Offline App
+ * "Add To Desktop/Homescreen" compatibility for iOS, Android, Mac, Linux & Windows
+ * Pure Javascript
 
 ## Prerequisites
   * A web browser.
