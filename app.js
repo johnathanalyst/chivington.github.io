@@ -233,30 +233,19 @@ const Redux = {
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
        cover: `
-         margin: 0.25em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
-       `,
-       coverHeader: `
-         padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
-         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-       `,
-       coverHeaderMobile: `
-        padding: 0.5em 0 1em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-       `,
-       coverHeaderLeft: `
-         color: #fff;
-       `,
-       coverHeaderLeftMobile: `
-         color: #fff; margin: 0.5em 1em; border-bottom: 1px solid #fff;
+         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
        `,
        coverImg: `
-         margin: 0 0 0.25em 0; width: 8em; border: 1px solid #333; border-radius: 100%;
+         margin: 0 0 0.25em 0; width: 8em; border: 1px solid #fff; border-radius: 100%;
+       `,
+       coverImgMobile: `
+         margin: 0.75em 0 5em 0; width: 13em; border: 1px solid #fff; border-radius: 100%;
        `,
        coverName: `
-         margin: 0.2em; font-size: 1.25em;
+         margin: 0.2em; font-size: 1.75em;
        `,
        coverTitle: `
-         margin: 0.2em; font-size: 0.75em;
+         margin: 0.2em; font-size: 1em;
        `,
        coverHeaderRight: `
          color: #fff;
@@ -268,10 +257,10 @@ const Redux = {
          padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
        `,
        coverHeaderIcon: `
-         height: 0.9em; width: 0.9em; margin: 0 0.35em 0 0;
+         height: 0.9em; width: 0.9em; margin: 0 0.5em 0 0;
        `,
        coverHeaderLink: `
-         text-decoration: underline; cursor: pointer; font-size: 0.8em; color: #fff;
+         text-decoration: underline; cursor: pointer; font-size: 0.9em; color: #fff;
        `,
        coverBody: `
          padding: 1em 3em; background-color: #fff; color: #222;
@@ -286,6 +275,7 @@ const Redux = {
      const state = store.getState();
      const currentMode = state.windowState;
      const viewName = state.viewState.toLowerCase();
+     const W = window.innerWidth;
      const E = React.createElement;
 
      // -- Create a wallpaper (img element) for the view
@@ -295,24 +285,7 @@ const Redux = {
 
      //  -- Create cover letter
      const cover = E("div", {style: styles.cover}, [
-       E("div", {style: window.innerWidth < 700 ? styles.coverHeaderMobile : styles.coverHeader}, [
-         E("div", {style: window.innerWidth < 700 ? styles.coverHeaderLeftMobile : styles.coverHeaderLeft}, [
-           E("img", {style: styles.coverImg, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
-           E("h2", {style: styles.coverName}, ["Johnathan Chivington"]),
-           E("p", {style: styles.coverTitle}, ["Deep Learning & AI Engineer"])
-         ]),
-         E("div", {style: styles.coverHeaderRight}, [
-           ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
-           ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
-           ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
-           ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
-           ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
-           ["./imgs/icons/sm/dl.svg", "Download Cover Letter (.docx)", "./includes/j.Chivington.Cover.docx", "Download Cover Letter (.docx)"]
-         ].map(r => E("div", {style:  window.innerWidth < 700 ? styles.coverHeaderRowMobile : styles.coverHeaderRow}, [
-           E("img", {style: styles.coverHeaderIcon, src: r[0], alt: r[1]}, []),
-           E("a", {style: styles.coverHeaderLink, href: r[2], target: "_blank"}, [r[3]])
-         ])))
-       ]),
+       Components.DocHeader(props, dispatch, []),
        E("div", {style: styles.coverBody}, [
          `I am an experienced software engineer, proficient in object-oriented, algorithmic design in C, Python, Java, and Js. I am seeking entry-level Deep Learning roles in Computer Vision, working with Object Detection & Tracking .`,
          `I am a Computer Science student at Bellevue College and have recently completed Stanford's Machine Learning course on Coursera, as well as four of five courses in deeplearning.AI’s Deep Learning Specialization on Coursera. I am currently building useful Deep Learning projects, using the skills learned in these courses.`,
@@ -347,62 +320,75 @@ const Redux = {
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
        resume: `
-         margin: 0.25em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
-       `,
-       resumeHeader: `
-         padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
-         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-       `,
-       resumeHeaderMobile: `
-        padding: 0.5em 0 1em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-       `,
-       resumeHeaderLeft: `
-         color: #fff;
-       `,
-       resumeHeaderLeftMobile: `
-         color: #fff; margin: 0.5em 1em; border-bottom: 1px solid #fff;
-       `,
-       resumeImg: `
-         margin: 0 0 0.25em 0; width: 8em; border: 1px solid #333; border-radius: 100%;
-       `,
-       resumeName: `
-         margin: 0.2em; font-size: 1.25em;
-       `,
-       resumeTitle: `
-         margin: 0.2em; font-size: 0.75em;
-       `,
-       resumeHeaderRight: `
-         color: #fff;
-       `,
-       resumeHeaderRow: `
-         padding: 0.25em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-       `,
-       resumeHeaderRowMobile: `
-         padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
-       `,
-       resumeHeaderIcon: `
-         height: 0.9em; width: 0.9em; margin: 0 0.35em 0 0;
-       `,
-       resumeHeaderLink: `
-         text-decoration: underline; cursor: pointer; font-size: 0.8em; color: #fff;
+         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
        `,
        resumeBody: `
-         padding: 1em 3em; background-color: #fff; color: #222;
+         padding: 0 1em; background-color: #444; color: #fff;
+         border: 1px solid #444;
        `,
-       resumeBodyMobile: ``,
-       skillsMobile: ``,
-       historyMobile: ``,
-       historyMobile: ``,
-       educationMobile: ``,
-       volunteeringMobile: ``
+       resumeBodyMobile: `
+         color: #fff;
+       `,
+       sectionTitle: `
+         margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+         padding: 0 0.75em; font-size: 1.05em; border-bottom: 1px solid #000;
+       `,
+       window: `
+         background-color: #333;
+       `,
+       skillsWindow: `
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; text-decoration: underline;
+       `,
+       skillsWindowMobile: `
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; text-decoration: underline;
+       `,
+       skillsWindow: `
+         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+       `,
+       skillsWindowMobile: `
+         color: #fff;
+       `,
+       skillColumn: `
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+       `,
+       skill: `
+         border: 1px solid #000; margin: 0.25em auto;
+       `,
+       historySection: `
+         display: flex; flex-direction: row; justify-content: space-beteween; align-items: center;
+       `,
+       historySectionMobile: `
+         display: flex; flex-direction: column; justify-content: stretch; align-items: center;
+       `,
+       historySectionMobileHidden: `
+        display: none;
+       `,
+       education: `
+         color: #fff;
+       `,
+       educationMobile: `
+         color: #fff;
+       `,
+       certifications: `
+         color: #fff;
+       `,
+       certificationsMobile: `
+         color: #fff;
+       `,
+       volunteering: `
+         color: #fff;
+       `,
+       volunteeringMobile: `
+         color: #fff;
+       `
      }
 
-     // CoverView Globals
+     // ResumeView Globals
      const store = props.store;
      const state = store.getState();
      const currentMode = state.windowState;
      const viewName = state.viewState.toLowerCase();
+     const W = window.innerWidth;
      const E = React.createElement;
 
      // -- Create a wallpaper (img element) for the view
@@ -410,42 +396,44 @@ const Redux = {
      const wpRoute = store.getState().wallpaperState.route;
      const wp = E("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
 
-     //  -- Create resume letter
-     const resume = E("div", {style: styles.resume}, [
-       E("div", {style: window.innerWidth < 700 ? styles.resumeHeaderMobile : styles.resumeHeader}, [
-         E("div", {style: window.innerWidth < 700 ? styles.resumeHeaderLeftMobile : styles.resumeHeaderLeft}, [
-           E("img", {style: styles.resumeImg, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
-           E("h2", {style: styles.resumeName}, ["Johnathan Chivington"]),
-           E("p", {style: styles.resumeTitle}, ["Deep Learning & AI Engineer"])
+     // -- Resume Skills Section
+     const skillsButton = E("h2", {style: styles.sectionTitle}, ["Skills"]);
+     skillsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_SKILL_SECTION"}));
+
+     const skillsWindow = E("div", {style: W < 700 ? styles.skillsWindowMobile : styles.window}, [
+       ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
+       ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
+       ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
+       ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
+     ].map(c => E("div", {style: styles.skillColumn}, c.map(s => E("p", {style: styles.skill}, [s])))));
+
+     // -- Resume History Section
+     //
+
+     // -- Resume Education Section
+     //
+
+     // -- Resume Certifications Section
+     //
+
+     // -- Resume Volunteering Section
+     //
+
+     //  -- Create Resume
+     const resume = E("div", {style: styles.resume}, [Components.DocHeader(props, dispatch, []),
+       E("div", {style: W < 700 ? styles.resumeBodyMobile : styles.resumeBody}, [
+         E("div", {style: styles.skillsSection}, [skillsButton, skillsWindow]),
+         E("div", {style: W < 700 ? styles.historyMobile : styles.history}, [
+           E("p", {style: W < 700 ? styles.historyMobile : styles.history}, ["history"])
          ]),
-         E("div", {style: styles.resumeHeaderRight}, [
-           ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
-           ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
-           ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
-           ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
-           ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
-           ["./imgs/icons/sm/dl.svg", "Download Resume (.docx)", "./includes/j.Chivington.Resume.docx", "Download Resume (.docx)"]
-         ].map(r => E("div", {style:  window.innerWidth < 700 ? styles.resumeHeaderRowMobile : styles.resumeHeaderRow}, [
-           E("img", {style: styles.resumeHeaderIcon, src: r[0], alt: r[1]}, []),
-           E("a", {style: styles.resumeHeaderLink, href: r[2], target: "_blank"}, [r[3]])
-         ])))
-       ]),
-       E("div", {style: window.innerWidth < 700 ? styles.resumeBodyMobile : styles.resumeBody}, [
-         E("div", {style: window.innerWidth < 700 ? styles.skillsMobile : styles.skills}, [
-           // map skills here
-           E("p", {style: window.innerWidth < 700 ? styles.skillsMobile : styles.skills}, ["skills"])
+         E("div", {style: W < 700 ? styles.educationMobile : styles.education}, [
+           E("p", {style: W < 700 ? styles.educationMobile : styles.education}, ["education"])
          ]),
-         E("div", {style: window.innerWidth < 700 ? styles.historyMobile : styles.history}, [
-           // map history here
-           E("p", {style: window.innerWidth < 700 ? styles.historyMobile : styles.history}, ["history"])
+         E("div", {style: W < 700 ? styles.certificationsMobile : styles.certifications}, [
+           E("p", {style: W < 700 ? styles.certificationsMobile : styles.certifications}, ["certifications"])
          ]),
-         E("div", {style: window.innerWidth < 700 ? styles.educationMobile : styles.education}, [
-           // map education here
-           E("p", {style: window.innerWidth < 700 ? styles.educationMobile : styles.education}, ["education"])
-         ]),
-         E("div", {style: window.innerWidth < 700 ? styles.volunteeringMobile : styles.volunteering}, [
-           // map volunteering here
-           E("p", {style: window.innerWidth < 700 ? styles.volunteeringMobile : styles.volunteering}, ["volunteering"])
+         E("div", {style: W < 700 ? styles.volunteeringMobile : styles.volunteering}, [
+           E("p", {style: W < 700 ? styles.volunteeringMobile : styles.volunteering}, ["volunteering"])
          ])
        ])
      ]);
@@ -472,6 +460,7 @@ const Redux = {
 const Components = {
   // Shell - contains the header, menu, and router.
   Shell: function(props, dispatch, children) {
+    // Shell Styles
     const styles = {
       shell: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
@@ -484,6 +473,7 @@ const Components = {
     const state = store.getState();
     const menuState = state.menuState;
 
+    // Create & Return the Shell
     return React.createElement("div", {style: styles.shell}, [
       { elem: Components.Header, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Menu, props: { store }, dispatch: dispatch, children: [] },
@@ -492,33 +482,40 @@ const Components = {
   },
   // Header - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
   Header: function(props, dispatch, children) {
+    // Header Styles
     const styles = {
       header: `
-        position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+        position: absolute; top: 0; left: 0; right: 0; z-index: 15;
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: rgba(225,225,255,0.9);
+        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff; background-color: #222;
       `,
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
-      title: `margin-left: 0.25em; color: #333; font-size: 2.15em; cursor: pointer;`,
+      title: `margin-left: 0.25em; color: #fff; font-size: 2.15em; cursor: pointer;`,
       superScript: `font-size: 0.3em; margin-left: 1px;`
     }
 
+    // Header icon
     const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "chivingtoninc Icon"}, []);
     icon.addEventListener("click", function(e) {
       dispatch({type: "TOGGLE_MENU"})
     });
 
+    // Superscript for current view
     const view = props.store.getState().viewState.toLowerCase();
     const superScript = React.createElement("sup", {style: styles.superScript}, [view])
 
+    // Title element & event listeners
     const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript ]);
     title.addEventListener("click", function() {
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "HOME"})
     });
 
-    const header = React.createElement("div", {style: styles.header}, [icon, title]);
-    return header;
+    // Create app header & add event listeners
+    const Header = React.createElement("div", {style: styles.header}, [icon, title]);
+
+    // Return Header
+    return Header;
   },
   // Menu - layered/collapsible full-route menu.
   Menu: function(props, dispatch, children) {
@@ -526,7 +523,7 @@ const Components = {
       menuOpen: `
         position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-image: linear-gradient(to bottom right, rgba(0,60,90,1), rgba(10,70,100,1));
+        background-image: linear-gradient(to bottom right, #666, #666);
         border-right: 1px solid #024; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
@@ -574,6 +571,7 @@ const Components = {
   },
   // Router - maintains view routes. (viewing, tabs, minimized...)
   Router: function(props, dispatch, children) {
+    // Router Styles
     const styles = {
       router: `
         position: absolute; top: -4em; left: 0; bottom: 0; right: 0; overflow: hidden;
@@ -582,6 +580,7 @@ const Components = {
       `
     }
 
+    // Views
     const views = {
       "HOME": Views.Home,
       "ABOUT": Views.About,
@@ -591,15 +590,98 @@ const Components = {
       "DEFAULT": Views.Home
     }
 
+    // Router Globals
     const name = props.store.getState().viewState;
     const view = views[name] ? views[name](props, dispatch, children) : views["DEFAULT"](props, dispatch, children);
 
-    const router = React.createElement("div", {style: styles.router}, [view]);
-    router.addEventListener("click", function(){
+    // Create Router & Add Even Listeners
+    const Router = React.createElement("div", {style: styles.router}, [view]);
+    Router.addEventListener("click", function(){
       dispatch({type: "CLOSE_MENU"});
     });
 
-    return router;
+    // Return Router
+    return Router;
+  },
+  // DocHeader - responsive cover/resume header
+  DocHeader: function(props, dispatch, children) {
+    // DocHeader Styles
+    const styles = {
+      docHeader: `
+        padding: 1.25em 4em; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+        background-image: url("./imgs/wp/math.jpg"); background-size: contain; background-repeat: no-repeat; background-position: center;
+        background-color: #000; color: #eee; border-bottom: 1px solid #ccc;
+      `,
+      docHeaderMobile: `
+        padding: 0.5em 0 1em; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+        background-image: url("./imgs/wp/math.jpg"); background-size: contain; background-repeat: no-repeat; background-position: center;
+        background-color: #000; color: #eee; border-bottom: 1px solid #fff;
+      `,
+      docHeaderLeft: `
+        color: #fff;
+      `,
+      docHeaderLeftMobile: `
+        color: #fff; margin: 0.5em 1em; border-bottom: 1px solid #fff;
+      `,
+      docImg: `
+        margin: 0 0 0.25em 0; width: 8em; border: 1px solid #fff; border-radius: 100%;
+      `,
+      docImgMobile: `
+        margin: 0.75em 0 5em 0; width: 13em; border: 1px solid #fff; border-radius: 100%;
+      `,
+      docName: `
+        margin: 0.2em; font-size: 1.75em;
+      `,
+      docTitle: `
+        margin: 0.2em; font-size: 1em;
+      `,
+      docHeaderRight: `
+        color: #fff;
+      `,
+      docHeaderRow: `
+        padding: 0.25em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+      `,
+      docHeaderRowMobile: `
+        padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
+      `,
+      docHeaderIcon: `
+        height: 0.9em; width: 0.9em; margin: 0 0.5em 0 0;
+      `,
+      docHeaderLink: `
+        text-decoration: underline; cursor: pointer; font-size: 0.9em; color: #fff;
+      `
+    }
+
+    // DocHeader Globals
+    const store = props.store;
+    const state = store.getState();
+    const currentMode = state.windowState;
+    const viewName = state.viewState.toLowerCase();
+    const W = window.innerWidth;
+    const E = React.createElement;
+
+    // Create DocHeader & add event listeners
+    const DocHeader = E("div", {style: W < 700 ? styles.docHeaderMobile : styles.docHeader}, [
+      E("div", {style: W < 700 ? styles.docHeaderLeftMobile : styles.docHeaderLeft}, [
+        E("img", {style: W < 700 ? styles.docImgMobile : styles.docImg, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
+        E("h2", {style: styles.docName}, ["Johnathan Chivington"]),
+        E("p", {style: styles.docTitle}, ["Deep Learning & AI Engineer"])
+      ]),
+      E("div", {style: styles.docHeaderRight}, [
+        ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
+        ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
+        ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
+        ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
+        ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
+        ["./imgs/icons/sm/dl.svg", "Download Resume (.docx)", "./includes/j.Chivington.Resume.docx", "Download Resume (.docx)"]
+      ].map(r => E("div", {style:  W < 700 ? styles.docHeaderRowMobile : styles.docHeaderRow}, [
+        E("img", {style: styles.docHeaderIcon, src: r[0], alt: r[1]}, []),
+        E("a", {style: styles.docHeaderLink, href: r[2], target: "_blank"}, [r[3]])
+      ])))
+    ])
+
+    // Return DocHeader
+    return DocHeader;
   }
 }
 
@@ -635,7 +717,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains menu state
-  menuState: function (state = "CLOSED", action) {
+  menuState: function (state = "OPEN", action) {
     const choices = {
       "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
       "OPEN_MENU": () => "OPEN",
