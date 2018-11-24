@@ -115,11 +115,9 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListeners
 
      //  -- Create contents (link element) to place in the view/filter
      const link = React.createElement("a", {style: styles.link, href: "https://github.com/chivingtoninc/chivingtoninc.github.io"}, ["chivingtoninc.github.io repo"]);
-     // addEventListeners
 
      // -- Create wallpaper filter
      const filter = React.createElement("div", {style: styles.filter}, [link]);
@@ -161,11 +159,9 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListeners
 
      //  -- Create contents (p element) to place in the view/filter
      const p = React.createElement("p", {style: styles.p}, [viewName]);
-     // addEventListeners
 
      // -- Create wallpaper filter
      const filter = React.createElement("div", {style: styles.filter}, [p]);
@@ -207,11 +203,9 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListeners
 
      //  -- Create contents (p element) to place in the view/filter
      const p = React.createElement("p", {style: styles.p}, [viewName]);
-     // addEventListeners
 
      // -- Create wallpaper filter
      const filter = React.createElement("div", {style: styles.filter}, [p]);
@@ -298,7 +292,6 @@ const Redux = {
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
      const wp = E("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListeners
 
      //  -- Create cover letter
      const cover = E("div", {style: styles.cover}, [
@@ -327,7 +320,6 @@ const Redux = {
          `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`
        ].map(l => E("p", {style: styles.coverLine}, [l])))
      ]);
-     // addEventListeners
 
      // -- Create wallpaper filter
      const filter = E("div", {style: styles.filter}, [cover]);
@@ -342,44 +334,127 @@ const Redux = {
    },
    // Resume View - description.
    Resume: function(props, dispatch, children) {
-     // ResumeView Styles
+     // CoverView Styles
      const styles = {
        view: `
          position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 0;
-         display: flex; flex-direction: column; justify-content: center; align-items: center;
        `,
        wp: `
          position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
        `,
        filter: `
-         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
-         display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 5; overflow-y: scroll;
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
-       link: `
-        color: #fff; font-family: sans-serif; cursor: pointer;
-       `
+       resume: `
+         margin: 0.25em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
+       `,
+       resumeHeader: `
+         padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
+         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+       `,
+       resumeHeaderMobile: `
+        padding: 0.5em 0 1em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+       `,
+       resumeHeaderLeft: `
+         color: #fff;
+       `,
+       resumeHeaderLeftMobile: `
+         color: #fff; margin: 0.5em 1em; border-bottom: 1px solid #fff;
+       `,
+       resumeImg: `
+         margin: 0 0 0.25em 0; width: 8em; border: 1px solid #333; border-radius: 100%;
+       `,
+       resumeName: `
+         margin: 0.2em; font-size: 1.25em;
+       `,
+       resumeTitle: `
+         margin: 0.2em; font-size: 0.75em;
+       `,
+       resumeHeaderRight: `
+         color: #fff;
+       `,
+       resumeHeaderRow: `
+         padding: 0.25em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+       `,
+       resumeHeaderRowMobile: `
+         padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
+       `,
+       resumeHeaderIcon: `
+         height: 0.9em; width: 0.9em; margin: 0 0.35em 0 0;
+       `,
+       resumeHeaderLink: `
+         text-decoration: underline; cursor: pointer; font-size: 0.8em; color: #fff;
+       `,
+       resumeBody: `
+         padding: 1em 3em; background-color: #fff; color: #222;
+       `,
+       resumeBodyMobile: ``,
+       skillsMobile: ``,
+       historyMobile: ``,
+       historyMobile: ``,
+       educationMobile: ``,
+       volunteeringMobile: ``
      }
 
-     // ResumeView Globals
+     // CoverView Globals
      const store = props.store;
-     const viewName = store.getState().viewState.toLowerCase();
+     const state = store.getState();
+     const currentMode = state.windowState;
+     const viewName = state.viewState.toLowerCase();
+     const E = React.createElement;
 
      // -- Create a wallpaper (img element) for the view
      const wpName = store.getState().wallpaperState.name;
      const wpRoute = store.getState().wallpaperState.route;
-     const wp = React.createElement("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
-     // addEventListeners
+     const wp = E("img", {src: wpRoute, alt: wpName, style: styles.wp}, []);
 
-     //  -- Create contents (a element) to place in the view/filter
-     const link = React.createElement("a", {style: styles.link, href: "./includes/j.Chivington.Resume.docx", download: ""}, ["Download Resume (.docx)"]);
-     // addEventListeners
+     //  -- Create resume letter
+     const resume = E("div", {style: styles.resume}, [
+       E("div", {style: window.innerWidth < 700 ? styles.resumeHeaderMobile : styles.resumeHeader}, [
+         E("div", {style: window.innerWidth < 700 ? styles.resumeHeaderLeftMobile : styles.resumeHeaderLeft}, [
+           E("img", {style: styles.resumeImg, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
+           E("h2", {style: styles.resumeName}, ["Johnathan Chivington"]),
+           E("p", {style: styles.resumeTitle}, ["Deep Learning & AI Engineer"])
+         ]),
+         E("div", {style: styles.resumeHeaderRight}, [
+           ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
+           ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
+           ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
+           ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
+           ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
+           ["./imgs/icons/sm/dl.svg", "Download Resume (.docx)", "./includes/j.Chivington.Resume.docx", "Download Resume (.docx)"]
+         ].map(r => E("div", {style:  window.innerWidth < 700 ? styles.resumeHeaderRowMobile : styles.resumeHeaderRow}, [
+           E("img", {style: styles.resumeHeaderIcon, src: r[0], alt: r[1]}, []),
+           E("a", {style: styles.resumeHeaderLink, href: r[2], target: "_blank"}, [r[3]])
+         ])))
+       ]),
+       E("div", {style: window.innerWidth < 700 ? styles.resumeBodyMobile : styles.resumeBody}, [
+         E("div", {style: window.innerWidth < 700 ? styles.skillsMobile : styles.skills}, [
+           // map skills here
+           E("p", {style: window.innerWidth < 700 ? styles.skillsMobile : styles.skills}, ["skills"])
+         ]),
+         E("div", {style: window.innerWidth < 700 ? styles.historyMobile : styles.history}, [
+           // map history here
+           E("p", {style: window.innerWidth < 700 ? styles.historyMobile : styles.history}, ["history"])
+         ]),
+         E("div", {style: window.innerWidth < 700 ? styles.educationMobile : styles.education}, [
+           // map education here
+           E("p", {style: window.innerWidth < 700 ? styles.educationMobile : styles.education}, ["education"])
+         ]),
+         E("div", {style: window.innerWidth < 700 ? styles.volunteeringMobile : styles.volunteering}, [
+           // map volunteering here
+           E("p", {style: window.innerWidth < 700 ? styles.volunteeringMobile : styles.volunteering}, ["volunteering"])
+         ])
+       ])
+     ]);
 
      // -- Create wallpaper filter
-     const filter = React.createElement("div", {style: styles.filter}, [link]);
+     const filter = E("div", {style: styles.filter}, [resume]);
 
      // -- Create view element, passing children
-     const ResumeView = React.createElement("div", {style: styles.view}, [wp, filter]);
+     const ResumeView = E("div", {style: styles.view}, [wp, filter]);
      ResumeView.addEventListener("click", function(){
        dispatch({type: "CLOSE_MENU"});
      });
@@ -451,8 +526,8 @@ const Components = {
       menuOpen: `
         position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-image: linear-gradient(to bottom right, rgba(100,100,125,1), rgba(75,75,100,1));
-        border-right: 1px solid #000; animation: menuOpen 0.15s 1;
+        background-image: linear-gradient(to bottom right, rgba(0,60,90,1), rgba(10,70,100,1));
+        border-right: 1px solid #024; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
         display: none;
@@ -542,7 +617,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "COVER", action) {
+  viewState: function (state = "RESUME", action) {
     const choices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
