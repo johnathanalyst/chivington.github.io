@@ -302,8 +302,8 @@ const Redux = {
 
      //  -- Create cover letter
      const cover = E("div", {style: styles.cover}, [
-       E("div", {style: window.innerWidth < 900 ? styles.coverHeaderMobile : styles.coverHeader}, [
-         E("div", {style: window.innerWidth < 900 ? styles.coverHeaderLeftMobile : styles.coverHeaderLeft}, [
+       E("div", {style: window.innerWidth < 700 ? styles.coverHeaderMobile : styles.coverHeader}, [
+         E("div", {style: window.innerWidth < 700 ? styles.coverHeaderLeftMobile : styles.coverHeaderLeft}, [
            E("img", {style: styles.coverImg, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
            E("h2", {style: styles.coverName}, ["Johnathan Chivington"]),
            E("p", {style: styles.coverTitle}, ["Deep Learning & AI Engineer"])
@@ -315,7 +315,7 @@ const Redux = {
            ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
            ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
            ["./imgs/icons/sm/dl.svg", "Download Cover Letter (.docx)", "./includes/j.Chivington.Cover.docx", "Download Cover Letter (.docx)"]
-         ].map(r => E("div", {style:  window.innerWidth < 900 ? styles.coverHeaderRowMobile : styles.coverHeaderRow}, [
+         ].map(r => E("div", {style:  window.innerWidth < 700 ? styles.coverHeaderRowMobile : styles.coverHeaderRow}, [
            E("img", {style: styles.coverHeaderIcon, src: r[0], alt: r[1]}, []),
            E("a", {style: styles.coverHeaderLink, href: r[2], target: "_blank"}, [r[3]])
          ])))
@@ -399,7 +399,7 @@ const Components = {
   Shell: function(props, dispatch, children) {
     const styles = {
       shell: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow-y: hidden;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
         position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
       `
     }
@@ -501,7 +501,7 @@ const Components = {
   Router: function(props, dispatch, children) {
     const styles = {
       router: `
-        position: absolute; top: -4em; left: 0; bottom: 0; right: 0; overflow-y: hidden;
+        position: absolute; top: -4em; left: 0; bottom: 0; right: 0; overflow: hidden;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: #07e;
       `
