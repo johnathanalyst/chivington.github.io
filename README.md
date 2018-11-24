@@ -19,10 +19,10 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 <br/>
 
 ## Features
- * Mobile 1st / Responsive
- * Offline App
- * "Add To Desktop/Homescreen" compatibility for iOS, Android, Mac, Linux & Windows
- * Pure Javascript
+ * **Mobile 1st / Responsive**
+ * **Offline App**
+ * **"Add To Desktop/Homescreen"** compatibility for iOS, Android, Mac, Linux & Windows
+ * **Pure Javascript**
 
 ## Prerequisites
   * A web browser.
