@@ -229,68 +229,67 @@ const Redux = {
      // CoverView Styles
      const styles = {
        view: `
-         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
-         display: flex; flex-direction: column; justify-content: center; align-items: center;
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 0;
        `,
        wp: `
          position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
        `,
        filter: `
-         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 5; overflow-x: scroll;
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5;
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 5; overflow-y: scroll;
          background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
        `,
        cover: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
          margin: 0.25em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
        `,
        coverHeader: `
-         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
          padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
+         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
        `,
        coverHeaderMobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         padding: 1.25em 4em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
+        padding: 0.5em 0 1em; background-color: #004575; color: #eee; border-bottom: 1px solid #000;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
        `,
        coverHeaderLeft: `
-         display: flex; flex-direction: column; justify-content: center; align-items: center;
+         color: #fff;
+       `,
+       coverHeaderLeftMobile: `
+         color: #fff; margin: 0.5em 1em; border-bottom: 1px solid #fff;
        `,
        coverImg: `
-         margin: 0 0 0.25em 0; height: 8em; width: 8em; border: 1px solid #333; border-radius: 100%;
+         margin: 0 0 0.25em 0; width: 8em; border: 1px solid #333; border-radius: 100%;
        `,
        coverName: `
-         font-size: 1.25em;
+         margin: 0.2em; font-size: 1.25em;
        `,
        coverTitle: `
-         font-size: 0.75em;
+         margin: 0.2em; font-size: 0.75em;
        `,
        coverHeaderRight: `
-         display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
-       `,
-       coverHeaderRightMobile: `
-         display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin: 0.5em 0 0 0 ;
+         color: #fff;
        `,
        coverHeaderRow: `
-         display: flex; flex-direction: row; justify-content: center; align-items: center; margin: 0.35em;
+         padding: 0.25em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+       `,
+       coverHeaderRowMobile: `
+         padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
        `,
        coverHeaderIcon: `
          height: 0.9em; width: 0.9em; margin: 0 0.35em 0 0;
        `,
        coverHeaderLink: `
-         text-decoration: underline; cursor: pointer; font-size: 0.8em;
+         text-decoration: underline; cursor: pointer; font-size: 0.8em; color: #fff;
        `,
        coverBody: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
          padding: 1em 3em; background-color: #fff; color: #222;
-       `,
-       coverLine: `
-         padding: 0.5em; text-align: center;
        `,
        coverDownloadRow: `
          display: flex; flex-direction: row; justify-content: flex-end; align-items: center;
        `,
-       download: `
-         margin: 0.25em; color: #000; font-family: sans-serif; cursor: pointer;
+       downloadButton: `
+         margin: 0.15em; color: #000; font-family: sans-serif; cursor: pointer;
+       `,
+       coverLine: `
+         margin: 0.5em; text-align: center;
        `
      }
 
@@ -310,30 +309,31 @@ const Redux = {
      //  -- Create cover letter
      const cover = E("div", {style: styles.cover}, [
        E("div", {style: window.innerWidth < 900 ? styles.coverHeaderMobile : styles.coverHeader}, [
-         E("div", {style: styles.coverHeaderLeft}, [
-           E("img", {style: styles.coverImg, src: "./imgs/me/me.jpg", alt: "my beautiful face"}, []),
+         E("div", {style: window.innerWidth < 900 ? styles.coverHeaderLeftMobile : styles.coverHeaderLeft}, [
+           E("img", {style: styles.coverImg, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
            E("h2", {style: styles.coverName}, ["Johnathan Chivington"]),
            E("p", {style: styles.coverTitle}, ["Deep Learning & AI Engineer"])
          ]),
-         E("div", {style: window.innerWidth < 900 ? styles.coverHeaderRightMobile : styles.coverHeaderRight}, [
-           ["./imgs/icons/sm/phone.svg", "phone icon", "303.900.2861"],
-           ["./imgs/icons/sm/email.svg", "email icon", "j.chivington@bellevuecollege.edu"],
-           ["./imgs/icons/sm/li.svg", "linkedin icon", "linkedin.com/in/chivingtoninc"],
-           ["./imgs/icons/sm/git.svg", "gihub icon", "github.com/chivingtoninc"],
-           ["./imgs/icons/sm/twt.svg", "twitter icon", "twitter.com/chivingtoninc"]
-         ].map(r => E("div", {style: styles.coverHeaderRow}, [
+         E("div", {style: styles.coverHeaderRight}, [
+           ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
+           ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
+           ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
+           ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
+           ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
+           ["./imgs/icons/sm/dl.svg", "Download Cover Letter (.docx)", "./includes/j.Chivington.Cover.docx", "Download Cover Letter (.docx)"]
+         ].map(r => E("div", {style:  window.innerWidth < 900 ? styles.coverHeaderRowMobile : styles.coverHeaderRow}, [
            E("img", {style: styles.coverHeaderIcon, src: r[0], alt: r[1]}, []),
-           E("a", {style: styles.coverHeaderLink}, [r[2]])
+           E("a", {style: styles.coverHeaderLink, href: r[2]}, [r[3]])
          ])))
        ]),
        E("div", {style: styles.coverBody}, [
          E("div", {style: styles.coverDownloadRow}, [
-           E("a", {style: styles.download, href: "./includes/j.Chivington.Cover.docx", download: ""}, [
+           E("a", {style: styles.downloadButton, href: "./includes/j.Chivington.Cover.docx", download: ""}, [
              E("img", {style: styles.coverHeaderIcon, src: "./imgs/icons/sm/dl.svg", alt: "Download Cover Letter (.docx)"}, [])
            ])
          ]), ...[
-         `I am seeking entry-level Deep Learning roles, internships, or co-ops. I am a strong software engineer, proficient in object-oriented C, algorithmic design, parallel computing with CUDA, rapid prototyping, and Recurrent/Convolutional Neural Network architectures for NLP & CV.`,
-         `I am a Computer Science student at Bellevue College and have recently completed and received certification for Andrew Ng's Stanford Machine Learning course on Coursera. I have also completed four of five of deeplearning.AI’s Deep Learning Specialization on Coursera. These great courses have given me valuable skills, which are enabling me to build useful Deep Learning projects.`,
+         `I am an experienced software engineer, proficient in object-oriented, algorithmic design in C, Python, Java, and Js. I am seeking entry-level Deep Learning roles in Computer Vision, working with Object Detection & Tracking .`,
+         `I am a Computer Science student at Bellevue College and have recently completed Stanford's Machine Learning course on Coursera, as well as four of five courses in deeplearning.AI’s Deep Learning Specialization on Coursera. I am currently building useful Deep Learning projects, using the skills learned in these courses.`,
          `I am focused on creating efficient AI applications, platforms and tools for CV, NLP, and SLAM on embedded & cloud-based systems for applications in automated manufacturing, intelligent robotics, and other areas. AI is revolutionizing many industries and I am learning to leverage it’s capabilities for enhancing daily life. My primary career field interests are in automated manufacturing, food production and sustainable technologies, and/or transportation.`,
          `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`
        ].map(l => E("p", {style: styles.coverLine}, [l]))])
@@ -356,7 +356,7 @@ const Redux = {
      // ResumeView Styles
      const styles = {
        view: `
-         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+         position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 0;
          display: flex; flex-direction: column; justify-content: center; align-items: center;
        `,
        wp: `
@@ -410,7 +410,7 @@ const Components = {
   Shell: function(props, dispatch, children) {
     const styles = {
       shell: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow-y: hidden;
         position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
       `
     }
@@ -512,7 +512,7 @@ const Components = {
   Router: function(props, dispatch, children) {
     const styles = {
       router: `
-        position: absolute; top: -4em; left: 0; bottom: 0; right: 0;
+        position: absolute; top: -4em; left: 0; bottom: 0; right: 0; overflow-y: hidden;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: #07e;
       `
