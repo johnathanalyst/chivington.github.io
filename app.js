@@ -370,7 +370,7 @@ const Components = {
         height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff; background-color: #222;
       `,
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
-      title: `margin-left: 0.25em; color: #fff; font-size: 2.15em; cursor: pointer;`,
+      title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
       superScript: `font-size: 0.3em; margin-left: 1px;`
     }
 
@@ -614,7 +614,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "RESUME", action) {
+  viewState: function (state = "COVER", action) {
     const choices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
@@ -632,7 +632,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains menu state
-  menuState: function (state = "OPEN", action) {
+  menuState: function (state = "CLOSED", action) {
     const choices = {
       "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
       "OPEN_MENU": () => "OPEN",
