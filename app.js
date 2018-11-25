@@ -603,12 +603,10 @@ const Components = {
          margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
        `,
        body: `
-         padding: 0 1em; background-color: #fff; color: #000;
-         border: 1px solid #444;
+         padding: 1em; background-color: #fff; color: #000;
        `,
        bodyMobile: `
          padding: 0 1em; background-color: #fff; color: #000;
-         border: 1px solid #444;
        `,
        section: {
          title: `
@@ -654,7 +652,7 @@ const Components = {
            margin: 0; border-bottom: 1px solid #222;
          `,
          infoField: `
-           display: flex; flex-direction: column; justify-content: center; align-items: center;
+           display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: center;
            margin: 0; font-size: 0.95em;
          `,
          descriptionRow: `
@@ -664,51 +662,68 @@ const Components = {
          description: `
            display: flex; flex-direction: column; justify-content: center; align-items: center;
            margin: 0; padding: 0; font-size: 0.9em;
-         `
+         `,
+         descriptionHidden: `display: none;`
        },
        edu: {
          window: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
            background-color: rgba(100,100,100,0.2);
          `,
          mobile: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
            background-color: rgba(100,100,100,0.2);
          `,
          row: `
-           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-           border: 1px solid #00f;
+           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+           margin: 0 0 0.5em; padding: 0 0 0 0.5em;
          `,
+         degree: `font-size: 0.9em;`,
          field: `
-           border: 1px solid #f00;
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em;
          `
        },
        certs: {
          window: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; flex-wrap: wrap;
            background-color: rgba(100,100,100,0.2);
          `,
          mobile: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
            background-color: rgba(100,100,100,0.2);
          `,
          row: `
-           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-           border: 1px solid #00f;
+           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+           margin: 0 0 0.5em; padding: 0 0 0 0.5em;
          `,
+         col: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+           margin: 0.5em; padding: 0; text-align: center;
+         `,
+         title: `margin: 0.5em; font-size: 0.9em;`,
          field: `
-           border: 1px solid #f00;
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em;
+         `,
+         link: `
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em; text-decoration: none; color: #aaf;
          `
        },
        volunteer: {
          window: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
            background-color: rgba(100,100,100,0.2);
          `,
          mobile: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
            background-color: rgba(100,100,100,0.2);
          `,
          row: `
-           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-           border: 1px solid #00f;
+           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+           margin: 0 0 0.5em; padding: 0 0 0 0.5em;
          `,
-         field: `
-           border: 1px solid #f00;
+         org: `font-size: 0.9em;`,
+         description: `
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em;
          `
        },
      }
@@ -752,8 +767,8 @@ const Components = {
        "Helped grow leads & sales for a CRM, text-to-lead, and home valuation SaaS company. Assisted in developing on-boarding and training programs. Also served in an IT support position."],
        ["Sales Supervisor", "Best Buy", "(Aug. 2015 – June 2016)",
        "Produced ~$700k in sales Q4 '15 through use of solutions-based sales techniques. Generated b2b leads. Improved financial services sales & lead one of the strongest locations for that metric in the West Coast market."]
-     ].map(position => E("div", {style: styles.history.position}, [
-       E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map(f => E("h3", {style: styles.history.infoField}, [f]))),
+     ].map((position,i) => E("div", {style: styles.history.position}, [
+       E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map((f,i) => E("h3", {style: styles.history.infoField}, [f]))),
        E("div", {style: styles.history.descriptionRow}, [E("p", {style: styles.history.description}, [position[3]])])
      ])));
 
@@ -761,45 +776,40 @@ const Components = {
      const eduButton = E("h2", {style: styles.section.title}, ["Education"]);
      eduButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_EDU_SECTION"}));
 
-     // Bellevue College – BS Computer Science (2018 – ongoing)
-     // Central Piedmont Community College – BS Electronics Engineering (2013 – unfinished)
-     // Queen's University of Charlotte – Cert. Nurse Aide (2012 – 4.0)
-
      const showEdu = state.resumeState.education == "OPEN";
      const eduWindow = E("div", {style: showEdu ? (MOB ? styles.edu.mobile : styles.edu.window) : styles.section.hidden}, [
-       ["school1", "dates1", "degree1"],
-       ["school2", "dates2", "degree2"],
-       ["school3", "dates3", "degree3"]
-     ].map(r => E("div", {style: styles.edu.row}, r.map(f => E("p", {style: styles.edu.field}, [f])))));
+       ["BS Computer Science - ", "Bellevue College ", "(2018 – ongoing)"]
+     ].map(row => E("div", {style: styles.edu.row}, row.map((field,idx) => (idx==0)
+       ? E("h3", {style: styles.edu.degree}, [field]) : E("p", {style: styles.edu.field}, [field])
+     ))));
 
      // Certifications Section
      const certsButton = E("h2", {style: styles.section.title}, ["Certifications"]);
      certsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_CERTS_SECTION"}));
 
-     // Deeplearning.ai on Coursera – 5 Course Deep Learning Specialization (2018 – ongoing)
-     // Stanford University on Coursera – Machine Learning Certificate (Aug. 2018 – 4.0)
-
      const showCerts = state.resumeState.certifications == "OPEN";
      const certsWindow = E("div", {style: showCerts ? (MOB ? styles.certs.mobile : styles.certs.window) : styles.section.hidden}, [
-       ["certification1", "issuer1", "date1", "expiration1"],
-       ["certification2", "issuer2", "date2", "expiration2"],
-       ["certification3", "issuer3", "date3", "expiration3"],
-       ["certification4", "issuer4", "date4", "expiration4"]
-     ].map(r => E("div", {style: styles.certs.row}, r.map(f => E("p", {style: styles.certs.field}, [f])))));
+       ["Machine Learning", "Stanford University on Coursera", "(08.10.2018)", "https://www.coursera.org/account/accomplishments/verify/NK67XWS3X7ZK"],
+       ["Neural Networks and Deep Learning", "deeplearning.ai on Coursera", "(08.31.2018)", "https://www.coursera.org/account/accomplishments/verify/H5ECGGJT5WM2"],
+       ["Improving Deep Neural Networks: Hyperparameter tuning, Regularization and Optimization", "deeplearning.ai on Coursera", "(09.09.2018)", "https://www.coursera.org/account/accomplishments/verify/UCFYFEDXJ5CP"],
+       ["Structuring Machine Learning Projects", " deeplearning.ai on Coursera", "(09.11.2018)", "https://www.coursera.org/account/accomplishments/verify/RRARJ2BRWZ7Y"],
+       ["Convolutional Neural Networks","deeplearning.ai on Coursera", "(11.05.2018)", "https://www.coursera.org/account/accomplishments/verify/PBHCCPXZWFGY"],
+       ["Certified Nurse Aide", "Queen's University of Charlotte", "2012", "http://www.queens.edu/academics/schools-colleges/presbyterian-school-of-nursing.html"]
+     ].map(r => E("div", {style: MOB ? styles.certs.col : styles.certs.row}, r.map((f,i) => (i==0)
+       ? E("h3", {style: styles.certs.title}, [f])
+       : ((i==3) ? E("a", {style: styles.certs.link, href: f, target: "_blank"}, ["(Link)"]) : E("p", {style: styles.certs.field}, [f]))
+     ))));
 
      // Volunteering Section
      const volunteerButton = E("h2", {style: styles.section.title}, ["Volunteering"]);
      volunteerButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_VOLUNTEER_SECTION"}));
 
-     // Hands-On Atlanta – maintenance and repair work for low/no-rent community helping single parents
-     // and families near or recovering from homelessness. (2014)
-
      const showVolunteer = state.resumeState.volunteering == "OPEN";
-     const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.skillsWindowMobile : styles.skillsWindow) : styles.section.hidden}, [
-       ["organization1", "description1", "dates1"],
-       ["organization2", "description2", "dates2"],
-       ["organization3", "description3", "dates3"]
-     ].map(r => E("div", {style: styles.volunteer.row}, r.map(f => E("p", {style: styles.volunteer.field}, [f])))));
+     const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.volunteer.mobile : styles.volunteer.window) : styles.section.hidden}, [
+       ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2018 – ongoing)"]
+     ].map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
+       ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
+     ))));
 
      // -- Resume
      const resume = E("div", {style: styles.resume}, [Components.DocHeader(props, dispatch, []),
@@ -838,7 +848,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "HOME", action) {
+  viewState: function (state = "RESUME", action) {
     const choices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
