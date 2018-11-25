@@ -241,49 +241,52 @@ const Components = {
   DocHeader: function(props, dispatch, children) {
     // DocHeader Styles
     const styles = {
-      docHeader: `
+      header: `
         padding: 1.25em 4em; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
         background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("./imgs/wp/math.jpg");
         background-size: contain; background-repeat: no-repeat; background-position: center;
         background-color: #000; color: #eee; border-bottom: 1px solid #ccc;
       `,
-      docHeaderMobile: `
+      headerMobile: `
         padding: 0.5em 0 1em; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("./imgs/wp/math.jpg");
         background-size: contain; background-repeat: no-repeat; background-position: center;
         background-color: #000; color: #eee; border-bottom: 1px solid #fff;
       `,
-      docHeaderLeft: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-      `,
-      docHeaderLeftMobile: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid #fff; margin: 0 1em;
-      `,
-      docImg: `
-        margin: 0 0 0.25em 0; width: 8em; border: 1px solid #fff; border-radius: 100%;
-      `,
-      docImgMobile: `
-        margin: 0.75em 0 0 0; width: 10em; border: 1px solid #fff; border-radius: 100%;
-      `,
-      docName: `
-        margin: 0; font-size: 1.75em;
-      `,
-      docTitle: `
-        margin: 0 0 0.2em 0; font-size: 1em;
-      `,
-      docHeaderRight: `
+      left: {
+        window: `
+          display: flex; flex-direction: column; justify-content: center; align-items: center;
+        `,
+        mobile: `
+          display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid #fff; margin: 0 1em;
+        `,
+        img: `
+          margin: 0 0 0.25em 0; width: 8em; border: 1px solid #fff; border-radius: 100%;
+        `,
+        imgMobile: `
+          margin: 0.75em 0 0 0; width: 10em; border: 1px solid #fff; border-radius: 100%;
+        `,
+        name: `
+          margin: 0; font-size: 1.75em;
+        `,
+        title: `
+          margin: 0 0 0.2em 0; font-size: 1em;
+        `
+      },
+      right: {},
+      headerRight: `
         margin: 1.25em;
       `,
-      docHeaderRow: `
+      headerRow: `
         margin: 0.5em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
       `,
-      docHeaderRowMobile: `
+      headerRowMobile: `
         padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
       `,
-      docHeaderIcon: `
+      headerIcon: `
         height: 0.9em; width: 0.9em; margin: 0 0.5em 0 0;
       `,
-      docHeaderLink: `
+      headerLink: `
         text-decoration: underline; cursor: pointer; font-size: 0.9em; color: #fff;
       `
     }
@@ -293,26 +296,27 @@ const Components = {
     const state = store.getState();
     const currentMode = state.windowState;
     const viewName = state.viewState.toLowerCase();
-    const W = window.innerWidth;
+    const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
+    const MOB = window.innerWidth < 700;
     const E = React.createElement;
 
     // Create DocHeader & add event listeners
-    const DocHeader = E("div", {style: W < 700 ? styles.docHeaderMobile : styles.docHeader}, [
-      E("div", {style: W < 700 ? styles.docHeaderLeftMobile : styles.docHeaderLeft}, [
-        E("img", {style: W < 700 ? styles.docImgMobile : styles.docImg, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
-        E("h2", {style: styles.docName}, ["Johnathan Chivington"]),
-        E("p", {style: styles.docTitle}, ["Deep Learning & AI Engineer"])
+    const DocHeader = E("div", {style: MOB ? styles.headerMobile : styles.header}, [
+      E("div", {style: MOB ? styles.left.mobile : styles.left.window}, [
+        E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
+        E("h2", {style: styles.left.name}, ["Johnathan Chivington"]),
+        E("p", {style: styles.left.title}, ["Deep Learning & AI Engineer"])
       ]),
-      E("div", {style: styles.docHeaderRight}, [
+      E("div", {style: styles.headerRight}, [
         ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
         ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
         ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
         ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
         ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
-        ["./imgs/icons/sm/dl.svg", "Download Resume (.docx)", "./includes/j.Chivington.Resume.docx", "Download Resume (.docx)"]
-      ].map(r => E("div", {style:  W < 700 ? styles.docHeaderRowMobile : styles.docHeaderRow}, [
-        E("img", {style: styles.docHeaderIcon, src: r[0], alt: r[1]}, []),
-        E("a", {style: styles.docHeaderLink, href: r[2], target: "_blank"}, [r[3]])
+        ["./imgs/icons/sm/dl.svg", `Download ${capitalized} (.docx)`, "./includes/j.Chivington.Resume.docx", `Download ${capitalized} (.docx)`]
+      ].map(r => E("div", {style:  MOB ? styles.headerRowMobile : styles.headerRow}, [
+        E("img", {style: styles.headerIcon, src: r[0], alt: r[1]}, []),
+        E("a", {style: styles.headerLink, href: r[2], target: "_blank"}, [r[3]])
       ])))
     ])
 
@@ -673,7 +677,7 @@ const Components = {
      ].map(position => E("div", {style: styles.history.position}, [
        E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map(f => E("h3", {style: styles.history.infoField}, [f]))),
        E("div", {style: styles.history.descriptionRow}, [E("p", {style: styles.history.description}, [position[3]])])
-     ])) );
+     ])));
 
      // Education Section
      const eduButton = E("h2", {style: styles.section.title}, ["Education"]);
