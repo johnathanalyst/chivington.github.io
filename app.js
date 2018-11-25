@@ -117,7 +117,7 @@ const Components = {
         position: absolute; top: 0; left: 0; right: 0; z-index: 15;
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
         height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
-        background-image: linear-gradient(rgba(30,60,100,1), rgba(30,60,100,1), rgba(30,60,100,0.9));
+        background-image: linear-gradient(#333, #222);
       `,
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
       title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
@@ -153,7 +153,7 @@ const Components = {
       menuOpen: `
         position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-image: linear-gradient(to bottom right, #666, #666);
+        background-image: linear-gradient(to bottom right, rgba(6,100,214,1), rgba(6,100,204,1));
         border-right: 1px solid #024; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
@@ -170,12 +170,6 @@ const Components = {
     home.addEventListener("click", function(){
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "HOME"});
-    });
-
-    const about = React.createElement("a", {style: styles.link}, ["About Me"]);
-    about.addEventListener("click", function() {
-      dispatch({type: "CLOSE_MENU"});
-      dispatch({type: "NAV_TO", payload: "ABOUT"});
     });
 
     const blog = React.createElement("a", {style: styles.link}, ["Blog"]);
@@ -203,7 +197,7 @@ const Components = {
     });
 
 
-    return React.createElement("div", {style: menuStyle}, [home, about, blog, projects, cover, resume, ...children]);
+    return React.createElement("div", {style: menuStyle}, [home, blog, projects, cover, resume, ...children]);
   },
   // Router - maintains view routes. (viewing, tabs, minimized...)
   Router: function(props, dispatch, children) {
@@ -219,7 +213,6 @@ const Components = {
     // Views
     const views = {
       "HOME": Views.Home,
-      "ABOUT": Views.About,
       "BLOG": Views.Blog,
       "PROJECTS": Views.Projects,
       "COVER": Views.Cover,
@@ -273,22 +266,23 @@ const Components = {
           margin: 0 0 0.2em 0; font-size: 1em;
         `
       },
-      right: {},
-      headerRight: `
-        margin: 1.25em;
-      `,
-      headerRow: `
-        margin: 0.5em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-      `,
-      headerRowMobile: `
-        padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
-      `,
-      headerIcon: `
-        height: 0.9em; width: 0.9em; margin: 0 0.5em 0 0;
-      `,
-      headerLink: `
-        text-decoration: underline; cursor: pointer; font-size: 0.9em; color: #fff;
-      `
+      right: {
+        window: `
+          margin: 1.25em;
+        `,
+        row: `
+          margin: 0.5em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+        `,
+        rowMobile: `
+          padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
+        `,
+        icon: `
+          height: 0.9em; width: 0.9em; margin: 0 0.5em 0 0;
+        `,
+        link: `
+          text-decoration: underline; cursor: pointer; font-size: 0.9em; color: #fff;
+        `
+      }
     }
 
     // DocHeader Globals
@@ -307,16 +301,16 @@ const Components = {
         E("h2", {style: styles.left.name}, ["Johnathan Chivington"]),
         E("p", {style: styles.left.title}, ["Deep Learning & AI Engineer"])
       ]),
-      E("div", {style: styles.headerRight}, [
+      E("div", {style: styles.right.window}, [
         ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
         ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
         ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
         ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
         ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
         ["./imgs/icons/sm/dl.svg", `Download ${capitalized} (.docx)`, "./includes/j.Chivington.Resume.docx", `Download ${capitalized} (.docx)`]
-      ].map(r => E("div", {style:  MOB ? styles.headerRowMobile : styles.headerRow}, [
-        E("img", {style: styles.headerIcon, src: r[0], alt: r[1]}, []),
-        E("a", {style: styles.headerLink, href: r[2], target: "_blank"}, [r[3]])
+      ].map(r => E("div", {style:  MOB ? styles.right.rowMobile : styles.right.row}, [
+        E("img", {style: styles.right.icon, src: r[0], alt: r[1]}, []),
+        E("a", {style: styles.right.link, href: r[2], target: "_blank"}, [r[3]])
       ])))
     ])
 
@@ -365,22 +359,136 @@ const Components = {
      // -- HomeView Styles
      const styles = {
        view: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        height: 100%;
+         display: flex; flex-direction: column; justify-content: center; align-items: stretch;
+         height: 100%; background-image: url("./imgs/wp/pnw.jpg"); background-position: center; background-size: cover; background-repeat: none;
        `,
-       link: `
-        color: #fff; font-family: sans-serif; cursor: pointer; text-decoration: underline;
-       `
+       viewMobile: `
+         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+         background-image: url("./imgs/wp/pnw.jpg"); background-position: center; background-size: cover; background-repeat: none;
+       `,
+       card: {
+         box: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+           margin: 0 3em; z-index: 5;
+         `,
+         boxMobile: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+           margin: 1em; z-index: 5;
+         `,
+         body: {
+           box: `
+            display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;
+            padding: 0.5em; background-color: #eff;
+           `,
+           boxMobile: `
+            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+            padding: 0.5em; background-color: #eff;
+           `,
+           left: {
+             box: `
+              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+              height: 25em;
+             `,
+             boxMobile: `
+              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+              height: 22em;
+             `,
+             img: `height: 100%;`,
+           },
+           right: {
+             box: `
+              display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch;
+              height: 25em; margin: 0 0 0 0.5em; background-color: #ddd;
+             `,
+             boxMobile: `
+              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+              margin: 0.5em 0 0 0;
+             `,
+             top: {
+               box: `
+                background-color: #eee; padding: 0.5em; border-bottom: 1px solid #444;
+               `,
+               boxMobile:`background-color: #eee; padding: 0.5em;  border-bottom: 1px solid #444; text-align: center;`,
+               greeting: `height: 4em; margin: 0.5em 0;;`,
+               name: `margin: 0; font-size: 1.5em;`,
+               title: `margin: 0; font-size: 0.9em; font-weight: 300;`
+             },
+             bottom: {
+               box: `
+                display: flex; flex-direction: column; justify-content: space-between; align-items: stretch;
+                background-color: #ddd; padding: 0 1em;
+               `,
+               row: `
+                display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+                margin: 0.5em 0; padding: 0;
+               `,
+               rowMobile: `
+                display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+                margin: 1.25em 0; padding: 0;
+               `,
+               field: `
+                font-size: 1em; margin: 0;
+               `,
+               text: `
+                font-size: 0.9em; margin: 0;
+               `
+             }
+           }
+         },
+         footer: {
+           box: `
+             display: flex; flex-direction: row; justify-content: space-around; align-items: center;
+             background-color: #222; padding: 1em 0 0.5em;
+           `,
+           link: `color: #fff`,
+           icon: `
+             height: 1.25em; width: 1.25em;
+           `
+         }
+       }
      }
 
      // -- HomeView Globals
      const store = props.store;
+     const MOB = window.innerWidth < 700;
+     const E = React.createElement;
 
      // -- HomeView Content
-     const link = React.createElement("a", {style: styles.link, href: "https://github.com/chivingtoninc/chivingtoninc.github.io"}, ["chivingtoninc.github.io repo"]);
+     const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
+       E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
+         E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
+           E("img", {style: styles.card.body.left.img, src: "./imgs/me/me.jpg", alt: "my face"}, [])
+         ]),
+         E("div", {style: MOB ? styles.card.body.right.boxMobile : styles.card.body.right.box}, [
+           E("div", {style: MOB ? styles.card.body.right.top.boxMobile : styles.card.body.right.top.box}, [
+             E("img", {style: styles.card.body.right.top.greeting, src: "./imgs/content/hello.png"}, []),
+             E("h2", {style: styles.card.body.right.top.name}, ["Johnathan Chivington"]),
+             E("h2", {style: styles.card.body.right.top.title}, ["Deep Learning & AI Engineer"])
+           ]),
+           E("div", {style: styles.card.body.right.bottom.box}, [
+             ["location", "Seattle, WA"],
+             ["phone", "303.900.2861"],
+             ["email", "j.chivington@bellevuecollege.edu"],
+             ["seeking", "actively"]
+           ].map(r => E("div", {style: MOB ? styles.card.body.right.bottom.rowMobile : styles.card.body.right.bottom.row}, [
+             E("h3", {style: styles.card.body.right.bottom.field}, [r[0]]),
+             E("p", {style: styles.card.body.right.bottom.text}, [r[1]]),
+           ])))
+         ])
+       ]),
+       E("div", {style: styles.card.footer.box}, [
+         ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc"],
+         ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc"],
+         ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc"],
+         ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861"],
+         ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu"]
+       ].map(icon => E("a", {style: styles.card.footer.link, href: icon[2], alt: icon[2], target: "_blank"}, [
+         E("img", {style: styles.card.footer.icon, src: icon[0], alt: icon[1]}, [])
+       ])))
+     ]);
 
      // -- HomeView
-     const HomeView = React.createElement("div", {style: styles.view}, [link]);
+     const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile : styles.view}, [card]);
 
      // -- HomeView Listeners
      HomeView.addEventListener("click", function(){
@@ -388,36 +496,6 @@ const Components = {
      });
 
      return HomeView;
-   },
-   // About View - description.
-   About: function(props, dispatch, children) {
-     // -- AboutView Styles
-     const styles = {
-       view: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        height: 100%;
-       `,
-       p: `
-        color: #fff; font-family: sans-serif; cursor: pointer;
-       `
-     }
-
-     // -- AboutView Globals
-     const store = props.store;
-     const viewName = store.getState().viewState.toLowerCase();
-
-     // -- AboutView Content
-     const p = React.createElement("p", {style: styles.p}, [viewName]);
-
-     // -- AboutView
-     const AboutView = React.createElement("div", {style: styles.view}, [p]);
-
-     // -- AboutView Listeners
-     AboutView.addEventListener("click", function(){
-       dispatch({type: "CLOSE_MENU"});
-     });
-
-     return AboutView;
    },
    // Blog View - description.
    Blog: function(props, dispatch, children) {
@@ -760,7 +838,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "RESUME", action) {
+  viewState: function (state = "HOME", action) {
     const choices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
