@@ -153,14 +153,14 @@ const Components = {
       menuOpen: `
         position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-image: linear-gradient(to bottom right, rgba(6,100,214,1), rgba(6,100,204,1));
+        background-image: linear-gradient(to bottom right, rgba(6,90,204,1), rgba(25,110,214,1));
         border-right: 1px solid #024; animation: menuOpen 0.15s 1;
       `,
       menuClosed: `
         display: none;
       `,
       link: `
-        padding: 0.5em; border-bottom: 0.5px solid #ddd; color: #fff; cursor: pointer;
+        padding: 1em; border-bottom: 0.5px solid #ddd; color: #fff; cursor: pointer;
       `
     }
 
@@ -505,17 +505,18 @@ const Components = {
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         height: 100%;
        `,
-       link: `
-        color: #fff; font-family: sans-serif; cursor: pointer; text-decoration: underline;
+       p: `
+        color: #fff; cursor: pointer;
        `
      }
 
      // -- BlogView Globals
      const store = props.store;
      const viewName = store.getState().viewState.toLowerCase();
+     const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
      // -- BlogView Content
-     const p = React.createElement("p", {style: styles.p}, [viewName]);
+     const p = React.createElement("p", {style: styles.p}, [capitalized]);
 
      // -- BlogView
      const BlogView = React.createElement("div", {style: styles.view}, [p]);
@@ -536,16 +537,17 @@ const Components = {
         height: 100%;
        `,
        p: `
-        color: #fff; font-family: sans-serif; cursor: pointer;
+        color: #fff; cursor: pointer;
        `
      }
 
      // -- ProjectsView Globals
      const store = props.store;
      const viewName = store.getState().viewState.toLowerCase();
+     const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
      // -- ProjectsView Content
-     const p = React.createElement("p", {style: styles.p}, [viewName]);
+     const p = React.createElement("p", {style: styles.p}, [capitalized]);
 
      // -- ProjectsView
      const ProjectsView = React.createElement("div", {style: styles.view}, [p]);
@@ -568,7 +570,8 @@ const Components = {
          padding: 1em 3em; background-color: #fff; color: #222;
        `,
        coverLine: `
-         margin: 1em auto; text-align: center;
+         margin: 1em auto; padding: 1em; text-align: center;
+         background-color: rgba(100,100,200,0.15);
        `
      }
 
@@ -611,7 +614,7 @@ const Components = {
        section: {
          title: `
            margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-           padding: 0 0.25em; font-size: 1.05em; border-bottom: 1px solid #000; cursor: pointer;
+           padding: 0 0.25em; font-size: 1.15em; border-bottom: 1px solid #000; cursor: pointer;
          `,
          hidden: `
            display: none;
@@ -620,11 +623,11 @@ const Components = {
        skills: {
          window: `
            display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          column: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -637,11 +640,11 @@ const Components = {
        history: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           padding: 0.5em; background-color: rgba(100,100,200,0.2);
+           padding: 0.5em; background-color: rgba(100,100,200,0.15);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          position: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -649,48 +652,48 @@ const Components = {
          `,
          infoRow: `
            display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-           margin: 0; border-bottom: 1px solid #222;
+           margin: 0; padding: 0 0.5em; border-bottom: 1px solid #222;
          `,
          infoField: `
-           display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: center;
+           display: flex; flex-direction: column; justify-content: center; align-items: center;
            margin: 0; font-size: 0.95em;
          `,
          descriptionRow: `
            display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-           margin: 0 0 0.5em; padding: 0 0.5em;
+           margin: 0.5em 0; padding: 0 0.5em;
          `,
          description: `
            display: flex; flex-direction: column; justify-content: center; align-items: center;
-           margin: 0; padding: 0; font-size: 0.9em;
+           margin: 0; padding: 0; font-size: 0.95em;
          `,
          descriptionHidden: `display: none;`
        },
        edu: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          row: `
            display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-           margin: 0 0 0.5em; padding: 0 0 0 0.5em;
+           margin: 0.5em; padding: 0 0 0 0.5em;
          `,
-         degree: `font-size: 0.9em;`,
+         degree: `margin: 0 0 0 0.5em; font-size: 0.95em;`,
          field: `
-           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em;
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
          `
        },
        certs: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; flex-wrap: wrap;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          row: `
            display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
@@ -700,30 +703,30 @@ const Components = {
            display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
            margin: 0.5em; padding: 0; text-align: center;
          `,
-         title: `margin: 0.5em; font-size: 0.9em;`,
+         title: `margin: 0.5em; font-size: 0.95em;`,
          field: `
-           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em;
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
          `,
          link: `
-           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em; text-decoration: none; color: #aaf;
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em; text-decoration: none; color: #aaf;
          `
        },
        volunteer: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,200,0.2);
+           background-color: rgba(100,100,200,0.15);
          `,
          row: `
            display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
            margin: 0 0 0.5em; padding: 0 0 0 0.5em;
          `,
-         org: `font-size: 0.9em;`,
+         org: `font-size: 0.95em;`,
          description: `
-           margin: 0 0 0 0.5em; padding: 0; font-size: 0.9em;
+           margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
          `
        },
      }
@@ -806,7 +809,7 @@ const Components = {
 
      const showVolunteer = state.resumeState.volunteering == "OPEN";
      const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.volunteer.mobile : styles.volunteer.window) : styles.section.hidden}, [
-       ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2018 – ongoing)"]
+       ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2012-2013)"]
      ].map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
        ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
      ))));
