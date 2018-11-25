@@ -6,7 +6,7 @@
 
 
 /* ------------------------------------- Libs -------------------------------------- *
- * -- UI & state "framework" objects/constructors                                    *
+ * -- UI & state "libraries"                                                         *
  * --------------------------------------------------------------------------------- */
 // React - for creating elements and diffing/maintaining vdom tree
 const React = {
@@ -81,257 +81,6 @@ const Redux = {
 }
 
 
-/* ------------------------------------- Views ------------------------------------ *
- * -- Views are a type of Component that group several individual Components into   *
- *  one device-screen-sized object to render.                                       *
- * -------------------------------------------------------------------------------- */
- const Views = {
-   // Home View - description.
-   Home: function(props, dispatch, children) {
-     // HomeView Styles
-     const styles = {
-       view: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        height: 100%;
-       `,
-       link: `
-        color: #fff; font-family: sans-serif; cursor: pointer; text-decoration: underline;
-       `
-     }
-
-     // HomeView Globals
-     const store = props.store;
-
-     // HomeView contents
-     const link = React.createElement("a", {style: styles.link, href: "https://github.com/chivingtoninc/chivingtoninc.github.io"}, ["chivingtoninc.github.io repo"]);
-
-     // Create HomeView & add event listeners
-     const HomeView = React.createElement("div", {style: styles.view}, [link]);
-     HomeView.addEventListener("click", function(){
-       dispatch({type: "CLOSE_MENU"});
-     });
-
-     return HomeView;
-   },
-   // About View - description.
-   About: function(props, dispatch, children) {
-     // AboutView Styles
-     const styles = {
-       view: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        height: 100%;
-       `,
-       p: `
-        color: #fff; font-family: sans-serif; cursor: pointer;
-       `
-     }
-
-     // AboutView Globals
-     const store = props.store;
-     const viewName = store.getState().viewState.toLowerCase();
-
-     //  -- Create contents (p element) to place in the view/filter
-     const p = React.createElement("p", {style: styles.p}, [viewName]);
-
-     // -- Create view element, passing children
-     const AboutView = React.createElement("div", {style: styles.view}, [p]);
-     AboutView.addEventListener("click", function(){
-       dispatch({type: "CLOSE_MENU"});
-     });
-
-     return AboutView;
-   },
-   // Projects View - description.
-   Projects: function(props, dispatch, children) {
-     // ProjectsView Styles
-     const styles = {
-       view: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        height: 100%;
-       `,
-       p: `
-        color: #fff; font-family: sans-serif; cursor: pointer;
-       `
-     }
-
-     // ProjectsView Globals
-     const store = props.store;
-     const viewName = store.getState().viewState.toLowerCase();
-
-     //  -- Create contents (p element) to place in the view/filter
-     const p = React.createElement("p", {style: styles.p}, [viewName]);
-
-     // -- Create view element, passing children
-     const ProjectsView = React.createElement("div", {style: styles.view}, [p]);
-     ProjectsView.addEventListener("click", function(){
-       dispatch({type: "CLOSE_MENU"});
-     });
-
-     return ProjectsView;
-   },
-   // Cover View - description.
-   Cover: function(props, dispatch, children) {
-     // CoverView Styles
-     const styles = {
-       cover: `
-         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
-       `,
-       coverBody: `
-         padding: 1em 3em; background-color: #fff; color: #222;
-       `,
-       coverLine: `
-         margin: 1em auto; text-align: center;
-       `
-     }
-
-     // CoverView Globals
-     const store = props.store;
-     const state = store.getState();
-
-     //  -- CoverView w/ DocHeader
-     const CoverView = React.createElement("div", {style: styles.cover}, [
-       Components.DocHeader(props, dispatch, []),
-       React.createElement("div", {style: styles.coverBody}, [
-         `I am an experienced software engineer, proficient in object-oriented, algorithmic design in C, Python, Java, and Js. I am seeking entry-level Deep Learning roles in Computer Vision, working with Object Detection & Tracking .`,
-         `I am a Computer Science student at Bellevue College and have recently completed Stanford's Machine Learning course on Coursera, as well as four of five courses in deeplearning.AI’s Deep Learning Specialization on Coursera. I am currently building useful Deep Learning projects, using the skills learned in these courses.`,
-         `I am focused on creating efficient AI applications, platforms and tools for CV, NLP, and SLAM on embedded & cloud-based systems for applications in automated manufacturing, intelligent robotics, and other areas. AI is revolutionizing many industries and I am learning to leverage it’s capabilities for enhancing daily life. My primary career field interests are in automated manufacturing, food production and sustainable technologies, and/or transportation.`,
-         `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a great pleasure to work alongside the dedicated professionals who are passionate about bringing useful AI technologies to life.`
-       ].map(l => React.createElement("p", {style: styles.coverLine}, [l])))
-     ]);
-
-     CoverView.addEventListener("click", function(){
-       dispatch({type: "CLOSE_MENU"});
-     });
-
-     return CoverView;
-   },
-   // Resume View - description.
-   Resume: function(props, dispatch, children) {
-     // CoverView Styles
-     const styles = {
-       resume: `
-         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
-       `,
-       resumeBody: `
-         padding: 0 1em; background-color: #444; color: #fff;
-         border: 1px solid #444;
-       `,
-       resumeBodyMobile: `
-         color: #fff;
-       `,
-       sectionTitle: `
-         margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-         padding: 0 0.75em; font-size: 1.05em; border-bottom: 1px solid #000;
-       `,
-       window: `
-         background-color: #333;
-       `,
-       skillsWindow: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; text-decoration: underline;
-       `,
-       skillsWindowMobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; text-decoration: underline;
-       `,
-       skillsWindow: `
-         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-       `,
-       skillsWindowMobile: `
-         color: #fff;
-       `,
-       skillColumn: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-       `,
-       skill: `
-         border: 1px solid #000; margin: 0.25em auto;
-       `,
-       historySection: `
-         display: flex; flex-direction: row; justify-content: space-beteween; align-items: center;
-       `,
-       historySectionMobile: `
-         display: flex; flex-direction: column; justify-content: stretch; align-items: center;
-       `,
-       historySectionMobileHidden: `
-        display: none;
-       `,
-       education: `
-         color: #fff;
-       `,
-       educationMobile: `
-         color: #fff;
-       `,
-       certifications: `
-         color: #fff;
-       `,
-       certificationsMobile: `
-         color: #fff;
-       `,
-       volunteering: `
-         color: #fff;
-       `,
-       volunteeringMobile: `
-         color: #fff;
-       `
-     }
-
-     // CoverView Globals
-     const store = props.store;
-     const state = store.getState();
-     const W = window.innerWidth;
-     const E = React.createElement;
-
-     // Resume Skills Section
-     const skillsButton = E("h2", {style: styles.sectionTitle}, ["Skills"]);
-     skillsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_SKILL_SECTION"}));
-
-     const skillsWindow = E("div", {style: W < 700 ? styles.skillsWindowMobile : styles.window}, [
-       ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
-       ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
-       ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
-       ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
-     ].map(c => E("div", {style: styles.skillColumn}, c.map(s => E("p", {style: styles.skill}, [s])))));
-
-     // -- Resume History Section
-     //
-
-     // -- Resume Education Section
-     //
-
-     // -- Resume Certifications Section
-     //
-
-     // -- Resume Volunteering Section
-     //
-
-     //  -- Create Resume
-     const resume = E("div", {style: styles.resume}, [Components.DocHeader(props, dispatch, []),
-       E("div", {style: W < 700 ? styles.resumeBodyMobile : styles.resumeBody}, [
-         E("div", {style: styles.skillsSection}, [skillsButton, skillsWindow]),
-         E("div", {style: W < 700 ? styles.historyMobile : styles.history}, [
-           E("p", {style: W < 700 ? styles.historyMobile : styles.history}, ["history"])
-         ]),
-         E("div", {style: W < 700 ? styles.educationMobile : styles.education}, [
-           E("p", {style: W < 700 ? styles.educationMobile : styles.education}, ["education"])
-         ]),
-         E("div", {style: W < 700 ? styles.certificationsMobile : styles.certifications}, [
-           E("p", {style: W < 700 ? styles.certificationsMobile : styles.certifications}, ["certifications"])
-         ]),
-         E("div", {style: W < 700 ? styles.volunteeringMobile : styles.volunteering}, [
-           E("p", {style: W < 700 ? styles.volunteeringMobile : styles.volunteering}, ["volunteering"])
-         ])
-       ])
-     ]);
-
-     // -- Create view element, passing children
-     const ResumeView = E("div", {style: styles.view}, [resume]);
-     ResumeView.addEventListener("click", function(){
-       dispatch({type: "CLOSE_MENU"});
-     });
-
-     return ResumeView;
-   }
- }
-
-
 /* ----------------------------------- Components --------------------------------- *
  * -- Components can be entire views, important/reused parts of views, or more      *
  *  abstract/hidden devices like Shell & Router that contain multiple views or      *
@@ -367,7 +116,8 @@ const Components = {
       header: `
         position: absolute; top: 0; left: 0; right: 0; z-index: 15;
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff; background-color: #222;
+        height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
+        background-image: linear-gradient(rgba(30,60,100,1), rgba(30,60,100,1), rgba(30,60,100,0.9));
       `,
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
       title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
@@ -428,6 +178,12 @@ const Components = {
       dispatch({type: "NAV_TO", payload: "ABOUT"});
     });
 
+    const blog = React.createElement("a", {style: styles.link}, ["Blog"]);
+    blog.addEventListener("click", function() {
+      dispatch({type: "CLOSE_MENU"});
+      dispatch({type: "NAV_TO", payload: "BLOG"});
+    });
+
     const projects = React.createElement("a", {style: styles.link}, ["Projects"]);
     projects.addEventListener("click", function () {
       dispatch({type: "CLOSE_MENU"});
@@ -447,7 +203,7 @@ const Components = {
     });
 
 
-    return React.createElement("div", {style: menuStyle}, [home, about, projects, cover, resume, ...children]);
+    return React.createElement("div", {style: menuStyle}, [home, about, blog, projects, cover, resume, ...children]);
   },
   // Router - maintains view routes. (viewing, tabs, minimized...)
   Router: function(props, dispatch, children) {
@@ -464,6 +220,7 @@ const Components = {
     const views = {
       "HOME": Views.Home,
       "ABOUT": Views.About,
+      "BLOG": Views.Blog,
       "PROJECTS": Views.Projects,
       "COVER": Views.Cover,
       "RESUME": Views.Resume,
@@ -486,37 +243,39 @@ const Components = {
     const styles = {
       docHeader: `
         padding: 1.25em 4em; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-        background-image: url("./imgs/wp/math.jpg"); background-size: contain; background-repeat: no-repeat; background-position: center;
+        background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("./imgs/wp/math.jpg");
+        background-size: contain; background-repeat: no-repeat; background-position: center;
         background-color: #000; color: #eee; border-bottom: 1px solid #ccc;
       `,
       docHeaderMobile: `
         padding: 0.5em 0 1em; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-image: url("./imgs/wp/math.jpg"); background-size: contain; background-repeat: no-repeat; background-position: center;
+        background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("./imgs/wp/math.jpg");
+        background-size: contain; background-repeat: no-repeat; background-position: center;
         background-color: #000; color: #eee; border-bottom: 1px solid #fff;
       `,
       docHeaderLeft: `
-        color: #fff;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
       `,
       docHeaderLeftMobile: `
-        color: #fff; margin: 0.5em 1em; border-bottom: 1px solid #fff;
+        display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid #fff; margin: 0 1em;
       `,
       docImg: `
         margin: 0 0 0.25em 0; width: 8em; border: 1px solid #fff; border-radius: 100%;
       `,
       docImgMobile: `
-        margin: 0.75em 0 5em 0; width: 13em; border: 1px solid #fff; border-radius: 100%;
+        margin: 0.75em 0 0 0; width: 10em; border: 1px solid #fff; border-radius: 100%;
       `,
       docName: `
-        margin: 0.2em; font-size: 1.75em;
+        margin: 0; font-size: 1.75em;
       `,
       docTitle: `
-        margin: 0.2em; font-size: 1em;
+        margin: 0 0 0.2em 0; font-size: 1em;
       `,
       docHeaderRight: `
-        color: #fff;
+        margin: 1.25em;
       `,
       docHeaderRow: `
-        padding: 0.25em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+        margin: 0.5em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
       `,
       docHeaderRowMobile: `
         padding: 0.25em; display: flex; flex-direction: row; justify-content: center; align-items: center;
@@ -565,14 +324,7 @@ const Components = {
     // View Styles
     const styles = {
       view: `
-        position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 0;
-      `,
-      wallpaper: `
-        position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
-      `,
-      filter: `
-        position: absolute; top: 4em; left: 0; right: 0; bottom: 0; z-index: 5; overflow-y: scroll;
-        background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; padding: 8em 0 0 0;
       `
     }
 
@@ -582,13 +334,11 @@ const Components = {
     // Create View Wallpaper
     const wallpaperName = store.getState().wallpaperState.name;
     const wallpaperRoute = store.getState().wallpaperState.route;
-    const wallpaper = React.createElement("img", {src: wallpaperRoute, alt: wallpaperName, style: styles.wallpaper}, []);
-
-    // Create Wallpaper Filter
-    const filter = React.createElement("div", {style: styles.filter}, children);
+    styles.view += ` background-image: linear-gradient(rgba(20,20,20,0.5), rgba(30,30,30,0.5)), url("./${wallpaperRoute}");`;
+    // const wallpaper = React.createElement("img", {src: wallpaperRoute, alt: wallpaperName, style: styles.wallpaper}, [children]);
 
     // Create View
-    const View = React.createElement("div", {style: styles.view}, [wallpaper, filter]);
+    const View = React.createElement("div", {style: styles.view}, children);
 
     // Even listener to close menu
     View.addEventListener("click", function(){
@@ -599,6 +349,398 @@ const Components = {
     return View;
   }
 }
+
+
+/* ------------------------------------- Views ------------------------------------ *
+ * -- Views are a type of Component that group several individual Components into   *
+ *  one device-screen-sized object to render.                                       *
+ * -------------------------------------------------------------------------------- */
+ const Views = {
+   // Home View - description.
+   Home: function(props, dispatch, children) {
+     // -- HomeView Styles
+     const styles = {
+       view: `
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        height: 100%;
+       `,
+       link: `
+        color: #fff; font-family: sans-serif; cursor: pointer; text-decoration: underline;
+       `
+     }
+
+     // -- HomeView Globals
+     const store = props.store;
+
+     // -- HomeView Content
+     const link = React.createElement("a", {style: styles.link, href: "https://github.com/chivingtoninc/chivingtoninc.github.io"}, ["chivingtoninc.github.io repo"]);
+
+     // -- HomeView
+     const HomeView = React.createElement("div", {style: styles.view}, [link]);
+
+     // -- HomeView Listeners
+     HomeView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return HomeView;
+   },
+   // About View - description.
+   About: function(props, dispatch, children) {
+     // -- AboutView Styles
+     const styles = {
+       view: `
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        height: 100%;
+       `,
+       p: `
+        color: #fff; font-family: sans-serif; cursor: pointer;
+       `
+     }
+
+     // -- AboutView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- AboutView Content
+     const p = React.createElement("p", {style: styles.p}, [viewName]);
+
+     // -- AboutView
+     const AboutView = React.createElement("div", {style: styles.view}, [p]);
+
+     // -- AboutView Listeners
+     AboutView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return AboutView;
+   },
+   // Blog View - description.
+   Blog: function(props, dispatch, children) {
+     // -- BlogView Styles
+     const styles = {
+       view: `
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        height: 100%;
+       `,
+       link: `
+        color: #fff; font-family: sans-serif; cursor: pointer; text-decoration: underline;
+       `
+     }
+
+     // -- BlogView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- BlogView Content
+     const p = React.createElement("p", {style: styles.p}, [viewName]);
+
+     // -- BlogView
+     const BlogView = React.createElement("div", {style: styles.view}, [p]);
+
+     // -- BlogView Listeners
+     BlogView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return BlogView;
+   },
+   // Projects View - description.
+   Projects: function(props, dispatch, children) {
+     // -- ProjectsView Styles
+     const styles = {
+       view: `
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        height: 100%;
+       `,
+       p: `
+        color: #fff; font-family: sans-serif; cursor: pointer;
+       `
+     }
+
+     // -- ProjectsView Globals
+     const store = props.store;
+     const viewName = store.getState().viewState.toLowerCase();
+
+     // -- ProjectsView Content
+     const p = React.createElement("p", {style: styles.p}, [viewName]);
+
+     // -- ProjectsView
+     const ProjectsView = React.createElement("div", {style: styles.view}, [p]);
+
+     // -- ProjectsView Listeners
+     ProjectsView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return ProjectsView;
+   },
+   // Cover View - description.
+   Cover: function(props, dispatch, children) {
+     // -- CoverView Styles
+     const styles = {
+       cover: `
+         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
+       `,
+       coverBody: `
+         padding: 1em 3em; background-color: #fff; color: #222;
+       `,
+       coverLine: `
+         margin: 1em auto; text-align: center;
+       `
+     }
+
+     // -- CoverView Globals
+     const store = props.store;
+     const state = store.getState();
+
+     // -- CoverView Content
+     const header = Components.DocHeader(props, dispatch, []);
+     const body = React.createElement("div", {style: styles.coverBody}, [
+       `I am an adept software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
+       `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
+       `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
+       `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
+     ].map(l => React.createElement("p", {style: styles.coverLine}, [l])));
+
+     // -- CoverView
+     const CoverView = React.createElement("div", {style: styles.cover}, [header, body]);
+
+     // -- CoverView listeners
+     CoverView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return CoverView;
+   },
+   // Resume View - description.
+   Resume: function(props, dispatch, children) {
+     // -- ResumeView Styles
+     const styles = {
+       resume: `
+         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
+       `,
+       body: `
+         padding: 0 1em; background-color: #fff; color: #000;
+         border: 1px solid #444;
+       `,
+       bodyMobile: `
+         padding: 0 1em; background-color: #fff; color: #000;
+         border: 1px solid #444;
+       `,
+       section: {
+         title: `
+           margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+           padding: 0 0.25em; font-size: 1.05em; border-bottom: 1px solid #000; cursor: pointer;
+         `,
+         hidden: `
+           display: none;
+         `
+       },
+       skills: {
+         window: `
+           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+           background-color: rgba(100,100,100,0.2);
+         `,
+         mobile: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+           background-color: rgba(100,100,100,0.2);
+         `,
+         column: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+           margin: 0 auto;
+         `,
+         skill: `
+           margin: 0.25em auto;
+         `
+       },
+       history: {
+         window: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+           padding: 0.5em; background-color: rgba(100,100,100,0.2);
+         `,
+         mobile: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+           background-color: rgba(100,100,100,0.2);
+         `,
+         position: `
+           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+           margin: 0.5em;
+         `,
+         infoRow: `
+           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+           margin: 0; border-bottom: 1px solid #222;
+         `,
+         infoField: `
+           display: flex; flex-direction: column; justify-content: center; align-items: center;
+           margin: 0; font-size: 0.95em;
+         `,
+         descriptionRow: `
+           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+           margin: 0 0 0.5em; padding: 0 0.5em;
+         `,
+         description: `
+           display: flex; flex-direction: column; justify-content: center; align-items: center;
+           margin: 0; padding: 0; font-size: 0.85em;
+         `
+       },
+       edu: {
+         window: `
+           background-color: rgba(100,100,100,0.2);
+         `,
+         mobile: `
+           background-color: rgba(100,100,100,0.2);
+         `,
+         row: `
+           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+           border: 1px solid #00f;
+         `,
+         field: `
+           border: 1px solid #f00;
+         `
+       },
+       certs: {
+         window: `
+           background-color: rgba(100,100,100,0.2);
+         `,
+         mobile: `
+           background-color: rgba(100,100,100,0.2);
+         `,
+         row: `
+           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+           border: 1px solid #00f;
+         `,
+         field: `
+           border: 1px solid #f00;
+         `
+       },
+       volunteer: {
+         window: `
+           background-color: rgba(100,100,100,0.2);
+         `,
+         mobile: `
+           background-color: rgba(100,100,100,0.2);
+         `,
+         row: `
+           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+           border: 1px solid #00f;
+         `,
+         field: `
+           border: 1px solid #f00;
+         `
+       },
+     }
+
+     // -- ResumeView Globals
+     const store = props.store;
+     const state = store.getState();
+     const MOB = window.innerWidth < 700;
+     const E = React.createElement;
+
+     // -- ResumeView Content
+     // Skills Section
+     const skillsButton = E("h2", {style: styles.section.title}, ["Skills"]);
+     skillsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_SKILLS_SECTION"}));
+
+     const showSkills = state.resumeState.skills == "OPEN";
+     const skillsWindow = E("div", {style: showSkills ? (MOB ? styles.skills.mobile : styles.skills.window) : styles.section.hidden}, [
+       ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
+       ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
+       ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
+       ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
+     ].map(c => E("div", {style: styles.skills.column}, c.map(s => E("p", {style: styles.skills.skill}, [s])))));
+
+     // History Section
+     const historyButton = E("h2", {style: styles.section.title}, ["History"]);
+     historyButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_HIST_SECTION"}));
+
+     const showHist = state.resumeState.history == "OPEN";
+     const historyWindow = E("div", {style: showHist ? (MOB ? styles.history.mobile : styles.history.window) : styles.section.hidden}, [
+       ["Accounts Receivable Specialist", "ABC Legal Services", "(July 2018 – Present)",
+       "Prepare monthly receivable statements. Post receipts to appropriate accounts and verify transaction details."],
+       ["Logistics Specialist", "ABC Legal Services", "(March 2018 – July 2018)",
+       "Reviewed court filings for key information and performed data entry. Determined case venues. Directed process service attempts. Followed best practices for handling sensitive legal information."],
+       ["Caregiver", "Woodway Senior Living", "(March 2017 – Nov. 2017)",
+       "Assisted elderly patients in daily living activities such as nutrition, ambulation, administering medications and personal care/hygiene."],
+       ["Mobile Developer", "ServiceMonster", "(Dec. 2016 – March 2017)",
+       "Developed business management software for POS, invoices & estimates, inventory, accounting, and fleet routing & tracking. Worked with mobile team to develop tablet-based solutions using React Native."],
+       ["Assembler", "Itek Energy", "(Sept. 2016 – Dec. 2016)",
+       "Performed basic assembly tasks for solar panel construction. Made bus bars, placed bars on panels to be spot welded, soldered broken welds, and installed junction boxes."],
+       ["Sales Associate", "Brivity", "(June 2016 – Sept. 2016)",
+       "Helped grow leads & sales for a CRM, text-to-lead, and home valuation SaaS company. Assisted in developing on-boarding and training programs. Also served in an IT support position."],
+       ["Sales Supervisor", "Best Buy", "(Aug. 2015 – June 2016)",
+       "Produced ~$700k in sales Q4 '15 through use of solutions-based sales techniques. Generated b2b leads. Improved financial services sales & lead one of the strongest locations for that metric in the West Coast market."]
+     ].map(position => E("div", {style: styles.history.position}, [
+       E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map(f => E("h3", {style: styles.history.infoField}, [f]))),
+       E("div", {style: styles.history.descriptionRow}, [E("p", {style: styles.history.description}, [position[3]])])
+     ])) );
+
+     // Education Section
+     const eduButton = E("h2", {style: styles.section.title}, ["Education"]);
+     eduButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_EDU_SECTION"}));
+
+     // Bellevue College – BS Computer Science (2018 – ongoing)
+     // Central Piedmont Community College – BS Electronics Engineering (2013 – unfinished)
+     // Queen's University of Charlotte – Cert. Nurse Aide (2012 – 4.0)
+
+     const showEdu = state.resumeState.education == "OPEN";
+     const eduWindow = E("div", {style: showEdu ? (MOB ? styles.edu.mobile : styles.edu.window) : styles.section.hidden}, [
+       ["school1", "dates1", "degree1"],
+       ["school2", "dates2", "degree2"],
+       ["school3", "dates3", "degree3"]
+     ].map(r => E("div", {style: styles.edu.row}, r.map(f => E("p", {style: styles.edu.field}, [f])))));
+
+     // Certifications Section
+     const certsButton = E("h2", {style: styles.section.title}, ["Certifications"]);
+     certsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_CERTS_SECTION"}));
+
+     // Deeplearning.ai on Coursera – 5 Course Deep Learning Specialization (2018 – ongoing)
+     // Stanford University on Coursera – Machine Learning Certificate (Aug. 2018 – 4.0)
+
+     const showCerts = state.resumeState.certifications == "OPEN";
+     const certsWindow = E("div", {style: showCerts ? (MOB ? styles.certs.mobile : styles.certs.window) : styles.section.hidden}, [
+       ["certification1", "issuer1", "date1", "expiration1"],
+       ["certification2", "issuer2", "date2", "expiration2"],
+       ["certification3", "issuer3", "date3", "expiration3"],
+       ["certification4", "issuer4", "date4", "expiration4"]
+     ].map(r => E("div", {style: styles.certs.row}, r.map(f => E("p", {style: styles.certs.field}, [f])))));
+
+     // Volunteering Section
+     const volunteerButton = E("h2", {style: styles.section.title}, ["Volunteering"]);
+     volunteerButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_VOLUNTEER_SECTION"}));
+
+     // Hands-On Atlanta – maintenance and repair work for low/no-rent community helping single parents
+     // and families near or recovering from homelessness. (2014)
+
+     const showVolunteer = state.resumeState.volunteering == "OPEN";
+     const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.skillsWindowMobile : styles.skillsWindow) : styles.section.hidden}, [
+       ["organization1", "description1", "dates1"],
+       ["organization2", "description2", "dates2"],
+       ["organization3", "description3", "dates3"]
+     ].map(r => E("div", {style: styles.volunteer.row}, r.map(f => E("p", {style: styles.volunteer.field}, [f])))));
+
+     // -- Resume
+     const resume = E("div", {style: styles.resume}, [Components.DocHeader(props, dispatch, []),
+       E("div", {style: MOB ? styles.bodyMobile : styles.body}, [
+         E("div", {style: styles.skillsSection}, [skillsButton, skillsWindow]),
+         E("div", {style: styles.skillsSection}, [historyButton, historyWindow]),
+         E("div", {style: styles.skillsSection}, [eduButton, eduWindow]),
+         E("div", {style: styles.skillsSection}, [certsButton, certsWindow]),
+         E("div", {style: styles.skillsSection}, [volunteerButton, volunteerWindow])
+       ])
+     ]);
+
+     // -- ResumeView
+     const ResumeView = E("div", {style: styles.view}, [resume]);
+
+     // -- ResumeView Listeners
+     ResumeView.addEventListener("click", function(){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return ResumeView;
+   }
+ }
 
 
 /* -------------------------------- State Reducers -------------------------------- *
@@ -614,7 +756,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "COVER", action) {
+  viewState: function (state = "RESUME", action) {
     const choices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
@@ -637,6 +779,18 @@ const Reducers = {
       "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
       "OPEN_MENU": () => "OPEN",
       "CLOSE_MENU": () => "CLOSED",
+      "DEFAULT": () => state
+    }
+    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+  },
+  // initializes/maintains resume state
+  resumeState: function (state = {skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"}, action) {
+    const choices = {
+      "TOGGLE_SKILLS_SECTION": () => Object.assign({}, state, {skills: state.skills == "OPEN" ? "CLOSED" : "OPEN"}),
+      "TOGGLE_HIST_SECTION": () => Object.assign({}, state, {history: state.history == "OPEN" ? "CLOSED" : "OPEN"}),
+      "TOGGLE_EDU_SECTION": () => Object.assign({}, state, {education: state.education == "OPEN" ? "CLOSED" : "OPEN"}),
+      "TOGGLE_CERTS_SECTION": () => Object.assign({}, state, {certifications: state.certifications == "OPEN" ? "CLOSED" : "OPEN"}),
+      "TOGGLE_VOLUNTEER_SECTION": () => Object.assign({}, state, {volunteering: state.volunteering == "OPEN" ? "CLOSED" : "OPEN"}),
       "DEFAULT": () => state
     }
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
