@@ -620,11 +620,11 @@ const Components = {
        skills: {
          window: `
            display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          column: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -637,11 +637,11 @@ const Components = {
        history: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           padding: 0.5em; background-color: rgba(100,100,100,0.2);
+           padding: 0.5em; background-color: rgba(100,100,200,0.2);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          position: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -668,11 +668,11 @@ const Components = {
        edu: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          row: `
            display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
@@ -686,11 +686,11 @@ const Components = {
        certs: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; flex-wrap: wrap;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          row: `
            display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
@@ -711,11 +711,11 @@ const Components = {
        volunteer: {
          window: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          mobile: `
            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           background-color: rgba(100,100,100,0.2);
+           background-color: rgba(100,100,200,0.2);
          `,
          row: `
            display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
