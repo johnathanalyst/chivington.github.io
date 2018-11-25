@@ -304,7 +304,7 @@ const Components = {
       E("div", {style: styles.right.window}, [
         ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
         ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
-        ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc", "linkedin.com/in/chivingtoninc"],
+        ["./imgs/icons/sm/li.svg", "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington", "linkedin.com/in/johnathan-chivington"],
         ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
         ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
         ["./imgs/icons/sm/dl.svg", `Download ${capitalized} (.docx)`, "./includes/j.Chivington.Resume.docx", `Download ${capitalized} (.docx)`]
@@ -478,7 +478,7 @@ const Components = {
        ]),
        E("div", {style: styles.card.footer.box}, [
          ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc"],
-         ["./imgs/icons/sm/li.svg", "linkedin icon", "https://linkedin.com/in/chivingtoninc"],
+         ["./imgs/icons/sm/li.svg", "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington"],
          ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc"],
          ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861"],
          ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu"]
