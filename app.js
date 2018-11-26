@@ -976,7 +976,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "PROJECTS", action) {
+  viewState: function (state = "HOME", action) {
     const choices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
