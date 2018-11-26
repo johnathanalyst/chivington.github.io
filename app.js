@@ -377,25 +377,25 @@ const Components = {
         show: `
          position: absolute; height: 4em; width: 23em; top: 5em; right: 1.75em; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationShowDesktop 0.5s 1 ease-in-out forwards;
         `,
         glance: `
          position: absolute; height: 4em; width: 23em; top: 5em; right: 1.75em; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationGlanceDesktop 3.5s 1 ease-in-out forwards;
         `,
         tile: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
-         height: 4em; width: 4em; border: 1px solid #fff;
+         height: 4em; width: 4em; border-right: 1px solid #aaa;
         `,
         img: `
           height: 2.5em; width: 2.5em;
         `,
         msg: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
-         height: 4em; width: 19em; border: 1px solid #fff;
+         height: 4em; width: 19em;
         `,
         txt: `
          font-size: 0.9em; margin: 0; padding: 0;
@@ -405,25 +405,25 @@ const Components = {
         show: `
          position: absolute; height: 3.5em; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationShowMobile 0.5s 1 ease-in-out forwards;
         `,
         glance: `
          position: absolute; height: 3.5em; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationGlanceMobile 3.5s 1 ease-in-out forwards;
         `,
         tile: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
-         height: 3.5em; width: 3.5em; border: 1px solid #fff;
+         height: 3.5em; width: 3.5em; border-right: 1px solid #aaa;
         `,
         img: `
          height: 2.5em; width: 2.5em;
         `,
         msg: `
          display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: center;
-         height: 3.5em; border: 1px solid #fff;
+         height: 3.5em;
         `,
         txt: `
          font-size: 0.9em; margin: 0; padding: 0;
@@ -695,7 +695,7 @@ const Components = {
          padding: 1em 3em; background-color: #fff; color: #222;
        `,
        coverLine: `
-         margin: 1em auto; padding: 1em; text-align: center;
+         margin: 0 auto 2em; padding: 1em; text-align: center;
          background-color: rgba(100,100,200,0.15);
        `
      }
@@ -976,7 +976,7 @@ const Reducers = {
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
   },
   // initializes/maintains view state
-  viewState: function (state = "HOME", action) {
+  viewState: function (state = "PROJECTS", action) {
     const choices = {
       "NAV_TO": () => action.payload,
       "DEFAULT": () => state
