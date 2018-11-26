@@ -14,7 +14,7 @@
   </head>
 
   <style media="screen">
-    * { font-family: sans-serif; text-decoration: none; }
+    * { font-family: sans-serif; text-decoration: none; scroll-behavior: smooth; }
     #AppNoJs {
       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
       position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
@@ -53,14 +53,25 @@
       0% { transform: translateX(-10em); }
       100% { transform: translateX(0); }
     }
-    @keyframes sectionOpenOpacity {
-      0% { opacity: 100%; }
-      99% { opacity: 100%; }
-      100% { opacity: 0%; }
+    @keyframes notificationShowDesktop {
+      0% { opacity: 100%; transform: translateX(50em); }
+      100% { opacity: 0%; transform: translateX(0); }
     }
-    @keyframes sectionOpenSlide {
-      0% { transform: translateY(-20%); }
-      100% { transform: translateY(0); }
+    @keyframes notificationGlanceDesktop {
+      0% { opacity: 100%; transform: translateX(50em); }
+      25% { opacity: 0%; transform: translateX(0); }
+      75% { opacity: 0%; transform: translateX(0); }
+      100% { opacity: 100%; transform: translateX(50em); }
+    }
+    @keyframes notificationShowMobile {
+      0% { opacity: 100%; transform: translateY(-25em); }
+      100% { opacity: 0%; transform: translateY(0); }
+    }
+    @keyframes notificationGlanceMobile {
+      0% { opacity: 100%; transform: translateY(-25em); }
+      25% { opacity: 0%; transform: translateY(0); }
+      75% { opacity: 0%; transform: translateY(0); }
+      100% { opacity: 100%; transform: translateY(-25em); }
     }
   </style>
 

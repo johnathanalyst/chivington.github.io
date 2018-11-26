@@ -103,11 +103,22 @@ const Components = {
     const menuState = state.menuState;
 
     // Create & Return the Shell
-    return React.createElement("div", {style: styles.shell}, [
+    const Shell = React.createElement("div", {style: styles.shell}, [
       { elem: Components.Header, props: { store }, dispatch: dispatch, children: [] },
+      { elem: Components.Notification, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Menu, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Router, props: { store }, dispatch: dispatch, children: [] }
     ]);
+
+    // Event listeners
+    Shell.addEventListener("click", function(event){
+      if (state.notificationState.visibility == "VISIBLE" || state.notificationState.visibility == "GLANCE")
+      dispatch({type: "HIDE_NOTIFICATION", payload: {
+        visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"
+      }});
+    });
+
+    return Shell;
   },
   // Header - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
   Header: function(props, dispatch, children) {
@@ -126,7 +137,7 @@ const Components = {
 
     // Header icon
     const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "chivingtoninc Icon"}, []);
-    icon.addEventListener("click", function(e) {
+    icon.addEventListener("click", function(event) {
       dispatch({type: "TOGGLE_MENU"})
     });
 
@@ -167,7 +178,7 @@ const Components = {
     const menuStyle = (props.store.getState().menuState == "OPEN") ? styles.menuOpen : styles.menuClosed;
 
     const home = React.createElement("a", {style: styles.link}, ["Home"]);
-    home.addEventListener("click", function(){
+    home.addEventListener("click", function(event){
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "HOME"});
     });
@@ -226,6 +237,7 @@ const Components = {
 
     // Create Router & Add Even Listeners
     const Router = React.createElement("div", {style: styles.router}, [Components.View(props, dispatch, [view])]);
+
 
     // Return Router
     return Router;
@@ -294,6 +306,17 @@ const Components = {
     const MOB = window.innerWidth < 700;
     const E = React.createElement;
 
+    // Create Download Link & add event listeners
+    const download = E("div", {style: MOB ? styles.right.rowMobile : styles.right.row}, [
+      E("img", {style: styles.right.icon, src: "./imgs/icons/sm/dl.svg", alt: `Download ${capitalized} (.docx)`}, []),
+      E("a", {style: styles.right.link, href: "./includes/j.Chivington.Resume.docx", target: "_blank"}, [`Download ${capitalized} (.docx)`])
+    ]);
+    download.addEventListener("click", function(event) {
+      dispatch({type: "SHOW_NOTIFICATION", payload: {
+        visibility: "VISIBLE", msg: `Downloaded ${capitalized}`, tile: "./imgs/icons/sm/dl.svg", alt: "download icon"
+      }});
+    });
+
     // Create DocHeader & add event listeners
     const DocHeader = E("div", {style: MOB ? styles.headerMobile : styles.header}, [
       E("div", {style: MOB ? styles.left.mobile : styles.left.window}, [
@@ -301,18 +324,18 @@ const Components = {
         E("h2", {style: styles.left.name}, ["Johnathan Chivington"]),
         E("p", {style: styles.left.title}, ["Deep Learning & AI Engineer"])
       ]),
-      E("div", {style: styles.right.window}, [
+      E("div", {style: styles.right.window}, [...[
         ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
         ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
         ["./imgs/icons/sm/li.svg", "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington", "linkedin.com/in/johnathan-chivington"],
         ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
-        ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"],
-        ["./imgs/icons/sm/dl.svg", `Download ${capitalized} (.docx)`, "./includes/j.Chivington.Resume.docx", `Download ${capitalized} (.docx)`]
-      ].map(r => E("div", {style:  MOB ? styles.right.rowMobile : styles.right.row}, [
+        ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"]
+      ].map(r => E("div", {style: MOB ? styles.right.rowMobile : styles.right.row}, [
         E("img", {style: styles.right.icon, src: r[0], alt: r[1]}, []),
         E("a", {style: styles.right.link, href: r[2], target: "_blank"}, [r[3]])
-      ])))
-    ])
+      ])),
+      download
+    ])])
 
     // Return DocHeader
     return DocHeader;
@@ -335,16 +358,118 @@ const Components = {
     styles.view += ` background-image: linear-gradient(rgba(20,20,20,0.5), rgba(30,30,30,0.5)), url("./${wallpaperRoute}");`;
     // const wallpaper = React.createElement("img", {src: wallpaperRoute, alt: wallpaperName, style: styles.wallpaper}, [children]);
 
-    // Create View
+    // View
     const View = React.createElement("div", {style: styles.view}, children);
 
-    // Even listener to close menu
-    View.addEventListener("click", function(){
+    // Shell Event Listeners
+    View.addEventListener("click", function(event){
       dispatch({type: "CLOSE_MENU"});
     });
 
     // Return View
     return View;
+  },
+  // Notification - app-wide notification module
+  Notification: function(props, dispatch, children) {
+    // -- Notification Styles
+    const styles = {
+      desktop: {
+        show: `
+         position: absolute; height: 4em; width: 23em; top: 5em; right: 1.75em; z-index: 100;
+         display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         animation: notificationShowDesktop 0.5s 1 ease-in-out forwards;
+        `,
+        glance: `
+         position: absolute; height: 4em; width: 23em; top: 5em; right: 1.75em; z-index: 100;
+         display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         animation: notificationGlanceDesktop 3.5s 1 ease-in-out forwards;
+        `,
+        tile: `
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+         height: 4em; width: 4em; border: 1px solid #fff;
+        `,
+        img: `
+          height: 2.5em; width: 2.5em;
+        `,
+        msg: `
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+         height: 4em; width: 19em; border: 1px solid #fff;
+        `,
+        txt: `
+         font-size: 0.9em; margin: 0; padding: 0;
+        `
+      },
+      mobile: {
+        show: `
+         position: absolute; height: 3.5em; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
+         display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         animation: notificationShowMobile 0.5s 1 ease-in-out forwards;
+        `,
+        glance: `
+         position: absolute; height: 3.5em; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
+         display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
+         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border-radius: 10px; cursor: pointer;
+         animation: notificationGlanceMobile 3.5s 1 ease-in-out forwards;
+        `,
+        tile: `
+         display: flex; flex-direction: column; justify-content: center; align-items: center;
+         height: 3.5em; width: 3.5em; border: 1px solid #fff;
+        `,
+        img: `
+         height: 2.5em; width: 2.5em;
+        `,
+        msg: `
+         display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: center;
+         height: 3.5em; border: 1px solid #fff;
+        `,
+        txt: `
+         font-size: 0.9em; margin: 0; padding: 0;
+        `
+      },
+      hidden: `display: none;`
+    }
+
+    // -- Notification Globals
+    const store = props.store;
+    const state = store.getState();
+    const viewName = state.viewState.toLowerCase();
+    const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
+    const status = state.notificationState;
+    const MOB = window.innerWidth < 700;
+    const E = React.createElement;
+
+    // -- Notification Settings
+    const choices = {
+      "VISIBLE": (c) => (c == true ? styles.mobile.show : styles.desktop.show),
+      "GLANCE": (c) => (c == true ? styles.mobile.glance : styles.desktop.glance),
+      "HIDDEN": () => styles.hidden,
+      "DEFAULT": () => styles.hidden
+    }
+    const displayType = choices[status.visibility] ? choices[status.visibility](MOB) : choices["DEFAULT"]();
+
+    // -- Notification Content
+    const tile = E("div", {style: MOB ? styles.mobile.tile : styles.desktop.tile}, [
+      E("img", {style: MOB ? styles.mobile.img : styles.desktop.img, src: status.tile, alt: status.alt}, [])
+    ]);
+    const txt = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.txt}, [status.msg]);
+    const dismiss = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.txt}, ["(Click to dismiss.)"]);
+    const msg = E("div", {style: MOB ? styles.mobile.msg : styles.desktop.msg}, [txt, dismiss]);
+
+    // -- Notification
+    const Notification = E("div", {style: displayType}, [tile, msg]);
+
+    // -- Notification Listeners
+    Notification.addEventListener("click", function(event) {
+      dispatch({type: "HIDE_NOTIFICATION", payload: {
+        visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"
+      }});
+      dispatch({type: "CLOSE_MENU"});
+    });
+
+    return Notification;
   }
 }
 
@@ -491,7 +616,7 @@ const Components = {
      const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile : styles.view}, [card]);
 
      // -- HomeView Listeners
-     HomeView.addEventListener("click", function(){
+     HomeView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
 
@@ -522,7 +647,7 @@ const Components = {
      const BlogView = React.createElement("div", {style: styles.view}, [p]);
 
      // -- BlogView Listeners
-     BlogView.addEventListener("click", function(){
+     BlogView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
 
@@ -553,7 +678,7 @@ const Components = {
      const ProjectsView = React.createElement("div", {style: styles.view}, [p]);
 
      // -- ProjectsView Listeners
-     ProjectsView.addEventListener("click", function(){
+     ProjectsView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
 
@@ -592,7 +717,7 @@ const Components = {
      const CoverView = React.createElement("div", {style: styles.cover}, [header, body]);
 
      // -- CoverView listeners
-     CoverView.addEventListener("click", function(){
+     CoverView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
 
@@ -829,7 +954,7 @@ const Components = {
      const ResumeView = E("div", {style: styles.view}, [resume]);
 
      // -- ResumeView Listeners
-     ResumeView.addEventListener("click", function(){
+     ResumeView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
 
@@ -894,6 +1019,16 @@ const Reducers = {
   wallpaperState: function (state = {name: "fragmented", route: "./imgs/wp/fragmented.jpg"}, action) {
     const choices = {
       "CHANGE_WP": () => action.payload,
+      "DEFAULT": () => state
+    }
+    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+  },
+  // initializes/maintains notification state
+  notificationState: function (state = {visibility: "GLANCE", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"}, action) {
+    const choices = {
+      "SHOW_NOTIFICATION": () => action.payload,
+      "HIDE_NOTIFICATION": () => ({visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"}),
+      "NOTIFICATION_GLANCE": () => action.payload,
       "DEFAULT": () => state
     }
     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
