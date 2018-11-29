@@ -41,9 +41,9 @@ const Redux = {
     }
 
     function dispatch(action) {
-      if (middlewares.logActions) middlewares.logActions("before", state, action);
+      if (middlewares && middlewares.logActions) middlewares.logActions("before", state, action);
       state = stateReducer(state, action);
-      if (middlewares.logActions) middlewares.logActions("after", state, action);
+      if (middlewares && middlewares.logActions) middlewares.logActions("after", state, action);
       listeners.forEach(listener => listener.func(...listener.params));
     }
 
@@ -309,7 +309,7 @@ const Components = {
     // Create Download Link & add event listeners
     const download = E("div", {style: MOB ? styles.right.rowMobile : styles.right.row}, [
       E("img", {style: styles.right.icon, src: "./imgs/icons/sm/dl.svg", alt: `Download ${capitalized} (.docx)`}, []),
-      E("a", {style: styles.right.link, href: "./includes/j.Chivington.Resume.docx", target: "_blank"}, [`Download ${capitalized} (.docx)`])
+      E("a", {style: styles.right.link, href: "./includes/j.Chivington.Resume.docx", target: "_self"}, [`Download ${capitalized} (.docx)`])
     ]);
     download.addEventListener("click", function(event) {
       dispatch({type: "SHOW_NOTIFICATION", payload: {
@@ -398,7 +398,10 @@ const Components = {
          height: 4em; width: 19em;
         `,
         txt: `
-         font-size: 0.9em; margin: 0; padding: 0;
+         font-size: 1em; margin: 0.25em 0; padding: 0;
+        `,
+        dismiss: `
+         font-size: 0.8em; margin: 0; padding: 0;
         `
       },
       mobile: {
@@ -426,7 +429,10 @@ const Components = {
          height: 3.5em;
         `,
         txt: `
-         font-size: 0.9em; margin: 0; padding: 0;
+         font-size: 1em; margin: 0.25em 0; padding: 0;
+        `,
+        dismiss: `
+         font-size: 0.8em; margin: 0; padding: 0;
         `
       },
       hidden: `display: none;`
@@ -455,7 +461,7 @@ const Components = {
       E("img", {style: MOB ? styles.mobile.img : styles.desktop.img, src: status.tile, alt: status.alt}, [])
     ]);
     const txt = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.txt}, [status.msg]);
-    const dismiss = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.txt}, ["(Click to dismiss.)"]);
+    const dismiss = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.dismiss}, ["(Click to dismiss.)"]);
     const msg = E("div", {style: MOB ? styles.mobile.msg : styles.desktop.msg}, [txt, dismiss]);
 
     // -- Notification
@@ -591,10 +597,10 @@ const Components = {
              E("h2", {style: styles.card.body.right.top.title}, ["Deep Learning & AI Engineer"])
            ]),
            E("div", {style: styles.card.body.right.bottom.box}, [
-             ["location", "Seattle, WA"],
-             ["phone", "303.900.2861"],
-             ["email", "j.chivington@bellevuecollege.edu"],
-             ["seeking", "actively"]
+             ["Location", "Seattle, WA"],
+             ["Phone", "303.900.2861"],
+             ["Email", "j.chivington@bellevuecollege.edu"],
+             ["Search Status", "Actively Seeking (local & remote)"]
            ].map(r => E("div", {style: MOB ? styles.card.body.right.bottom.rowMobile : styles.card.body.right.bottom.row}, [
              E("h3", {style: styles.card.body.right.bottom.field}, [r[0]]),
              E("p", {style: styles.card.body.right.bottom.text}, [r[1]]),
