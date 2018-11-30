@@ -6,7 +6,8 @@
 
 
 /* ------------------------------------- Libs -------------------------------------- *
- * -- UI & state "libraries"                                                         *
+ *    These barebones modules for initializing and maintaining application state/UI  *
+ *  are modeled after React & Redux.                                                 *
  * --------------------------------------------------------------------------------- */
 // React - for creating elements and diffing/maintaining vdom tree
 const React = {
@@ -21,7 +22,7 @@ const React = {
 
     return element;
   }
-}
+};
 
 // ReactDOM - for rendering/updating dom based on vdom tree
 const ReactDOM = {
@@ -29,7 +30,7 @@ const ReactDOM = {
     while (root.children[0]) root.removeChild(root.children[0]);
     root.appendChild(component.elem(component.props, component.dispatch, component.children));
   }
-}
+};
 
 // Redux - for maintaining application state
 const Redux = {
@@ -78,16 +79,143 @@ const Redux = {
       }
     }
   }
-}
+};
+
+
+/* ----------------------------------- Blueprint ----------------------------------- *
+ *    This object specifies the initial app features, such as themes, wallpapers,    *
+ *  guides, notifications, etc.                                                      *
+ * --------------------------------------------------------------------------------- */
+ const Blueprint = {
+   initUser: {
+     user: "GUEST", returning: false
+   },
+   initWindow: "TABLET",
+   initHeader: "VISIBLE",
+   initMenu: "CLOSED",
+   initNotification: {
+     visibility: "GLANCE", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"
+   },
+   initGuide: {
+     visibility: "HIDDEN",
+     box: {bx:0, by:0, bh:0, bw:0, br:0},
+     msg: {position: {mx:0, my:0, mh:0, mw:0}, txt: "Guide Message!"},
+     btn: {position: {btx:0, bty:0, bth:0, btw:0}, txt: "Guide Button!"}
+   },
+   initView: "HOME",
+   initWallpaper: {
+     name: "fragmented", route: "./imgs/wp/fragmented.jpg"
+   },
+   initResume: {
+     skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"
+   }
+ };
+
+
+ /* ----------------------------------- Reducers ----------------------------------- *
+  *    Functions that initialize & reduce state into store based on several choices. *
+  * -------------------------------------------------------------------------------- */
+ const Reducers = {
+   // initializes/maintains user state
+   userState: function (state = Blueprint.initUser, action) {
+     const choices = {
+       "LANDING": () => Object.assign({}, state, {returning: true}),
+       "LOGIN": () => Object.assign({}, state, {user: action.payload.user}),
+       "LOGOUT": () => Object.assign({}, state, {user: "GUEST"}),
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains window state
+   windowState: function (state = Blueprint.initWindow, action) {
+     const choices = {
+       "SWITCH_MODE": () => action.payload,
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains header state
+   headerState: function (state = Blueprint.initHeader, action) {
+     const choices = {
+       "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
+       "SHOW_MENU": () => "VISIBLE",
+       "CLOSE_MENU": () => "HIDDEN",
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains menu state
+   menuState: function (state = Blueprint.initMenu, action) {
+     const choices = {
+       "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
+       "OPEN_MENU": () => "OPEN",
+       "CLOSE_MENU": () => "CLOSED",
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains notification state
+   notificationState: function (state = Blueprint.initNotification, action) {
+     const choices = {
+       "SHOW_NOTIFICATION": () => action.payload,
+       "HIDE_NOTIFICATION": () => ({visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"}),
+       "NOTIFICATION_GLANCE": () => action.payload,
+       "DEFAULT": () => state
+     }
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains guide state
+   guideState: function (state = Blueprint.initGuide, action) {
+     const choices = {
+       "SHOW_GUIDE": () => Object.assign({}, {visibility: "VISIBLE"}, action.payload),
+       "HIDE_GUIDE": () => Object.assign({}, Blueprint.initGuide),
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains view state
+   viewState: function (state = Blueprint.initView, action) {
+     const choices = {
+       "NAV_TO": () => action.payload,
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains wallpaper state
+   wallpaperState: function (state = Blueprint.initWallpaper, action) {
+     const choices = {
+       "CHANGE_WP": () => action.payload,
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   },
+   // initializes/maintains resume state
+   resumeState: function (state = Blueprint.initResume, action) {
+     const choices = {
+       "TOGGLE_SKILLS_SECTION": () => Object.assign({}, state, {skills: state.skills == "OPEN" ? "CLOSED" : "OPEN"}),
+       "TOGGLE_HIST_SECTION": () => Object.assign({}, state, {history: state.history == "OPEN" ? "CLOSED" : "OPEN"}),
+       "TOGGLE_EDU_SECTION": () => Object.assign({}, state, {education: state.education == "OPEN" ? "CLOSED" : "OPEN"}),
+       "TOGGLE_CERTS_SECTION": () => Object.assign({}, state, {certifications: state.certifications == "OPEN" ? "CLOSED" : "OPEN"}),
+       "TOGGLE_VOLUNTEER_SECTION": () => Object.assign({}, state, {volunteering: state.volunteering == "OPEN" ? "CLOSED" : "OPEN"}),
+       "DEFAULT": () => state
+     };
+     return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+   }
+ };
+
+ /*  Combine reducers into one function & create store. Initializes state based
+   on default params or "DEFAULT" choices of reducer functions. */
+ const InitialState = Redux.combineReducers(Reducers);
+ const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
 
 
 /* ----------------------------------- Components --------------------------------- *
- * -- Components can be entire views, important/reused parts of views, or more      *
- *  abstract/hidden devices like Shell & Router that contain multiple views or      *
+ *    Components can be entire views, important/reused parts of views, or more      *
+ *  abstract/hidden devices like the Shell or Router that contain multiple views or *
  *  more complex infrastructure.                                                    *
  * -------------------------------------------------------------------------------- */
 const Components = {
-  // Shell - contains the header, menu, and router.
+  // Shell - contains the Header, Menu, Router, and Guide modules.
   Shell: function(props, dispatch, children) {
     // Shell Styles
     const styles = {
@@ -95,22 +223,23 @@ const Components = {
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
         position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
       `
-    }
+    };
 
     // Shell Globals
     const store = props.store;
     const state = store.getState();
     const menuState = state.menuState;
 
-    // Create & Return the Shell
+    // Shell Element
     const Shell = React.createElement("div", {style: styles.shell}, [
       { elem: Components.Header, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Notification, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Menu, props: { store }, dispatch: dispatch, children: [] },
-      { elem: Components.Router, props: { store }, dispatch: dispatch, children: [] }
+      { elem: Components.Router, props: { store }, dispatch: dispatch, children: [] },
+      { elem: Components.Guide, props: { store }, dispatch: dispatch, children: [] }
     ]);
 
-    // Event listeners
+    // Shell listeners
     Shell.addEventListener("click", function(event){
       if (state.notificationState.visibility == "VISIBLE" || state.notificationState.visibility == "GLANCE")
       dispatch({type: "HIDE_NOTIFICATION", payload: {
@@ -120,7 +249,7 @@ const Components = {
 
     return Shell;
   },
-  // Header - contains menu toggle button, title/home link, and top-level (favorites/most recent) routes.
+  // Header - contains Menu toggle button and title/home link.
   Header: function(props, dispatch, children) {
     // Header Styles
     const styles = {
@@ -133,9 +262,9 @@ const Components = {
       icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
       title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
       superScript: `font-size: 0.3em; margin-left: 1px;`
-    }
+    };
 
-    // Header icon
+    // Header Icon & Listeners
     const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "chivingtoninc Icon"}, []);
     icon.addEventListener("click", function(event) {
       dispatch({type: "TOGGLE_MENU"})
@@ -145,17 +274,16 @@ const Components = {
     const view = props.store.getState().viewState.toLowerCase();
     const superScript = React.createElement("sup", {style: styles.superScript}, [view])
 
-    // Title element & event listeners
+    // Title Element Listeners
     const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript ]);
     title.addEventListener("click", function() {
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "HOME"})
     });
 
-    // Create app header & add event listeners
+    // Header Element
     const Header = React.createElement("div", {style: styles.header}, [icon, title]);
 
-    // Return Header
     return Header;
   },
   // Menu - layered/collapsible full-route menu.
@@ -173,44 +301,51 @@ const Components = {
       link: `
         padding: 1em; border-bottom: 0.5px solid #ddd; color: #fff; cursor: pointer;
       `
-    }
+    };
 
     const menuStyle = (props.store.getState().menuState == "OPEN") ? styles.menuOpen : styles.menuClosed;
 
+    // Home Link & Listeners
     const home = React.createElement("a", {style: styles.link}, ["Home"]);
     home.addEventListener("click", function(event){
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "HOME"});
     });
 
+    // Blog Link & Listeners
     const blog = React.createElement("a", {style: styles.link}, ["Blog"]);
     blog.addEventListener("click", function() {
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "BLOG"});
     });
 
+    // Projects Link & Listeners
     const projects = React.createElement("a", {style: styles.link}, ["Projects"]);
     projects.addEventListener("click", function () {
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "PROJECTS"});
     });
 
+    // Cover Link & Listeners
     const cover = React.createElement("a", {style: styles.link}, ["Cover"]);
     cover.addEventListener("click", function () {
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "COVER"});
     });
 
+    // Resume Link & Listeners
     const resume = React.createElement("a", {style: styles.link}, ["Resume"]);
     resume.addEventListener("click", function () {
       dispatch({type: "CLOSE_MENU"});
       dispatch({type: "NAV_TO", payload: "RESUME"});
     });
 
+    // Menu Element
+    const Menu = React.createElement("div", {style: menuStyle}, [home, blog, projects, cover, resume, ...children]);
 
-    return React.createElement("div", {style: menuStyle}, [home, blog, projects, cover, resume, ...children]);
+    return Menu;
   },
-  // Router - maintains view routes. (viewing, tabs, minimized...)
+  // Router - maintains views/routes. (viewing, tabs, minimized...)
   Router: function(props, dispatch, children) {
     // Router Styles
     const styles = {
@@ -219,7 +354,7 @@ const Components = {
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: #07e;
       `
-    }
+    };
 
     // Views
     const views = {
@@ -229,17 +364,15 @@ const Components = {
       "COVER": Views.Cover,
       "RESUME": Views.Resume,
       "DEFAULT": Views.Home
-    }
+    };
 
     // Router Globals
     const name = props.store.getState().viewState;
     const view = views[name] ? views[name](props, dispatch, children) : views["DEFAULT"](props, dispatch, children);
 
-    // Create Router & Add Even Listeners
+    // Router Element
     const Router = React.createElement("div", {style: styles.router}, [Components.View(props, dispatch, [view])]);
 
-
-    // Return Router
     return Router;
   },
   // DocHeader - responsive cover/resume header
@@ -295,7 +428,7 @@ const Components = {
           text-decoration: underline; cursor: pointer; font-size: 0.9em; color: #fff;
         `
       }
-    }
+    };
 
     // DocHeader Globals
     const store = props.store;
@@ -306,18 +439,20 @@ const Components = {
     const MOB = window.innerWidth < 700;
     const E = React.createElement;
 
-    // Create Download Link & add event listeners
+    // Download Link
     const download = E("div", {style: MOB ? styles.right.rowMobile : styles.right.row}, [
       E("img", {style: styles.right.icon, src: "./imgs/icons/sm/dl.svg", alt: `Download ${capitalized} (.docx)`}, []),
       E("a", {style: styles.right.link, href: "./includes/j.Chivington.Resume.docx", target: "_self"}, [`Download ${capitalized} (.docx)`])
     ]);
+
+    // Download Link  Listeners
     download.addEventListener("click", function(event) {
       dispatch({type: "SHOW_NOTIFICATION", payload: {
         visibility: "VISIBLE", msg: `Downloaded ${capitalized}`, tile: "./imgs/icons/sm/dl.svg", alt: "download icon"
       }});
     });
 
-    // Create DocHeader & add event listeners
+    // DocHeader Element
     const DocHeader = E("div", {style: MOB ? styles.headerMobile : styles.header}, [
       E("div", {style: MOB ? styles.left.mobile : styles.left.window}, [
         E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
@@ -337,7 +472,6 @@ const Components = {
       download
     ])])
 
-    // Return DocHeader
     return DocHeader;
   },
   // View - responsive view container w/ wallpaper & filter
@@ -347,7 +481,7 @@ const Components = {
       view: `
         position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; padding: 8em 0 0 0;
       `
-    }
+    };
 
     // View Globals
     const store = props.store;
@@ -361,17 +495,16 @@ const Components = {
     // View
     const View = React.createElement("div", {style: styles.view}, children);
 
-    // Shell Event Listeners
+    // View Listeners
     View.addEventListener("click", function(event){
       dispatch({type: "CLOSE_MENU"});
     });
 
-    // Return View
     return View;
   },
   // Notification - app-wide notification module
   Notification: function(props, dispatch, children) {
-    // -- Notification Styles
+    // Notification Styles
     const styles = {
       desktop: {
         show: `
@@ -436,9 +569,9 @@ const Components = {
         `
       },
       hidden: `display: none;`
-    }
+    };
 
-    // -- Notification Globals
+    // Notification Globals
     const store = props.store;
     const state = store.getState();
     const viewName = state.viewState.toLowerCase();
@@ -447,7 +580,7 @@ const Components = {
     const MOB = window.innerWidth < 700;
     const E = React.createElement;
 
-    // -- Notification Settings
+    // Notification Settings
     const choices = {
       "VISIBLE": (c) => (c == true ? styles.mobile.show : styles.desktop.show),
       "GLANCE": (c) => (c == true ? styles.mobile.glance : styles.desktop.glance),
@@ -456,7 +589,7 @@ const Components = {
     }
     const displayType = choices[status.visibility] ? choices[status.visibility](MOB) : choices["DEFAULT"]();
 
-    // -- Notification Content
+    // Notification Content
     const tile = E("div", {style: MOB ? styles.mobile.tile : styles.desktop.tile}, [
       E("img", {style: MOB ? styles.mobile.img : styles.desktop.img, src: status.tile, alt: status.alt}, [])
     ]);
@@ -464,10 +597,10 @@ const Components = {
     const dismiss = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.dismiss}, ["(Click to dismiss.)"]);
     const msg = E("div", {style: MOB ? styles.mobile.msg : styles.desktop.msg}, [txt, dismiss]);
 
-    // -- Notification
+    // Notification
     const Notification = E("div", {style: displayType}, [tile, msg]);
 
-    // -- Notification Listeners
+    // Notification Listeners
     Notification.addEventListener("click", function(event) {
       dispatch({type: "HIDE_NOTIFICATION", payload: {
         visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"
@@ -476,18 +609,77 @@ const Components = {
     });
 
     return Notification;
+  },
+  // Guide - app-wide guide module
+  Guide: function(props, dispatch, children) {
+    // Guide Styles
+    const styles = {
+      visible: `
+       position: absolute; top: 0; right: 0; height: 100%; width: 100%; z-index: 1000; color: #fff;
+      `,
+      box: (x,y,h,w,r) => `
+        position: absolute; top: ${y}; left: ${x}; height: ${h}; width: ${w}; z-index: 1000; background-color: rgba(0,0,0,0);
+        border-radius: ${r}; box-shadow: 0 0 0 1000em rgba(0,0,0,0.8);
+      `,
+      hidden: `display: none;`,
+      msg: (x,y,h,w) => `
+        position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
+      `,
+      btn: (x,y,h,w) => `
+        position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
+        display: flex; flex-direction: row; justify-content: center; align-items: center;
+        padding: 0.1em 0.5em 0; background-color: rgba(25,110,214,1); border: 1px solid #999; border-radius: 3px; cursor: pointer;
+      `
+    };
+
+    // Guide Globals
+    const store = props.store;
+    const state = store.getState();
+    const viewName = state.viewState.toLowerCase();
+    const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
+    const status = state.guideState.visibility;
+    const { bx,by,bh,bw,br } = state.guideState.box;
+    const { mx,my,mh,mw } = state.guideState.msg.position;
+    const { btx,bty,bth,btw } = state.guideState.btn.position;
+    const msgTxt = state.guideState.msg.txt;
+    const btnTxt = state.guideState.btn.txt;
+    const MOB = window.innerWidth < 700;
+    const E = React.createElement;
+
+    // Guide Settings
+    const choices = {
+      "VISIBLE": () => styles.visible,
+      "HIDDEN": () => styles.hidden,
+      "DEFAULT": () => styles.hidden
+    };
+    const displayType = choices[status] ? choices[status](bx,by,bh,bw,br) : choices["DEFAULT"]();
+
+    // Guide Box
+    const box = E("div", {style: styles.box(bx,by,bh,bw,br)}, []);
+    const msg = E("p", {style: styles.msg(mx,my,mh,mw)}, [msgTxt]);
+    const btn = E("p", {style: styles.btn(btx,bty,bth,btw)}, [btnTxt]);
+
+    // Guide
+    const Guide = E("div", {style: displayType}, [box, msg, btn]);
+
+    // Guide Listeners
+    Guide.addEventListener("click", function(event) {
+      dispatch({type: "HIDE_GUIDE"});
+    });
+
+    return Guide;
   }
-}
+};
 
 
 /* ------------------------------------- Views ------------------------------------ *
- * -- Views are a type of Component that group several individual Components into   *
+ *    Views are a type of Component that group several individual Components into   *
  *  one device-screen-sized object to render.                                       *
  * -------------------------------------------------------------------------------- */
  const Views = {
-   // Home View - description.
+   // Home View - contains contact card.
    Home: function(props, dispatch, children) {
-     // -- HomeView Styles
+     // HomeView Styles
      const styles = {
        view: `
          display: flex; flex-direction: column; justify-content: center; align-items: stretch;
@@ -579,12 +771,24 @@ const Components = {
        }
      }
 
-     // -- HomeView Globals
+     // HomeView Globals
      const store = props.store;
+     const state = store.getState();
+     const landing = !state.userState.returning;
      const MOB = window.innerWidth < 700;
      const E = React.createElement;
 
-     // -- HomeView Content
+     // Menu Guide if landing
+     if (landing) {
+       dispatch({type: "LANDING"});
+       dispatch({type: "SHOW_GUIDE", payload: {
+         box: {bx:"0.655em", by:"0.5em", bh:"3em", bw:"3em", br:"100%"},
+         msg: {position: {mx:"0.86em", my:"2.7em", mh:"1em", mw:"3em"}, txt: "menu"},
+         btn: {position: {btx:"0.25em", bty:"4em", bth:0, btw:0}, txt: "Got it!"}
+       }});
+     }
+
+     // HomeView Content
      const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
        E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
          E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
@@ -618,10 +822,10 @@ const Components = {
        ])))
      ]);
 
-     // -- HomeView
+     // HomeView
      const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile : styles.view}, [card]);
 
-     // -- HomeView Listeners
+     // HomeView Listeners
      HomeView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
@@ -630,7 +834,7 @@ const Components = {
    },
    // Blog View - description.
    Blog: function(props, dispatch, children) {
-     // -- BlogView Styles
+     // BlogView Styles
      const styles = {
        view: `
         display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -641,18 +845,18 @@ const Components = {
        `
      }
 
-     // -- BlogView Globals
+     // BlogView Globals
      const store = props.store;
      const viewName = store.getState().viewState.toLowerCase();
      const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
-     // -- BlogView Content
+     // BlogView Content
      const p = React.createElement("p", {style: styles.p}, [capitalized]);
 
-     // -- BlogView
+     // BlogView
      const BlogView = React.createElement("div", {style: styles.view}, [p]);
 
-     // -- BlogView Listeners
+     // BlogView Listeners
      BlogView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
@@ -661,7 +865,7 @@ const Components = {
    },
    // Projects View - description.
    Projects: function(props, dispatch, children) {
-     // -- ProjectsView Styles
+     // ProjectsView Styles
      const styles = {
        view: `
         display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -672,18 +876,18 @@ const Components = {
        `
      }
 
-     // -- ProjectsView Globals
+     // ProjectsView Globals
      const store = props.store;
      const viewName = store.getState().viewState.toLowerCase();
      const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
-     // -- ProjectsView Content
+     // ProjectsView Content
      const p = React.createElement("p", {style: styles.p}, [capitalized]);
 
-     // -- ProjectsView
+     // ProjectsView
      const ProjectsView = React.createElement("div", {style: styles.view}, [p]);
 
-     // -- ProjectsView Listeners
+     // ProjectsView Listeners
      ProjectsView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
@@ -692,7 +896,7 @@ const Components = {
    },
    // Cover View - description.
    Cover: function(props, dispatch, children) {
-     // -- CoverView Styles
+     // CoverView Styles
      const styles = {
        cover: `
          margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
@@ -706,11 +910,11 @@ const Components = {
        `
      }
 
-     // -- CoverView Globals
+     // CoverView Globals
      const store = props.store;
      const state = store.getState();
 
-     // -- CoverView Content
+     // CoverView Content
      const header = Components.DocHeader(props, dispatch, []);
      const body = React.createElement("div", {style: styles.coverBody}, [
        `I am an adept software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
@@ -719,10 +923,10 @@ const Components = {
        `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
      ].map(l => React.createElement("p", {style: styles.coverLine}, [l])));
 
-     // -- CoverView
+     // CoverView
      const CoverView = React.createElement("div", {style: styles.cover}, [header, body]);
 
-     // -- CoverView listeners
+     // CoverView listeners
      CoverView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
@@ -731,7 +935,7 @@ const Components = {
    },
    // Resume View - description.
    Resume: function(props, dispatch, children) {
-     // -- ResumeView Styles
+     // ResumeView Styles
      const styles = {
        resume: `
          margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
@@ -862,13 +1066,13 @@ const Components = {
        },
      }
 
-     // -- ResumeView Globals
+     // ResumeView Globals
      const store = props.store;
      const state = store.getState();
      const MOB = window.innerWidth < 700;
      const E = React.createElement;
 
-     // -- ResumeView Content
+     // ResumeView Content
      // Skills Section
      const skillsButton = E("h2", {style: styles.section.title}, ["Skills"]);
      skillsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_SKILLS_SECTION"}));
@@ -945,7 +1149,7 @@ const Components = {
        ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
      ))));
 
-     // -- Resume
+     // Resume
      const resume = E("div", {style: styles.resume}, [Components.DocHeader(props, dispatch, []),
        E("div", {style: MOB ? styles.bodyMobile : styles.body}, [
          E("div", {style: styles.skillsSection}, [skillsButton, skillsWindow]),
@@ -956,106 +1160,29 @@ const Components = {
        ])
      ]);
 
-     // -- ResumeView
+     // ResumeView
      const ResumeView = E("div", {style: styles.view}, [resume]);
 
-     // -- ResumeView Listeners
+     // ResumeView Listeners
      ResumeView.addEventListener("click", function(event){
        dispatch({type: "CLOSE_MENU"});
      });
 
      return ResumeView;
    }
- }
-
-
-/* -------------------------------- State Reducers -------------------------------- *
- * -- Functions that reduce state into stucture/object based on several choices.    *
- * -------------------------------------------------------------------------------- */
-const Reducers = {
-  // initializes/maintains window state
-  windowState: function (state = "TABLET", action) {
-    const choices = {
-      "SWITCH_MODE": () => action.payload,
-      "DEFAULT": () => state
-    }
-    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-  },
-  // initializes/maintains view state
-  viewState: function (state = "HOME", action) {
-    const choices = {
-      "NAV_TO": () => action.payload,
-      "DEFAULT": () => state
-    }
-    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-  },
-  // initializes/maintains header state
-  headerState: function (state = "VISIBLE", action) {
-    const choices = {
-      "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
-      "SHOW_MENU": () => "VISIBLE",
-      "CLOSE_MENU": () => "HIDDEN",
-      "DEFAULT": () => state
-    }
-    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-  },
-  // initializes/maintains menu state
-  menuState: function (state = "CLOSED", action) {
-    const choices = {
-      "TOGGLE_MENU": () => (state == "CLOSED") ? "OPEN" : "CLOSED",
-      "OPEN_MENU": () => "OPEN",
-      "CLOSE_MENU": () => "CLOSED",
-      "DEFAULT": () => state
-    }
-    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-  },
-  // initializes/maintains resume state
-  resumeState: function (state = {skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"}, action) {
-    const choices = {
-      "TOGGLE_SKILLS_SECTION": () => Object.assign({}, state, {skills: state.skills == "OPEN" ? "CLOSED" : "OPEN"}),
-      "TOGGLE_HIST_SECTION": () => Object.assign({}, state, {history: state.history == "OPEN" ? "CLOSED" : "OPEN"}),
-      "TOGGLE_EDU_SECTION": () => Object.assign({}, state, {education: state.education == "OPEN" ? "CLOSED" : "OPEN"}),
-      "TOGGLE_CERTS_SECTION": () => Object.assign({}, state, {certifications: state.certifications == "OPEN" ? "CLOSED" : "OPEN"}),
-      "TOGGLE_VOLUNTEER_SECTION": () => Object.assign({}, state, {volunteering: state.volunteering == "OPEN" ? "CLOSED" : "OPEN"}),
-      "DEFAULT": () => state
-    }
-    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-  },
-  // initializes/maintains wallpaper state
-  wallpaperState: function (state = {name: "fragmented", route: "./imgs/wp/fragmented.jpg"}, action) {
-    const choices = {
-      "CHANGE_WP": () => action.payload,
-      "DEFAULT": () => state
-    }
-    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-  },
-  // initializes/maintains notification state
-  notificationState: function (state = {visibility: "GLANCE", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"}, action) {
-    const choices = {
-      "SHOW_NOTIFICATION": () => action.payload,
-      "HIDE_NOTIFICATION": () => ({visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"}),
-      "NOTIFICATION_GLANCE": () => action.payload,
-      "DEFAULT": () => state
-    }
-    return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-  }
-}
-
-/* -- Combine reducers into one function & create store. Initializes state based
-  on default params or "DEFAULT" choices of reducer functions. */
-const InitialState = Redux.combineReducers(Reducers);
-const ReduxStore = Redux.createStore(InitialState, Redux.storeMiddlewares);
+ };
 
 
 /* ---------------------------------- Rendering ----------------------------------- *
- *  -- Render to the DOM once, passing in Redux Store. App renders based on state   *
+ *   Render to the DOM once, passing in Redux Store. App renders based on state     *
  * of the Redux Store. Then subscribe Render method to the Redux Store. Any change  *
  * in the store state and the UI "React"s accordingly.                              *
  * -------------------------------------------------------------------------------- */
 
- /* -- Currently results in refresh of entire app. Soon to add app/ui state diffing
-   to only refresh a particular "branch/sub-branch of ui tree" based on corresponding
-   changes in the "app state tree" or subtree of. */
+ /*  Currently results in refresh of entire app. For most apps, this is fine. For
+   very large apps like Googe Sheets, Word Online, etc., this is a problem. Soon to
+   add app/ui state diffing engine so that only a particular "branch of ui tree"
+   refreshes, based on corresponding changes in the "app state tree" or subtree of. */
 
 // Initial render
 ReactDOM.render({
