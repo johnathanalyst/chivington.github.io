@@ -622,7 +622,7 @@ const Components = {
       box: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; height: ${h}; width: ${w}; z-index: 1000; background-color: rgba(0,0,0,0);
         border: 1px solid #aaa; border-radius: ${r};
-        -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
+        -moz-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
       `,
       hidden: `display: none;`,
       msg: (x,y,h,w,r) => `
