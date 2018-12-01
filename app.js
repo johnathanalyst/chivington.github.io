@@ -630,7 +630,7 @@ const Components = {
       btn: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
         display: flex; flex-direction: row; justify-content: center; align-items: center;
-        padding: 0.2em 0.5em 0.05em 0.55em; background-color: rgba(25,110,214,0.9); border: 1px solid #777; border-radius: 5px; cursor: pointer;
+        padding: 0.1em 0.5em 0.05em; background-color: rgba(25,110,214,0.9); border: 1px solid #777; border-radius: 5px; cursor: pointer;
       `
     };
 
