@@ -786,7 +786,7 @@ const Components = {
      if (landing) {
        dispatch({type: "LANDING"});
        dispatch({type: "SHOW_GUIDE", payload: {
-         box: {bx:"0.6em", by:"0.45em", bh:"3em", bw:"3em", br:"100%"},
+         box: {bx:"0.55em", by:"0.45em", bh:"3em", bw:"3em", br:"1px"},
          msg: {position: {mx:"4em", my:"0", mh:"1em", mw:"3em"}, txt: "Tap the brain for more..."},
          btn: {position: {btx:"7em", bty:"1.25em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."},
          animation:  "animation: menuGuide 750ms 1 ease-in-out forwards;"
