@@ -100,7 +100,8 @@ const Redux = {
      visibility: "HIDDEN",
      box: {bx:0, by:0, bh:0, bw:0, br:0},
      msg: {position: {mx:0, my:0, mh:0, mw:0, mr:0}, txt: "Guide Message!"},
-     btn: {position: {btx:0, bty:0, bth:0, btw:0, btr:0}, txt: "Guide Button!"}
+     btn: {position: {btx:0, bty:0, bth:0, btw:0, btr:0}, txt: "Guide Button!"},
+     animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
    },
    initView: "HOME",
    initWallpaper: {
@@ -615,13 +616,13 @@ const Components = {
   Guide: function(props, dispatch, children) {
     // Guide Styles
     const styles = {
-      visible: `
-        position: absolute; top: 0; right: 0; height: 100%; width: 100%; z-index: 1000; color: #fff;
-        animation: notificationShowMobile 750ms 1 ease-in-out forwards;
+      visible: (animation) => `
+        position: absolute; top: 0; right: 0; height: 100%; width: 100%; z-index: 1000; color: #fff; ${animation}
       `,
       box: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; height: ${h}; width: ${w}; z-index: 1000; background-color: rgba(0,0,0,0);
-        border-radius: ${r}; -webkit-appearance: none; -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
+        border: 1px solid #aaa; border-radius: ${r};
+        -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
       `,
       hidden: `display: none;`,
       msg: (x,y,h,w,r) => `
@@ -640,6 +641,7 @@ const Components = {
     const viewName = state.viewState.toLowerCase();
     const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
     const visibility = state.guideState.visibility;
+    const animation = state.guideState.animation;
     const { bx,by,bh,bw,br } = state.guideState.box;
     const { mx,my,mh,mw } = state.guideState.msg.position;
     const { btx,bty,bth,btw } = state.guideState.btn.position;
@@ -650,11 +652,11 @@ const Components = {
 
     // Guide Settings
     const choices = {
-      "VISIBLE": () => styles.visible,
+      "VISIBLE": (a) => styles.visible(a),
       "HIDDEN": () => styles.hidden,
       "DEFAULT": () => styles.hidden
     };
-    const displayType = choices[visibility] ? choices[visibility](bx,by,bh,bw,br) : choices["DEFAULT"]();
+    const displayType = choices[visibility] ? choices[visibility](animation) : choices["DEFAULT"]();
 
     // Guide Box
     const box = E("div", {style: styles.box(bx,by,bh,bw,br)}, []);
@@ -787,7 +789,8 @@ const Components = {
        dispatch({type: "SHOW_GUIDE", payload: {
          box: {bx:"0.655em", by:"0.5em", bh:"3em", bw:"3em", br:"100%"},
          msg: {position: {mx:"4em", my:"0.7em", mh:"1em", mw:"3em"}, txt: "Tap the brain for more..."},
-         btn: {position: {btx:"7em", bty:"2em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."}
+         btn: {position: {btx:"7em", bty:"2em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."},
+         animation:  "animation: menuGuide 750ms 1 ease-in-out forwards;"
        }});
      }
 
