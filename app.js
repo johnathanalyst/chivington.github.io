@@ -293,7 +293,7 @@ const Components = {
           position: absolute; top: 0; left: 0; right: 0; z-index: 15;
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
           height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
-          background-image: linear-gradient(#333, #222); -webkit-box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.3);
+          background-image: linear-gradient(#333, #222); -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
         `,
         icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
@@ -337,7 +337,7 @@ const Components = {
           position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
           background-image: linear-gradient(to bottom right, rgba(25,110,214,1), rgba(6,90,204,1));
-          border-right: 1px solid #000; animation: menuOpen 1s 1; -webkit-box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.3);
+          border-right: 1px solid #000; animation: menuOpen 1s 1; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
         `,
         menuClosed: `
           display: none;
@@ -576,10 +576,6 @@ const Components = {
             E("button", {style: styles.notificationBtn}, ["Need help?"])
           ])
         }});
-
-        window.setTimeout(function(){
-          dispatch({type: "HIDE_NOTIFICATION"});
-        }, 5000);
       }
 
       // View Wallpaper
@@ -594,6 +590,7 @@ const Components = {
       // View Listeners
       View.addEventListener("click", function(event){
         dispatch({type: "CLOSE_MENU"});
+        dispatch({type: "HIDE_NOTIFICATION"});
       });
 
       return View;
@@ -607,13 +604,13 @@ const Components = {
            position: absolute; width: 25em; top: 5em; right: 1.75em; z-index: 100;
            display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
            background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-           animation: notificationShowDesktop 0.5s 1 ease-in-out forwards;
+           animation: notificationShowDesktop 0.5s 1 ease-in-out forwards; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
           `,
           glance: `
            position: absolute; top: 5em; right: 1.75em; z-index: 100;
            display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
            background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-           animation: notificationGlanceDesktop 5s 1 ease-in-out forwards;
+           animation: notificationGlanceDesktop 5s 1 ease-in-out forwards; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
           `,
           tile: `
            display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -637,13 +634,13 @@ const Components = {
            position: absolute; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
            display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
            background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-           animation: notificationShowMobile 0.5s 1 ease-in-out forwards;
+           animation: notificationShowMobile 0.5s 1 ease-in-out forwards; -webkit-box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.3);
           `,
           glance: `
            position: absolute; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
            display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
            background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-           animation: notificationGlanceMobile 5s 1 ease-in-out forwards;
+           animation: notificationGlanceMobile 5s 1 ease-in-out forwards; -webkit-box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.3);
           `,
           tile: `
            display: flex; flex-direction: column; justify-content: center; align-items: center;
