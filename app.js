@@ -94,13 +94,13 @@ const Redux = {
    initHeader: "VISIBLE",
    initMenu: "CLOSED",
    initNotification: {
-     visibility: "GLANCE", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"
+     visibility: "HIDDEN", tile: "./imgs/icons/sm/brain.svg", msg: "Welcome!", alt: "brain icon"
    },
    initGuide: {
      visibility: "HIDDEN",
      box: {bx:0, by:0, bh:0, bw:0, br:0},
-     msg: {position: {mx:0, my:0, mh:0, mw:0}, txt: "Guide Message!"},
-     btn: {position: {btx:0, bty:0, bth:0, btw:0}, txt: "Guide Button!"}
+     msg: {position: {mx:0, my:0, mh:0, mw:0, mr:0}, txt: "Guide Message!"},
+     btn: {position: {btx:0, bty:0, bth:0, btw:0, btr:0}, txt: "Guide Button!"}
    },
    initView: "HOME",
    initWallpaper: {
@@ -157,9 +157,9 @@ const Redux = {
    // initializes/maintains notification state
    notificationState: function (state = Blueprint.initNotification, action) {
      const choices = {
-       "SHOW_NOTIFICATION": () => action.payload,
-       "HIDE_NOTIFICATION": () => ({visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"}),
-       "NOTIFICATION_GLANCE": () => action.payload,
+       "SHOW_NOTIFICATION": () => Object.assign({visibility: "VISIBLE"}, action.payload),
+       "HIDE_NOTIFICATION": () => Blueprint.initNotification,
+       "FLASH_NOTIFICATION": () => Object.assign({visibility: "FLASH"}, action.payload),
        "DEFAULT": () => state
      }
      return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
@@ -167,8 +167,9 @@ const Redux = {
    // initializes/maintains guide state
    guideState: function (state = Blueprint.initGuide, action) {
      const choices = {
-       "SHOW_GUIDE": () => Object.assign({}, {visibility: "VISIBLE"}, action.payload),
-       "HIDE_GUIDE": () => Object.assign({}, Blueprint.initGuide),
+       "SHOW_GUIDE": () => Object.assign({visibility: "VISIBLE"}, action.payload),
+       "HIDE_GUIDE": () => Blueprint.initGuide,
+       "FLASH_GUIDE": () => Object.assign({visibility: "FLASH"}, action.payload),
        "DEFAULT": () => state
      };
      return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
@@ -229,22 +230,22 @@ const Components = {
     const store = props.store;
     const state = store.getState();
     const menuState = state.menuState;
+    const notificationState = state.notificationState;
 
     // Shell Element
     const Shell = React.createElement("div", {style: styles.shell}, [
       { elem: Components.Header, props: { store }, dispatch: dispatch, children: [] },
-      { elem: Components.Notification, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Menu, props: { store }, dispatch: dispatch, children: [] },
       { elem: Components.Router, props: { store }, dispatch: dispatch, children: [] },
-      { elem: Components.Guide, props: { store }, dispatch: dispatch, children: [] }
+      { elem: Components.Guide, props: { store }, dispatch: dispatch, children: [] },
+      { elem: Components.Notification, props: { store }, dispatch: dispatch, children: [] }
     ]);
 
     // Shell listeners
     Shell.addEventListener("click", function(event){
-      if (state.notificationState.visibility == "VISIBLE" || state.notificationState.visibility == "GLANCE")
-      dispatch({type: "HIDE_NOTIFICATION", payload: {
-        visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"
-      }});
+      if (notificationState.visibility == "VISIBLE" || notificationState.visibility == "FLASH") dispatch({
+        type: "HIDE_NOTIFICATION", payload: { visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon" }
+      });
     });
 
     return Shell;
@@ -583,7 +584,7 @@ const Components = {
     // Notification Settings
     const choices = {
       "VISIBLE": (c) => (c == true ? styles.mobile.show : styles.desktop.show),
-      "GLANCE": (c) => (c == true ? styles.mobile.glance : styles.desktop.glance),
+      "FLASH": (c) => (c == true ? styles.mobile.glance : styles.desktop.glance),
       "HIDDEN": () => styles.hidden,
       "DEFAULT": () => styles.hidden
     }
@@ -615,17 +616,18 @@ const Components = {
     // Guide Styles
     const styles = {
       visible: `
-       position: absolute; top: 0; right: 0; height: 100%; width: 100%; z-index: 1000; color: #fff;
+        position: absolute; top: 0; right: 0; height: 100%; width: 100%; z-index: 1000; color: #fff;
+        animation: notificationShowMobile 750ms 1 ease-in-out forwards;
       `,
       box: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; height: ${h}; width: ${w}; z-index: 1000; background-color: rgba(0,0,0,0);
-        border-radius: ${r}; box-shadow: 0 0 0 1000em rgba(0,0,0,0.8);
+        border-radius: ${r}; box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
       `,
       hidden: `display: none;`,
-      msg: (x,y,h,w) => `
+      msg: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
       `,
-      btn: (x,y,h,w) => `
+      btn: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
         display: flex; flex-direction: row; justify-content: center; align-items: center;
         padding: 0.1em 0.5em 0; background-color: rgba(25,110,214,1); border: 1px solid #999; border-radius: 3px; cursor: pointer;
@@ -637,7 +639,7 @@ const Components = {
     const state = store.getState();
     const viewName = state.viewState.toLowerCase();
     const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
-    const status = state.guideState.visibility;
+    const visibility = state.guideState.visibility;
     const { bx,by,bh,bw,br } = state.guideState.box;
     const { mx,my,mh,mw } = state.guideState.msg.position;
     const { btx,bty,bth,btw } = state.guideState.btn.position;
@@ -652,7 +654,7 @@ const Components = {
       "HIDDEN": () => styles.hidden,
       "DEFAULT": () => styles.hidden
     };
-    const displayType = choices[status] ? choices[status](bx,by,bh,bw,br) : choices["DEFAULT"]();
+    const displayType = choices[visibility] ? choices[visibility](bx,by,bh,bw,br) : choices["DEFAULT"]();
 
     // Guide Box
     const box = E("div", {style: styles.box(bx,by,bh,bw,br)}, []);
@@ -775,6 +777,7 @@ const Components = {
      const store = props.store;
      const state = store.getState();
      const landing = !state.userState.returning;
+     const loggedIn = state.userState.user != "GUEST";
      const MOB = window.innerWidth < 700;
      const E = React.createElement;
 
@@ -783,8 +786,10 @@ const Components = {
        dispatch({type: "LANDING"});
        dispatch({type: "SHOW_GUIDE", payload: {
          box: {bx:"0.655em", by:"0.5em", bh:"3em", bw:"3em", br:"100%"},
-         msg: {position: {mx:"0.86em", my:"2.7em", mh:"1em", mw:"3em"}, txt: "menu"},
-         btn: {position: {btx:"0.25em", bty:"4em", bth:0, btw:0}, txt: "Got it!"}
+         msg: {position: {mx:"4em", my:"0.7em", mh:"1em", mw:"3em"}, txt: "Touch the brain for more..."},
+         btn: {position: {btx:"7em", bty:"2em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."}
+         // msg: {position: {mx:"0.86em", my:"2.7em", mh:"1em", mw:"3em"}, txt: "Touch the brain..."},
+         // btn: {position: {btx:"0.25em", bty:"4em", bth:0, btw:0}, txt: "Got it!"}
        }});
      }
 
