@@ -88,7 +88,7 @@ const Redux = {
  * --------------------------------------------------------------------------------- */
  const Blueprint = {
    initUser: {
-     user: "GUEST", returning: false
+     user: "GUEST", returning: false, appMsg: false
    },
    initWindow: "TABLET",
    initHeader: "VISIBLE",
@@ -121,6 +121,7 @@ const Redux = {
    userState: function (state = Blueprint.initUser, action) {
      const choices = {
        "LANDING": () => Object.assign({}, state, {returning: true}),
+       "APP_MSG": () => Object.assign({}, state, {appMsg: true}),
        "LOGIN": () => Object.assign({}, state, {user: action.payload.user}),
        "LOGOUT": () => Object.assign({}, state, {user: "GUEST"}),
        "DEFAULT": () => state
@@ -519,7 +520,7 @@ const Components = {
          position: absolute; height: 4em; width: 23em; top: 5em; right: 1.75em; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
          background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-         animation: notificationGlanceDesktop 3.5s 1 ease-in-out forwards;
+         animation: notificationGlanceDesktop 4s 1 ease-in-out forwards;
         `,
         tile: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -536,7 +537,7 @@ const Components = {
          font-size: 1em; margin: 0.25em 0; padding: 0;
         `,
         dismiss: `
-         font-size: 0.8em; margin: 0; padding: 0;
+         font-size: 0.65em; margin: 0; padding: 0;
         `
       },
       mobile: {
@@ -550,7 +551,7 @@ const Components = {
          position: absolute; height: 3.5em; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
          background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-         animation: notificationGlanceMobile 3.5s 1 ease-in-out forwards;
+         animation: notificationGlanceMobile 4s 1 ease-in-out forwards;
         `,
         tile: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -564,10 +565,10 @@ const Components = {
          height: 3.5em;
         `,
         txt: `
-         font-size: 1em; margin: 0.25em 0; padding: 0;
+         margin: 0.25em 0; padding: 0; font-size: 1em; text-align: center;
         `,
         dismiss: `
-         font-size: 0.8em; margin: 0; padding: 0;
+         margin: 0; padding: 0; font-size: 0.65em;
         `
       },
       hidden: `display: none;`
@@ -596,7 +597,7 @@ const Components = {
       E("img", {style: MOB ? styles.mobile.img : styles.desktop.img, src: status.tile, alt: status.alt}, [])
     ]);
     const txt = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.txt}, [status.msg]);
-    const dismiss = E("p", {style: MOB ? styles.mobile.txt : styles.desktop.dismiss}, ["(Click to dismiss.)"]);
+    const dismiss = E("p", {style: MOB ? styles.mobile.dismiss : styles.desktop.dismiss}, ["(Click to dismiss.)"]);
     const msg = E("div", {style: MOB ? styles.mobile.msg : styles.desktop.msg}, [txt, dismiss]);
 
     // Notification
@@ -778,6 +779,7 @@ const Components = {
      const store = props.store;
      const state = store.getState();
      const landing = !state.userState.returning;
+     const appMsg = state.userState.appMsg;
      const loggedIn = state.userState.user != "GUEST";
      const MOB = window.innerWidth < 700;
      const E = React.createElement;
@@ -791,6 +793,16 @@ const Components = {
          btn: {position: {btnx:"7.75em", btny:"1.25em", btnh:"1.25em", btnw:"3.5em", btnr: "7px"}, txt: "Got it."},
          animation:  "animation: menuGuide 750ms 1 ease-in-out forwards;"
        }});
+     }
+
+     if (!landing && !appMsg) {
+       dispatch({type: "APP_MSG"});
+       dispatch({type: "FLASH_NOTIFICATION", payload: {
+         tile: "./imgs/icons/sm/brain.svg", msg: "Welcome! For the best experience, choose \"Add to homescreen.\"", alt: "brain icon"
+       }});
+       window.setTimeout(function(){
+         dispatch({type: "HIDE_NOTIFICATION"});
+       }, 4000);
      }
 
      // HomeView Content
