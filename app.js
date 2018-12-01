@@ -511,15 +511,15 @@ const Components = {
     const styles = {
       desktop: {
         show: `
-         position: absolute; height: 4em; width: 23em; top: 5em; right: 1.75em; z-index: 100;
+         position: absolute; width: 23em; top: 5em; right: 1.75em; z-index: 100; padding: 0.5em;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
+         background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationShowDesktop 0.5s 1 ease-in-out forwards;
         `,
         glance: `
-         position: absolute; height: 4em; width: 23em; top: 5em; right: 1.75em; z-index: 100;
+         position: absolute; width: 23em; top: 5em; right: 1.75em; z-index: 100; padding: 0.5em;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
+         background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationGlanceDesktop 4s 1 ease-in-out forwards;
         `,
         tile: `
@@ -531,26 +531,26 @@ const Components = {
         `,
         msg: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
-         height: 4em; width: 19em;
+         width: 19em;
         `,
         txt: `
-         font-size: 1em; margin: 0.25em 0; padding: 0;
+         font-size: 1em;
         `,
         dismiss: `
-         font-size: 0.65em; margin: 0; padding: 0;
+         margin: 0 auto 0.75em; font-size: 0.65em;
         `
       },
       mobile: {
         show: `
-         position: absolute; height: 3.5em; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
+         position: absolute; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
+         background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationShowMobile 0.5s 1 ease-in-out forwards;
         `,
         glance: `
-         position: absolute; height: 3.5em; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
+         position: absolute; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
-         background-image: linear-gradient(rgba(35,35,35,0.9), rgba(35,35,35,0.9)); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
+         background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationGlanceMobile 4s 1 ease-in-out forwards;
         `,
         tile: `
@@ -562,13 +562,12 @@ const Components = {
         `,
         msg: `
          display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: center;
-         height: 3.5em;
         `,
         txt: `
-         margin: 0.25em 0; padding: 0; font-size: 1em; text-align: center;
+         font-size: 1em; text-align: center;
         `,
         dismiss: `
-         margin: 0; padding: 0; font-size: 0.65em;
+          margin: 0 0 0.75em; font-size: 0.65em;
         `
       },
       hidden: `display: none;`
@@ -631,7 +630,7 @@ const Components = {
       `,
       btn: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; z-index: 1000; display: flex; flex-direction: row; justify-content: center; align-items: center;
-        padding: 0.1em 0.5em 0.05em; background-color: rgba(25,110,214,0.9); border: 1px solid #777; border-radius: 5px; cursor: pointer;
+        padding: 0.1em 0.5em 0.05em; background-color: rgba(25,110,214,1); border: 1px solid #777; border-radius: 5px; cursor: pointer;
       `
     };
 
@@ -692,6 +691,15 @@ const Components = {
        viewMobile: `
          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
          background-image: url("./imgs/wp/pnw.jpg"); background-position: center; background-size: cover; background-repeat: none;
+       `,
+       appNotification: `
+         display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;
+       `,
+       notificationTxt: `
+         margin: 0.1em auto;
+       `,
+       notificationBtn: `
+         padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1);
        `,
        card: {
          box: `
@@ -795,11 +803,17 @@ const Components = {
        }});
      }
 
+     // Recommend "Add to Homescreen"
      if (!landing && !appMsg) {
        dispatch({type: "APP_MSG"});
        dispatch({type: "FLASH_NOTIFICATION", payload: {
-         tile: "./imgs/icons/sm/brain.svg", msg: "Welcome! For the best experience, choose \"Add to homescreen.\"", alt: "brain icon"
+         tile: "./imgs/icons/sm/brain.svg", msg: E("div", {style: styles.appNotification}, [
+           E("p", {style: styles.notificationTxt}, ["Welcome!"]),
+           E("p", {style: styles.notificationTxt}, ["For the best experience, choose \"Add to homescreen.\""]),
+           E("p", {style: styles.notificationBtn}, ["Need help?"])
+         ]), alt: "brain icon"
        }});
+
        window.setTimeout(function(){
          dispatch({type: "HIDE_NOTIFICATION"});
        }, 4000);
