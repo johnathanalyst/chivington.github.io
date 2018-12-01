@@ -94,7 +94,7 @@ const Redux = {
    initHeader: "VISIBLE",
    initMenu: "CLOSED",
    initNotification: {
-     visibility: "HIDDEN", tile: "./imgs/icons/sm/brain.svg", msg: "Welcome!", alt: "brain icon"
+     visibility: "HIDDEN", tile: "./imgs/icons/sm/brain.svg", msg: "Welcome!", alt: "brain icon", action: null
    },
    initGuide: {
      visibility: "HIDDEN",
@@ -366,6 +366,7 @@ const Components = {
       "PROJECTS": Views.Projects,
       "COVER": Views.Cover,
       "RESUME": Views.Resume,
+      "GUIDE": Views.Guide,
       "DEFAULT": Views.Home
     };
 
@@ -511,16 +512,16 @@ const Components = {
     const styles = {
       desktop: {
         show: `
-         position: absolute; width: 23em; top: 5em; right: 1.75em; z-index: 100; padding: 0.5em;
+         position: absolute; width: 25em; top: 5em; right: 1.75em; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
          background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
          animation: notificationShowDesktop 0.5s 1 ease-in-out forwards;
         `,
         glance: `
-         position: absolute; width: 23em; top: 5em; right: 1.75em; z-index: 100; padding: 0.5em;
+         position: absolute; top: 5em; right: 1.75em; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
          background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-         animation: notificationGlanceDesktop 4s 1 ease-in-out forwards;
+         animation: notificationGlanceDesktop 5s 1 ease-in-out forwards;
         `,
         tile: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -530,8 +531,7 @@ const Components = {
           height: 2.5em; width: 2.5em;
         `,
         msg: `
-         display: flex; flex-direction: column; justify-content: center; align-items: center;
-         width: 19em;
+         display: flex; flex-direction: column; justify-content: center; align-items: center; margin: auto 1em;
         `,
         txt: `
          font-size: 1em;
@@ -551,7 +551,7 @@ const Components = {
          position: absolute; width: 95%; top: 4.5em; left: 2.5%; z-index: 100;
          display: flex; flex-direction: row; justify-content: center; align-items: center; overflow: hidden;
          background-image: linear-gradient(#333, #222); color: #fff; border: 1px solid #aaa; border-radius: 15px; cursor: pointer;
-         animation: notificationGlanceMobile 4s 1 ease-in-out forwards;
+         animation: notificationGlanceMobile 5s 1 ease-in-out forwards;
         `,
         tile: `
          display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -608,6 +608,7 @@ const Components = {
         visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon"
       }});
       dispatch({type: "CLOSE_MENU"});
+      if (status.action) dispatch(status.action);
     });
 
     return Notification;
@@ -626,11 +627,11 @@ const Components = {
       hidden: `display: none;`,
       msg: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; height: ${h||"auto"}; width: ${w||"auto"}; z-index: 1000;
-        padding: 0.5em; border-radius: 5px; background-color: rgba(0,0,0,1);
+        padding: 0.5em; border: 1px solid #aaa; border-radius: 5px; background-image: linear-gradient(#222, #333); font-size: 0.9em;
       `,
       btn: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; z-index: 1000; display: flex; flex-direction: row; justify-content: center; align-items: center;
-        padding: 0.1em 0.5em 0.05em; background-color: rgba(25,110,214,1); border: 1px solid #777; border-radius: 5px; cursor: pointer;
+        padding: 0.15em 0.75em; background-color: rgba(25,110,214,1); color: #fff; border: 1px solid #aaa; border-radius: 5px; cursor: pointer;
       `
     };
 
@@ -660,7 +661,7 @@ const Components = {
     // Guide Box
     const box = E("div", {style: styles.box(boxx,boxy,boxh,boxw,boxr)}, []);
     const msg = E("p", {style: styles.msg(msgx,msgy,msgh,msgw)}, [msgTxt]);
-    const btn = E("p", {style: styles.btn(btnx,btny,btnh,btnw)}, [btnTxt]);
+    const btn = E("button", {style: styles.btn(btnx,btny,btnh,btnw)}, [btnTxt]);
 
     // Guide
     const Guide = E("div", {style: displayType}, [box, msg, btn]);
@@ -699,7 +700,7 @@ const Components = {
          margin: 0.1em auto;
        `,
        notificationBtn: `
-         padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1);
+         padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;
        `,
        card: {
          box: `
@@ -797,8 +798,8 @@ const Components = {
        dispatch({type: "LANDING"});
        dispatch({type: "SHOW_GUIDE", payload: {
          box: {boxx:"0.55em", boxy:"0.45em", boxh:"3em", boxw:"3em", boxr:"100%"},
-         msg: {position: {msgx:"4em", msgy:"-0.75em", msgh:"2.65em", msgw:""}, txt: "Tap the brain for more..."},
-         btn: {position: {btnx:"7.75em", btny:"1.25em", btnh:"1.25em", btnw:"3.5em", btnr: "7px"}, txt: "Got it."},
+         msg: {position: {msgx:"4.75em", msgy:"-0.5em", msgh:"2.65em", msgw:""}, txt: "Tap the brain for more..."},
+         btn: {position: {btnx:"9.25em", btny:"2.65em", btnh:"1.25em", btnw:"3.5em", btnr: "7px"}, txt: "Got it."},
          animation:  "animation: menuGuide 750ms 1 ease-in-out forwards;"
        }});
      }
@@ -806,17 +807,19 @@ const Components = {
      // Recommend "Add to Homescreen"
      if (!landing && !appMsg) {
        dispatch({type: "APP_MSG"});
+
        dispatch({type: "FLASH_NOTIFICATION", payload: {
-         tile: "./imgs/icons/sm/brain.svg", msg: E("div", {style: styles.appNotification}, [
+         tile: "./imgs/icons/sm/brain.svg", alt: "brain icon", action: {type:"NAV_TO", payload:"GUIDE"},
+         msg: E("div", {style: styles.appNotification}, [
            E("p", {style: styles.notificationTxt}, ["Welcome!"]),
            E("p", {style: styles.notificationTxt}, ["For the best experience, choose \"Add to homescreen.\""]),
-           E("p", {style: styles.notificationBtn}, ["Need help?"])
-         ]), alt: "brain icon"
+           E("button", {style: styles.notificationBtn}, ["Need help?"])
+         ])
        }});
 
        window.setTimeout(function(){
          dispatch({type: "HIDE_NOTIFICATION"});
-       }, 4000);
+       }, 5000);
      }
 
      // HomeView Content
@@ -1200,7 +1203,47 @@ const Components = {
      });
 
      return ResumeView;
-   }
+   },
+   // Guide View - description.
+   Guide: function(props, dispatch, children) {
+     // GuideView Styles
+     const styles = {
+       view: `
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: center; height: 100%;
+       `,
+       title: `
+        margin: 0.75em auto 0.5em; color: #fff; text-decoration: underline; font-weight: 300;
+       `,
+       imgs: (w) => `
+        width: ${w}; margin: 1em auto;
+       `
+     }
+
+     // GuideView Globals
+     const store = props.store;
+     const state = store.getState();
+     const landing = !state.userState.returning;
+     const appMsg = state.userState.appMsg;
+     const loggedIn = state.userState.user != "GUEST";
+     const MOB = window.innerWidth < 700;
+     const E = React.createElement;
+
+     // GuideView Content
+     const title = E("h2", {style: styles.title}, ["Add to Homescreen Guide"]);
+     const stepOneImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: "./imgs/content/step1.jpg", alt: "step1 img"}, []);
+     const stepTwoImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: "./imgs/content/step2.jpg", alt: "step2 img"}, []);
+
+
+     // GuideView
+     const GuideView = E("div", {style: styles.view}, [title, stepOneImg, stepTwoImg]);
+
+     // GuideView Listeners
+     GuideView.addEventListener("click", function(event){
+       dispatch({type: "CLOSE_MENU"});
+     });
+
+     return GuideView;
+   },
  };
 
 
