@@ -621,7 +621,7 @@ const Components = {
       `,
       box: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; height: ${h}; width: ${w}; z-index: 1000; background-color: rgba(0,0,0,0);
-        border-radius: ${r}; -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
+        border-radius: ${r}; -webkit-appearance: none; -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
       `,
       hidden: `display: none;`,
       msg: (x,y,h,w,r) => `
@@ -630,7 +630,7 @@ const Components = {
       btn: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
         display: flex; flex-direction: row; justify-content: center; align-items: center;
-        padding: 0.1em 0.5em 0; background-color: rgba(25,110,214,1); border: 1px solid #999; border-radius: 3px; cursor: pointer;
+        padding: 0.2em 0.5em 0.05em 0.55em; background-color: rgba(25,110,214,0.9); border: 1px solid #777; border-radius: 5px; cursor: pointer;
       `
     };
 
