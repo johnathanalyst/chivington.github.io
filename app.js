@@ -98,9 +98,9 @@ const Redux = {
    },
    initGuide: {
      visibility: "HIDDEN",
-     box: {bx:0, by:0, bh:0, bw:0, br:0},
-     msg: {position: {mx:0, my:0, mh:0, mw:0, mr:0}, txt: "Guide Message!"},
-     btn: {position: {btx:0, bty:0, bth:0, btw:0, btr:0}, txt: "Guide Button!"},
+     box: {boxx:0, boxy:0, boxh:0, boxw:0, boxr:0},
+     msg: {position: {msgx:0, msgy:0, msgh:0, msgw:0, msgr:0}, txt: "Guide Message!"},
+     btn: {position: {btnx:0, btny:0, btnh:0, btnw:0, btnr:0}, txt: "Guide Button!"},
      animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
    },
    initView: "HOME",
@@ -625,11 +625,13 @@ const Components = {
       `,
       hidden: `display: none;`,
       msg: (x,y,h,w,r) => `
-        position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
+        position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,1);
+      `,
+      msg: (x,y,h,w,r) => `
+        position: absolute; top: ${y}; left: ${x}; height: ${h||"auto"}; width: ${w||"auto"}; z-index: 1000; background-color: rgba(0,0,0,1);
       `,
       btn: (x,y,h,w,r) => `
-        position: absolute; top: ${y}; left: ${x}; z-index: 1000; background-color: rgba(0,0,0,0);
-        display: flex; flex-direction: row; justify-content: center; align-items: center;
+        position: absolute; top: ${y}; left: ${x}; z-index: 1000; display: flex; flex-direction: row; justify-content: center; align-items: center;
         padding: 0.1em 0.5em 0.05em; background-color: rgba(25,110,214,0.9); border: 1px solid #777; border-radius: 5px; cursor: pointer;
       `
     };
@@ -641,9 +643,9 @@ const Components = {
     const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
     const visibility = state.guideState.visibility;
     const animation = state.guideState.animation;
-    const { bx,by,bh,bw,br } = state.guideState.box;
-    const { mx,my,mh,mw } = state.guideState.msg.position;
-    const { btx,bty,bth,btw } = state.guideState.btn.position;
+    const { boxx,boxy,boxh,boxw,boxr } = state.guideState.box;
+    const { msgx,msgy,msgh,msgw } = state.guideState.msg.position;
+    const { btnx,btny,btnh,btnw } = state.guideState.btn.position;
     const msgTxt = state.guideState.msg.txt;
     const btnTxt = state.guideState.btn.txt;
     const MOB = window.innerWidth < 700;
@@ -658,9 +660,9 @@ const Components = {
     const displayType = choices[visibility] ? choices[visibility](animation) : choices["DEFAULT"]();
 
     // Guide Box
-    const box = E("div", {style: styles.box(bx,by,bh,bw,br)}, []);
-    const msg = E("p", {style: styles.msg(mx,my,mh,mw)}, [msgTxt]);
-    const btn = E("p", {style: styles.btn(btx,bty,bth,btw)}, [btnTxt]);
+    const box = E("div", {style: styles.box(boxx,boxy,boxh,boxw,boxr)}, []);
+    const msg = E("p", {style: styles.msg(msgx,msgy,msgh,msgw)}, [msgTxt]);
+    const btn = E("p", {style: styles.btn(btnx,btny,btnh,btnw)}, [btnTxt]);
 
     // Guide
     const Guide = E("div", {style: displayType}, [box, msg, btn]);
@@ -786,9 +788,9 @@ const Components = {
      if (landing) {
        dispatch({type: "LANDING"});
        dispatch({type: "SHOW_GUIDE", payload: {
-         box: {bx:"0.55em", by:"0.45em", bh:"3em", bw:"3em", br:"1px"},
-         msg: {position: {mx:"4em", my:"0", mh:"1em", mw:"3em"}, txt: "Tap the brain for more..."},
-         btn: {position: {btx:"7em", bty:"1.25em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."},
+         box: {boxx:"0.55em", boxy:"0.45em", boxh:"3em", boxw:"3em", boxr:"100%"},
+         msg: {position: {msgx:"4em", msgy:"0", msgh:"", msgw:""}, txt: "Tap the brain for more..."},
+         btn: {position: {btnx:"7em", btny:"1.25em", btnh:"1.25em", btnw:"3.5em", btnr: "7px"}, txt: "Got it."},
          animation:  "animation: menuGuide 750ms 1 ease-in-out forwards;"
        }});
      }
