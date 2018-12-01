@@ -786,7 +786,7 @@ const Components = {
        dispatch({type: "LANDING"});
        dispatch({type: "SHOW_GUIDE", payload: {
          box: {bx:"0.655em", by:"0.5em", bh:"3em", bw:"3em", br:"100%"},
-         msg: {position: {mx:"4em", my:"0.7em", mh:"1em", mw:"3em"}, txt: "Touch the brain for more..."},
+         msg: {position: {mx:"4em", my:"0.7em", mh:"1em", mw:"3em"}, txt: "Tap the brain for more..."},
          btn: {position: {btx:"7em", bty:"2em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."}
          // msg: {position: {mx:"0.86em", my:"2.7em", mh:"1em", mw:"3em"}, txt: "Touch the brain..."},
          // btn: {position: {btx:"0.25em", bty:"4em", bth:0, btw:0}, txt: "Got it!"}
