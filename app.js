@@ -621,8 +621,7 @@ const Components = {
       `,
       box: (x,y,h,w,r) => `
         position: absolute; top: ${y}; left: ${x}; height: ${h}; width: ${w}; z-index: 1000; background-color: rgba(0,0,0,0);
-        border: 1px solid #aaa; border-radius: ${r};
-        -moz-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9); box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
+        border: 1px solid #aaa; border-radius: ${r}; -webkit-box-shadow: 0 0 0 1000em rgba(0,0,0,0.9);
       `,
       hidden: `display: none;`,
       msg: (x,y,h,w,r) => `
@@ -787,9 +786,9 @@ const Components = {
      if (landing) {
        dispatch({type: "LANDING"});
        dispatch({type: "SHOW_GUIDE", payload: {
-         box: {bx:"0.655em", by:"0.5em", bh:"3em", bw:"3em", br:"100%"},
-         msg: {position: {mx:"4em", my:"0.7em", mh:"1em", mw:"3em"}, txt: "Tap the brain for more..."},
-         btn: {position: {btx:"7em", bty:"2em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."},
+         box: {bx:"0.6em", by:"0.45em", bh:"3em", bw:"3em", br:"100%"},
+         msg: {position: {mx:"4em", my:"0", mh:"1em", mw:"3em"}, txt: "Tap the brain for more..."},
+         btn: {position: {btx:"7em", bty:"1.25em", bth:"1.25em", btw:"3.5em", btr: "7px"}, txt: "Got it."},
          animation:  "animation: menuGuide 750ms 1 ease-in-out forwards;"
        }});
      }
