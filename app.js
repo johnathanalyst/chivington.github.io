@@ -491,8 +491,7 @@ const Components = {
       // DocHeader Globals
       const store = props.store;
       const state = store.getState();
-      const currentMode = state.windowState;
-      const viewName = state.viewState.toLowerCase();
+      const viewName = state.uiState.viewState.toLowerCase();
       const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
       const MOB = window.innerWidth < 700;
       const E = React.createElement;
@@ -976,7 +975,8 @@ const Components = {
 
      // BlogView Globals
      const store = props.store;
-     const viewName = store.getState().viewState.toLowerCase();
+     const state = store.getState();
+     const viewName = state.uiState.viewState.toLowerCase();
      const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
      // BlogView Content
