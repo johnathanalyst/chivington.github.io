@@ -331,7 +331,6 @@ const Components = {
       // Header Listeners
       Header.addEventListener("click", function(event) {
         dispatch({type: "HIDE_NOTIFICATION"});
-        // dispatch({type: "HIDE_GUIDE"});
       });
 
       return Header;
@@ -392,7 +391,6 @@ const Components = {
       Menu.addEventListener("click", function(event) {
         dispatch({type: "CLOSE_MENU"});
         dispatch({type: "HIDE_NOTIFICATION"});
-        dispatch({type: "HIDE_GUIDE"});
       });
 
       return Menu;
