@@ -328,6 +328,12 @@ const Components = {
       // Header Element
       const Header = React.createElement("div", {style: styles.header}, [icon, title]);
 
+      // Header Listeners
+      Header.addEventListener("click", function(event) {
+        dispatch({type: "HIDE_NOTIFICATION"});
+        // dispatch({type: "HIDE_GUIDE"});
+      });
+
       return Header;
     },
     // Menu - layered/collapsible full-route menu.
@@ -352,40 +358,42 @@ const Components = {
       // Home Link & Listeners
       const home = React.createElement("a", {style: styles.link}, ["Home"]);
       home.addEventListener("click", function(event){
-        dispatch({type: "CLOSE_MENU"});
         dispatch({type: "NAV_TO", payload: "HOME"});
       });
 
       // Blog Link & Listeners
       const blog = React.createElement("a", {style: styles.link}, ["Blog"]);
       blog.addEventListener("click", function() {
-        dispatch({type: "CLOSE_MENU"});
         dispatch({type: "NAV_TO", payload: "BLOG"});
       });
 
       // Projects Link & Listeners
       const projects = React.createElement("a", {style: styles.link}, ["Projects"]);
       projects.addEventListener("click", function () {
-        dispatch({type: "CLOSE_MENU"});
         dispatch({type: "NAV_TO", payload: "PROJECTS"});
       });
 
       // Cover Link & Listeners
       const cover = React.createElement("a", {style: styles.link}, ["Cover"]);
       cover.addEventListener("click", function () {
-        dispatch({type: "CLOSE_MENU"});
         dispatch({type: "NAV_TO", payload: "COVER"});
       });
 
       // Resume Link & Listeners
       const resume = React.createElement("a", {style: styles.link}, ["Resume"]);
       resume.addEventListener("click", function () {
-        dispatch({type: "CLOSE_MENU"});
         dispatch({type: "NAV_TO", payload: "RESUME"});
       });
 
       // Menu Element
       const Menu = React.createElement("div", {style: menuStyle}, [home, blog, projects, cover, resume, ...children]);
+
+      // Menu Listeners
+      Menu.addEventListener("click", function(event) {
+        dispatch({type: "CLOSE_MENU"});
+        dispatch({type: "HIDE_NOTIFICATION"});
+        dispatch({type: "HIDE_GUIDE"});
+      });
 
       return Menu;
     },
