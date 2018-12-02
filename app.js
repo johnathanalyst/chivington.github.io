@@ -337,7 +337,7 @@ const Components = {
           position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
           background-image: linear-gradient(to bottom right, rgba(25,110,214,1), rgba(6,90,204,1));
-          border-right: 1px solid #000; animation: menuOpen 1s 1; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
+          border-right: 1px solid #000; animation: menuOpen 150MS 1; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
         `,
         menuClosed: `
           display: none;
