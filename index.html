@@ -14,44 +14,63 @@
   </head>
 
   <style media="screen">
-    * { font-family: sans-serif; text-decoration: none; scroll-behavior: smooth; }
-    #AppNoJs {
+    * {
+      font-family: sans-serif; scroll-behavior: smooth;
+    }
+    #NoJsApp {
       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
       position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
     }
-    #HeaderNoJs {
-      position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+    #NoJsHeader {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 15;
       display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-      height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #000; background-color: rgba(225,225,255,0.7);
+      height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
+      background-image: linear-gradient(#333, #222); -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
     }
-    #IconNoJs {
+    #NoJsIcon {
       height: 2.25em; width: 2.25em;
     }
-    #TitleNoJs {
-      margin-left: 0.25em; color: #222; font-size: 2.15em;
+    #NoJsTitle {
+      margin-left: 0.25em; color: #fff; font-size: 2.15em;
     }
-    #ViewNoJs {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0;
+    #NoJsView {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; padding: 8em 0 0 0;
       display: flex; flex-direction: column; justify-content: center; align-items: center;
     }
-    #WpNoJs {
+    #NoJsWp {
       position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
     }
-    #FilterNoJs {
+    #NoJsFilter {
       position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
       display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
       background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
     }
-    .loading {
-      width: 17em; height: 17em; margin: 0 0 1em 0; animation: float 5.5s infinite;
+    #NoJsImg {
+      height: 50%; margin: 0 0 1em 0; animation: float 5.5s infinite;
+    }
+    .NoJsRow {
+      display: flex; flex-direction: row; justify-content: center; align-items: center;
+    }
+    .NoJsRow * {
+      margin: 0.25em 0.2em 0;
+    }
+    .NoJsRow a {
+      font-style: italic; color: rgba(25,110,214,1); text-decoration: none;
+    }
+    #NoJsMsg {
+      margin: 1em; font-size: 0.85em; font-style: italic;
     }
     @keyframes float {
       0% 100% { transform: translateY(0); }
       50% { transform: translateY(-1em); }
     }
     @keyframes menuOpen {
-      0% { transform: translateX(-10em); }
+      0% { transform: translateX(-12em); }
       100% { transform: translateX(0); }
+    }
+    @keyframes menuClosing {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-12em); }
     }
     @keyframes notificationShowDesktop {
       0% { opacity: 100%; transform: translateX(50em); }
@@ -77,34 +96,48 @@
       0% { opacity: 100%; transform: translateY(-25em); }
       100% { opacity: 0%; transform: translateY(0); }
     }
+    @keyframes viewSlideIn {
+      0% { transform: translateX(-1000em); }
+      100% { transform: translateX(0); }
+    }
   </style>
 
   <body>
     <div id="AppRoot">
-      <div id="AppNoJs">
-        <div id="HeaderNoJs">
-          <img id="IconNoJs" src="./favicon.ico" alt="chivingtoninc Icon">
-          <h1 id="TitleNoJs">chivingtoninc<sup style="font-size: 0.3em; margin-left: 1px;">work</sup></h1>
+      <div id="NoJsApp">
+        <div id="NoJsHeader">
+          <img id="NoJsIcon" src="./favicon.ico" alt="chivingtoninc Icon">
+          <h1 id="NoJsTitle">chivingtoninc<sup style="font-size: 0.3em; margin-left: 1px;">noJs</sup></h1>
         </div>
 
-        <div id="ViewNoJs">
-          <img id="WpNoJs" src="./imgs/wp/fragmented.jpg" alt="chivingtoninc Wallpaper">
+        <div id="NoJsView">
+          <img id="NoJsWp" src="./imgs/wp/pnw.jpg" alt="chivingtoninc Wallpaper">
 
-          <div id="FilterNoJs">
-            <img class="loading" src="./imgs/icons/safari-pinned-tab.svg" alt="chivingtoninc Icon">
-            <p style="margin: 0.5em ;">this app's repo:
-              <a src="https://github.com/chivingtoninc/chivingtoninc.github.io" style="cursor: pointer;text-decoration: underline;">
-                chivingtoninc.github.io
-              </a>
-            </p>
+          <div id="NoJsFilter">
+            <img id="NoJsImg" src="./imgs/icons/safari-pinned-tab.svg" alt="chivingtoninc Icon">
 
-            <a href="./includes/j.Chivington.Cover.docx" style="color: #fff; cursor: pointer;text-decoration: underline;" download>Download Cover Letter (.docx)</a>
-            <a href="./includes/j.Chivington.Resume.docx" style="color: #fff; cursor: pointer;text-decoration: underline;" download>Download Resume (.docx)</a>
+            <div class="NoJsRow">
+              <h3 class="NoJsLinkLabel">View GitHub:</h3>
+              <a class="NoJsLink" href="https://github.com/chivingtoninc/chivingtoninc.github.io">(web app)</a>
+              <p class="NoJsSep">|</p>
+              <a class="NoJsLink" href="https://github.com/chivingtoninc">(main)</a>
+            </div>
 
-            <p style="margin: 0.75em; font-size: 0.8em; font-style: italic;">
-              If this takes more than 1-2 seconds to load, Javascript is likely disabled. <br/> You will need Javascript to use this app.
-            </p>
+            <div class="NoJsRow">
+              <h3 class="NoJsLinkLabel">Download Cover:</h3>
+              <a class="NoJsLink" href="./includes/j.Chivington.Cover.docx" download>(.docx)</a>
+              <p class="NoJsSep">|</p>
+              <a class="NoJsLink" href="./includes/j.Chivington.Cover.pdf" download>(.pdf)</a>
+            </div>
 
+            <div class="NoJsRow">
+              <h3 class="NoJsLinkLabel">Download Resume:</h3>
+              <a class="NoJsLink" href="./includes/j.Chivington.Resume.docx" download>(.docx)</a>
+              <p class="NoJsSep">|</p>
+              <a class="NoJsLink" href="./includes/j.Chivington.Resume.pdf" download>(.pdf)</a>
+            </div>
+
+            <p id="NoJsMsg">Javascript is likely disabled. <br/> You will need Javascript to use this app.</p>
           </div>
         </div>
       </div>
