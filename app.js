@@ -406,7 +406,7 @@ const Components = {
         router: `
           position: absolute; top: -4em; left: 0; bottom: 0; right: 0; overflow: hidden;
           display: flex; flex-direction: column; justify-content: center; align-items: center;
-          background-color: #07e;
+          background-image: linear-gradient(rgba(25,110,214,1), rgba(6,90,204,1));
         `
       };
 
@@ -414,6 +414,7 @@ const Components = {
       const store = props.store;
       const state = store.getState();
       const viewName = state.uiState.viewState.view;
+      const prevName = state.uiState.viewState.prev;
       const MOB = window.innerWidth < 700;
       const E = React.createElement;
 
@@ -428,10 +429,18 @@ const Components = {
         "DEFAULT": Views.Home
       };
 
+      // Current View & Props
       const view = views[viewName] ? views[viewName] : views["DEFAULT"];
+      const currentProps = Object.assign(props, {viewName: viewName});
+
+      // Previous View & Props
+      const prev = views[prevName] ? views[prevName] : views["DEFAULT"];
+      const previousProps = Object.assign(props, {viewName: prevName});
 
       // Router Element
-      const Router = React.createElement("div", {style: styles.router}, [Components.UI.View(props, dispatch, [view])]);
+      const Router = React.createElement("div", {style: styles.router}, [
+        Components.UI.View(previousProps, dispatch, [prev]), Components.UI.View(currentProps, dispatch, [view])
+      ]);
 
       return Router;
     },
@@ -566,7 +575,9 @@ const Components = {
       const E = React.createElement;
 
       // View Animation
-      if (viewState.view != viewState.prev && lastAction == "NAV_TO") styles.view += `animation: viewSlideIn 500ms 1 forwards;`
+      const sameView = viewState.view == viewState.prev, navAction = lastAction == "NAV_TO", current = props.viewName == viewState.prev;
+      if (navAction && current && !sameView) styles.view += `animation: viewSlideIn 500ms 1 forwards;`
+      if (navAction && !current && !sameView) styles.view += `animation: viewSlideOut 500ms 1 forwards;`
 
       // Menu Guide if landing
       if (landing) {
@@ -599,8 +610,7 @@ const Components = {
 
       // View
       const View = React.createElement("div", {style: styles.view}, [
-        children[0](props, dispatch, children),
-        Components.UI.Notification(props, dispatch, [])
+        children[0](props, dispatch, children), Components.UI.Notification(props, dispatch, [])
       ]);
 
       // View Listeners
