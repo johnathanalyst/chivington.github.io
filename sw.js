@@ -44,6 +44,7 @@ this.addEventListener("install", function(event) {
 });
 
 this.addEventListener("fetch", function(event) {
+  console.log("\n CACHES: ", caches);
   event.respondWith(
     caches.match(event.request).catch(function() {
       return event.default();
