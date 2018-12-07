@@ -1,8 +1,9 @@
 this.addEventListener("install", function(event) {
-  event.waitUntil(caches.create("static-v1".then(function(cache) {
+  event.waitUntil(caches.create("chivingtoninc-v1".then(function(cache) {
     return cache.add({
       "./index.html",
       "./app.js",
+      "./sw.js",
       "./favicon.ico",
       "./site.webmanifest",
       "./includes/docs/j.Chivington.Cover.docx",
@@ -40,4 +41,8 @@ this.addEventListener("install", function(event) {
       "./imgs/wp/pnw.jpg"
     });
   })));
+});
+
+this.addEventListener("fetch", function(event) {
+  console.log("\n FETCH IS GOING TO HAPPEN!");
 });

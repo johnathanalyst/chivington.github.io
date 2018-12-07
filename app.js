@@ -418,13 +418,6 @@ const Components = {
         }});
       });
 
-      // Asset Caching
-      // if (state.subscriptionState) {
-      //   if ("serviceWorker" in navigator) navigator.serviceWorker.register(
-      //     "./sw.js", {scope: "/"}).then(success, failure);
-      //   // else do indexedDB
-      // }
-
       // Shell Element
       const Shell = React.createElement("div", {style: styles.shell}, [
         Components.UI.Header(props, dispatch, []), Components.UI.Menu(props, dispatch, []), Components.UI.Router(props, dispatch, [])
@@ -1443,3 +1436,12 @@ ReduxStore.subscribe({
     children: []
   }, document.getElementById("AppRoot")]
 });
+
+
+
+
+/* --------------------------------- Cache Assets --------------------------------- *
+ *    Cache assets, using service workers. No support planned for fringe devices.   *
+ * -------------------------------------------------------------------------------- */
+ if ("serviceWorker" in navigator)
+  navigator.serviceWorker.register("./sw.js", {scope: "/"}).then(success, failure);
