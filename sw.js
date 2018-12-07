@@ -40,7 +40,7 @@ this.addEventListener("install", function(event) {
       "./imgs/wp/math.jpg",
       "./imgs/wp/pnw.jpg"
     ]);
-  })));
+  }));
 });
 
 this.addEventListener("fetch", function(event) {
