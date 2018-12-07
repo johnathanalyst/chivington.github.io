@@ -676,8 +676,8 @@ const Components = {
       const E = React.createElement;
 
       // View Animation
-      if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 10ms 1 forwards;`;
-      if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 1500ms 1 forwards;`;
+      if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 50ms 1 forwards;`;
+      if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 2000ms 1 forwards;`;
       if (!navAction && isPrevious && !sameView) styles.view += `display: none;`;
 
       // Menu Guide if landing
