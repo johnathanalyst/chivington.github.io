@@ -1445,5 +1445,5 @@ ReduxStore.subscribe({
  * -------------------------------------------------------------------------------- */
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js", {scope: "/"}).then(
-  console.log("\n SW INSTALLED!"), console.log("\n SW FAILED!")
+  function(){ console.log("\n SW INSTALLED!") }, function() { console.log("\n SW FAILED!") }
 );
