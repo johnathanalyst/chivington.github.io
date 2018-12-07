@@ -44,5 +44,7 @@ this.addEventListener("install", function(event) {
 });
 
 this.addEventListener("fetch", function(event) {
-  event.respondWith(caches.match(event.request).catch(() => event.default()));
+  event.respondWith(caches.match(event.request).catch(function() {
+    return event.default();
+  }));
 });
