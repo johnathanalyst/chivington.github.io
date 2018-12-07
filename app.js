@@ -1036,7 +1036,7 @@ const Views = {
    const landing = !state.uiState.userState.returning;
    const appMsg = state.uiState.userState.appMsg;
    const loggedIn = state.uiState.userState.user != "GUEST";
-   const { mePath, helloPath, githubPath, linkedinPath, twitterPath, phonePath, emailPath, fragmentedPath } = Assets;
+   const { mePath, helloPath, githubPath, linkedinPath, twitterPath, phonePath, emailPath, pnwPath } = Assets;
    const MOB = state.uiState.windowState.mode == "MOBILE";
    const E = React.createElement;
 
@@ -1044,7 +1044,7 @@ const Views = {
    const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
      E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
        E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
-         E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: Assets.mePath, alt: "my face"}, [])
+         E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: mePath, alt: "my face"}, [])
        ]),
        E("div", {style: MOB ? styles.card.body.right.boxMobile : styles.card.body.right.box}, [
          E("div", {style: MOB ? styles.card.body.right.top.boxMobile : styles.card.body.right.top.box}, [
@@ -1075,7 +1075,7 @@ const Views = {
    ]);
 
    // HomeView
-   const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile(fragmentedPath) : styles.view(fragmentedPath)}, [card]);
+   const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile(pnwPath) : styles.view(pnwPath)}, [card]);
 
    return HomeView;
  },
