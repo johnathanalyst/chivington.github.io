@@ -163,8 +163,8 @@ const Blueprint = {
    },
    initWallpaper: {
      name: "fragmented", route: Assets.fragmentedPath
-   }
-   // initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
+   },
+   initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
  },
  chivingtoninc: {
    initContact: {
@@ -236,6 +236,12 @@ const Blueprint = {
    }
  }
 };
+
+if (window.navigator) {
+  console.log("\n NAV", window.navigator);
+  if (userAgent.match(/iPhone/i)) Blueprint.ui.initView.view = "BLOG";
+  if (userAgent.match(/iPad/i)) Blueprint.ui.initView.view = "PROJECTS";
+}
 
 
 /* ----------------------------------- Reducers ----------------------------------- *
