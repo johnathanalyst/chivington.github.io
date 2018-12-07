@@ -643,7 +643,7 @@ const Components = {
       const viewName = state.uiState.viewState.view.toLowerCase();
       const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
       const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook } = state.chivingtonincState.contactState;
-      const { downloadPath, meAndWinPath, phonePath, emailPath, linkedinPath, githubPath, twitterPath, facebookPath } = Assets;
+      const { downloadPath, meAndWinPath, phonePath, emailPath, linkedinPath, githubPath, twitterPath, facebookPath, mathPath } = Assets;
       const doc = Assets[`${viewName}DocxPath`];
       const pdf = Assets[`${viewName}PdfPath`];
       const alt = `Download ${capitalized}`;
@@ -652,7 +652,7 @@ const Components = {
 
       // Responsive Styles
       const rowStyle = MOB ? styles.right.rowMobile : styles.right.row;
-      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common();
+      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common(mathPath);
       // const
 
       // Download Link
