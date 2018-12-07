@@ -486,7 +486,7 @@ const Components = {
       });
 
       // Network Indicator
-      const src = networkState != "UNKNOWN" ? wifiPath : noWifi2Path;
+      const src = networkState != "UNKNOWN" ? wifiPath : noWifiPath;
       const networkIndicator = E("img", {style: styles.networkIndicator, src: src, alt: "network indicator"}, []);
 
       // Header Element
