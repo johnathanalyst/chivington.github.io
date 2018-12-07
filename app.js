@@ -163,8 +163,8 @@ const Blueprint = {
    },
    initWallpaper: {
      name: "fragmented", route: Assets.fragmentedPath
-   },
-   initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
+   }
+   // initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
  },
  chivingtoninc: {
    initContact: {
@@ -376,15 +376,15 @@ const Reducers = {
      // initializes/maintains action history state
      actionHistory: function(state = [], action) {
        return state.length == 5 ? [...state.slice(1), action.type] : [...state, action.type];
-     },
-     // initializes/maintains connectivity/network state
-     networkState: function(state = Blueprint.ui.initNetwork, action) {
-       const choices = {
-         "NETWORK_CHANGE": () => action.payload,
-         "DEFAULT": () => state
-       };
-       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      }
+     // initializes/maintains connectivity/network state
+     // networkState: function(state = Blueprint.ui.initNetwork, action) {
+     //   const choices = {
+     //     "NETWORK_CHANGE": () => action.payload,
+     //     "DEFAULT": () => state
+     //   };
+     //   return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+     // }
      // battery state
      // theme state
      // offline features to cache
@@ -475,7 +475,7 @@ const Components = {
       });
 
       // Superscript for current view
-      const superScript =E("sup", {style: styles.superScript}, [view]);
+      const superScript = E("sup", {style: styles.superScript}, [view]);
 
       // Title Element Listeners
       const title =E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
@@ -486,11 +486,11 @@ const Components = {
       });
 
       // Network Indicator
-      const src = networkState != "UNKNOWN" ? wifiPath : noWifiPath;
-      const networkIndicator = E("img", {style: styles.networkIndicator, src: src, alt: "network indicator"}, []);
+      // const src = networkState != "UNKNOWN" ? wifiPath : noWifiPath;
+      // const networkIndicator = E("img", {style: styles.networkIndicator, src: src, alt: "network indicator"}, []);
 
       // Header Element
-      const Header =E("div", {style: styles.header}, [icon, title, networkIndicator]);
+      const Header =E("div", {style: styles.header}, [icon, title]);
 
       return Header;
     },
