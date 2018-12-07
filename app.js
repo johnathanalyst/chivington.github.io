@@ -110,7 +110,7 @@ const Blueprint = {
      animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
    },
    initView: {
-     view: "HOME", prev: "@@INIT"
+     view: "COVER", prev: "@@INIT"
    },
    initWallpaper: {
      name: "fragmented", route: "./imgs/wp/fragmented.jpg"
@@ -377,7 +377,7 @@ const Components = {
         header: `
           position: absolute; top: 0; left: 0; right: 0; z-index: 15;
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-          height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
+          height: 4em; padding: 0.1em 0 0 1em; border-bottom: 1px solid #fff;
           background-image: linear-gradient(#333, #222); -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
         `,
         icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
@@ -540,6 +540,7 @@ const Components = {
         left: {
           window: `
             display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 1px solid #f00;
           `,
           mobile: `
             display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid #fff; margin: 0 1em;
@@ -559,7 +560,7 @@ const Components = {
         },
         right: {
           window: `
-            margin: 1.25em;
+            margin: 1em;
           `,
           row: `
             margin: 0.5em; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
@@ -597,14 +598,15 @@ const Components = {
       // Responsive Styles
       const rowStyle = MOB ? styles.right.rowMobile : styles.right.row;
       const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common;
+      // const
 
       // Download Link
       const download = E("div", {style: rowStyle}, [
         ["img", {style: styles.right.icon, src: "./imgs/icons/sm/dl.svg", alt: alt}, []],
         ["p", {style: styles.right.label}, [alt+": "]],
-        ["a", {style: styles.right.link + "color: #5bf", href: doc, target: "_self", download:""}, [`(.docx)`]],
+        ["a", {style: styles.right.link + "color: #5bf; font-size: 0.75em;", href: doc, target: "_self", download:""}, [`(.docx)`]],
         ["p", {style: styles.right.sep}, [`|`]],
-        ["a", {style: styles.right.link + "color: #5bf", href: pdf, target: "_self", download:""}, [`(.pdf)`]]
+        ["a", {style: styles.right.link + "color: #5bf; font-size: 0.75em;", href: pdf, target: "_self", download:""}, [`(.pdf)`]]
       ].map(e => E(e[0], e[1], e[2])));
 
       // Download Link  Listeners
