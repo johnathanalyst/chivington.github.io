@@ -51,6 +51,7 @@ const Redux = {
 
     function subscribe(listener) {
       listeners.push(listener);
+      dispatch({type: "SUBSCRIBED"});
       return () => {
         listeners = listeners.filter(l => l !== listener);
       }
@@ -83,12 +84,57 @@ const Redux = {
 };
 
 
+/* -------------------------------- Asset Manifest --------------------------------- *
+ *    Define everything needed to cache. *
+ * --------------------------------------------------------------------------------- */
+const Assets = {
+  indexPath: "./index.html",
+  appPath: "./app.js",
+  swPath: "./sw.js",
+  faviconPath: "./favicon.ico",
+  webmanifestPath: "./site.webmanifest",
+  coverDocxPath: "./includes/docs/j.Chivington.Cover.docx",
+  coverPdfPath: "./includes/docs/j.Chivington.Cover.pdf",
+  resumeDocxPath: "./includes/docs/j.Chivington.Resume.docx",
+  resumePdfPath: "./includes/docs/j.Chivington.Resume.pdf",
+  avenirPath: "./includes/fonts/Avenir-Book.otf",
+  helloPath: "./imgs/content/hello.png",
+  step1Path: "./imgs/content/step1.jpg",
+  step2Path: "./imgs/content/step2.jpg",
+  brainPath: "./imgs/icons/sm/brain.svg",
+  downloadPath: "./imgs/icons/sm/dl.svg",
+  emailPath: "./imgs/icons/sm/email.svg",
+  facebookPath: "./imgs/icons/sm/fb.svg",
+  githubPath: "./imgs/icons/sm/git.svg",
+  linkedinPath: "./imgs/icons/sm/li.svg",
+  phonePath: "./imgs/icons/sm/phone.svg",
+  twitterPath: "./imgs/icons/sm/twt.svg",
+  androidChrome192Path: "./imgs/icons/android-chrome-192x192.png",
+  androidChrome512Path: "./imgs/icons/android-chrome-512x512.png",
+  appleTouchIconPath: "./imgs/icons/apple-touch-icon.png",
+  browserconfigPath: "./imgs/icons/browserconfig.xml",
+  favicon16Path: "./imgs/icons/favicon-16x16.png",
+  favicon32Path: "./imgs/icons/favicon-32x32.png",
+  mstile70Path: "./imgs/icons/mstile-70x70.png",
+  mstile144Path: "./imgs/icons/mstile-144x144.png",
+  mstile150Path: "./imgs/icons/mstile-150x150.png",
+  mstile310Path: "./imgs/icons/mstile-310x150.png",
+  mstile310Path: "./imgs/icons/mstile-310x310.png",
+  safariPinnedTabPath: "./imgs/icons/safari-pinned-tab.png",
+  meAndWinPath: "./imgs/me/me-n-win.jpg",
+  mePath: "./imgs/me/me.jpg",
+  fragmentedPath: "./imgs/wp/fragmented.jpg",
+  mathPath: "./imgs/wp/math.jpg",
+  pnwPath: "./imgs/wp/pnw.jpg"
+};
+
 /* ----------------------------------- Blueprint ----------------------------------- *
  *    This object specifies the initial app features, such as themes, wallpapers,    *
  *  guides, notifications, etc.                                                      *
  * --------------------------------------------------------------------------------- */
 const Blueprint = {
  ui: {
+   initSubscription: false,
    initUser: {
      user: "GUEST", returning: false, appMsg: false
    },
@@ -100,7 +146,7 @@ const Blueprint = {
    initHeader: "VISIBLE",
    initMenu: "CLOSED",
    initNotification: {
-     visibility: "HIDDEN", msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon", action: null
+     visibility: "HIDDEN", msg: "Welcome!", tile: Assets.brainPath, alt: "brain icon", action: null
    },
    initGuide: {
      visibility: "HIDDEN",
@@ -113,7 +159,7 @@ const Blueprint = {
      view: "HOME", prev: "@@INIT"
    },
    initWallpaper: {
-     name: "fragmented", route: "./imgs/wp/fragmented.jpg"
+     name: "fragmented", route: Assets.fragmentedPath
    }
  },
  chivingtoninc: {
@@ -195,6 +241,14 @@ const Reducers = {
  // initializes/maintains ui state
  uiState: function(state = Blueprint.ui, action) {
    return Redux.combineReducers({
+     // initializes/maintains app subscription state
+     subscriptionState: function (state = Blueprint.ui.initSubscription, action) {
+       const choices = {
+         "SUBSCRIBED": () => true,
+         "DEFAULT": () => state
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+     },
      // initializes/maintains user state
      userState: function (state = Blueprint.ui.initUser, action) {
        const choices = {
@@ -364,6 +418,13 @@ const Components = {
         }});
       });
 
+      // Asset Caching
+      // if (state.subscriptionState) {
+      //   if ("serviceWorker" in navigator) navigator.serviceWorker.register(
+      //     "./sw.js", {scope: "/"}).then(success, failure);
+      //   // else do indexedDB
+      // }
+
       // Shell Element
       const Shell = React.createElement("div", {style: styles.shell}, [
         Components.UI.Header(props, dispatch, []), Components.UI.Menu(props, dispatch, []), Components.UI.Router(props, dispatch, [])
@@ -394,7 +455,7 @@ const Components = {
       const E = React.createElement;
 
       // Header Icon & Listeners
-      const icon = React.createElement("img", {style: styles.icon, src: "./favicon.ico", alt: "chivingtoninc Icon"}, []);
+      const icon = React.createElement("img", {style: styles.icon, src: Assets.faviconPath, alt: "chivingtoninc Icon"}, []);
       icon.addEventListener("click", function(event) {
         dispatch({type: "TOGGLE_MENU"})
       });
@@ -533,8 +594,8 @@ const Components = {
         headerMobile: `
           padding: 0.5em 0 1em; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         `,
-        common: `
-          background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("./imgs/wp/math.jpg");
+        common: (wp) => `
+          background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("${wp}");
           background-size: contain; background-repeat: no-repeat; background-position: center;
           background-color: #000; color: #eee; border-bottom: 1px solid #fff;
         `,
@@ -589,20 +650,21 @@ const Components = {
       const viewName = state.uiState.viewState.view.toLowerCase();
       const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
       const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook } = state.chivingtonincState.contactState;
-      const doc = `./includes/docs/j.Chivington.${capitalized}.docx`;
-      const pdf = `./includes/docs/j.Chivington.${capitalized}.pdf`;
+      const { downloadPath, meAndWinPath, phonePath, emailPath, linkedinPath, githubPath, twitterPath, facebookPath } = Assets;
+      const doc = Assets[`${viewName}Docx`];
+      const pdf = Assets[`${viewName}Pdf`];
       const alt = `Download ${capitalized}`;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Responsive Styles
       const rowStyle = MOB ? styles.right.rowMobile : styles.right.row;
-      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common;
+      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common();
       // const
 
       // Download Link
       const download = E("div", {style: rowStyle}, [
-        ["img", {style: styles.right.icon, src: "./imgs/icons/sm/dl.svg", alt: alt}, []],
+        ["img", {style: styles.right.icon, src: downloadPath, alt: alt}, []],
         ["p", {style: styles.right.label}, [alt+": "]],
         ["a", {style: styles.right.link + "color: #5bf; font-size: 0.75em;", href: doc, target: "_self", download:""}, [`(.docx)`]],
         ["p", {style: styles.right.sep}, [`|`]],
@@ -612,23 +674,23 @@ const Components = {
       // Download Link  Listeners
       download.addEventListener("click", function(event) {
         dispatch({type: "SHOW_NOTIFICATION", payload: {
-          visibility: "VISIBLE", msg: alt, tile: "./imgs/icons/sm/dl.svg", alt: "download icon"
+          visibility: "VISIBLE", msg: alt, tile: downloadPath, alt: "download icon"
         }});
       });
 
       // DocHeader Element
       const DocHeader = E("div", {style: headerStyle}, [
         E("div", {style: MOB ? styles.left.mobile : styles.left.window}, [
-          E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
+          E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: meAndWinPath, alt: "Winston and I"}, []),
           E("h2", {style: styles.left.name}, [`${firstName} ${lastName}`]),
           E("p", {style: styles.left.title}, [title])
         ]),
         E("div", {style: styles.right.window}, [...[
-          ["./imgs/icons/sm/phone.svg", "phone icon", `tel:${phone}`, phone],
-          ["./imgs/icons/sm/email.svg", "email icon", `mailto:${email}`, email],
-          ["./imgs/icons/sm/li.svg", "linkedin icon", linkedin, linkedin.slice(8)],
-          ["./imgs/icons/sm/git.svg", "gihub icon", github, github.slice(8)],
-          ["./imgs/icons/sm/twt.svg", "twitter icon", twitter, twitter.slice(8)]
+          [phonePath, "phone icon", `tel:${phone}`, phone],
+          [emailPath, "email icon", `mailto:${email}`, email],
+          [linkedinPath, "linkedin icon", linkedin, linkedin.slice(8)],
+          [githubPath, "gihub icon", github, github.slice(8)],
+          [twitterPath, "twitter icon", twitter, twitter.slice(8)]
         ].map(r => E("div", {style: rowStyle}, [
           E("img", {style: styles.right.icon, src: r[0], alt: r[1]}, []),
           E("a", {style: styles.right.link, href: r[2], target: "_blank"}, [r[3]])
@@ -696,7 +758,7 @@ const Components = {
         dispatch({type: "APP_MSG"});
 
         dispatch({type: "FLASH_NOTIFICATION", payload: {
-          tile: "./imgs/icons/sm/brain.svg", alt: "brain icon", action: {type:"NAV_TO", payload:"GUIDES"},
+          tile: Assets.brainPath, alt: "brain icon", action: {type:"NAV_TO", payload:"GUIDES"},
           msg: E("div", {style: styles.appNotification}, [
             E("p", {style: styles.notificationTxt}, ["Welcome!"]),
             E("p", {style: styles.notificationTxt}, ["For the best experience, choose \"Add to homescreen.\""]),
@@ -770,7 +832,7 @@ const Components = {
 
       // Notification Listeners
       Notification.addEventListener("click", function(event) {
-        dispatch({type: "HIDE_NOTIFICATION", payload: { msg: "Welcome!", tile: "./imgs/icons/sm/brain.svg", alt: "brain icon" }});
+        dispatch({type: "HIDE_NOTIFICATION", payload: { msg: "Welcome!", tile: Assets.brainPath, alt: "brain icon" }});
         if (action) dispatch(action);
       });
 
@@ -885,13 +947,13 @@ const Views = {
  Home: function(props, dispatch, children) {
    // HomeView Styles
    const styles = {
-     view: `
+     view: (wp) => `
        display: flex; flex-direction: column; justify-content: center; align-items: stretch;
-       height: 100%; background-image: url("./imgs/wp/pnw.jpg"); background-position: center; background-size: cover; background-repeat: none;
+       height: 100%; background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
      `,
-     viewMobile: `
+     viewMobile: (wp) => `
        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-       background-image: url("./imgs/wp/pnw.jpg"); background-position: center; background-size: cover; background-repeat: none;
+       background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
      `,
      card: {
        box: `
@@ -981,6 +1043,7 @@ const Views = {
    const landing = !state.uiState.userState.returning;
    const appMsg = state.uiState.userState.appMsg;
    const loggedIn = state.uiState.userState.user != "GUEST";
+   const { mePath, helloPath, githubPath, linkedinPath, twitterPath, phonePath, emailPath, fragmentedPath } = Assets;
    const MOB = state.uiState.windowState.mode == "MOBILE";
    const E = React.createElement;
 
@@ -988,11 +1051,11 @@ const Views = {
    const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
      E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
        E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
-         E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: "./imgs/me/me.jpg", alt: "my face"}, [])
+         E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: Assets.mePath, alt: "my face"}, [])
        ]),
        E("div", {style: MOB ? styles.card.body.right.boxMobile : styles.card.body.right.box}, [
          E("div", {style: MOB ? styles.card.body.right.top.boxMobile : styles.card.body.right.top.box}, [
-           E("img", {style: styles.card.body.right.top.greeting, src: "./imgs/content/hello.png"}, []),
+           E("img", {style: styles.card.body.right.top.greeting, src: helloPath}, []),
            E("h2", {style: styles.card.body.right.top.name}, ["Johnathan Chivington"]),
            E("h2", {style: styles.card.body.right.top.title}, ["Deep Learning & AI Engineer"])
          ]),
@@ -1008,18 +1071,18 @@ const Views = {
        ])
      ]),
      E("div", {style: styles.card.footer.box}, [
-       ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc"],
-       ["./imgs/icons/sm/li.svg", "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington"],
-       ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc"],
-       ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861"],
-       ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu"]
+       [githubPath, "gihub icon", "https://github.com/chivingtoninc"],
+       [linkedinPath, "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington"],
+       [twitterPath, "twitter icon", "https://twitter.com/chivingtoninc"],
+       [phonePath, "phone icon", "tel:303-900-2861"],
+       [emailPath, "email icon", "mailto:j.chivington@bellevuecollege.edu"]
      ].map(icon => E("a", {style: styles.card.footer.link, href: icon[2], alt: icon[2], target: "_blank"}, [
        E("img", {style: styles.card.footer.icon, src: icon[0], alt: icon[1]}, [])
      ])))
    ]);
 
    // HomeView
-   const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile : styles.view}, [card]);
+   const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile(fragmentedPath) : styles.view(fragmentedPath)}, [card]);
 
    return HomeView;
  },
@@ -1339,8 +1402,8 @@ const Views = {
 
    // GuideView Content
    const title = E("h2", {style: styles.title}, ["Add to Homescreen Guide"]);
-   const stepOneImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: "./imgs/content/step1.jpg", alt: "step1 img"}, []);
-   const stepTwoImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: "./imgs/content/step2.jpg", alt: "step2 img"}, []);
+   const stepOneImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step1Path, alt: "step1 img"}, []);
+   const stepTwoImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step2Path, alt: "step2 img"}, []);
 
 
    // GuideView
@@ -1380,15 +1443,3 @@ ReduxStore.subscribe({
     children: []
   }, document.getElementById("AppRoot")]
 });
-
-
-
-/* ----------------------------------- Caching ------------------------------------ *
- *                          Cache assest for offline use.                           *
- * -------------------------------------------------------------------------------- */
-console.log(window);
-
-
-/* ----------------------------------- Sockets ------------------------------------ *
- *                               For streaming data.                                *
- * -------------------------------------------------------------------------------- */
