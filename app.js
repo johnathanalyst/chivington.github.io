@@ -469,7 +469,7 @@ const Components = {
       // Superscript for current view
       const view = state.uiState.viewState.view.toLowerCase();
       const superScript = React.createElement("sup", {style: styles.superScript}, [view])
-      const superScript = React.createElement("sup", {style: styles.superScript + networkState != "UNKNOWN" ? "color: #9f9" : "color: #f99"}, [view])
+      // const superScript = React.createElement("sup", {style: styles.superScript + networkState != "UNKNOWN" ? "color: #9f9" : "color: #f99"}, [view])
 
       // Title Element Listeners
       const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript]);
