@@ -160,7 +160,8 @@ const Blueprint = {
    },
    initWallpaper: {
      name: "fragmented", route: Assets.fragmentedPath
-   }
+   },
+   initNetwork: window.navigator ? window.navigator.connection.type : "UNKNOWN"
  },
  chivingtoninc: {
    initContact: {
@@ -372,12 +373,19 @@ const Reducers = {
      // initializes/maintains action history state
      actionHistory: function(state = [], action) {
        return state.length == 5 ? [...state.slice(1), action.type] : [...state, action.type];
+     },
+     // initializes/maintains connectivity/network state
+     networkState: function(state = Blueprint.ui.initNetwork, action) {
+       const choices = {
+         "NETWORK_CHANGE": () => action.payload,
+         "DEFAULT": () => state
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      }
+     // battery state
+     // theme state
+     // offline features to cache
    })(state, action);
-   // connectivity/network state
-   // battery state
-   // theme state
-   // offline features to cache
  }
 };
 
@@ -416,6 +424,15 @@ const Components = {
           width: newWidth, height: window.innerHeight,
           mode: newWidth < 700 ? "MOBILE" : (newWidth < 1200 ? "TABLET" : "DESKTOP")
         }});
+      });
+
+      // Network Connection Listeners
+      window.addEventListener("online", function() {
+        console.log("ONLINE!!!");
+      });
+
+      window.addEventListener("offline", function() {
+        console.log("OFFLINE!!!");
       });
 
       // Shell Element
