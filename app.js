@@ -161,7 +161,7 @@ const Blueprint = {
    initWallpaper: {
      name: "fragmented", route: Assets.fragmentedPath
    },
-   initNetwork: window.navigator ? window.navigator.connection : "UNKNOWN"
+   initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
  },
  chivingtoninc: {
    initContact: {
@@ -455,7 +455,8 @@ const Components = {
       // Header Globals
       const store = props.store;
       const state = store.getState();
-      const notificationState = state.uiState.notificationState;
+      const { notificationState } = state.uiState;
+      const { networkState } = state.appState;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
@@ -467,7 +468,7 @@ const Components = {
 
       // Superscript for current view
       const view = state.uiState.viewState.view.toLowerCase();
-      const superScript = React.createElement("sup", {style: styles.superScript}, [view])
+      const superScript = React.createElement("sup", {style: styles.superScript + networkState != "UNKNOWN" ? "color: #9f9" : "color: #f99"}, [view])
 
       // Title Element Listeners
       const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript]);
