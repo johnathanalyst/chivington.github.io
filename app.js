@@ -429,17 +429,14 @@ const Components = {
         "DEFAULT": Views.Home
       };
 
-      // Current View & Props
+      // Current & Previous Views
       const view = views[viewName] ? views[viewName] : views["DEFAULT"];
-      const currentProps = Object.assign(props, {viewName: viewName});
-
-      // Previous View & Props
       const prev = views[prevName] ? views[prevName] : views["DEFAULT"];
-      const previousProps = Object.assign(props, {viewName: prevName});
 
       // Router Element
       const Router = React.createElement("div", {style: styles.router}, [
-        Components.UI.View(previousProps, dispatch, [prev]), Components.UI.View(currentProps, dispatch, [view])
+        Components.UI.View(Object.assign(props, {viewName: viewName}), dispatch, [view]),
+        Components.UI.View(Object.assign(props, {viewName: prevName}), dispatch, [prev])
       ]);
 
       return Router;
@@ -561,23 +558,27 @@ const Components = {
       };
 
       // View Globals
-      const store = props.store;
-      const state = store.getState();
+      const state = props.store.getState();
       const landing = !state.uiState.userState.returning;
       const appMsg = state.uiState.userState.appMsg;
       const loggedIn = state.uiState.userState.user != "GUEST";
       const notificationState = state.uiState.notificationState;
       const menuState = state.uiState.menuState;
-      const viewState = state.uiState.viewState;
       const actionHistory = state.appState.actionHistory;
       const lastAction = actionHistory[actionHistory.length - 1];
+      const navAction = lastAction == "NAV_TO";
+      const viewState = state.uiState.viewState;
+      const currentView = viewState.view;
+      const previousView = viewState.prev;
+      const isCurrent = props.viewName == currentView;
+      const isPrevious = props.viewName == previousView;
+      const sameView = currentView == previousView;
       const MOB = window.innerWidth < 700;
       const E = React.createElement;
 
       // View Animation
-      const sameView = viewState.view == viewState.prev, navAction = lastAction == "NAV_TO", current = props.viewName == viewState.prev;
-      if (navAction && current && !sameView) styles.view += `animation: viewSlideIn 500ms 1 forwards;`
-      if (navAction && !current && !sameView) styles.view += `animation: viewSlideOut 500ms 1 forwards;`
+      if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 100ms 1 forwards;`;
+      if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 75ms 1 forwards;`;
 
       // Menu Guide if landing
       if (landing) {
@@ -1170,7 +1171,7 @@ const Views = {
      "Prepare monthly receivable statements. Post receipts to appropriate accounts and verify transaction details."],
      ["Logistics Specialist", "ABC Legal Services", "(March 2018 – July 2018)",
      "Reviewed court filings for key information and performed data entry. Determined case venues. Directed process service attempts. Followed best practices for handling sensitive legal information."],
-     ["Caregiver", "Woodway Senior Living", "(March 2017 – Nov. 2017)",
+     ["Caregiver", "Woodway Senior Living", "(March 2017 – Jan. 2018)",
      "Assisted elderly patients in daily living activities such as nutrition, ambulation, administering medications and personal care/hygiene."],
      ["Mobile Developer", "ServiceMonster", "(Dec. 2016 – March 2017)",
      "Developed business management software for POS, invoices & estimates, inventory, accounting, and fleet routing & tracking. Worked with mobile team to develop tablet-based solutions using React Native."],
