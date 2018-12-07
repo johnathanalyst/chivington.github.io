@@ -578,7 +578,8 @@ const Components = {
 
       // View Animation
       if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 100ms 1 forwards;`;
-      if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 75ms 1 forwards;`;
+      if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 750ms 1 forwards;`;
+      if (!navAction && isPrevious && !sameView) styles.view += `display: none;`;
 
       // Menu Guide if landing
       if (landing) {
