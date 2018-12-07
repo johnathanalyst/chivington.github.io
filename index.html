@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="manifest" href="/site.webmanifest">
     <link rel="apple-touch-icon" sizes="180x180" href="/imgs/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/imgs/icons/favicon-32x32.png">
@@ -14,8 +14,11 @@
   </head>
 
   <style media="screen">
+    @font-face {
+      font-family: 'Avenir-Light'; src: url('./includes/fonts/Avenir-Free/Avenir-Light.otf');
+    }
     * {
-      font-family: sans-serif; scroll-behavior: smooth;
+      font-family: "Avenir-Light", Fallback, sans-serif; scroll-behavior: smooth;
     }
     #NoJsApp {
       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -129,16 +132,16 @@
 
             <div class="NoJsRow">
               <h3>Download Cover:</h3>
-              <a href="./includes/j.Chivington.Cover.docx" download>(.docx)</a>
+              <a href="./includes/docs/j.Chivington.Cover.docx" download>(.docx)</a>
               <p>|</p>
-              <a href="./includes/j.Chivington.Cover.pdf" download>(.pdf)</a>
+              <a href="./includes/docs/j.Chivington.Cover.pdf" download>(.pdf)</a>
             </div>
 
             <div class="NoJsRow">
               <h3>Download Resume:</h3>
-              <a href="./includes/j.Chivington.Resume.docx" download>(.docx)</a>
+              <a href="./includes/docs/j.Chivington.Resume.docx" download>(.docx)</a>
               <p>|</p>
-              <a href="./includes/j.Chivington.Resume.pdf" download>(.pdf)</a>
+              <a href="./includes/docs/j.Chivington.Resume.pdf" download>(.pdf)</a>
             </div>
 
             <p id="NoJsMsg">Javascript is likely disabled. <br/> You will need Javascript to use this app.</p>

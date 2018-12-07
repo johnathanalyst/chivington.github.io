@@ -92,7 +92,11 @@ const Blueprint = {
    initUser: {
      user: "GUEST", returning: false, appMsg: false
    },
-   initWindow: "TABLET",
+   initWindow: {
+     width: window.innerWidth,
+     height: window.innerHeight,
+     mode: window.innerWidth < 700 ? "MOBILE" : (window.innerWidth < 1000 ? "TABLET" : "DESKTOP")
+   },
    initHeader: "VISIBLE",
    initMenu: "CLOSED",
    initNotification: {
@@ -106,16 +110,75 @@ const Blueprint = {
      animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
    },
    initView: {
-     view: "HOME", prev: "HOME"
+     view: "HOME", prev: "@@INIT"
    },
    initWallpaper: {
      name: "fragmented", route: "./imgs/wp/fragmented.jpg"
    }
  },
  chivingtoninc: {
+   initContact: {
+     firstName: "Johnathan",
+     lastName: "Chivington",
+     title: "Deep Learning & AI Engineer",
+     phone: "303.900.2861",
+     email: "j.chivington@bellevuecollege.edu",
+     linkedin: "https://linkedin.com/in/johnathan-chivington",
+     github: "https://github.com/chivingtoninc",
+     twitter: "https://twitter.com/chivingtoninc",
+     facebook: "https://facebook.com/chivingtoninc"
+   },
    initResume: {
-     skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"
-   }
+     visible: {
+       skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"
+     },
+     sections: {
+       skills: [
+         ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
+         ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
+         ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
+         ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
+       ],
+       history: [
+         ["Accounts Receivable Specialist", "ABC Legal Services", "(July 2018 – Present)",
+         "Prepare monthly receivable statements. Post receipts to appropriate accounts and verify transaction details."],
+         ["Logistics Specialist", "ABC Legal Services", "(March 2018 – July 2018)",
+         "Reviewed court filings for key information and performed data entry. Determined case venues. Directed process service attempts. Followed best practices for handling sensitive legal information."],
+         ["Caregiver", "Woodway Senior Living", "(March 2017 – Jan. 2018)",
+         "Assisted elderly patients in daily living activities such as nutrition, ambulation, administering medications and personal care/hygiene."],
+         ["Mobile Developer", "ServiceMonster", "(Dec. 2016 – March 2017)",
+         "Developed business management software for POS, invoices & estimates, inventory, accounting, and fleet routing & tracking. Worked with mobile team to develop tablet-based solutions using React Native."],
+         ["Assembler", "Itek Energy", "(Sept. 2016 – Dec. 2016)",
+         "Performed basic assembly tasks for solar panel construction. Made bus bars, placed bars on panels to be spot welded, soldered broken welds, and installed junction boxes."],
+         ["Sales Associate", "Brivity", "(June 2016 – Sept. 2016)",
+         "Helped grow leads & sales for a CRM, text-to-lead, and home valuation SaaS company. Assisted in developing on-boarding and training programs. Also served in an IT support position."],
+         ["Sales Supervisor", "Best Buy", "(Aug. 2015 – June 2016)",
+         "Produced ~$700k in sales Q4 '15 through use of solutions-based sales techniques. Generated b2b leads. Improved financial services sales & lead one of the strongest locations for that metric in the West Coast market."]
+       ],
+       education: [
+         ["BS Computer Science - ", "Bellevue College ", "(2018 – ongoing)"]
+       ],
+       certifications: [
+         ["Machine Learning", "Stanford University on Coursera", "(08.10.2018)", "https://www.coursera.org/account/accomplishments/verify/NK67XWS3X7ZK"],
+         ["Neural Networks and Deep Learning", "deeplearning.ai on Coursera", "(08.31.2018)", "https://www.coursera.org/account/accomplishments/verify/H5ECGGJT5WM2"],
+         ["Improving Deep Neural Networks: Hyperparameter tuning, Regularization and Optimization", "deeplearning.ai on Coursera", "(09.09.2018)", "https://www.coursera.org/account/accomplishments/verify/UCFYFEDXJ5CP"],
+         ["Structuring Machine Learning Projects", " deeplearning.ai on Coursera", "(09.11.2018)", "https://www.coursera.org/account/accomplishments/verify/RRARJ2BRWZ7Y"],
+         ["Convolutional Neural Networks","deeplearning.ai on Coursera", "(11.05.2018)", "https://www.coursera.org/account/accomplishments/verify/PBHCCPXZWFGY"],
+         ["Certified Nurse Aide", "Queen's University of Charlotte", "2012", "http://www.queens.edu/academics/schools-colleges/presbyterian-school-of-nursing.html"]
+       ],
+       volunteering: [
+         ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2012-2013)"]
+       ]
+     }
+   },
+   initCover: {
+     lines: [
+       `I am an adept software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
+       `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
+       `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
+       `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
+     ]
+   },
  },
  math: {
    initGraph: {
@@ -146,7 +209,7 @@ const Reducers = {
      // initializes/maintains window state
      windowState: function (state = Blueprint.ui.initWindow, action) {
        const choices = {
-         "SWITCH_MODE": () => action.payload,
+         "RESIZE": () => action.payload,
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
@@ -212,17 +275,27 @@ const Reducers = {
  // initializes/maintains chivingtoninc-specific state
  chivingtonincState: function(state = Blueprint.chivingtoninc, action) {
    return Redux.combineReducers({
+     // initializes/maintains contact info state
+     contactState: function(state = Blueprint.chivingtoninc.initContact, action) {
+       return state;
+     },
+     // initializes/maintains resume state
+     coverState: function(state = Blueprint.chivingtoninc.initCover, action) {
+       return state;
+     },
      // initializes/maintains resume state
      resumeState: function(state = Blueprint.chivingtoninc.initResume, action) {
+       const { visible, sections } = Blueprint.chivingtoninc.initResume;
+       const { skills, history, education, certifications, volunteer } = visible;
        const choices = {
-         "TOGGLE_SKILLS_SECTION": () => Object.assign({}, state, {skills: state.skills == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_HIST_SECTION": () => Object.assign({}, state, {history: state.history == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_EDU_SECTION": () => Object.assign({}, state, {education: state.education == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_CERTS_SECTION": () => Object.assign({}, state, {certifications: state.certifications == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_VOLUNTEER_SECTION": () => Object.assign({}, state, {volunteering: state.volunteering == "OPEN" ? "CLOSED" : "OPEN"}),
+         "TOGGLE_SKILLS_SECTION": () => Object.assign({}, visible, {skills: skills == "OPEN" ? "CLOSED" : "OPEN"}),
+         "TOGGLE_HIST_SECTION": () => Object.assign({}, visible, {history: history == "OPEN" ? "CLOSED" : "OPEN"}),
+         "TOGGLE_EDU_SECTION": () => Object.assign({}, visible, {education: education == "OPEN" ? "CLOSED" : "OPEN"}),
+         "TOGGLE_CERTS_SECTION": () => Object.assign({}, visible, {certifications: certifications == "OPEN" ? "CLOSED" : "OPEN"}),
+         "TOGGLE_VOLUNTEER_SECTION": () => Object.assign({}, visible, {volunteering: volunteering == "OPEN" ? "CLOSED" : "OPEN"}),
          "DEFAULT": () => state
        };
-       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+       return choices[action.type] ? Object.assign({}, sections, choices[action.type]()) : Object.assign({}, sections, choices["DEFAULT"]());
      }
    })(state, action);
  },
@@ -247,6 +320,9 @@ const Reducers = {
        return state.length == 5 ? [...state.slice(1), action.type] : [...state, action.type];
      }
    })(state, action);
+   // connectivity/network state
+   // battery state
+   // theme state
  }
 };
 
@@ -276,15 +352,20 @@ const Components = {
       // Shell Globals
       const store = props.store;
       const state = store.getState();
+      const { width, height, mode } = state.uiState.windowState;
+
+      // Window Resize Listener
+      window.addEventListener("resize", function(event) {
+        const newWidth = window.innerWidth;
+        if (Math.abs(newWidth - width) > 500) dispatch({type: "RESIZE", payload: {
+          width: newWidth, height: window.innerHeight,
+          mode: newWidth < 700 ? "MOBILE" : (newWidth < 1200 ? "TABLET" : "DESKTOP")
+        }});
+      });
 
       // Shell Element
       const Shell = React.createElement("div", {style: styles.shell}, [
-        Components.UI.Header(props, dispatch, []),
-        Components.UI.Menu(props, dispatch, []),
-        Components.UI.Router(props, dispatch, [])
-        // { elem: Components.UI.Header, props: { store }, dispatch: dispatch, children: [] },
-        // { elem: Components.UI.Menu, props: { store }, dispatch: dispatch, children: [] },
-        // { elem: Components.UI.Router, props: { store }, dispatch: dispatch, children: [] }
+        Components.UI.Header(props, dispatch, []), Components.UI.Menu(props, dispatch, []), Components.UI.Router(props, dispatch, [])
       ]);
 
       return Shell;
@@ -308,7 +389,7 @@ const Components = {
       const store = props.store;
       const state = store.getState();
       const notificationState = state.uiState.notificationState;
-      const MOB = window.innerWidth < 700;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Header Icon & Listeners
@@ -322,7 +403,7 @@ const Components = {
       const superScript = React.createElement("sup", {style: styles.superScript}, [view])
 
       // Title Element Listeners
-      const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript ]);
+      const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript]);
       title.addEventListener("click", function() {
         dispatch({type: "CLOSE_MENU"});
         dispatch({type: "HIDE_NOTIFICATION"});
@@ -415,7 +496,7 @@ const Components = {
       const state = store.getState();
       const viewName = state.uiState.viewState.view;
       const prevName = state.uiState.viewState.prev;
-      const MOB = window.innerWidth < 700;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Views
@@ -447,12 +528,11 @@ const Components = {
       const styles = {
         header: `
           padding: 1.25em 4em; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-          background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("./imgs/wp/math.jpg");
-          background-size: contain; background-repeat: no-repeat; background-position: center;
-          background-color: #000; color: #eee; border-bottom: 1px solid #ccc;
         `,
         headerMobile: `
           padding: 0.5em 0 1em; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+        `,
+        common: `
           background-image: linear-gradient(rgba(20,20,20,0.6), rgba(30,30,30,0.7)), url("./imgs/wp/math.jpg");
           background-size: contain; background-repeat: no-repeat; background-position: center;
           background-color: #000; color: #eee; border-bottom: 1px solid #fff;
@@ -490,8 +570,14 @@ const Components = {
           icon: `
             height: 0.9em; width: 0.9em; margin: 0 0.5em 0 0;
           `,
+          label: `
+            margin: 0 0.4em 0 0; font-size: 0.8em; color: #fff;
+          `,
           link: `
-            text-decoration: underline; cursor: pointer; font-size: 0.9em; color: #fff;
+            text-decoration: underline; cursor: pointer; font-size: 0.8em; color: #fff;
+          `,
+          sep: `
+            color: #fff; margin: 0 0.2em;
           `
         }
       };
@@ -501,36 +587,47 @@ const Components = {
       const state = store.getState();
       const viewName = state.uiState.viewState.view.toLowerCase();
       const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
-      const MOB = window.innerWidth < 700;
+      const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook } = state.chivingtonincState.contactState;
+      const doc = `./includes/docs/j.Chivington.${capitalized}.docx`;
+      const pdf = `./includes/docs/j.Chivington.${capitalized}.pdf`;
+      const alt = `Download ${capitalized}`;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
+      // Responsive Styles
+      const rowStyle = MOB ? styles.right.rowMobile : styles.right.row;
+      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common;
+
       // Download Link
-      const download = E("div", {style: MOB ? styles.right.rowMobile : styles.right.row}, [
-        E("img", {style: styles.right.icon, src: "./imgs/icons/sm/dl.svg", alt: `Download ${capitalized} (.docx)`}, []),
-        E("a", {style: styles.right.link, href: "./includes/j.Chivington.Resume.docx", target: "_self"}, [`Download ${capitalized} (.docx)`])
-      ]);
+      const download = E("div", {style: rowStyle}, [
+        ["img", {style: styles.right.icon, src: "./imgs/icons/sm/dl.svg", alt: alt}, []],
+        ["p", {style: styles.right.label}, [alt+": "]],
+        ["a", {style: styles.right.link + "color: #5bf", href: doc, target: "_self", download:""}, [`(.docx)`]],
+        ["p", {style: styles.right.sep}, [`|`]],
+        ["a", {style: styles.right.link + "color: #5bf", href: pdf, target: "_self", download:""}, [`(.pdf)`]]
+      ].map(e => E(e[0], e[1], e[2])));
 
       // Download Link  Listeners
       download.addEventListener("click", function(event) {
         dispatch({type: "SHOW_NOTIFICATION", payload: {
-          visibility: "VISIBLE", msg: `Downloaded ${capitalized}`, tile: "./imgs/icons/sm/dl.svg", alt: "download icon"
+          visibility: "VISIBLE", msg: alt, tile: "./imgs/icons/sm/dl.svg", alt: "download icon"
         }});
       });
 
       // DocHeader Element
-      const DocHeader = E("div", {style: MOB ? styles.headerMobile : styles.header}, [
+      const DocHeader = E("div", {style: headerStyle}, [
         E("div", {style: MOB ? styles.left.mobile : styles.left.window}, [
           E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: "./imgs/me/me-n-win.jpg", alt: "my beautiful face"}, []),
-          E("h2", {style: styles.left.name}, ["Johnathan Chivington"]),
-          E("p", {style: styles.left.title}, ["Deep Learning & AI Engineer"])
+          E("h2", {style: styles.left.name}, [`${firstName} ${lastName}`]),
+          E("p", {style: styles.left.title}, [title])
         ]),
         E("div", {style: styles.right.window}, [...[
-          ["./imgs/icons/sm/phone.svg", "phone icon", "tel:303-900-2861", "303.900.2861"],
-          ["./imgs/icons/sm/email.svg", "email icon", "mailto:j.chivington@bellevuecollege.edu", "j.chivington@bellevuecollege.edu"],
-          ["./imgs/icons/sm/li.svg", "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington", "linkedin.com/in/johnathan-chivington"],
-          ["./imgs/icons/sm/git.svg", "gihub icon", "https://github.com/chivingtoninc", "github.com/chivingtoninc"],
-          ["./imgs/icons/sm/twt.svg", "twitter icon", "https://twitter.com/chivingtoninc", "twitter.com/chivingtoninc"]
-        ].map(r => E("div", {style: MOB ? styles.right.rowMobile : styles.right.row}, [
+          ["./imgs/icons/sm/phone.svg", "phone icon", `tel:${phone}`, phone],
+          ["./imgs/icons/sm/email.svg", "email icon", `mailto:${email}`, email],
+          ["./imgs/icons/sm/li.svg", "linkedin icon", linkedin, linkedin.slice(8)],
+          ["./imgs/icons/sm/git.svg", "gihub icon", github, github.slice(8)],
+          ["./imgs/icons/sm/twt.svg", "twitter icon", twitter, twitter.slice(8)]
+        ].map(r => E("div", {style: rowStyle}, [
           E("img", {style: styles.right.icon, src: r[0], alt: r[1]}, []),
           E("a", {style: styles.right.link, href: r[2], target: "_blank"}, [r[3]])
         ])),
@@ -573,12 +670,12 @@ const Components = {
       const isCurrent = props.viewName == currentView;
       const isPrevious = props.viewName == previousView;
       const sameView = currentView == previousView;
-      const MOB = window.innerWidth < 700;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // View Animation
-      if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 100ms 1 forwards;`;
-      if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 750ms 1 forwards;`;
+      if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 10ms 1 forwards;`;
+      if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 1500ms 1 forwards;`;
       if (!navAction && isPrevious && !sameView) styles.view += `display: none;`;
 
       // Menu Guide if landing
@@ -656,7 +753,7 @@ const Components = {
       const state = store.getState();
       const notificationState = state.uiState.notificationState;
       const { visibility, tile, alt, msg, action } = notificationState;
-      const MOB = window.innerWidth < 700;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Choose Notification Styles & Animation
@@ -709,7 +806,7 @@ const Components = {
       const { btnx,btny,btnh,btnw } = state.uiState.guideState.btn.position;
       const msgTxt = state.uiState.guideState.msg.txt;
       const btnTxt = state.uiState.guideState.btn.txt;
-      const MOB = window.innerWidth < 700;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Guide Settings
@@ -761,7 +858,7 @@ const Components = {
       const state = store.getState();
       const loggedIn = state.uiState.userState.user != "GUEST";
       const rows = state.mathState.graphstate;
-      const MOB = window.innerWidth < 700;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Graph
@@ -819,9 +916,9 @@ const Views = {
            `,
            boxMobile: `
             display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-            height: 22em;
            `,
            img: `height: 100%;`,
+           imgMobile: `width: 100%;`,
          },
          right: {
            box: `
@@ -882,14 +979,14 @@ const Views = {
    const landing = !state.uiState.userState.returning;
    const appMsg = state.uiState.userState.appMsg;
    const loggedIn = state.uiState.userState.user != "GUEST";
-   const MOB = window.innerWidth < 700;
+   const MOB = state.uiState.windowState.mode == "MOBILE";
    const E = React.createElement;
 
    // HomeView Content
    const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
      E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
        E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
-         E("img", {style: styles.card.body.left.img, src: "./imgs/me/me.jpg", alt: "my face"}, [])
+         E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: "./imgs/me/me.jpg", alt: "my face"}, [])
        ]),
        E("div", {style: MOB ? styles.card.body.right.boxMobile : styles.card.body.right.box}, [
          E("div", {style: MOB ? styles.card.body.right.top.boxMobile : styles.card.body.right.top.box}, [
@@ -967,7 +1064,7 @@ const Views = {
    const landing = !state.uiState.userState.returning;
    const appMsg = state.uiState.userState.appMsg;
    const loggedIn = state.uiState.userState.user != "GUEST";
-   const MOB = window.innerWidth < 700;
+   const MOB = state.uiState.windowState.mode == "MOBILE";
    const E = React.createElement;
 
    // ProjectsView Content
@@ -997,18 +1094,13 @@ const Views = {
    // CoverView Globals
    const store = props.store;
    const state = store.getState();
-
-   // CoverView Content
-   const header = Components.UI.DocHeader(props, dispatch, []);
-   const body = React.createElement("div", {style: styles.coverBody}, [
-     `I am an adept software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
-     `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
-     `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
-     `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
-   ].map(l => React.createElement("p", {style: styles.coverLine}, [l])));
+   const { coverState } = state.chivingtonincState;
 
    // CoverView
-   const CoverView = React.createElement("div", {style: styles.cover}, [header, body]);
+   const CoverView = React.createElement("div", {style: styles.cover}, [
+     Components.UI.DocHeader(props, dispatch, []),
+     React.createElement("div", {style: styles.coverBody}, coverState.lines.map(l => React.createElement("p", {style: styles.coverLine}, [l])))
+   ]);
 
    return CoverView;
  },
@@ -1119,7 +1211,7 @@ const Views = {
          margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
        `,
        link: `
-         margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em; text-decoration: none; color: #aaf;
+         margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em; text-decoration: none; color: rgba(25,110,214,1);
        `
      },
      volunteer: {
@@ -1146,7 +1238,9 @@ const Views = {
    const store = props.store;
    const state = store.getState();
    const resumeState = state.chivingtonincState.resumeState;
-   const MOB = window.innerWidth < 700;
+   const { visible, sections } = state.chivingtonincState.resumeState;
+   const { skills, history, education, certifications, volunteering } = sections;
+   const MOB = state.uiState.windowState.mode == "MOBILE";
    const E = React.createElement;
 
    // ResumeView Content
@@ -1154,76 +1248,51 @@ const Views = {
    const skillsButton = E("h2", {style: styles.section.title}, ["Skills"]);
    skillsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_SKILLS_SECTION"}));
 
-   const showSkills = resumeState.skills == "OPEN";
-   const skillsWindow = E("div", {style: showSkills ? (MOB ? styles.skills.mobile : styles.skills.window) : styles.section.hidden}, [
-     ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
-     ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
-     ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
-     ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
-   ].map(c => E("div", {style: styles.skills.column}, c.map(s => E("p", {style: styles.skills.skill}, [s])))));
+   const showSkills = visible.skills == "OPEN";
+   const skillsWindow = E("div", {style: showSkills ? (MOB ? styles.skills.mobile : styles.skills.window) : styles.section.hidden},
+     skills.map(c => E("div", {style: styles.skills.column}, c.map(s => E("p", {style: styles.skills.skill}, [s]))))
+   );
 
    // History Section
    const historyButton = E("h2", {style: styles.section.title}, ["History"]);
    historyButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_HIST_SECTION"}));
 
-   const showHist = resumeState.history == "OPEN";
-   const historyWindow = E("div", {style: showHist ? (MOB ? styles.history.mobile : styles.history.window) : styles.section.hidden}, [
-     ["Accounts Receivable Specialist", "ABC Legal Services", "(July 2018 – Present)",
-     "Prepare monthly receivable statements. Post receipts to appropriate accounts and verify transaction details."],
-     ["Logistics Specialist", "ABC Legal Services", "(March 2018 – July 2018)",
-     "Reviewed court filings for key information and performed data entry. Determined case venues. Directed process service attempts. Followed best practices for handling sensitive legal information."],
-     ["Caregiver", "Woodway Senior Living", "(March 2017 – Jan. 2018)",
-     "Assisted elderly patients in daily living activities such as nutrition, ambulation, administering medications and personal care/hygiene."],
-     ["Mobile Developer", "ServiceMonster", "(Dec. 2016 – March 2017)",
-     "Developed business management software for POS, invoices & estimates, inventory, accounting, and fleet routing & tracking. Worked with mobile team to develop tablet-based solutions using React Native."],
-     ["Assembler", "Itek Energy", "(Sept. 2016 – Dec. 2016)",
-     "Performed basic assembly tasks for solar panel construction. Made bus bars, placed bars on panels to be spot welded, soldered broken welds, and installed junction boxes."],
-     ["Sales Associate", "Brivity", "(June 2016 – Sept. 2016)",
-     "Helped grow leads & sales for a CRM, text-to-lead, and home valuation SaaS company. Assisted in developing on-boarding and training programs. Also served in an IT support position."],
-     ["Sales Supervisor", "Best Buy", "(Aug. 2015 – June 2016)",
-     "Produced ~$700k in sales Q4 '15 through use of solutions-based sales techniques. Generated b2b leads. Improved financial services sales & lead one of the strongest locations for that metric in the West Coast market."]
-   ].map((position,i) => E("div", {style: styles.history.position}, [
-     E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map((f,i) => E("h3", {style: styles.history.infoField}, [f]))),
-     E("div", {style: styles.history.descriptionRow}, [E("p", {style: styles.history.description}, [position[3]])])
+   const showHist = visible.history == "OPEN";
+   const historyWindow = E("div", {style: showHist ? (MOB ? styles.history.mobile : styles.history.window) : styles.section.hidden},
+     history.map((position,i) => E("div", {style: styles.history.position}, [
+       E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map((f,i) => E("h3", {style: styles.history.infoField}, [f]))),
+       E("div", {style: styles.history.descriptionRow}, [E("p", {style: styles.history.description}, [position[3]])])
    ])));
 
    // Education Section
    const eduButton = E("h2", {style: styles.section.title}, ["Education"]);
    eduButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_EDU_SECTION"}));
 
-   const showEdu = resumeState.education == "OPEN";
-   const eduWindow = E("div", {style: showEdu ? (MOB ? styles.edu.mobile : styles.edu.window) : styles.section.hidden}, [
-     ["BS Computer Science - ", "Bellevue College ", "(2018 – ongoing)"]
-   ].map(row => E("div", {style: styles.edu.row}, row.map((field,idx) => (idx==0)
-     ? E("h3", {style: styles.edu.degree}, [field]) : E("p", {style: styles.edu.field}, [field])
+   const showEdu = visible.education == "OPEN";
+   const eduWindow = E("div", {style: showEdu ? (MOB ? styles.edu.mobile : styles.edu.window) : styles.section.hidden},
+     education.map(row => E("div", {style: styles.edu.row}, row.map((field,idx) => (idx==0) ?
+       E("h3", {style: styles.edu.degree}, [field]) : E("p", {style: styles.edu.field}, [field])
    ))));
 
    // Certifications Section
    const certsButton = E("h2", {style: styles.section.title}, ["Certifications"]);
    certsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_CERTS_SECTION"}));
 
-   const showCerts = resumeState.certifications == "OPEN";
-   const certsWindow = E("div", {style: showCerts ? (MOB ? styles.certs.mobile : styles.certs.window) : styles.section.hidden}, [
-     ["Machine Learning", "Stanford University on Coursera", "(08.10.2018)", "https://www.coursera.org/account/accomplishments/verify/NK67XWS3X7ZK"],
-     ["Neural Networks and Deep Learning", "deeplearning.ai on Coursera", "(08.31.2018)", "https://www.coursera.org/account/accomplishments/verify/H5ECGGJT5WM2"],
-     ["Improving Deep Neural Networks: Hyperparameter tuning, Regularization and Optimization", "deeplearning.ai on Coursera", "(09.09.2018)", "https://www.coursera.org/account/accomplishments/verify/UCFYFEDXJ5CP"],
-     ["Structuring Machine Learning Projects", " deeplearning.ai on Coursera", "(09.11.2018)", "https://www.coursera.org/account/accomplishments/verify/RRARJ2BRWZ7Y"],
-     ["Convolutional Neural Networks","deeplearning.ai on Coursera", "(11.05.2018)", "https://www.coursera.org/account/accomplishments/verify/PBHCCPXZWFGY"],
-     ["Certified Nurse Aide", "Queen's University of Charlotte", "2012", "http://www.queens.edu/academics/schools-colleges/presbyterian-school-of-nursing.html"]
-   ].map(r => E("div", {style: MOB ? styles.certs.col : styles.certs.row}, r.map((f,i) => (i==0)
-     ? E("h3", {style: styles.certs.title}, [f])
-     : ((i==3) ? E("a", {style: styles.certs.link, href: f, target: "_blank"}, ["(Link)"]) : E("p", {style: styles.certs.field}, [f]))
+   const showCerts = visible.certifications == "OPEN";
+   const certsWindow = E("div", {style: showCerts ? (MOB ? styles.certs.mobile : styles.certs.window) : styles.section.hidden},
+     certifications.map(r => E("div", {style: MOB ? styles.certs.col : styles.certs.row}, r.map((f,i) => (i==0)
+       ? E("h3", {style: styles.certs.title}, [f])
+       : ((i==3) ? E("a", {style: styles.certs.link, href: f, target: "_blank"}, ["(Link)"]) : E("p", {style: styles.certs.field}, [f]))
    ))));
 
    // Volunteering Section
    const volunteerButton = E("h2", {style: styles.section.title}, ["Volunteering"]);
    volunteerButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_VOLUNTEER_SECTION"}));
 
-   const showVolunteer = resumeState.volunteering == "OPEN";
-   const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.volunteer.mobile : styles.volunteer.window) : styles.section.hidden}, [
-     ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2012-2013)"]
-   ].map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
-     ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
+   const showVolunteer = visible.volunteering == "OPEN";
+   const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.volunteer.mobile : styles.volunteer.window) : styles.section.hidden},
+     volunteering.map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
+       ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
    ))));
 
    // Resume
@@ -1263,7 +1332,7 @@ const Views = {
    const landing = !state.uiState.userState.returning;
    const appMsg = state.uiState.userState.appMsg;
    const loggedIn = state.uiState.userState.user != "GUEST";
-   const MOB = window.innerWidth < 700;
+   const MOB = state.uiState.windowState.mode == "MOBILE";
    const E = React.createElement;
 
    // GuideView Content
