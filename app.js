@@ -427,13 +427,8 @@ const Components = {
       });
 
       // Network Connection Listeners
-      window.addEventListener("online", function() {
-        console.log("ONLINE!!!");
-      });
-
-      window.addEventListener("offline", function() {
-        console.log("OFFLINE!!!");
-      });
+      window.addEventListener("online", () => dispatch({type: "NETWORK_CHANGE", payload: "ONLINE"}));
+      window.addEventListener("offline", () => dispatch({type: "NETWORK_CHANGE", payload: "OFFLINE"}));
 
       // Shell Element
       const Shell = React.createElement("div", {style: styles.shell}, [
