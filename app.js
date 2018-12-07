@@ -461,18 +461,18 @@ const Components = {
       const E = React.createElement;
 
       // Header Icon & Listeners
-      const icon = React.createElement("img", {style: styles.icon, src: Assets.faviconPath, alt: "chivingtoninc Icon"}, []);
+      const icon =E("img", {style: styles.icon, src: Assets.faviconPath, alt: "chivingtoninc Icon"}, []);
       icon.addEventListener("click", function(event) {
         dispatch({type: "TOGGLE_MENU"})
       });
 
       // Superscript for current view
       const view = state.uiState.viewState.view.toLowerCase();
-      const superScript = React.createElement("sup", {style: styles.superScript}, [view])
-      // const superScript = React.createElement("sup", {style: styles.superScript + networkState != "UNKNOWN" ? "color: #9f9" : "color: #f99"}, [view])
+      const superScript =E("sup", {style: styles.superScript}, [view]);
+      // const superScript =E("sup", {style: styles.superScript + networkState != "UNKNOWN" ? "color: #9f9" : "color: #f99"}, [view])
 
       // Title Element Listeners
-      const title = React.createElement("h1", {style: styles.title}, ["chivingtoninc", superScript]);
+      const title =E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
       title.addEventListener("click", function() {
         dispatch({type: "CLOSE_MENU"});
         dispatch({type: "HIDE_NOTIFICATION"});
@@ -480,7 +480,7 @@ const Components = {
       });
 
       // Header Element
-      const Header = React.createElement("div", {style: styles.header}, [icon, title]);
+      const Header =E("div", {style: styles.header}, [icon, title]);
 
       return Header;
     },
