@@ -644,8 +644,8 @@ const Components = {
       const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
       const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook } = state.chivingtonincState.contactState;
       const { downloadPath, meAndWinPath, phonePath, emailPath, linkedinPath, githubPath, twitterPath, facebookPath } = Assets;
-      const doc = Assets[`${viewName}Docx`];
-      const pdf = Assets[`${viewName}Pdf`];
+      const doc = Assets[`${viewName}DocxPath`];
+      const pdf = Assets[`${viewName}PdfPath`];
       const alt = `Download ${capitalized}`;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
