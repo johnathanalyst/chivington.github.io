@@ -161,7 +161,7 @@ const Blueprint = {
    initWallpaper: {
      name: "fragmented", route: Assets.fragmentedPath
    },
-   initNetwork: window.navigator ? window.navigator.connection.type : "UNKNOWN"
+   initNetwork: window.navigator ? window.navigator.connection : "UNKNOWN"
  },
  chivingtoninc: {
    initContact: {
