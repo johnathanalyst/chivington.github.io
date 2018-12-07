@@ -110,7 +110,7 @@ const Blueprint = {
      animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
    },
    initView: {
-     view: "COVER", prev: "@@INIT"
+     view: "HOME", prev: "@@INIT"
    },
    initWallpaper: {
      name: "fragmented", route: "./imgs/wp/fragmented.jpg"
@@ -323,6 +323,7 @@ const Reducers = {
    // connectivity/network state
    // battery state
    // theme state
+   // offline features to cache
  }
 };
 
@@ -527,7 +528,7 @@ const Components = {
       // DocHeader Styles
       const styles = {
         header: `
-          padding: 1.25em 4em; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+          padding: 1.25em 2em 1.25em 3em; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
         `,
         headerMobile: `
           padding: 0.5em 0 1em; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -540,7 +541,6 @@ const Components = {
         left: {
           window: `
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border: 1px solid #f00;
           `,
           mobile: `
             display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid #fff; margin: 0 1em;
@@ -905,11 +905,11 @@ const Views = {
        body: {
          box: `
           display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;
-          padding: 0.5em; background-color: #eff;
+          padding: 0.5em; background-color: #fff;
          `,
          boxMobile: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          padding: 0.5em; background-color: #eff;
+          padding: 0.5em; background-color: #fff;
          `,
          left: {
            box: `
@@ -925,7 +925,7 @@ const Views = {
          right: {
            box: `
             display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch;
-            height: 25em; margin: 0 0 0 0.5em; background-color: #ddd;
+            height: 25em; margin: 0 0 0 0.5em; background-color: #ccc;
            `,
            boxMobile: `
             display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -943,7 +943,7 @@ const Views = {
            bottom: {
              box: `
               display: flex; flex-direction: column; justify-content: space-between; align-items: stretch;
-              background-color: #ddd; padding: 0 1em;
+              background-color: #ccc; padding: 0 1em;
              `,
              row: `
               display: flex; flex-direction: row; justify-content: space-between; align-items: center;
@@ -965,7 +965,7 @@ const Views = {
        footer: {
          box: `
            display: flex; flex-direction: row; justify-content: space-around; align-items: center;
-           background-color: #222; padding: 1em 0 0.5em;
+           background-color: #222; padding: 1.15em 0 1em;
          `,
          link: `color: #fff`,
          icon: `
@@ -1380,3 +1380,15 @@ ReduxStore.subscribe({
     children: []
   }, document.getElementById("AppRoot")]
 });
+
+
+
+/* ----------------------------------- Caching ------------------------------------ *
+ *                          Cache assest for offline use.                           *
+ * -------------------------------------------------------------------------------- */
+console.log(window);
+
+
+/* ----------------------------------- Sockets ------------------------------------ *
+ *                               For streaming data.                                *
+ * -------------------------------------------------------------------------------- */
