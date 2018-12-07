@@ -1,5 +1,5 @@
 this.addEventListener("install", function(event) {
-  event.waitUntil(caches.create("chivingtoninc-v1".then(function(cache) {
+  event.waitUntil(caches.create("chivingtoninc-v1").then(function(cache) {
     return cache.add([
       "./index.html",
       "./app.js",
