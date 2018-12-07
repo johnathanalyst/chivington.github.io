@@ -1,6 +1,6 @@
 this.addEventListener("install", function(event) {
-  event.waitUntil(caches.create("chivingtoninc-v1").then(function(cache) {
-    return cache.add([
+  event.waitUntil(caches.open("chivingtoninc-v1").then(function(cache) {
+    return cache.addAll([
       "/index.html",
       "/app.js",
       "/sw.js",
@@ -43,13 +43,22 @@ this.addEventListener("install", function(event) {
   }));
 });
 
-this.addEventListener("fetch", function(event) {
-  console.log("\n CACHES: ", caches);
-  event.respondWith(
-    caches.match(event.request).catch(function() {
-      return event.default();
-    }).catch(function() {
-      return caches.match("./index.html");
-    })
-  );
+
+
+self.addEventListener('fetch', function(event) {
+  event.respondWith(caches.match(event.request).then(function(response) {
+    if (response) return response;
+    var fetchRequest = event.request.clone();
+
+    return fetch(fetchRequest).then(function(response) {
+      if(!response || response.status !== 200 || response.type !== 'basic') return response;
+      var responseToCache = response.clone();
+
+      caches.open(CACHE_NAME).then(function(cache) {
+        cache.put(event.request, responseToCache);
+      });
+
+      return response;
+    });
+  }));
 });
