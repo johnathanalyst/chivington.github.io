@@ -1444,4 +1444,4 @@ ReduxStore.subscribe({
  *    Cache assets, using service workers. No support planned for fringe devices.   *
  * -------------------------------------------------------------------------------- */
  if ("serviceWorker" in navigator)
-  navigator.serviceWorker.register("./sw.js", {scope: "/"}).then(success, failure);
+  navigator.serviceWorker.register("./sw.js", {scope: "/"}).then(console.log("\n SW INSTALLED!"), console.log("\n SW FAILED!"));
