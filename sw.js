@@ -44,7 +44,11 @@ this.addEventListener("install", function(event) {
 });
 
 this.addEventListener("fetch", function(event) {
-  event.respondWith(caches.match(event.request).catch(function() {
-    return event.default();
-  }));
+  event.respondWith(
+    caches.mathc(event.request).catch(function() {
+      return event.default();
+    }).catch(function() {
+      return caches.match("./index.html");
+    })
+  );
 });
