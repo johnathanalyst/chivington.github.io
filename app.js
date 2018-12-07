@@ -85,7 +85,7 @@ const Redux = {
 
 
 /* -------------------------------- Asset Manifest --------------------------------- *
- *    Define everything needed to cache. *
+ *                         Define everything needed to cache.                        *
  * --------------------------------------------------------------------------------- */
 const Assets = {
   indexPath: "./index.html",
@@ -101,6 +101,9 @@ const Assets = {
   helloPath: "./imgs/content/hello.png",
   step1Path: "./imgs/content/step1.jpg",
   step2Path: "./imgs/content/step2.jpg",
+  wifiPath: "./imgs/icons/network/wifi.svg",
+  noWifiPath: "./imgs/icons/network/noWifi.svg",
+  noWifi2Path: "./imgs/icons/network/noWifi2.svg",
   brainPath: "./imgs/icons/sm/brain.svg",
   downloadPath: "./imgs/icons/sm/dl.svg",
   emailPath: "./imgs/icons/sm/email.svg",
@@ -449,7 +452,10 @@ const Components = {
         `,
         icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
-        superScript: `font-size: 0.3em; margin-left: 1px;`
+        superScript: `font-size: 0.3em; margin-left: 1px;`,
+        networkIndicator: `
+          position: absolute; top: 1.5em; right: 1em; height: 1.2em; width: 1.2em; z-index: 1000;
+        `
       };
 
       // Header Globals
@@ -457,19 +463,19 @@ const Components = {
       const state = store.getState();
       const { notificationState } = state.uiState;
       const { networkState } = state.appState;
+      const view = state.uiState.viewState.view.toLowerCase();
+      const { faviconPath, wifiPath, noWifiPath, noWifi2Path } = Assets;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Header Icon & Listeners
-      const icon =E("img", {style: styles.icon, src: Assets.faviconPath, alt: "chivingtoninc Icon"}, []);
+      const icon =E("img", {style: styles.icon, src: faviconPath, alt: "chivingtoninc Icon"}, []);
       icon.addEventListener("click", function(event) {
         dispatch({type: "TOGGLE_MENU"})
       });
 
       // Superscript for current view
-      const view = state.uiState.viewState.view.toLowerCase();
       const superScript =E("sup", {style: styles.superScript}, [view]);
-      // const superScript =E("sup", {style: styles.superScript + networkState != "UNKNOWN" ? "color: #9f9" : "color: #f99"}, [view])
 
       // Title Element Listeners
       const title =E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
@@ -479,8 +485,12 @@ const Components = {
         dispatch({type: "NAV_TO", payload: "HOME"});
       });
 
+      // Network Indicator
+      const src = networkState != "UNKNOWN" ? wifiPath : noWifi2Path;
+      const networkIndicator = E("img", {style: styles.networkIndicator, src: src, alt: "network indicator"}, []);
+
       // Header Element
-      const Header =E("div", {style: styles.header}, [icon, title]);
+      const Header =E("div", {style: styles.header}, [icon, title, networkIndicator]);
 
       return Header;
     },
