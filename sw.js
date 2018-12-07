@@ -44,5 +44,5 @@ this.addEventListener("install", function(event) {
 });
 
 this.addEventListener("fetch", function(event) {
-  console.log("\n FETCH IS GOING TO HAPPEN!");
+  console.log("\n FETCH IS GOING TO HAPPEN!", event);
 });
