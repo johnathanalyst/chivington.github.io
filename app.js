@@ -237,11 +237,11 @@ const Blueprint = {
  }
 };
 
-// if (window.navigator) {
-//   console.log("\n NAV", window.navigator);
-//   if (userAgent.match(/iPhone/i)) Blueprint.ui.initView.view = "BLOG";
-//   if (userAgent.match(/iPad/i)) Blueprint.ui.initView.view = "PROJECTS";
-// }
+if (window.navigator) {
+  console.log("\n NAV", window.navigator);
+  if (userAgent.match(/iPhone/i)) Blueprint.ui.initView.view = "BLOG";
+  if (userAgent.match(/iPad/i)) Blueprint.ui.initView.view = "PROJECTS";
+}
 
 
 /* ----------------------------------- Reducers ----------------------------------- *
