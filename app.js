@@ -84,28 +84,6 @@ const Redux = {
 };
 
 
-const html = (color, msg) => `
-  <div style="position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll;
-    background-color: ${color}; display: flex; flex-direction: column; justify-content: flext-start; align-items: center;">
-      <p style="margin: 0.25em;"">${msg}</p>
-  </div>`;
-  // ${Object.keys(msg).reduce((s,k) => `${s}<p style="margin: 0.25em;${k=="navigator"?"color:#00f;":""}">${k}</p>`, ``)}
-
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js", {scope: "/"}).then(
-  function(reg){
-    // success
-    console.log("\n REG: ", reg);
-    document.getElementById("AppRoot").innerHTML = html("#4f4", reg);
-  },
-  function(reg) {
-    // failure
-    console.log("\n REG: ", reg);
-    document.getElementById("AppRoot").innerHTML = html("#f44", reg);
-  }
-);
-blah
-
-
 /* -------------------------------- Asset Manifest --------------------------------- *
  *                         Define everything needed to cache.                        *
  * --------------------------------------------------------------------------------- */
@@ -1490,6 +1468,14 @@ ReduxStore.subscribe({
  *    Cache assets, using service workers. No support planned for fringe devices.   *
  * -------------------------------------------------------------------------------- */
 
-// if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js", {scope: "/"}).then(
-//   function(){ console.log("\n SW INSTALLED!") }, function() { console.log("\n SW FAILED!") }
-// );
+ const Work = {
+   regSuccess: function(reg){
+     console.log("\n REG: ", reg);
+   },
+   regFail: function(reg) {
+     console.log("\n REG: ", reg);
+   }
+ };
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
+  .then((reg) => Work.regSuccess(reg), (reg) => Work.regFail(reg));
