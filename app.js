@@ -1468,16 +1468,21 @@ ReduxStore.subscribe({
  *    Cache assets, using service workers. No support planned for fringe devices.   *
  * -------------------------------------------------------------------------------- */
 
- const Work = {
-   regSuccess: function(reg){
-     console.log("\n NAVIGATOR: ", navigator);
-   },
-   regFail: function(reg) {
-     console.log("\n NAVIGATOR: ", navigator);
-   }
- };
+// const Work = {
+//   regSuccess: function(reg){
+//     console.log("\n NAVIGATOR: ", navigator);
+//   },
+//   regFail: function(reg) {
+//     console.log("\n NAVIGATOR: ", navigator);
+//   }
+// };
 
- console.log("\n NAVIGATOR1: ", navigator);
+navigator.connection.onchange() = function(event) {
+  console.log("\n CHANGE: ", event);
+};
 
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
-  .then((reg) => Work.regSuccess(reg), (reg) => Work.regFail(reg));
+console.log("\n NAVIGATOR: ", navigator);
+
+
+// if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
+//   .then((reg) => Work.regSuccess(reg), (reg) => Work.regFail(reg));
