@@ -1470,12 +1470,14 @@ ReduxStore.subscribe({
 
  const Work = {
    regSuccess: function(reg){
-     console.log("\n REG: ", reg);
+     console.log("\n NAVIGATOR: ", navigator);
    },
    regFail: function(reg) {
-     console.log("\n REG: ", reg);
+     console.log("\n NAVIGATOR: ", navigator);
    }
  };
+
+ console.log("\n NAVIGATOR1: ", navigator);
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
   .then((reg) => Work.regSuccess(reg), (reg) => Work.regFail(reg));
