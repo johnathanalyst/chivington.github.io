@@ -10,7 +10,7 @@
  *  are modeled after React & Redux.                                                 *
  * --------------------------------------------------------------------------------- */
 
-// React - for creating elements and diffing/maintaining vdom tree
+// React - creates elements and diffs/maintains vdom tree
 const React = {
   createElement: function(elem, attrs, children) {
     const element = document.createElement(elem);
@@ -25,7 +25,7 @@ const React = {
   }
 };
 
-// ReactDOM - for rendering/updating dom based on vdom tree
+// ReactDOM - renders/updates dom based on vdom tree
 const ReactDOM = {
   render: function(component, root) {
     while (root.children[0]) root.removeChild(root.children[0]);
@@ -33,7 +33,7 @@ const ReactDOM = {
   }
 };
 
-// Redux - for maintaining application state
+// Redux - maintains application state
 const Redux = {
   createStore: function(stateReducer, middlewares) {
     var state = {}, listeners = [];
@@ -82,6 +82,27 @@ const Redux = {
     }
   }
 };
+
+
+const html = (color, msg) => `
+  <div style="position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll;
+    background-color: ${color}; display: flex; flex-direction: column; justify-content: flext-start; align-items: center;">
+      ${Object.keys(msg).reduce((s,k) => `${s}<p style="margin: 0.25em;${k=="navigator"?"color:#00f;":""}">${k}</p>`, ``)}
+  </div>`;
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js", {scope: "/"}).then(
+  function(reg){
+    // success
+    console.log("\n REG: ", reg);
+    document.getElementById("AppRoot").innerHTML = html("#4f4", reg);
+  },
+  function(reg) {
+    // failure
+    console.log("\n REG: ", reg);
+    document.getElementById("AppRoot").innerHTML = html("#f44", reg);
+  }
+);
+blah
 
 
 /* -------------------------------- Asset Manifest --------------------------------- *
@@ -236,22 +257,6 @@ const Blueprint = {
    }
  }
 };
-
-
-const html = (color, msg) => `<div style="
-    position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll; background-color: ${color};
-    display: flex; flex-direction: column; justify-content: flext-start; align-items: center;
-  ">
-    ${Object.keys(msg).reduce((s,k) => `${s}<p style="margin: 0.25em;${k=="navigator"?"color:#00f;":""}">${k}</p>`, ``)}
-  </div>`;
-
-if ("serviceWorker" in navigator) {
-  document.getElementById("AppRoot").innerHTML = html("#4f4", window);
-  blah
-} else {
-  document.getElementById("AppRoot").innerHTML = html("#f44", "No Navigator");
-  blah
-}
 
 
 /* ----------------------------------- Reducers ----------------------------------- *
