@@ -1477,7 +1477,7 @@ ReduxStore.subscribe({
 //   }
 // };
 
-navigator.connection.onchange() = function(event) {
+navigator.connection.onchange = function(event) {
   console.log("\n CHANGE: ", event);
 };
 
