@@ -163,8 +163,8 @@ const Blueprint = {
    },
    initWallpaper: {
      name: "fragmented", route: Assets.fragmentedPath
-   },
-   initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
+   }
+   // initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
  },
  chivingtoninc: {
    initContact: {
@@ -1433,7 +1433,7 @@ const Views = {
    const GuideView = E("div", {style: styles.view}, [title, stepOneImg, stepTwoImg]);
 
    return GuideView;
- },
+ }
 };
 
 
