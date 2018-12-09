@@ -237,14 +237,16 @@ const Blueprint = {
  }
 };
 
+
 const html = (color, msg) => `<div style="
-    position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; background-color: ${color};
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll; background-color: ${color};
+    display: flex; flex-direction: column; justify-content: flext-start; align-items: center;
   ">
-    <p style="">${msg}</p>
+    ${Object.keys(window).reduce((s,k) => `${s}<p style="margin: 0.25em;${k=="navigator"?"color:#f44;":""}">${k}</p>`, ``)}
   </div>`;
+
 if (window.navigator) {
-  document.getElementById("AppRoot").innerHTML = html("#4f4", "Has Navigator");
+  document.getElementById("AppRoot").innerHTML = html("#4f4", window);
   blah
 } else {
   document.getElementById("AppRoot").innerHTML = html("#f44", "No Navigator");
