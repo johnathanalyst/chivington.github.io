@@ -242,7 +242,7 @@ const html = (color, msg) => `<div style="
     position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll; background-color: ${color};
     display: flex; flex-direction: column; justify-content: flext-start; align-items: center;
   ">
-    ${Object.keys(msg).reduce((s,k) => `${s}<p style="margin: 0.25em;${k=="navigator"?"color:#f44;":""}">${k}</p>`, ``)}
+    ${Object.keys(msg).reduce((s,k) => `${s}<p style="margin: 0.25em;${k=="navigator"?"color:#00f;":""}">${k}</p>`, ``)}
   </div>`;
 
 if ("serviceWorker" in navigator) {
