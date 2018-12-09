@@ -136,105 +136,122 @@ const Assets = {
  *  guides, notifications, etc.                                                      *
  * --------------------------------------------------------------------------------- */
 const Blueprint = {
- ui: {
-   initSubscription: false,
-   initUser: {
-     user: "GUEST", returning: false, appMsg: false
-   },
-   initWindow: {
-     width: window.innerWidth,
-     height: window.innerHeight,
-     mode: window.innerWidth < 700 ? "MOBILE" : (window.innerWidth < 1000 ? "TABLET" : "DESKTOP")
-   },
-   initHeader: "VISIBLE",
-   initMenu: "CLOSED",
-   initNotification: {
-     visibility: "HIDDEN", msg: "Welcome!", tile: Assets.brainPath, alt: "brain icon", action: null
-   },
-   initGuide: {
-     visibility: "HIDDEN",
-     box: {boxx:0, boxy:0, boxh:0, boxw:0, boxr:0},
-     msg: {position: {msgx:0, msgy:0, msgh:0, msgw:0, msgr:0}, txt: "Guide Message!"},
-     btn: {position: {btnx:0, btny:0, btnh:0, btnw:0, btnr:0}, txt: "Guide Button!"},
-     animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
-   },
-   initView: {
-     view: "HOME", prev: "@@INIT"
-   },
-   initWallpaper: {
-     name: "fragmented", route: Assets.fragmentedPath
-   }
-   // initNetwork: window.navigator ? window.navigator.connection.effectiveType : "UNKNOWN"
- },
- chivingtoninc: {
-   initContact: {
-     firstName: "Johnathan",
-     lastName: "Chivington",
-     title: "Deep Learning & AI Engineer",
-     phone: "303.900.2861",
-     email: "j.chivington@bellevuecollege.edu",
-     linkedin: "https://linkedin.com/in/johnathan-chivington",
-     github: "https://github.com/chivingtoninc",
-     twitter: "https://twitter.com/chivingtoninc",
-     facebook: "https://facebook.com/chivingtoninc"
-   },
-   initResume: {
-     visible: {
-       skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"
+  app: {
+    initConnection: {
+      downlink: navigator.connection.downlink, effectiveType: navigator.connection.effectiveType
+    },
+    initBattery: {
+      percent: 0
+    },
+    initWorkers: {
+      installed:  false, domain: null
+    }
+  },
+  ui: {
+    initSubscription: false,
+    initUser: {
+      user: "GUEST", returning: false, appMsg: false
+    },
+    initWindow: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      mode: window.innerWidth < 700 ? "MOBILE" : (window.innerWidth < 1000 ? "TABLET" : "DESKTOP")
+    },
+    initHeader: "VISIBLE",
+    initMenu: "CLOSED",
+    initNotification: {
+      visibility: "HIDDEN", msg: "Welcome!", tile: Assets.brainPath, alt: "brain icon", action: null
+    },
+    initGuide: {
+      visibility: "HIDDEN",
+      box: { boxx:0, boxy:0, boxh:0, boxw:0, boxr:0 },
+      msg: { position: {msgx:0, msgy:0, msgh:0, msgw:0, msgr:0}, txt: "Guide Message!" },
+      btn: { position: {btnx:0, btny:0, btnh:0, btnw:0, btnr:0}, txt: "Guide Button!" },
+      animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
      },
-     sections: {
-       skills: [
-         ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
-         ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
-         ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
-         ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
-       ],
-       history: [
-         ["Accounts Receivable Specialist", "ABC Legal Services", "(July 2018 – Present)",
-         "Prepare monthly receivable statements. Post receipts to appropriate accounts and verify transaction details."],
-         ["Logistics Specialist", "ABC Legal Services", "(March 2018 – July 2018)",
-         "Reviewed court filings for key information and performed data entry. Determined case venues. Directed process service attempts. Followed best practices for handling sensitive legal information."],
-         ["Caregiver", "Woodway Senior Living", "(March 2017 – Jan. 2018)",
-         "Assisted elderly patients in daily living activities such as nutrition, ambulation, administering medications and personal care/hygiene."],
-         ["Mobile Developer", "ServiceMonster", "(Dec. 2016 – March 2017)",
-         "Developed business management software for POS, invoices & estimates, inventory, accounting, and fleet routing & tracking. Worked with mobile team to develop tablet-based solutions using React Native."],
-         ["Assembler", "Itek Energy", "(Sept. 2016 – Dec. 2016)",
-         "Performed basic assembly tasks for solar panel construction. Made bus bars, placed bars on panels to be spot welded, soldered broken welds, and installed junction boxes."],
-         ["Sales Associate", "Brivity", "(June 2016 – Sept. 2016)",
-         "Helped grow leads & sales for a CRM, text-to-lead, and home valuation SaaS company. Assisted in developing on-boarding and training programs. Also served in an IT support position."],
-         ["Sales Supervisor", "Best Buy", "(Aug. 2015 – June 2016)",
-         "Produced ~$700k in sales Q4 '15 through use of solutions-based sales techniques. Generated b2b leads. Improved financial services sales & lead one of the strongest locations for that metric in the West Coast market."]
-       ],
-       education: [
-         ["BS Computer Science - ", "Bellevue College ", "(2018 – ongoing)"]
-       ],
-       certifications: [
-         ["Machine Learning", "Stanford University on Coursera", "(08.10.2018)", "https://www.coursera.org/account/accomplishments/verify/NK67XWS3X7ZK"],
-         ["Neural Networks and Deep Learning", "deeplearning.ai on Coursera", "(08.31.2018)", "https://www.coursera.org/account/accomplishments/verify/H5ECGGJT5WM2"],
-         ["Improving Deep Neural Networks: Hyperparameter tuning, Regularization and Optimization", "deeplearning.ai on Coursera", "(09.09.2018)", "https://www.coursera.org/account/accomplishments/verify/UCFYFEDXJ5CP"],
-         ["Structuring Machine Learning Projects", " deeplearning.ai on Coursera", "(09.11.2018)", "https://www.coursera.org/account/accomplishments/verify/RRARJ2BRWZ7Y"],
-         ["Convolutional Neural Networks","deeplearning.ai on Coursera", "(11.05.2018)", "https://www.coursera.org/account/accomplishments/verify/PBHCCPXZWFGY"],
-         ["Certified Nurse Aide", "Queen's University of Charlotte", "2012", "http://www.queens.edu/academics/schools-colleges/presbyterian-school-of-nursing.html"]
-       ],
-       volunteering: [
-         ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2012-2013)"]
-       ]
-     }
-   },
-   initCover: {
-     lines: [
-       `I am an adept software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
-       `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
-       `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
-       `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
-     ]
-   },
- },
- math: {
-   initGraph: {
-     rows: 0, cols: 0
-   }
- }
+    initView: {
+      view: "HOME", prev: "@@INIT"
+    },
+    initTheme: {
+      headerColor: "",
+      menuIcon: "",
+      menuColor: "",
+      networkIndicator: "SHOWN",
+      viewBackground: ""
+    },
+    initWallpaper: {
+      name: "fragmented", route: Assets.fragmentedPath
+    }
+  },
+  chivingtoninc: {
+    initContact: {
+      firstName: "Johnathan",
+      lastName: "Chivington",
+      title: "Deep Learning & AI Engineer",
+      phone: "303.900.2861",
+      email: "j.chivington@bellevuecollege.edu",
+      linkedin: "https://linkedin.com/in/johnathan-chivington",
+      github: "https://github.com/chivingtoninc",
+      twitter: "https://twitter.com/chivingtoninc",
+      facebook: "https://facebook.com/chivingtoninc"
+    },
+    initResume: {
+      visible: {
+        skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"
+      },
+      sections: {
+        skills: [
+          ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
+          ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
+          ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
+          ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
+        ],
+        history: [
+          ["Accounts Receivable Specialist", "ABC Legal Services", "(July 2018 – Present)",
+          "Prepare monthly receivable statements. Post receipts to appropriate accounts and verify transaction details."],
+          ["Logistics Specialist", "ABC Legal Services", "(March 2018 – July 2018)",
+          "Reviewed court filings for key information and performed data entry. Determined case venues. Directed process service attempts. Followed best practices for handling sensitive legal information."],
+          ["Caregiver", "Woodway Senior Living", "(March 2017 – Jan. 2018)",
+          "Assisted elderly patients in daily living activities such as nutrition, ambulation, administering medications and personal care/hygiene."],
+          ["Mobile Developer", "ServiceMonster", "(Dec. 2016 – March 2017)",
+          "Developed business management software for POS, invoices & estimates, inventory, accounting, and fleet routing & tracking. Worked with mobile team to develop tablet-based solutions using React Native."],
+          ["Assembler", "Itek Energy", "(Sept. 2016 – Dec. 2016)",
+          "Performed basic assembly tasks for solar panel construction. Made bus bars, placed bars on panels to be spot welded, soldered broken welds, and installed junction boxes."],
+          ["Sales Associate", "Brivity", "(June 2016 – Sept. 2016)",
+          "Helped grow leads & sales for a CRM, text-to-lead, and home valuation SaaS company. Assisted in developing on-boarding and training programs. Also served in an IT support position."],
+          ["Sales Supervisor", "Best Buy", "(Aug. 2015 – June 2016)",
+          "Produced ~$700k in sales Q4 '15 through use of solutions-based sales techniques. Generated b2b leads. Improved financial services sales & lead one of the strongest locations for that metric in the West Coast market."]
+        ],
+        education: [
+          ["BS Computer Science - ", "Bellevue College ", "(2018 – ongoing)"]
+        ],
+        certifications: [
+          ["Machine Learning", "Stanford University on Coursera", "(08.10.2018)", "https://www.coursera.org/account/accomplishments/verify/NK67XWS3X7ZK"],
+          ["Neural Networks and Deep Learning", "deeplearning.ai on Coursera", "(08.31.2018)", "https://www.coursera.org/account/accomplishments/verify/H5ECGGJT5WM2"],
+          ["Improving Deep Neural Networks: Hyperparameter tuning, Regularization and Optimization", "deeplearning.ai on Coursera", "(09.09.2018)", "https://www.coursera.org/account/accomplishments/verify/UCFYFEDXJ5CP"],
+          ["Structuring Machine Learning Projects", " deeplearning.ai on Coursera", "(09.11.2018)", "https://www.coursera.org/account/accomplishments/verify/RRARJ2BRWZ7Y"],
+          ["Convolutional Neural Networks","deeplearning.ai on Coursera", "(11.05.2018)", "https://www.coursera.org/account/accomplishments/verify/PBHCCPXZWFGY"],
+          ["Certified Nurse Aide", "Queen's University of Charlotte", "2012", "http://www.queens.edu/academics/schools-colleges/presbyterian-school-of-nursing.html"]
+        ],
+        volunteering: [
+          ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2012-2013)"]
+        ]
+      }
+    },
+    initCover: {
+      lines: [
+        `I am an adept software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
+        `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
+        `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
+        `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
+      ]
+    },
+  },
+  math: {
+    initGraph: {
+      rows: 0, cols: 0
+    }
+  }
 };
 
 
@@ -320,6 +337,14 @@ const Reducers = {
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
+     // initializes/maintains theme state
+     themeState: function(state = Blueprint.ui.initTheme, action) {
+       const choices = {
+         "THEME_CHANGE": () => Object.assign({}, state),
+         "DEFAULT": () => state
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+     },
      // initializes/maintains wallpaper state
      wallpaperState: function (state = Blueprint.ui.initWallpaper, action) {
        const choices = {
@@ -376,18 +401,32 @@ const Reducers = {
      // initializes/maintains action history state
      actionHistory: function(state = [], action) {
        return state.length == 5 ? [...state.slice(1), action.type] : [...state, action.type];
-     }
+     },
      // initializes/maintains connectivity/network state
-     // networkState: function(state = Blueprint.ui.initNetwork, action) {
-     //   const choices = {
-     //     "NETWORK_CHANGE": () => action.payload,
-     //     "DEFAULT": () => state
-     //   };
-     //   return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-     // }
-     // battery state
-     // theme state
-     // offline features to cache
+     connectionState: function(state = Blueprint.app.initConnection, action) {
+       const choices = {
+         "NETWORK_CHANGE": () => action.payload,
+         "DEFAULT": () => state
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+     },
+     // initializes/maintains offline features to cache
+     workerState: function(state = Blueprint.app.initWorkers, action) {
+       const choices = {
+         "WORKER_INSTALL": () => action.payload,
+         "APP_CACHE": () => action.payload,
+         "DEFAULT": () => state
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+     },
+     // initializes/maintains battery state
+     batteryState: function(state = Blueprint.app.initBattery, action) {
+       const choices = {
+         "BATTERY_CHANGE": () => action.payload,
+         "DEFAULT": () => state
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+     }
    })(state, action);
  }
 };
@@ -404,6 +443,48 @@ const Reducers = {
  *  more complex infrastructure.                                                    *
  * -------------------------------------------------------------------------------- */
 const Components = {
+  App: {
+    // Net - interfaces with Network Information API
+    Net: function(props, dispatch, children) {
+      // Net Styles
+      const styles = {
+        net: (color) => `
+          position: absolute; top: 3em; right: 1em; z-index: 1005;
+          font-size: 0.55em; color: ${color};
+        `
+      };
+
+      // Net Globals
+      const state = props.store.getState();
+      const { connectionState } = state.appState;
+      const { effectiveType, downlink } = connectionState;
+      const offline = downlink == 0 ? true : false;
+      const status = offline ? "OFFLINE" : effectiveType.toUpperCase();
+      const displayed = state.uiState.themeState.networkIndicator == "SHOWN" ? true : false;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
+      const E = React.createElement;
+
+      console.log("\n CONNECTION FROM APP: ", navigator.connection);
+
+      // Connection Listener
+      navigator.connection.onchange = function(event) {
+        const newState = event.currentTarget;
+        const offline = newState.downlink == 0 ? true : false;
+        const status = offline ? "offline" : newState.effectiveType.toUpperCase();
+
+        dispatch({type: "NETWORK_CHANGE", payload: {
+          effectiveType: newState.effectiveType, downlink: newState.downlink
+        }});
+      };
+
+      // Net Style
+      const netStyles = displayed ? styles.net(offline ? "#f44" : "#4f4") : `display: none;`;
+
+      const Net = E("div", {style: netStyles}, [status]);
+
+      return Net;
+    }
+  },
   UI: {
     // Shell - contains the Header, Menu, Router, and Guide modules.
     Shell: function(props, dispatch, children) {
@@ -418,24 +499,16 @@ const Components = {
       // Shell Globals
       const store = props.store;
       const state = store.getState();
-      const { width, height, mode } = state.uiState.windowState;
-
-      // Window Resize Listener
-      window.addEventListener("resize", function(event) {
-        const newWidth = window.innerWidth;
-        if (Math.abs(newWidth - width) > 500) dispatch({type: "RESIZE", payload: {
-          width: newWidth, height: window.innerHeight,
-          mode: newWidth < 700 ? "MOBILE" : (newWidth < 1200 ? "TABLET" : "DESKTOP")
-        }});
-      });
-
-      // Network Connection Listeners
-      window.addEventListener("online", () => dispatch({type: "NETWORK_CHANGE", payload: "ONLINE"}));
-      window.addEventListener("offline", () => dispatch({type: "NETWORK_CHANGE", payload: "OFFLINE"}));
+      const fullProps = Object.assign({}, props, {display: true});
+      const MOB = state.uiState.windowState.mode == "MOBILE";
+      const E = React.createElement;
 
       // Shell Element
       const Shell = React.createElement("div", {style: styles.shell}, [
-        Components.UI.Header(props, dispatch, []), Components.UI.Menu(props, dispatch, []), Components.UI.Router(props, dispatch, [])
+        Components.UI.Header(fullProps, dispatch, []),
+        Components.UI.Menu(fullProps, dispatch, []),
+        Components.UI.Router(fullProps, dispatch, []),
+        Components.App.Net(fullProps, dispatch, [])
       ]);
 
       return Shell;
@@ -1468,21 +1541,5 @@ ReduxStore.subscribe({
  *    Cache assets, using service workers. No support planned for fringe devices.   *
  * -------------------------------------------------------------------------------- */
 
-// const Work = {
-//   regSuccess: function(reg){
-//     console.log("\n NAVIGATOR: ", navigator);
-//   },
-//   regFail: function(reg) {
-//     console.log("\n NAVIGATOR: ", navigator);
-//   }
-// };
-
-navigator.connection.onchange = function(event) {
-  console.log("\n CHANGE: ", event);
-};
-
-console.log("\n NAVIGATOR: ", navigator);
-
-
-// if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
-//   .then((reg) => Work.regSuccess(reg), (reg) => Work.regFail(reg));
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
+  .then(reg => console.log("\n REG SUCCESS: ", reg), reg => console.log("\n REG FAIL: ", reg));
