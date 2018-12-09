@@ -237,17 +237,19 @@ const Blueprint = {
  }
 };
 
-const html = `<div style="
-    position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; background-color: #aaa;
+const html = (color, msg) => `<div style="
+    position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; background-color: ${color};
     display: flex; flex-direction: column; justify-content: center; align-items: center;
   ">
-    <p style="">Nope</p>
+    <p style="">${msg}</p>
   </div>`;
 if (window.navigator) {
-  console.log("\n HAS NAVIGATOR: ", window.navigator);
-  // if () Blueprint.ui.initView.view = "PROJECTS";
-  // if () Blueprint.ui.initView.view = "";
-} else document.getElementById("AppRoot").innerHTML = html;
+  document.getElementById("AppRoot").innerHTML = html("#4f4", "Has Navigator");
+  blah
+} else {
+  document.getElementById("AppRoot").innerHTML = html("#f44", "No Navigator");
+  blah
+}
 
 
 /* ----------------------------------- Reducers ----------------------------------- *
