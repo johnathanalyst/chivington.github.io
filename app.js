@@ -449,7 +449,7 @@ const Components = {
       // Net Styles
       const styles = {
         net: (color) => `
-          position: absolute; top: 3em; right: 1em; z-index: 1005;
+          position: absolute; top: 3.25em; right: 2em; z-index: 1005;
           font-size: 0.55em; color: ${color};
         `
       };
@@ -1540,6 +1540,6 @@ ReduxStore.subscribe({
 /* --------------------------------- Cache Assets --------------------------------- *
  *    Cache assets, using service workers. No support planned for fringe devices.   *
  * -------------------------------------------------------------------------------- */
-// 
+//
 // if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
 //   .then(reg => console.log("\n REG SUCCESS: ", reg), reg => console.log("\n REG FAIL: ", reg));
