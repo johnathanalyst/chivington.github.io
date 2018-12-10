@@ -522,7 +522,7 @@ const Components = {
         Components.UI.Header(fullProps, dispatch, []),
         Components.UI.Menu(fullProps, dispatch, []),
         Components.UI.Router(fullProps, dispatch, []),
-        Components.App.Net(fullProps, dispatch, [])
+        // Components.App.Net(fullProps, dispatch, [])
       ]);
 
       return Shell;
