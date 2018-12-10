@@ -1033,474 +1033,474 @@ const Components = {
  *  one device-screen-sized object to render.                                       *
  * -------------------------------------------------------------------------------- */
 const Views = {
- // Home View - contains contact card.
- Home: function(props, dispatch, children) {
-   // HomeView Styles
-   const styles = {
-     view: (wp) => `
-       display: flex; flex-direction: column; justify-content: center; align-items: stretch;
-       height: 100%; background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
-     `,
-     viewMobile: (wp) => `
-       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-       background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
-     `,
-     card: {
-       box: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         margin: 0 3em; z-index: 5;
-       `,
-       boxMobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         margin: 1em; z-index: 5;
-       `,
-       body: {
-         box: `
-          display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;
-          padding: 0.5em; background-color: #fff;
-         `,
-         boxMobile: `
+  // Home View - contains contact card.
+  Home: function(props, dispatch, children) {
+    // HomeView Styles
+    const styles = {
+      view: (wp) => `
+        display: flex; flex-direction: column; justify-content: center; align-items: stretch;
+        height: 100%; background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
+      `,
+      viewMobile: (wp) => `
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+        background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
+      `,
+      card: {
+        box: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          padding: 0.5em; background-color: #fff;
-         `,
-         left: {
-           box: `
+          margin: 0 3em; z-index: 5;
+        `,
+        boxMobile: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          margin: 1em; z-index: 5;
+        `,
+        body: {
+          box: `
+            display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;
+            padding: 0.5em; background-color: #fff;
+          `,
+          boxMobile: `
             display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-            height: 25em;
-           `,
-           boxMobile: `
-            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-           `,
-           img: `height: 100%;`,
-           imgMobile: `width: 100%;`,
+            padding: 0.5em; background-color: #fff;
+          `,
+          left: {
+            box: `
+              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+              height: 25em;
+            `,
+            boxMobile: `
+              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+            `,
+            img: `height: 100%;`,
+            imgMobile: `width: 100%;`,
+          },
+          right: {
+            box: `
+              display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch;
+              height: 25em; margin: 0 0 0 0.5em; background-color: #ccc;
+            `,
+            boxMobile: `
+              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+              margin: 0.5em 0 0 0;
+            `,
+            top: {
+              box: `
+                background-color: #eee; padding: 0.5em; border-bottom: 1px solid #444;
+              `,
+              boxMobile:`background-color: #eee; padding: 0.5em;  border-bottom: 1px solid #444; text-align: center;`,
+              greeting: `height: 4em; margin: 0.5em 0;;`,
+              name: `margin: 0; font-size: 1.5em;`,
+              title: `margin: 0; font-size: 0.9em; font-weight: 300;`
+            },
+            bottom: {
+              box: `
+                display: flex; flex-direction: column; justify-content: space-between; align-items: stretch;
+                background-color: #ccc; padding: 0 1em;
+              `,
+              row: `
+                display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+                margin: 0.5em 0; padding: 0;
+              `,
+              rowMobile: `
+                display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+                margin: 1.25em 0; padding: 0;
+              `,
+              field: `
+                font-size: 1em; margin: 0;
+              `,
+              text: `
+                font-size: 0.9em; margin: 0;
+              `
+            }
+          }
          },
-         right: {
-           box: `
-            display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch;
-            height: 25em; margin: 0 0 0 0.5em; background-color: #ccc;
-           `,
-           boxMobile: `
-            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-            margin: 0.5em 0 0 0;
-           `,
-           top: {
-             box: `
-              background-color: #eee; padding: 0.5em; border-bottom: 1px solid #444;
-             `,
-             boxMobile:`background-color: #eee; padding: 0.5em;  border-bottom: 1px solid #444; text-align: center;`,
-             greeting: `height: 4em; margin: 0.5em 0;;`,
-             name: `margin: 0; font-size: 1.5em;`,
-             title: `margin: 0; font-size: 0.9em; font-weight: 300;`
-           },
-           bottom: {
-             box: `
-              display: flex; flex-direction: column; justify-content: space-between; align-items: stretch;
-              background-color: #ccc; padding: 0 1em;
-             `,
-             row: `
-              display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-              margin: 0.5em 0; padding: 0;
-             `,
-             rowMobile: `
-              display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-              margin: 1.25em 0; padding: 0;
-             `,
-             field: `
-              font-size: 1em; margin: 0;
-             `,
-             text: `
-              font-size: 0.9em; margin: 0;
-             `
-           }
-         }
-       },
-       footer: {
-         box: `
-           display: flex; flex-direction: row; justify-content: space-around; align-items: center;
-           background-color: #222; padding: 1.15em 0 1em;
-         `,
-         link: `color: #fff`,
-         icon: `
-           height: 1.25em; width: 1.25em;
-         `
-       }
-     }
-   }
+        footer: {
+          box: `
+            display: flex; flex-direction: row; justify-content: space-around; align-items: center;
+            background-color: #222; padding: 1.15em 0 1em;
+          `,
+          link: `color: #fff`,
+          icon: `
+            height: 1.25em; width: 1.25em;
+          `
+        }
+      }
+    }
 
-   // HomeView Globals
-   const store = props.store;
-   const state = store.getState();
-   const landing = !state.uiState.userState.returning;
-   const appMsg = state.uiState.userState.appMsg;
-   const loggedIn = state.uiState.userState.user != "GUEST";
-   const { mePath, helloPath, githubPath, linkedinPath, twitterPath, phonePath, emailPath, pnwPath } = Assets;
-   const MOB = state.uiState.windowState.mode == "MOBILE";
-   const E = React.createElement;
+    // HomeView Globals
+    const store = props.store;
+    const state = store.getState();
+    const landing = !state.uiState.userState.returning;
+    const appMsg = state.uiState.userState.appMsg;
+    const loggedIn = state.uiState.userState.user != "GUEST";
+    const { mePath, helloPath, githubPath, linkedinPath, twitterPath, phonePath, emailPath, pnwPath } = Assets;
+    const MOB = state.uiState.windowState.mode == "MOBILE";
+    const E = React.createElement;
 
-   // HomeView Content
-   const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
-     E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
-       E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
-         E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: mePath, alt: "my face"}, [])
-       ]),
-       E("div", {style: MOB ? styles.card.body.right.boxMobile : styles.card.body.right.box}, [
-         E("div", {style: MOB ? styles.card.body.right.top.boxMobile : styles.card.body.right.top.box}, [
-           E("img", {style: styles.card.body.right.top.greeting, src: helloPath}, []),
-           E("h2", {style: styles.card.body.right.top.name}, ["Johnathan Chivington"]),
-           E("h2", {style: styles.card.body.right.top.title}, ["Deep Learning & AI Engineer"])
-         ]),
-         E("div", {style: styles.card.body.right.bottom.box}, [
-           ["Location", "Seattle, WA"],
-           ["Phone", "303.900.2861"],
-           ["Email", "j.chivington@bellevuecollege.edu"],
-           ["Search Status", "Actively Seeking (local & remote)"]
-         ].map(r => E("div", {style: MOB ? styles.card.body.right.bottom.rowMobile : styles.card.body.right.bottom.row}, [
-           E("h3", {style: styles.card.body.right.bottom.field}, [r[0]]),
-           E("p", {style: styles.card.body.right.bottom.text}, [r[1]]),
-         ])))
-       ])
-     ]),
-     E("div", {style: styles.card.footer.box}, [
-       [githubPath, "gihub icon", "https://github.com/chivingtoninc"],
-       [linkedinPath, "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington"],
-       [twitterPath, "twitter icon", "https://twitter.com/chivingtoninc"],
-       [phonePath, "phone icon", "tel:303-900-2861"],
-       [emailPath, "email icon", "mailto:j.chivington@bellevuecollege.edu"]
-     ].map(icon => E("a", {style: styles.card.footer.link, href: icon[2], alt: icon[2], target: "_blank"}, [
-       E("img", {style: styles.card.footer.icon, src: icon[0], alt: icon[1]}, [])
-     ])))
-   ]);
+    // HomeView Content
+    const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
+      E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
+        E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
+          E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: mePath, alt: "my face"}, [])
+        ]),
+        E("div", {style: MOB ? styles.card.body.right.boxMobile : styles.card.body.right.box}, [
+          E("div", {style: MOB ? styles.card.body.right.top.boxMobile : styles.card.body.right.top.box}, [
+            E("img", {style: styles.card.body.right.top.greeting, src: helloPath}, []),
+            E("h2", {style: styles.card.body.right.top.name}, ["Johnathan Chivington"]),
+            E("h2", {style: styles.card.body.right.top.title}, ["Deep Learning & AI Engineer"])
+          ]),
+          E("div", {style: styles.card.body.right.bottom.box}, [
+            ["Location", "Seattle, WA"],
+            ["Phone", "303.900.2861"],
+            ["Email", "j.chivington@bellevuecollege.edu"],
+            ["Search Status", "Actively Seeking (local & remote)"]
+          ].map(r => E("div", {style: MOB ? styles.card.body.right.bottom.rowMobile : styles.card.body.right.bottom.row}, [
+            E("h3", {style: styles.card.body.right.bottom.field}, [r[0]]),
+            E("p", {style: styles.card.body.right.bottom.text}, [r[1]]),
+          ])))
+        ])
+      ]),
+      E("div", {style: styles.card.footer.box}, [
+        [githubPath, "gihub icon", "https://github.com/chivingtoninc"],
+        [linkedinPath, "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington"],
+        [twitterPath, "twitter icon", "https://twitter.com/chivingtoninc"],
+        [phonePath, "phone icon", "tel:303-900-2861"],
+        [emailPath, "email icon", "mailto:j.chivington@bellevuecollege.edu"]
+      ].map(icon => E("a", {style: styles.card.footer.link, href: icon[2], alt: icon[2], target: "_blank"}, [
+        E("img", {style: styles.card.footer.icon, src: icon[0], alt: icon[1]}, [])
+      ])))
+    ]);
 
-   // HomeView
-   const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile(pnwPath) : styles.view(pnwPath)}, [card]);
+    // HomeView
+    const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile(pnwPath) : styles.view(pnwPath)}, [card]);
 
-   return HomeView;
- },
- // Blog View - description.
- Blog: function(props, dispatch, children) {
-   // BlogView Styles
-   const styles = {
-     view: `
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      height: 100%;
-     `,
-     p: `
-      color: #fff; cursor: pointer;
-     `
-   }
+    return HomeView;
+  },
+  // Blog View - description.
+  Blog: function(props, dispatch, children) {
+    // BlogView Styles
+    const styles = {
+      view: `
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        height: 100%;
+      `,
+      p: `
+        color: #fff; cursor: pointer;
+      `
+    }
 
-   // BlogView Globals
-   const store = props.store;
-   const state = store.getState();
-   const viewName = state.uiState.viewState.view.toLowerCase();
-   const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
+    // BlogView Globals
+    const store = props.store;
+    const state = store.getState();
+    const viewName = state.uiState.viewState.view.toLowerCase();
+    const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
-   // BlogView Content
-   const p = React.createElement("p", {style: styles.p}, [capitalized]);
+    // BlogView Content
+    const p = React.createElement("p", {style: styles.p}, [capitalized]);
 
-   // BlogView
-   const BlogView = React.createElement("div", {style: styles.view}, [p]);
+    // BlogView
+    const BlogView = React.createElement("div", {style: styles.view}, [p]);
 
-   return BlogView;
- },
- // Projects View - description.
- Projects: function(props, dispatch, children) {
-   // ProjectsView Styles
-   const styles = {
-     view: `
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      height: 100%;
-     `
-   };
+    return BlogView;
+  },
+  // Projects View - description.
+  Projects: function(props, dispatch, children) {
+    // ProjectsView Styles
+    const styles = {
+      view: `
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        height: 100%;
+      `
+    };
 
-   // ProjectsView Globals
-   const store = props.store;
-   const state = store.getState();
-   const landing = !state.uiState.userState.returning;
-   const appMsg = state.uiState.userState.appMsg;
-   const loggedIn = state.uiState.userState.user != "GUEST";
-   const MOB = state.uiState.windowState.mode == "MOBILE";
-   const E = React.createElement;
+    // ProjectsView Globals
+    const store = props.store;
+    const state = store.getState();
+    const landing = !state.uiState.userState.returning;
+    const appMsg = state.uiState.userState.appMsg;
+    const loggedIn = state.uiState.userState.user != "GUEST";
+    const MOB = state.uiState.windowState.mode == "MOBILE";
+    const E = React.createElement;
 
-   // ProjectsView Content
-   const graph = Components.Math.Graph(props, dispatch, []);
+    // ProjectsView Content
+    const graph = Components.Math.Graph(props, dispatch, []);
 
-   // ProjectsView
-   const ProjectsView = E("div", {style: styles.view}, [graph]);
+    // ProjectsView
+    const ProjectsView = E("div", {style: styles.view}, [graph]);
 
-   return ProjectsView;
- },
- // Cover View - description.
- Cover: function(props, dispatch, children) {
-   // CoverView Styles
-   const styles = {
-     cover: `
-       margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
-     `,
-     coverBody: `
-       padding: 1em 3em; background-color: #fff; color: #222;
-     `,
-     coverLine: `
-       margin: 0 auto 2em; padding: 1em; text-align: center;
-       background-color: rgba(100,100,200,0.15);
-     `
-   }
+    return ProjectsView;
+  },
+  // Cover View - description.
+  Cover: function(props, dispatch, children) {
+    // CoverView Styles
+    const styles = {
+      cover: `
+        margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
+      `,
+      coverBody: `
+        padding: 1em 3em; background-color: #fff; color: #222;
+      `,
+      coverLine: `
+        margin: 0 auto 2em; padding: 1em; text-align: center;
+        background-color: rgba(100,100,200,0.15);
+      `
+    };
 
-   // CoverView Globals
-   const store = props.store;
-   const state = store.getState();
-   const { coverState } = state.chivingtonincState;
+    // CoverView Globals
+    const store = props.store;
+    const state = store.getState();
+    const { coverState } = state.chivingtonincState;
 
-   // CoverView
-   const CoverView = React.createElement("div", {style: styles.cover}, [
-     Components.UI.DocHeader(props, dispatch, []),
-     React.createElement("div", {style: styles.coverBody}, coverState.lines.map(l => React.createElement("p", {style: styles.coverLine}, [l])))
-   ]);
+    // CoverView
+    const CoverView = React.createElement("div", {style: styles.cover}, [
+      Components.UI.DocHeader(props, dispatch, []),
+      React.createElement("div", {style: styles.coverBody}, coverState.lines.map(l => React.createElement("p", {style: styles.coverLine}, [l])))
+    ]);
 
-   return CoverView;
- },
- // Resume View - description.
- Resume: function(props, dispatch, children) {
-   // ResumeView Styles
-   const styles = {
-     resume: `
-       margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
-     `,
-     body: `
-       padding: 1em; background-color: #fff; color: #000;
-     `,
-     section: {
-       title: `
-         margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-         padding: 0 0.25em; font-size: 1.15em; border-bottom: 1px solid #000; cursor: pointer;
-       `,
-       hidden: `
-         display: none;
-       `
-     },
-     skills: {
-       window: `
-         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       mobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       column: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         margin: 0 auto;
-       `,
-       skill: `
-         margin: 0.25em auto;
-       `
-     },
-     history: {
-       window: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         padding: 0.5em; background-color: rgba(100,100,200,0.15);
-       `,
-       mobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       position: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         margin: 0.5em;
-       `,
-       infoRow: `
-         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-         margin: 0; padding: 0 0.5em; border-bottom: 1px solid #222;
-       `,
-       infoField: `
-         display: flex; flex-direction: column; justify-content: center; align-items: center;
-         margin: 0; font-size: 0.95em;
-       `,
-       descriptionRow: `
-         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-         margin: 0.5em 0; padding: 0 0.5em;
-       `,
-       description: `
-         display: flex; flex-direction: column; justify-content: center; align-items: center;
-         margin: 0; padding: 0; font-size: 0.95em;
-       `,
-       descriptionHidden: `display: none;`
-     },
-     edu: {
-       window: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       mobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       row: `
-         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-         margin: 0.5em; padding: 0 0 0 0.5em;
-       `,
-       degree: `margin: 0 0 0 0.5em; font-size: 0.95em;`,
-       field: `
-         margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
-       `
-     },
-     certs: {
-       window: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; flex-wrap: wrap;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       mobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       row: `
-         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-         margin: 0 0 0.5em; padding: 0 0 0 0.5em;
-       `,
-       col: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-         margin: 0.5em; padding: 0; text-align: center;
-       `,
-       title: `margin: 0.5em; font-size: 0.95em;`,
-       field: `
-         margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
-       `,
-       link: `
-         margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em; text-decoration: none; color: rgba(25,110,214,1);
-       `
-     },
-     volunteer: {
-       window: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       mobile: `
-         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-         background-color: rgba(100,100,200,0.15);
-       `,
-       row: `
-         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-         margin: 0 0 0.5em; padding: 0 0 0 0.5em;
-       `,
-       org: `font-size: 0.95em;`,
-       description: `
-         margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
-       `
-     },
-   }
+    return CoverView;
+  },
+  // Resume View - description.
+  Resume: function(props, dispatch, children) {
+    // ResumeView Styles
+    const styles = {
+      resume: `
+        margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
+      `,
+      body: `
+        padding: 1em; background-color: #fff; color: #000;
+      `,
+      section: {
+        title: `
+          margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+          padding: 0 0.25em; font-size: 1.15em; border-bottom: 1px solid #000; cursor: pointer;
+        `,
+        hidden: `
+          display: none;
+        `
+      },
+      skills: {
+        window: `
+          display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        mobile: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        column: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          margin: 0 auto;
+        `,
+        skill: `
+          margin: 0.25em auto;
+        `
+      },
+      history: {
+        window: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          padding: 0.5em; background-color: rgba(100,100,200,0.15);
+        `,
+        mobile: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        position: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          margin: 0.5em;
+        `,
+        infoRow: `
+          display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+          margin: 0; padding: 0 0.5em; border-bottom: 1px solid #222;
+        `,
+        infoField: `
+          display: flex; flex-direction: column; justify-content: center; align-items: center;
+          margin: 0; font-size: 0.95em;
+        `,
+        descriptionRow: `
+          display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+          margin: 0.5em 0; padding: 0 0.5em;
+        `,
+        description: `
+          display: flex; flex-direction: column; justify-content: center; align-items: center;
+          margin: 0; padding: 0; font-size: 0.95em;
+        `,
+        descriptionHidden: `display: none;`
+      },
+      edu: {
+        window: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        mobile: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        row: `
+          display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+          margin: 0.5em; padding: 0 0 0 0.5em;
+        `,
+        degree: `margin: 0 0 0 0.5em; font-size: 0.95em;`,
+        field: `
+          margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
+        `
+      },
+      certs: {
+        window: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; flex-wrap: wrap;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        mobile: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        row: `
+          display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+          margin: 0 0 0.5em; padding: 0 0 0 0.5em;
+        `,
+        col: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+          margin: 0.5em; padding: 0; text-align: center;
+        `,
+        title: `margin: 0.5em; font-size: 0.95em;`,
+        field: `
+          margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
+        `,
+        link: `
+          margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em; text-decoration: none; color: rgba(25,110,214,1);
+        `
+      },
+      volunteer: {
+        window: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        mobile: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-color: rgba(100,100,200,0.15);
+        `,
+        row: `
+          display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+          margin: 0 0 0.5em; padding: 0 0 0 0.5em;
+        `,
+        org: `font-size: 0.95em;`,
+        description: `
+          margin: 0 0 0 0.5em; padding: 0; font-size: 0.95em;
+        `
+      }
+    };
 
-   // ResumeView Globals
-   const store = props.store;
-   const state = store.getState();
-   const resumeState = state.chivingtonincState.resumeState;
-   const { visible, sections } = state.chivingtonincState.resumeState;
-   const { skills, history, education, certifications, volunteering } = sections;
-   const MOB = state.uiState.windowState.mode == "MOBILE";
-   const E = React.createElement;
+    // ResumeView Globals
+    const store = props.store;
+    const state = store.getState();
+    const resumeState = state.chivingtonincState.resumeState;
+    const { visible, sections } = state.chivingtonincState.resumeState;
+    const { skills, history, education, certifications, volunteering } = sections;
+    const MOB = state.uiState.windowState.mode == "MOBILE";
+    const E = React.createElement;
 
-   // ResumeView Content
-   // Skills Section
-   const skillsButton = E("h2", {style: styles.section.title}, ["Skills"]);
-   skillsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_SKILLS_SECTION"}));
+    // ResumeView Content
+    // Skills Section
+    const skillsButton = E("h2", {style: styles.section.title}, ["Skills"]);
+    skillsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_SKILLS_SECTION"}));
 
-   const showSkills = visible.skills == "OPEN";
-   const skillsWindow = E("div", {style: showSkills ? (MOB ? styles.skills.mobile : styles.skills.window) : styles.section.hidden},
-     skills.map(c => E("div", {style: styles.skills.column}, c.map(s => E("p", {style: styles.skills.skill}, [s]))))
-   );
+    const showSkills = visible.skills == "OPEN";
+    const skillsWindow = E("div", {style: showSkills ? (MOB ? styles.skills.mobile : styles.skills.window) : styles.section.hidden},
+      skills.map(c => E("div", {style: styles.skills.column}, c.map(s => E("p", {style: styles.skills.skill}, [s]))))
+    );
 
-   // History Section
-   const historyButton = E("h2", {style: styles.section.title}, ["History"]);
-   historyButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_HIST_SECTION"}));
+    // History Section
+    const historyButton = E("h2", {style: styles.section.title}, ["History"]);
+    historyButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_HIST_SECTION"}));
 
-   const showHist = visible.history == "OPEN";
-   const historyWindow = E("div", {style: showHist ? (MOB ? styles.history.mobile : styles.history.window) : styles.section.hidden},
-     history.map((position,i) => E("div", {style: styles.history.position}, [
-       E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map((f,i) => E("h3", {style: styles.history.infoField}, [f]))),
-       E("div", {style: styles.history.descriptionRow}, [E("p", {style: styles.history.description}, [position[3]])])
-   ])));
+    const showHist = visible.history == "OPEN";
+    const historyWindow = E("div", {style: showHist ? (MOB ? styles.history.mobile : styles.history.window) : styles.section.hidden},
+      history.map((position,i) => E("div", {style: styles.history.position}, [
+        E("div", {style: styles.history.infoRow}, position.filter((field,idx) => idx !== 3).map((f,i) => E("h3", {style: styles.history.infoField}, [f]))),
+        E("div", {style: styles.history.descriptionRow}, [E("p", {style: styles.history.description}, [position[3]])])
+    ])));
 
-   // Education Section
-   const eduButton = E("h2", {style: styles.section.title}, ["Education"]);
-   eduButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_EDU_SECTION"}));
+    // Education Section
+    const eduButton = E("h2", {style: styles.section.title}, ["Education"]);
+    eduButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_EDU_SECTION"}));
 
-   const showEdu = visible.education == "OPEN";
-   const eduWindow = E("div", {style: showEdu ? (MOB ? styles.edu.mobile : styles.edu.window) : styles.section.hidden},
-     education.map(row => E("div", {style: styles.edu.row}, row.map((field,idx) => (idx==0) ?
-       E("h3", {style: styles.edu.degree}, [field]) : E("p", {style: styles.edu.field}, [field])
-   ))));
+    const showEdu = visible.education == "OPEN";
+    const eduWindow = E("div", {style: showEdu ? (MOB ? styles.edu.mobile : styles.edu.window) : styles.section.hidden},
+      education.map(row => E("div", {style: styles.edu.row}, row.map((field,idx) => (idx==0) ?
+        E("h3", {style: styles.edu.degree}, [field]) : E("p", {style: styles.edu.field}, [field])
+    ))));
 
-   // Certifications Section
-   const certsButton = E("h2", {style: styles.section.title}, ["Certifications"]);
-   certsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_CERTS_SECTION"}));
+    // Certifications Section
+    const certsButton = E("h2", {style: styles.section.title}, ["Certifications"]);
+    certsButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_CERTS_SECTION"}));
 
-   const showCerts = visible.certifications == "OPEN";
-   const certsWindow = E("div", {style: showCerts ? (MOB ? styles.certs.mobile : styles.certs.window) : styles.section.hidden},
-     certifications.map(r => E("div", {style: MOB ? styles.certs.col : styles.certs.row}, r.map((f,i) => (i==0)
-       ? E("h3", {style: styles.certs.title}, [f])
-       : ((i==3) ? E("a", {style: styles.certs.link, href: f, target: "_blank"}, ["(Link)"]) : E("p", {style: styles.certs.field}, [f]))
-   ))));
+    const showCerts = visible.certifications == "OPEN";
+    const certsWindow = E("div", {style: showCerts ? (MOB ? styles.certs.mobile : styles.certs.window) : styles.section.hidden},
+      certifications.map(r => E("div", {style: MOB ? styles.certs.col : styles.certs.row}, r.map((f,i) => (i==0)
+        ? E("h3", {style: styles.certs.title}, [f])
+        : ((i==3) ? E("a", {style: styles.certs.link, href: f, target: "_blank"}, ["(Link)"]) : E("p", {style: styles.certs.field}, [f]))
+    ))));
 
-   // Volunteering Section
-   const volunteerButton = E("h2", {style: styles.section.title}, ["Volunteering"]);
-   volunteerButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_VOLUNTEER_SECTION"}));
+    // Volunteering Section
+    const volunteerButton = E("h2", {style: styles.section.title}, ["Volunteering"]);
+    volunteerButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_VOLUNTEER_SECTION"}));
 
-   const showVolunteer = visible.volunteering == "OPEN";
-   const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.volunteer.mobile : styles.volunteer.window) : styles.section.hidden},
-     volunteering.map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
-       ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
-   ))));
+    const showVolunteer = visible.volunteering == "OPEN";
+    const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.volunteer.mobile : styles.volunteer.window) : styles.section.hidden},
+      volunteering.map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
+        ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
+    ))));
 
-   // Resume
-   const resume = E("div", {style: styles.resume}, [Components.UI.DocHeader(props, dispatch, []),
-     E("div", {style: styles.body}, [
-       E("div", {style: styles.skillsSection}, [skillsButton, skillsWindow]),
-       E("div", {style: styles.skillsSection}, [historyButton, historyWindow]),
-       E("div", {style: styles.skillsSection}, [eduButton, eduWindow]),
-       E("div", {style: styles.skillsSection}, [certsButton, certsWindow]),
-       E("div", {style: styles.skillsSection}, [volunteerButton, volunteerWindow])
-     ])
-   ]);
+    // Resume
+    const resume = E("div", {style: styles.resume}, [Components.UI.DocHeader(props, dispatch, []),
+      E("div", {style: styles.body}, [
+        E("div", {style: styles.skillsSection}, [skillsButton, skillsWindow]),
+        E("div", {style: styles.skillsSection}, [historyButton, historyWindow]),
+        E("div", {style: styles.skillsSection}, [eduButton, eduWindow]),
+        E("div", {style: styles.skillsSection}, [certsButton, certsWindow]),
+        E("div", {style: styles.skillsSection}, [volunteerButton, volunteerWindow])
+      ])
+    ]);
 
-   // ResumeView
-   const ResumeView = E("div", {style: styles.view}, [resume]);
+    // ResumeView
+    const ResumeView = E("div", {style: styles.view}, [resume]);
 
-   return ResumeView;
- },
- // Guide View - description.
- Guide: function(props, dispatch, children) {
-   // GuideView Styles
-   const styles = {
-     view: `
-      display: flex; flex-direction: column; justify-content: flex-start; align-items: center; height: 100%;
-     `,
-     title: `
-      margin: 0.75em auto 0.5em; color: #fff; text-decoration: underline; font-weight: 300;
-     `,
-     imgs: (w) => `
-      width: ${w}; margin: 1em auto;
-     `
-   }
+    return ResumeView;
+  },
+  // Guide View - description.
+  Guide: function(props, dispatch, children) {
+    // GuideView Styles
+    const styles = {
+      view: `
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: center; height: 100%;
+      `,
+      title: `
+        margin: 0.75em auto 0.5em; color: #fff; text-decoration: underline; font-weight: 300;
+      `,
+      imgs: (w) => `
+        width: ${w}; margin: 1em auto;
+      `
+    };
 
-   // GuideView Globals
-   const store = props.store;
-   const state = store.getState();
-   const landing = !state.uiState.userState.returning;
-   const appMsg = state.uiState.userState.appMsg;
-   const loggedIn = state.uiState.userState.user != "GUEST";
-   const MOB = state.uiState.windowState.mode == "MOBILE";
-   const E = React.createElement;
+    // GuideView Globals
+    const store = props.store;
+    const state = store.getState();
+    const landing = !state.uiState.userState.returning;
+    const appMsg = state.uiState.userState.appMsg;
+    const loggedIn = state.uiState.userState.user != "GUEST";
+    const MOB = state.uiState.windowState.mode == "MOBILE";
+    const E = React.createElement;
 
-   // GuideView Content
-   const title = E("h2", {style: styles.title}, ["Add to Homescreen Guide"]);
-   const stepOneImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step1Path, alt: "step1 img"}, []);
-   const stepTwoImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step2Path, alt: "step2 img"}, []);
+    // GuideView Content
+    const title = E("h2", {style: styles.title}, ["Add to Homescreen Guide"]);
+    const stepOneImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step1Path, alt: "step1 img"}, []);
+    const stepTwoImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step2Path, alt: "step2 img"}, []);
 
 
-   // GuideView
-   const GuideView = E("div", {style: styles.view}, [title, stepOneImg, stepTwoImg]);
+    // GuideView
+    const GuideView = E("div", {style: styles.view}, [title, stepOneImg, stepTwoImg]);
 
-   return GuideView;
- }
+    return GuideView;
+  }
 };
 
 
@@ -1540,6 +1540,6 @@ ReduxStore.subscribe({
 /* --------------------------------- Cache Assets --------------------------------- *
  *    Cache assets, using service workers. No support planned for fringe devices.   *
  * -------------------------------------------------------------------------------- */
-
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
-  .then(reg => console.log("\n REG SUCCESS: ", reg), reg => console.log("\n REG FAIL: ", reg));
+// 
+// if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js")
+//   .then(reg => console.log("\n REG SUCCESS: ", reg), reg => console.log("\n REG FAIL: ", reg));
