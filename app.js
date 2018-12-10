@@ -88,47 +88,46 @@ const Redux = {
  *                         Define everything needed to cache.                        *
  * --------------------------------------------------------------------------------- */
 const Assets = {
-  indexPath: "./index.html",
-  appPath: "./app.js",
-  swPath: "./sw.js",
-  faviconPath: "./favicon.ico",
-  webmanifestPath: "./site.webmanifest",
-  coverDocxPath: "./includes/docs/j.Chivington.Cover.docx",
-  coverPdfPath: "./includes/docs/j.Chivington.Cover.pdf",
-  resumeDocxPath: "./includes/docs/j.Chivington.Resume.docx",
-  resumePdfPath: "./includes/docs/j.Chivington.Resume.pdf",
-  avenirPath: "./includes/fonts/Avenir-Book.otf",
-  helloPath: "./imgs/content/hello.png",
-  step1Path: "./imgs/content/step1.jpg",
-  step2Path: "./imgs/content/step2.jpg",
-  wifiPath: "./imgs/icons/network/wifi.svg",
-  noWifiPath: "./imgs/icons/network/noWifi.svg",
-  noWifi2Path: "./imgs/icons/network/noWifi2.svg",
-  brainPath: "./imgs/icons/sm/brain.svg",
-  downloadPath: "./imgs/icons/sm/dl.svg",
-  emailPath: "./imgs/icons/sm/email.svg",
-  facebookPath: "./imgs/icons/sm/fb.svg",
-  githubPath: "./imgs/icons/sm/git.svg",
-  linkedinPath: "./imgs/icons/sm/li.svg",
-  phonePath: "./imgs/icons/sm/phone.svg",
-  twitterPath: "./imgs/icons/sm/twt.svg",
-  androidChrome192Path: "./imgs/icons/android-chrome-192x192.png",
-  androidChrome512Path: "./imgs/icons/android-chrome-512x512.png",
-  appleTouchIconPath: "./imgs/icons/apple-touch-icon.png",
-  browserconfigPath: "./imgs/icons/browserconfig.xml",
-  favicon16Path: "./imgs/icons/favicon-16x16.png",
-  favicon32Path: "./imgs/icons/favicon-32x32.png",
-  mstile70Path: "./imgs/icons/mstile-70x70.png",
-  mstile144Path: "./imgs/icons/mstile-144x144.png",
-  mstile150Path: "./imgs/icons/mstile-150x150.png",
-  mstile310Path: "./imgs/icons/mstile-310x150.png",
-  mstile310Path: "./imgs/icons/mstile-310x310.png",
-  safariPinnedTabPath: "./imgs/icons/safari-pinned-tab.png",
-  meAndWinPath: "./imgs/me/me-n-win.jpg",
-  mePath: "./imgs/me/me.jpg",
-  fragmentedPath: "./imgs/wp/fragmented.jpg",
-  mathPath: "./imgs/wp/math.jpg",
-  pnwPath: "./imgs/wp/pnw.jpg"
+  resource_index: "./index.html",
+  resource_appPath: "./app.js",
+  resource_swPath: "./sw.js",
+  resource_webmanifest: "./site.webmanifest",
+  resource_coverDocx: "./includes/docs/j.Chivington.Cover.docx",
+  resource_coverPdf: "./includes/docs/j.Chivington.Cover.pdf",
+  resource_resumeDocx: "./includes/docs/j.Chivington.Resume.docx",
+  resource_resumePdf: "./includes/docs/j.Chivington.Resume.pdf",
+  resource_avenir: "./includes/fonts/Avenir-Book.otf",
+  content_greeting: "./imgs/content/hello.png",
+  content_step1: "./imgs/content/step1.jpg",
+  content_step2: "./imgs/content/step2.jpg",
+  content_MeAndWinPath: "./imgs/me/me-n-win.jpg",
+  content_mePath: "./imgs/me/me.jpg",
+  wp_fragmentedPath: "./imgs/wp/fragmented.jpg",
+  wp_mathPath: "./imgs/wp/math.jpg",
+  wp_pnwPath: "./imgs/wp/pnw.jpg",
+  icon_favicon: "./favicon.ico",
+  icon_wifi: "./imgs/icons/network/wifi.svg",
+  icon_noWifi: "./imgs/icons/network/noWifi.svg",
+  icon_noWifi2: "./imgs/icons/network/noWifi2.svg",
+  icon_brain: "./imgs/icons/sm/brain.svg",
+  icon_download: "./imgs/icons/sm/dl.svg",
+  icon_email: "./imgs/icons/sm/email.svg",
+  icon_facebook: "./imgs/icons/sm/fb.svg",
+  icon_github: "./imgs/icons/sm/git.svg",
+  icon_linkedin: "./imgs/icons/sm/li.svg",
+  icon_phone: "./imgs/icons/sm/phone.svg",
+  icon_twitter: "./imgs/icons/sm/twt.svg",
+  icon_androidChrome192Path: "./imgs/icons/android-chrome-192x192.png",
+  icon_androidChrome512Path: "./imgs/icons/android-chrome-512x512.png",
+  icon_appleTouchIconPath: "./imgs/icons/apple-touch-icon.png",
+  icon_browserconfigPath: "./imgs/icons/browserconfig.xml",
+  icon_favicon16Path: "./imgs/icons/favicon-16x16.png",
+  icon_favicon32Path: "./imgs/icons/favicon-32x32.png",
+  icon_mstile70Path: "./imgs/icons/mstile-70x70.png",
+  icon_mstile144Path: "./imgs/icons/mstile-144x144.png",
+  icon_mstile150Path: "./imgs/icons/mstile-150x150.png",
+  icon_mstile310Path: "./imgs/icons/mstile-310x310.png",
+  icon_safariPinnedTabPath: "./imgs/icons/safari-pinned-tab.png"
 };
 
 /* ----------------------------------- Blueprint ----------------------------------- *
@@ -155,12 +154,12 @@ const Blueprint = {
     initWindow: {
       width: window.innerWidth,
       height: window.innerHeight,
-      mode: window.innerWidth < 700 ? "MOBILE" : (window.innerWidth < 1000 ? "TABLET" : "DESKTOP")
+      mode: window.innerWidth < 950 ? "MOBILE" : (window.innerWidth < 1200 ? "TABLET" : "DESKTOP")
     },
     initHeader: "VISIBLE",
     initMenu: "CLOSED",
     initNotification: {
-      visibility: "HIDDEN", msg: "Welcome!", tile: Assets.brainPath, alt: "brain icon", action: null
+      visibility: "HIDDEN", msg: "Welcome!", tile: Assets.icon_brain, alt: "brain icon", action: null
     },
     initGuide: {
       visibility: "HIDDEN",
@@ -170,17 +169,17 @@ const Blueprint = {
       animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
      },
     initView: {
-      view: "HOME", prev: "@@INIT"
+      view: "HOME", prev: "@@INIT", scroll: {x: 0, y: 0}
     },
     initTheme: {
-      headerColor: "",
-      menuIcon: "",
-      menuColor: "",
+      headerColor: "background-image: linear-gradient(#333, #222);",
+      menuIcon: Assets.icon_brain,
+      menuColor: "background-image: linear-gradient(to bottom right, rgba(25,110,214,1), rgba(6,90,204,1));",
       networkIndicator: "SHOWN",
-      viewBackground: ""
+      viewBackground: Assets.wp_pnwPath
     },
     initWallpaper: {
-      name: "fragmented", route: Assets.fragmentedPath
+      name: "fragmented", route: Assets.wp_fragmentedPath
     }
   },
   chivingtoninc: {
@@ -193,7 +192,9 @@ const Blueprint = {
       linkedin: "https://linkedin.com/in/johnathan-chivington",
       github: "https://github.com/chivingtoninc",
       twitter: "https://twitter.com/chivingtoninc",
-      facebook: "https://facebook.com/chivingtoninc"
+      facebook: "https://facebook.com/chivingtoninc",
+      location: "Seattle, WA",
+      search: "Actively Seeking (local & remote)"
     },
     initResume: {
       visible: {
@@ -206,6 +207,7 @@ const Blueprint = {
           ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
           ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
         ],
+        technologies: [],
         history: [
           ["Accounts Receivable Specialist", "ABC Legal Services", "(July 2018 – Present)",
           "Prepare monthly receivable statements. Post receipts to appropriate accounts and verify transaction details."],
@@ -446,14 +448,6 @@ const Components = {
   App: {
     // Net - interfaces with Network Information API
     Net: function(props, dispatch, children) {
-      // Net Styles
-      const styles = {
-        net: (color) => `
-          position: absolute; top: 3.25em; right: 2em; z-index: 1005;
-          font-size: 0.55em; color: ${color};
-        `
-      };
-
       // Net Globals
       const state = props.store.getState();
       const { connectionState } = state.appState;
@@ -461,10 +455,14 @@ const Components = {
       const offline = downlink == 0 ? true : false;
       const status = offline ? "OFFLINE" : effectiveType.toUpperCase();
       const displayed = state.uiState.themeState.networkIndicator == "SHOWN" ? true : false;
-      const MOB = state.uiState.windowState.mode == "MOBILE";
+      const DEV = state.uiState.windowState.mode.toLowerCase();
+      const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
       const E = React.createElement;
 
-      console.log("\n CONNECTION FROM APP: ", navigator.connection);
+      // Net Styles
+      const styles = {
+        net: `position: absolute; top: 3.25em; right: 2em; z-index: 1005; font-size: 0.55em; color: ${offline?`#f22`:`#2f2`};`
+      };
 
       // Connection Listener
       navigator.connection.onchange = function(event) {
@@ -472,13 +470,13 @@ const Components = {
         const offline = newState.downlink == 0 ? true : false;
         const status = offline ? "offline" : newState.effectiveType.toUpperCase();
 
-        dispatch({type: "NETWORK_CHANGE", payload: {
-          effectiveType: newState.effectiveType, downlink: newState.downlink
+        if (newState.effectiveType != status) dispatch({type: "NETWORK_CHANGE", payload: {
+          effectiveType: offline ? "OFFLINE" : newState.effectiveType, downlink: newState.downlink
         }});
       };
 
       // Net Style
-      const netStyles = displayed ? styles.net(offline ? "#f44" : "#4f4") : `display: none;`;
+      const netStyles = displayed ? styles.net : `display: none;`;
 
       const Net = E("div", {style: netStyles}, [status]);
 
@@ -537,12 +535,12 @@ const Components = {
       const { notificationState } = state.uiState;
       const { networkState } = state.appState;
       const view = state.uiState.viewState.view.toLowerCase();
-      const { faviconPath, wifiPath, noWifiPath, noWifi2Path } = Assets;
+      const { icon_favicon, icon_wifi, icon_noWifi, icon_noWifi2 } = Assets;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Header Icon & Listeners
-      const icon =E("img", {style: styles.icon, src: faviconPath, alt: "chivingtoninc Icon"}, []);
+      const icon =E("img", {style: styles.icon, src: icon_favicon, alt: "chivingtoninc Icon"}, []);
       icon.addEventListener("click", function(event) {
         dispatch({type: "TOGGLE_MENU"})
       });
@@ -559,7 +557,7 @@ const Components = {
       });
 
       // Network Indicator
-      // const src = networkState != "UNKNOWN" ? wifiPath : noWifiPath;
+      // const src = networkState != "UNKNOWN" ? icon_wifi : icon_noWifi;
       // const networkIndicator = E("img", {style: styles.networkIndicator, src: src, alt: "network indicator"}, []);
 
       // Header Element
@@ -570,8 +568,8 @@ const Components = {
     // Menu - layered/collapsible full-route menu.
     Menu: function(props, dispatch, children) {
       const styles = {
-        menu: `
-          position: absolute; top: 4em; left: 0; bottom: 0; width: 10em; padding: 0.25em 1em 0 0; z-index: 10;
+        menu: (m) => `
+          position: absolute; top: 4em; left: 0; bottom: 0; width: ${m ? "100%" : "20em"}; padding: 0.25em 1em 0 0; z-index: 10;
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
           background-image: linear-gradient(to bottom right, rgba(25,110,214,1), rgba(6,90,204,1));
           border-right: 1px solid #000; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
@@ -586,11 +584,8 @@ const Components = {
       const state = store.getState();
       const menuState = state.uiState.menuState;
       const notificationState = state.uiState.notificationState;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
-
-      // Menu Styles & Animation
-      styles.menu += (menuState == "OPEN") ? `animation: menuOpen 150MS 1 forwards;`
-        : (menuState == "CLOSING" ? `animation: menuClosing 150MS 1 forwards;` : `display: none;`);
 
       // Home Link & Listeners
       const home = React.createElement("a", {style: styles.link}, ["Home"]);
@@ -627,8 +622,12 @@ const Components = {
         dispatch({type: "NAV_TO", payload: "RESUME"});
       });
 
+      // Menu Styles & Animation
+      const menuStyles = styles.menu(MOB) + ((menuState == "OPEN") ? `animation: menuOpen 150MS 1 forwards;`
+        : (menuState == "CLOSING" ? `animation: menuClosing 150MS 1 forwards;` : `display: none;`));
+
       // Menu Element
-      const Menu = React.createElement("div", {style: styles.menu}, [home, blog, projects, cover, resume]);
+      const Menu = React.createElement("div", {style: menuStyles}, [home, blog, projects, cover, resume]);
 
       return Menu;
     },
@@ -740,7 +739,7 @@ const Components = {
       const viewName = state.uiState.viewState.view.toLowerCase();
       const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
       const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook } = state.chivingtonincState.contactState;
-      const { downloadPath, meAndWinPath, phonePath, emailPath, linkedinPath, githubPath, twitterPath, facebookPath, mathPath } = Assets;
+      const { icon_download, content_MeAndWinPath, icon_phone, icon_email, icon_linkedin, icon_github, icon_twitter, icon_facebook, wp_mathPath } = Assets;
       const doc = Assets[`${viewName}DocxPath`];
       const pdf = Assets[`${viewName}PdfPath`];
       const alt = `Download ${capitalized}`;
@@ -749,12 +748,12 @@ const Components = {
 
       // Responsive Styles
       const rowStyle = MOB ? styles.right.rowMobile : styles.right.row;
-      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common(mathPath);
+      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common(wp_mathPath);
       // const
 
       // Download Link
       const download = E("div", {style: rowStyle}, [
-        ["img", {style: styles.right.icon, src: downloadPath, alt: alt}, []],
+        ["img", {style: styles.right.icon, src: icon_download, alt: alt}, []],
         ["p", {style: styles.right.label}, [alt+": "]],
         ["a", {style: styles.right.link + "color: #5bf; font-size: 0.75em;", href: doc, target: "_self", download:""}, [`(.docx)`]],
         ["p", {style: styles.right.sep}, [`|`]],
@@ -764,23 +763,23 @@ const Components = {
       // Download Link  Listeners
       download.addEventListener("click", function(event) {
         dispatch({type: "SHOW_NOTIFICATION", payload: {
-          visibility: "VISIBLE", msg: alt, tile: downloadPath, alt: "download icon"
+          visibility: "VISIBLE", msg: alt, tile: icon_download, alt: "download icon"
         }});
       });
 
       // DocHeader Element
       const DocHeader = E("div", {style: headerStyle}, [
         E("div", {style: MOB ? styles.left.mobile : styles.left.window}, [
-          E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: meAndWinPath, alt: "Winston and I"}, []),
+          E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: content_MeAndWinPath, alt: "Winston and I"}, []),
           E("h2", {style: styles.left.name}, [`${firstName} ${lastName}`]),
           E("p", {style: styles.left.title}, [title])
         ]),
         E("div", {style: styles.right.window}, [...[
-          [phonePath, "phone icon", `tel:${phone}`, phone],
-          [emailPath, "email icon", `mailto:${email}`, email],
-          [linkedinPath, "linkedin icon", linkedin, linkedin.slice(8)],
-          [githubPath, "gihub icon", github, github.slice(8)],
-          [twitterPath, "twitter icon", twitter, twitter.slice(8)]
+          [icon_phone, "phone icon", `tel:${phone}`, phone],
+          [icon_email, "email icon", `mailto:${email}`, email],
+          [icon_linkedin, "linkedin icon", linkedin, linkedin.slice(8)],
+          [icon_github, "gihub icon", github, github.slice(8)],
+          [icon_twitter, "twitter icon", twitter, twitter.slice(8)]
         ].map(r => E("div", {style: rowStyle}, [
           E("img", {style: styles.right.icon, src: r[0], alt: r[1]}, []),
           E("a", {style: styles.right.link, href: r[2], target: "_blank"}, [r[3]])
@@ -848,7 +847,7 @@ const Components = {
         dispatch({type: "APP_MSG"});
 
         dispatch({type: "FLASH_NOTIFICATION", payload: {
-          tile: Assets.brainPath, alt: "brain icon", action: {type:"NAV_TO", payload:"GUIDES"},
+          tile: Assets.icon_brain, alt: "brain icon", action: {type:"NAV_TO", payload:"GUIDES"},
           msg: E("div", {style: styles.appNotification}, [
             E("p", {style: styles.notificationTxt}, ["Welcome!"]),
             E("p", {style: styles.notificationTxt}, ["For the best experience, choose \"Add to homescreen.\""]),
@@ -865,6 +864,12 @@ const Components = {
       const View = React.createElement("div", {style: styles.view}, [
         children[0](props, dispatch, children), Components.UI.Notification(props, dispatch, [])
       ]);
+
+      // View Scroll Position
+      // if (sameView) {
+      //   console.log("SAAAME");
+      //   window.scrollBy({top: 250, left: 0, behavior: "auto"});
+      // }
 
       // View Listeners
       View.addEventListener("click", function(event) {
@@ -922,7 +927,7 @@ const Components = {
 
       // Notification Listeners
       Notification.addEventListener("click", function(event) {
-        dispatch({type: "HIDE_NOTIFICATION", payload: { msg: "Welcome!", tile: Assets.brainPath, alt: "brain icon" }});
+        dispatch({type: "HIDE_NOTIFICATION", payload: { msg: "Welcome!", tile: Assets.icon_brain, alt: "brain icon" }});
         if (action) dispatch(action);
       });
 
@@ -1035,144 +1040,69 @@ const Components = {
 const Views = {
   // Home View - contains contact card.
   Home: function(props, dispatch, children) {
-    // HomeView Styles
-    const styles = {
-      view: (wp) => `
-        display: flex; flex-direction: column; justify-content: center; align-items: stretch;
-        height: 100%; background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
-      `,
-      viewMobile: (wp) => `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-image: url("${wp}"); background-position: center; background-size: cover; background-repeat: none;
-      `,
-      card: {
-        box: `
-          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          margin: 0 3em; z-index: 5;
-        `,
-        boxMobile: `
-          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          margin: 1em; z-index: 5;
-        `,
-        body: {
-          box: `
-            display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;
-            padding: 0.5em; background-color: #fff;
-          `,
-          boxMobile: `
-            display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-            padding: 0.5em; background-color: #fff;
-          `,
-          left: {
-            box: `
-              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-              height: 25em;
-            `,
-            boxMobile: `
-              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-            `,
-            img: `height: 100%;`,
-            imgMobile: `width: 100%;`,
-          },
-          right: {
-            box: `
-              display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch;
-              height: 25em; margin: 0 0 0 0.5em; background-color: #ccc;
-            `,
-            boxMobile: `
-              display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-              margin: 0.5em 0 0 0;
-            `,
-            top: {
-              box: `
-                background-color: #eee; padding: 0.5em; border-bottom: 1px solid #444;
-              `,
-              boxMobile:`background-color: #eee; padding: 0.5em;  border-bottom: 1px solid #444; text-align: center;`,
-              greeting: `height: 4em; margin: 0.5em 0;;`,
-              name: `margin: 0; font-size: 1.5em;`,
-              title: `margin: 0; font-size: 0.9em; font-weight: 300;`
-            },
-            bottom: {
-              box: `
-                display: flex; flex-direction: column; justify-content: space-between; align-items: stretch;
-                background-color: #ccc; padding: 0 1em;
-              `,
-              row: `
-                display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-                margin: 0.5em 0; padding: 0;
-              `,
-              rowMobile: `
-                display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-                margin: 1.25em 0; padding: 0;
-              `,
-              field: `
-                font-size: 1em; margin: 0;
-              `,
-              text: `
-                font-size: 0.9em; margin: 0;
-              `
-            }
-          }
-         },
-        footer: {
-          box: `
-            display: flex; flex-direction: row; justify-content: space-around; align-items: center;
-            background-color: #222; padding: 1.15em 0 1em;
-          `,
-          link: `color: #fff`,
-          icon: `
-            height: 1.25em; width: 1.25em;
-          `
-        }
-      }
-    }
-
-    // HomeView Globals
+    // Home View Globals
     const store = props.store;
     const state = store.getState();
     const landing = !state.uiState.userState.returning;
     const appMsg = state.uiState.userState.appMsg;
     const loggedIn = state.uiState.userState.user != "GUEST";
-    const { mePath, helloPath, githubPath, linkedinPath, twitterPath, phonePath, emailPath, pnwPath } = Assets;
-    const MOB = state.uiState.windowState.mode == "MOBILE";
+    const { content_mePath, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnwPath } = Assets;
+    const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.chivingtonincState.contactState;
+    const DEV = state.uiState.windowState.mode.toLowerCase();
+    const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
     const E = React.createElement;
 
-    // HomeView Content
-    const card = E("div", {style: MOB ? styles.card.boxMobile : styles.card.box}, [
-      E("div", {style: MOB ? styles.card.body.boxMobile : styles.card.body.box}, [
-        E("div", {style: MOB ? styles.card.body.left.boxMobile : styles.card.body.left.box}, [
-          E("img", {style: MOB ? styles.card.body.left.imgMobile : styles.card.body.left.img, src: mePath, alt: "my face"}, [])
+    // Home View Styles
+    const styles = {
+      view: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%;`,
+      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: ${MB ? `1em` : `0 3em`};`,
+      cardBody: `padding: 0.5em; background-color: #fff; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
+      bodyLeft: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; ${MB?``:`height: 25em;`}`,
+      leftImg: `border: 1px solid #222; ${MB ? `width: 100%;` : `height: 100%;`}`,
+      bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,
+      rightTop: `background-color: #ddd; padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
+      greetingImg: `height: 4em; margin: 0.5em 0;`,
+      name: `margin: 0; font-size: 1.5em;`,
+      title: `margin: 0; font-size: 0.9em; font-weight: 300;`,
+      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 0 1em; background-color: #aaa;`,
+      row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.5em 0`};`,
+      label: `font-size: 1em; margin: 0;`,
+      text: `font-size: 0.8em; margin: 0;`,
+      footer: `display: flex; flex-direction: row; justify-content: space-around; align-items: center;background-color: #222; padding: 1.15em 0 0.85em;`,
+      footerLink: `color: #fff`,
+      footerIcon: `height: 1.25em; width: 1.25em;`
+    };
+
+    // Card
+    const card = E("div", {style: styles.card}, [
+      E("div", {style: styles.cardBody}, [
+        E("div", {style: styles.bodyLeft}, [
+          E("img", {style: styles.leftImg, src: content_mePath, alt: "my beautiful face"}, [])
         ]),
-        E("div", {style: MOB ? styles.card.body.right.boxMobile : styles.card.body.right.box}, [
-          E("div", {style: MOB ? styles.card.body.right.top.boxMobile : styles.card.body.right.top.box}, [
-            E("img", {style: styles.card.body.right.top.greeting, src: helloPath}, []),
-            E("h2", {style: styles.card.body.right.top.name}, ["Johnathan Chivington"]),
-            E("h2", {style: styles.card.body.right.top.title}, ["Deep Learning & AI Engineer"])
+        E("div", {style: styles.bodyRight}, [
+          E("div", {style: styles.rightTop}, [
+            E("img", {style: styles.greetingImg}, []),
+            E("h2", {style: styles.name}, [`${firstName} ${lastName}`]),
+            E("h2", {style: styles.title}, [title])
           ]),
-          E("div", {style: styles.card.body.right.bottom.box}, [
-            ["Location", "Seattle, WA"],
-            ["Phone", "303.900.2861"],
-            ["Email", "j.chivington@bellevuecollege.edu"],
-            ["Search Status", "Actively Seeking (local & remote)"]
-          ].map(r => E("div", {style: MOB ? styles.card.body.right.bottom.rowMobile : styles.card.body.right.bottom.row}, [
-            E("h3", {style: styles.card.body.right.bottom.field}, [r[0]]),
-            E("p", {style: styles.card.body.right.bottom.text}, [r[1]]),
-          ])))
+          E("div", {style: styles.rightBottom}, Object.keys({location, phone, email, search}).map(k => {
+            return E("div", {style: styles.row}, [
+              E("h3", {style: styles.label}, [k[0].toUpperCase()+k.slice(1)]),
+              E("p", {style: styles.text}, [{location, phone, email, search}[k]])
+            ])
+          }))
         ])
       ]),
-      E("div", {style: styles.card.footer.box}, [
-        [githubPath, "gihub icon", "https://github.com/chivingtoninc"],
-        [linkedinPath, "linkedin icon", "https://www.linkedin.com/in/johnathan-chivington"],
-        [twitterPath, "twitter icon", "https://twitter.com/chivingtoninc"],
-        [phonePath, "phone icon", "tel:303-900-2861"],
-        [emailPath, "email icon", "mailto:j.chivington@bellevuecollege.edu"]
-      ].map(icon => E("a", {style: styles.card.footer.link, href: icon[2], alt: icon[2], target: "_blank"}, [
-        E("img", {style: styles.card.footer.icon, src: icon[0], alt: icon[1]}, [])
+      E("div", {style: styles.footer}, [
+        [icon_github, "gihub icon", github], [icon_linkedin, "linkedin icon", linkedin], [icon_twitter, "twitter icon", twitter],
+        [icon_phone, "phone icon", `tel:${phone}`], [icon_email, "email icon", `mailto:${email}`]
+      ].map(icon => E("a", {style: styles.footerLink, href: icon[2], alt: icon[2], target: "_blank"}, [
+        E("img", {style: styles.footerIcon, src: icon[0], alt: icon[1]}, [])
       ])))
     ]);
 
-    // HomeView
-    const HomeView = React.createElement("div", {style: MOB ? styles.viewMobile(pnwPath) : styles.view(pnwPath)}, [card]);
+    // Home View
+    const HomeView = E("div", {style: styles.view}, [card]);
 
     return HomeView;
   },
@@ -1492,8 +1422,8 @@ const Views = {
 
     // GuideView Content
     const title = E("h2", {style: styles.title}, ["Add to Homescreen Guide"]);
-    const stepOneImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step1Path, alt: "step1 img"}, []);
-    const stepTwoImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.step2Path, alt: "step2 img"}, []);
+    const stepOneImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.content_step1, alt: "step1 img"}, []);
+    const stepTwoImg = E("img", {style: MOB ? styles.imgs("85%") : styles.imgs("60%"), src: Assets.content_step2, alt: "step2 img"}, []);
 
 
     // GuideView
