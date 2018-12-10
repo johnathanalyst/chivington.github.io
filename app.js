@@ -104,7 +104,7 @@ const Assets = {
   content_mePath: "./imgs/me/me.jpg",
   wp_fragmentedPath: "./imgs/wp/fragmented.jpg",
   wp_mathPath: "./imgs/wp/math.jpg",
-  wp_pnwPath: "./imgs/wp/pnw.jpg",
+  wp_pnw: "./imgs/wp/pnw.jpg",
   icon_favicon: "./favicon.ico",
   icon_wifi: "./imgs/icons/network/wifi.svg",
   icon_noWifi: "./imgs/icons/network/noWifi.svg",
@@ -137,7 +137,7 @@ const Assets = {
 const Blueprint = {
   app: {
     initConnection: {
-      downlink: navigator.connection.downlink, effectiveType: navigator.connection.effectiveType
+      downlink: navigator.connection.downlink, effectiveType: navigator.connection.effectiveType, prev: "@@INIT"
     },
     initBattery: {
       percent: 0
@@ -176,10 +176,7 @@ const Blueprint = {
       menuIcon: Assets.icon_brain,
       menuColor: "background-image: linear-gradient(to bottom right, rgba(25,110,214,1), rgba(6,90,204,1));",
       networkIndicator: "SHOWN",
-      viewBackground: Assets.wp_pnwPath
-    },
-    initWallpaper: {
-      name: "fragmented", route: Assets.wp_fragmentedPath
+      viewBackground: Assets.wp_pnw
     }
   },
   chivingtoninc: {
@@ -346,14 +343,6 @@ const Reducers = {
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-     },
-     // initializes/maintains wallpaper state
-     wallpaperState: function (state = Blueprint.ui.initWallpaper, action) {
-       const choices = {
-         "CHANGE_WP": () => action.payload,
-         "DEFAULT": () => state
-       };
-       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      }
    })(state, action);
  },
@@ -451,34 +440,50 @@ const Components = {
       // Net Globals
       const state = props.store.getState();
       const { connectionState } = state.appState;
-      const { effectiveType, downlink } = connectionState;
+      const { effectiveType, downlink, prev } = connectionState;
       const offline = downlink == 0 ? true : false;
       const status = offline ? "OFFLINE" : effectiveType.toUpperCase();
-      const displayed = state.uiState.themeState.networkIndicator == "SHOWN" ? true : false;
+      const changed = (effectiveType != prev);
       const DEV = state.uiState.windowState.mode.toLowerCase();
       const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
       const E = React.createElement;
 
       // Net Styles
       const styles = {
-        net: `position: absolute; top: 3.25em; right: 2em; z-index: 1005; font-size: 0.55em; color: ${offline?`#f22`:`#2f2`};`
+        net: `
+          position: absolute; top: 5.5em; left: 0; width: 100%; margin: 0; padding: 0.6em; z-index: 10;
+          display: flex; flex-direction: column; justify-content: center; align-items: center;
+          background-color: ${offline?`#e44`:`#4e4`}; font-size: 0.75em; color: #222; font-weight: bold;
+          ${changed ? `animation: flashNetwork 3500ms ease-in-out 1 forwards;` : `display: none;`}
+        `
       };
 
       // Connection Listener
       navigator.connection.onchange = function(event) {
         const newState = event.currentTarget;
         const offline = newState.downlink == 0 ? true : false;
-        const status = offline ? "offline" : newState.effectiveType.toUpperCase();
+        const newStatus = offline ? "offline" : newState.effectiveType.toUpperCase();
 
-        if (newState.effectiveType != status) dispatch({type: "NETWORK_CHANGE", payload: {
-          effectiveType: offline ? "OFFLINE" : newState.effectiveType, downlink: newState.downlink
-        }});
+        if (newState.effectiveType != status) {
+          dispatch({type: "NETWORK_CHANGE", payload: {
+            effectiveType: offline ? "OFFLINE" : newState.effectiveType, downlink: newState.downlink, prev: effectiveType
+          }});
+          window.setTimeout(function() {
+            dispatch({type: "NETWORK_CHANGE", payload: {
+              effectiveType: effectiveType, downlink: downlink, prev: effectiveType
+            }});
+          }, 3500);
+        }
       };
 
-      // Net Style
-      const netStyles = displayed ? styles.net : `display: none;`;
+      // Display on initialization
+      if (prev == "@@INIT") window.setTimeout(function() {
+        dispatch({type: "NETWORK_CHANGE", payload: {
+          effectiveType: effectiveType, downlink: downlink, prev: effectiveType
+        }});
+      }, 3500);
 
-      const Net = E("div", {style: netStyles}, [status]);
+      const Net = E("div", {style: styles.net}, [status]);
 
       return Net;
     }
@@ -498,8 +503,19 @@ const Components = {
       const store = props.store;
       const state = store.getState();
       const fullProps = Object.assign({}, props, {display: true});
+      const { width, height, mode } = state.uiState.windowState;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
+
+      // Resize Listener
+      window.addEventListener("resize", function(event) {
+        const newWidth = event.target.innerWidth;
+        const newMode = newWidth < 950 ? "MOBILE" : (newWidth < 1200 ? "TABLET" : "DESKTOP");
+        const sameMode = mode == newMode;
+        if (!sameMode) dispatch({type: "RESIZE", payload: {
+          width: newWidth, height: event.target.innerWidth, mode: newMode
+        }});
+      });
 
       // Shell Element
       const Shell = React.createElement("div", {style: styles.shell}, [
@@ -524,23 +540,19 @@ const Components = {
         icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
         superScript: `font-size: 0.3em; margin-left: 1px;`,
-        networkIndicator: `
-          position: absolute; top: 1.5em; right: 1em; height: 1.2em; width: 1.2em; z-index: 1000;
-        `
       };
 
       // Header Globals
       const store = props.store;
       const state = store.getState();
       const { notificationState } = state.uiState;
-      const { networkState } = state.appState;
       const view = state.uiState.viewState.view.toLowerCase();
-      const { icon_favicon, icon_wifi, icon_noWifi, icon_noWifi2 } = Assets;
+      const { icon_favicon } = Assets;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
       // Header Icon & Listeners
-      const icon =E("img", {style: styles.icon, src: icon_favicon, alt: "chivingtoninc Icon"}, []);
+      const icon = E("img", {style: styles.icon, src: icon_favicon, alt: "chivingtoninc Icon"}, []);
       icon.addEventListener("click", function(event) {
         dispatch({type: "TOGGLE_MENU"})
       });
@@ -549,19 +561,15 @@ const Components = {
       const superScript = E("sup", {style: styles.superScript}, [view]);
 
       // Title Element Listeners
-      const title =E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
+      const title = E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
       title.addEventListener("click", function() {
         dispatch({type: "CLOSE_MENU"});
         dispatch({type: "HIDE_NOTIFICATION"});
         dispatch({type: "NAV_TO", payload: "HOME"});
       });
 
-      // Network Indicator
-      // const src = networkState != "UNKNOWN" ? icon_wifi : icon_noWifi;
-      // const networkIndicator = E("img", {style: styles.networkIndicator, src: src, alt: "network indicator"}, []);
-
       // Header Element
-      const Header =E("div", {style: styles.header}, [icon, title]);
+      const Header = E("div", {style: styles.header}, [icon, title]);
 
       return Header;
     },
@@ -791,22 +799,6 @@ const Components = {
     },
     // View - responsive view container w/ wallpaper & filter
     View: function(props, dispatch, children) {
-      // View Styles
-      const styles = {
-        view: `
-          position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; overflow-x: hidden; padding: 8em 0 0 0;
-        `,
-        appNotification: `
-          display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;
-        `,
-        notificationTxt: `
-          margin: 0.1em auto;
-        `,
-        notificationBtn: `
-          padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;
-        `
-      };
-
       // View Globals
       const state = props.store.getState();
       const landing = !state.uiState.userState.returning;
@@ -826,8 +818,16 @@ const Components = {
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
+      // View Styles
+      const styles = {
+        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; overflow-x: hidden; padding: 8em 0 0 0;`,
+        appNotification: `display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;`,
+        notificationTxt: `margin: 0.1em auto;`,
+        notificationBtn: `padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;`
+      };
+
       // View Animation
-      if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 50ms 1 forwards;`;
+      if (navAction && isCurrent && !sameView) styles.view += `animation: viewSlideIn 250ms 1 forwards;`;
       if (navAction && isPrevious && !sameView) styles.view += `animation: viewSlideOut 2000ms 1 forwards;`;
       if (!navAction && isPrevious && !sameView) styles.view += `display: none;`;
 
@@ -857,8 +857,8 @@ const Components = {
       }
 
       // View Wallpaper
-      const wallpaperRoute = state.uiState.themeState.viewBackground;
-      styles.view += ` background-image: linear-gradient(rgba(20,20,20,0.3), rgba(30,30,30,0.3)), url("./${wallpaperRoute}"); background-position: center; background-repeat: no-repeat; background-size: cover;`;
+      const wallpaper = state.uiState.themeState.viewBackground;
+      styles.view += ` background-image: linear-gradient(rgba(20,20,20,0.3), rgba(30,30,30,0.3)), url("./${wallpaper}"); background-position: center; background-repeat: no-repeat; background-size: cover;`;
 
       // View
       const View = React.createElement("div", {style: styles.view}, [
@@ -867,8 +867,9 @@ const Components = {
 
       // View Scroll Position
       // if (sameView) {
-      //   console.log("SAAAME");
-      //   window.scrollBy({top: 250, left: 0, behavior: "auto"});
+      //   console.log("scrollTop: ", View.scrollTop);
+      //   View.scrollTop += 250;
+      //   console.log("scrollTop: ", View.scrollTop);
       // }
 
       // View Listeners
@@ -1046,7 +1047,7 @@ const Views = {
     const landing = !state.uiState.userState.returning;
     const appMsg = state.uiState.userState.appMsg;
     const loggedIn = state.uiState.userState.user != "GUEST";
-    const { content_mePath, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnwPath } = Assets;
+    const { content_mePath, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.chivingtonincState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
@@ -1081,7 +1082,7 @@ const Views = {
         ]),
         E("div", {style: styles.bodyRight}, [
           E("div", {style: styles.rightTop}, [
-            E("img", {style: styles.greetingImg}, []),
+            E("img", {style: styles.greetingImg, src: content_greeting, alt: "greeting image"}, []),
             E("h2", {style: styles.name}, [`${firstName} ${lastName}`]),
             E("h2", {style: styles.title}, [title])
           ]),
