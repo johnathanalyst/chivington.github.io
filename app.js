@@ -857,8 +857,8 @@ const Components = {
       }
 
       // View Wallpaper
-      const wallpaperRoute = state.uiState.wallpaperState.route;
-      styles.view += ` background-image: linear-gradient(rgba(20,20,20,0.5), rgba(30,30,30,0.5)), url("./${wallpaperRoute}");`;
+      const wallpaperRoute = state.uiState.themeState.viewBackground;
+      styles.view += ` background-image: linear-gradient(rgba(20,20,20,0.3), rgba(30,30,30,0.3)), url("./${wallpaperRoute}"); background-position: center; background-repeat: no-repeat; background-size: cover;`;
 
       // View
       const View = React.createElement("div", {style: styles.view}, [
@@ -1463,8 +1463,6 @@ ReduxStore.subscribe({
     children: []
   }, document.getElementById("AppRoot")]
 });
-
-
 
 
 /* --------------------------------- Cache Assets --------------------------------- *
