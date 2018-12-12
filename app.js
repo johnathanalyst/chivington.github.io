@@ -250,6 +250,9 @@ const Blueprint = {
     initGraph: {
       rows: 0, cols: 0
     }
+  },
+  ad: {
+    initAd: {}
   }
 };
 
@@ -331,7 +334,7 @@ const Reducers = {
      // initializes/maintains view state
      viewState: function (state = Blueprint.ui.initView, action) {
        const choices = {
-         "NAV_TO": () => Object.assign({}, state, {view: action.payload, prev: state.view}),
+         "NAV_TO": () => Object.assign(action.payload, {prev: state.view}),
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
@@ -451,7 +454,7 @@ const Components = {
       // Net Styles
       const styles = {
         net: `
-          position: absolute; top: 5.5em; left: 0; width: 100%; margin: 0; padding: 0.6em; z-index: 10;
+          position: absolute; top: 5.5em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 10;
           display: flex; flex-direction: column; justify-content: center; align-items: center;
           background-color: ${offline?`#e44`:`#4e4`}; font-size: 0.75em; color: #222; font-weight: bold;
           ${changed ? `animation: flashNetwork 3500ms ease-in-out 1 forwards;` : `display: none;`}
@@ -486,19 +489,32 @@ const Components = {
       const Net = E("div", {style: styles.net}, [status]);
 
       return Net;
+    },
+    // Ad - Google AdSense Interface
+    Ad: function(props, dispatch, children) {
+      // Ad Globals
+      const state = props.store.getState();
+      const DEV = state.uiState.windowState.mode.toLowerCase();
+      const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
+      const E = React.createElement;
+
+      // Ad Styles
+      const styles = {
+        ad: `
+          position: absolute; top: 5.5em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 10;
+          display: flex; flex-direction: column; justify-content: center; align-items: center;
+        `
+      };
+
+      // Ad Element
+      const Ad = E("div", {style: styles.net}, [status]);
+
+      return Ad;
     }
   },
   UI: {
     // Shell - contains the Header, Menu, Router, and Guide modules.
     Shell: function(props, dispatch, children) {
-      // Shell Styles
-      const styles = {
-        shell: `
-          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
-          position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
-        `
-      };
-
       // Shell Globals
       const store = props.store;
       const state = store.getState();
@@ -506,6 +522,14 @@ const Components = {
       const { width, height, mode } = state.uiState.windowState;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
+
+      // Shell Styles
+      const styles = {
+        shell: `
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; overflow: hidden;
+          position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #07e;
+        `
+      };
 
       // Resize Listener
       window.addEventListener("resize", function(event) {
@@ -529,6 +553,15 @@ const Components = {
     },
     // Header - contains Menu toggle button and title/home link.
     Header: function(props, dispatch, children) {
+      // Header Globals
+      const store = props.store;
+      const state = store.getState();
+      const { notificationState, viewState } = state.uiState;
+      const view = viewState.view.toLowerCase();
+      const { icon_favicon } = Assets;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
+      const E = React.createElement;
+
       // Header Styles
       const styles = {
         header: `
@@ -542,15 +575,6 @@ const Components = {
         superScript: `font-size: 0.3em; margin-left: 1px;`,
       };
 
-      // Header Globals
-      const store = props.store;
-      const state = store.getState();
-      const { notificationState } = state.uiState;
-      const view = state.uiState.viewState.view.toLowerCase();
-      const { icon_favicon } = Assets;
-      const MOB = state.uiState.windowState.mode == "MOBILE";
-      const E = React.createElement;
-
       // Header Icon & Listeners
       const icon = E("img", {style: styles.icon, src: icon_favicon, alt: "chivingtoninc Icon"}, []);
       icon.addEventListener("click", function(event) {
@@ -563,9 +587,10 @@ const Components = {
       // Title Element Listeners
       const title = E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
       title.addEventListener("click", function() {
+        const newScroll = {x: window, y: window};
         dispatch({type: "CLOSE_MENU"});
         dispatch({type: "HIDE_NOTIFICATION"});
-        dispatch({type: "NAV_TO", payload: "HOME"});
+        dispatch({type: "NAV_TO", payload: {view: "HOME", scroll: newScroll}});
       });
 
       // Header Element
