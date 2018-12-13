@@ -1,16 +1,21 @@
-const http = require('net');
-const port = 3000;
-const host = '127.0.0.1';
+#!/usr/bin/env nodejs
+const os = require('os');
+const fs = require('fs');
+const http = require('http');
 
-const requestHandler = (req, res) => {
-  console.log("\n REQUEST: ", request);
-  res.end(`<html><body><h1>chivingtoninc.github.io</h1></body></html>`);
-}
+http.createServer(function (req, res) {
+  console.log("\n\n\n\n REQUEST ", req.host);
+  res.writeHead(200, {'Content-Type': 'text/html'});
 
-const errHandler = (err) => {
-  console.log("\n ERROR: ", err);
-  console.log(` Server is listening on: ${port}`);
-}
+  fs.readFile(req.uri, null, function(err, data) {
+    if (err) {
+      res.writeHead(404);
+      res.write("File not found.")
+    }
+    else res.write(data);
 
-const server = http.createServer(requestHandler);
-server.listen(port, errHandler);
+    res.end();
+  });
+}).listen(3000, '127.0.0.1');
+
+console.log('Server running at http://localhost:3000/');

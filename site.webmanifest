@@ -1,7 +1,7 @@
 {
     "name": "chivingtoninc",
     "short_name": "chivingtoninc",
-    "description": "My cover & resume, blog, and cool projects...",
+    "description": "Personal blog, resume, portfolio, etc. in a custom, single page web app, modeled after React and Redux.",
     "icons": [
         {
             "src": "/imgs/icons/android-chrome-192x192.png",
