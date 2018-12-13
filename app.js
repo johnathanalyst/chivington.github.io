@@ -117,27 +117,32 @@ const Assets = {
   icon_linkedin: "./imgs/icons/sm/li.svg",
   icon_phone: "./imgs/icons/sm/phone.svg",
   icon_twitter: "./imgs/icons/sm/twt.svg",
-  icon_androidChrome192Path: "./imgs/icons/android-chrome-192x192.png",
-  icon_androidChrome512Path: "./imgs/icons/android-chrome-512x512.png",
-  icon_appleTouchIconPath: "./imgs/icons/apple-touch-icon.png",
-  icon_browserconfigPath: "./imgs/icons/browserconfig.xml",
-  icon_favicon16Path: "./imgs/icons/favicon-16x16.png",
-  icon_favicon32Path: "./imgs/icons/favicon-32x32.png",
-  icon_mstile70Path: "./imgs/icons/mstile-70x70.png",
-  icon_mstile144Path: "./imgs/icons/mstile-144x144.png",
-  icon_mstile150Path: "./imgs/icons/mstile-150x150.png",
-  icon_mstile310Path: "./imgs/icons/mstile-310x310.png",
-  icon_safariPinnedTabPath: "./imgs/icons/safari-pinned-tab.png"
+  icon_androidChrome192: "./imgs/icons/android-chrome-192x192.png",
+  icon_androidChrome512: "./imgs/icons/android-chrome-512x512.png",
+  icon_appleTouchIcon: "./imgs/icons/apple-touch-icon.png",
+  icon_browserconfig: "./imgs/icons/browserconfig.xml",
+  icon_favicon16: "./imgs/icons/favicon-16x16.png",
+  icon_favicon32: "./imgs/icons/favicon-32x32.png",
+  icon_mstile70: "./imgs/icons/mstile-70x70.png",
+  icon_mstile144: "./imgs/icons/mstile-144x144.png",
+  icon_mstile150: "./imgs/icons/mstile-150x150.png",
+  icon_mstile310: "./imgs/icons/mstile-310x310.png",
+  icon_safariPinnedTab: "./imgs/icons/safari-pinned-tab.png",
+  icon_adsenseSquare: "./imgs/ads/adsense-400x400.jpg",
+  icon_adsenseWide: "./imgs/ads/adsense-wide.png"
 };
 
 /* ----------------------------------- Blueprint ----------------------------------- *
  *    This object specifies the initial app features, such as themes, wallpapers,    *
  *  guides, notifications, etc.                                                      *
  * --------------------------------------------------------------------------------- */
+
 const Blueprint = {
   app: {
     initConnection: {
-      downlink: navigator.connection.downlink, effectiveType: navigator.connection.effectiveType, prev: "@@INIT"
+      downlink: navigator.connection ? navigator.connection.downlink : 10,
+      effectiveType: navigator.connection ? navigator.connection.effectiveType : "Connecting...",
+      prev: "@@INIT"
     },
     initBattery: {
       percent: 0
@@ -254,9 +259,9 @@ const Blueprint = {
   ad: {
     initAd: {
       adTheme: "FOOTER",
-      adVisibility: "SHOW",
+      adVisibility: "VISIBLE",
       adMsg: "Welcome to chivingtoninc.com",
-      adImg: Assets.icon_brain
+      adImg: Assets.icon_adsenseSquare
     }
   }
 };
@@ -440,7 +445,7 @@ const Reducers = {
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      }
-   });
+   })(state, action);
  }
 };
 
@@ -470,33 +475,33 @@ const Components = {
       const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
       const E = React.createElement;
 
-      // Net Styles
+      // // Net Styles
       const styles = {
         net: `
           position: absolute; top: 5.5em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 10;
           display: flex; flex-direction: column; justify-content: center; align-items: center;
           background-color: ${offline?`#e44`:`#4e4`}; font-size: 0.75em; color: #222; font-weight: bold;
-          ${changed ? `animation: flashNetwork 3500ms ease-in-out 1 forwards;` : `display: none;`}
+          ${changed ? `animation: flashNetwork 2500ms ease-in-out 1 forwards;` : `display: none;`}
         `
       };
 
       // Connection Listener
-      navigator.connection.onchange = function(event) {
-        const newState = event.currentTarget;
-        const offline = newState.downlink == 0 ? true : false;
-        const newStatus = offline ? "offline" : newState.effectiveType.toUpperCase();
-
-        if (newState.effectiveType != status) {
-          dispatch({type: "NETWORK_CHANGE", payload: {
-            effectiveType: offline ? "OFFLINE" : newState.effectiveType, downlink: newState.downlink, prev: effectiveType
-          }});
-          window.setTimeout(function() {
-            dispatch({type: "NETWORK_CHANGE", payload: {
-              effectiveType: effectiveType, downlink: downlink, prev: effectiveType
-            }});
-          }, 3500);
-        }
-      };
+      // navigator.connection.onchange = function(event) {
+      //   const newState = event.currentTarget;
+      //   const offline = newState.downlink == 0 ? true : false;
+      //   const newStatus = offline ? "offline" : newState.effectiveType.toUpperCase();
+      //
+      //   if (newState.effectiveType != status) {
+      //     dispatch({type: "NETWORK_CHANGE", payload: {
+      //       effectiveType: offline ? "OFFLINE" : newState.effectiveType, downlink: newState.downlink, prev: effectiveType
+      //     }});
+      //     window.setTimeout(function() {
+      //       dispatch({type: "NETWORK_CHANGE", payload: {
+      //         effectiveType: effectiveType, downlink: downlink, prev: effectiveType
+      //       }});
+      //     }, 3500);
+      //   }
+      // };
 
       // Display on initialization
       if (prev == "@@INIT") window.setTimeout(function() {
@@ -513,7 +518,7 @@ const Components = {
     Ad: function(props, dispatch, children) {
       // Ad Globals
       const state = props.store.getState();
-      const { adTheme, adVisibility, adImg, adMsg } = state.adState;
+      const { adTheme, adVisibility, adImg, adMsg } = state.adState.ad;
       const DEV = state.uiState.windowState.mode.toLowerCase();
       const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
       const E = React.createElement;
@@ -521,21 +526,14 @@ const Components = {
       // Ad Styles
       const styles = {
         ad: `
-          position: absolute; bottom: 0em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 10;
+          position: absolute; bottom: 0; left: 50%; width: 100%; margin: 0; padding: 0; z-index: 10;
           display: flex; flex-direction: row; justify-content: center; align-items: center;
+          transform: translate(-50%, 0); background-color: #aaa; border-top: 1px solid #222; box-shadow: 0 0 1px -5px #000;
         `,
-        adImgDiv: `
-          flex-direction: column; border: 1px solid #0f0;
-        `,
-        adImg: `
-          width: 100%;
-        `,
-        adMsgDiv: `
-          flex-direction: column; flex: 1;
-        `,
-        adMsg: `
-          min-width: 70%;
-        `
+        adImgDiv: `flex-direction: column;`,
+        adImg: `height: 2em; margin: 1em 1em 0.65em; border: 1px solid #666;`,
+        adMsgDiv: `flex: 1; flex-direction: column;`,
+        adMsg: `margin: 0;`
       };
 
       // Ad Image
@@ -587,7 +585,8 @@ const Components = {
         Components.UI.Header(fullProps, dispatch, []),
         Components.UI.Menu(fullProps, dispatch, []),
         Components.UI.Router(fullProps, dispatch, []),
-        Components.App.Net(fullProps, dispatch, [])
+        Components.App.Net(fullProps, dispatch, []),
+        Components.App.Ad(fullProps, dispatch, [])
       ]);
 
       return Shell;
@@ -1175,7 +1174,7 @@ const Views = {
   },
   // Blog View - description.
   Blog: function(props, dispatch, children) {
-    // BlogView Styles
+    // Blog Styles
     const styles = {
       view: `
         display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -1186,19 +1185,18 @@ const Views = {
       `
     }
 
-    // BlogView Globals
-    const store = props.store;
-    const state = store.getState();
+    // Blog Globals
+    const state = props.store.getState();
     const viewName = state.uiState.viewState.view.toLowerCase();
     const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
-    // BlogView Content
+    // Blog Content
     const p = React.createElement("p", {style: styles.p}, [capitalized]);
 
-    // BlogView
-    const BlogView = React.createElement("div", {style: styles.view}, [p]);
+    // Blog
+    const Blog = React.createElement("div", {style: styles.view}, [p]);
 
-    return BlogView;
+    return Blog;
   },
   // Projects View - description.
   Projects: function(props, dispatch, children) {
