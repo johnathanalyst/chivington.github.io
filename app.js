@@ -128,6 +128,7 @@ const Assets = {
   icon_mstile150: "/imgs/icons/mstile-150x150.png",
   icon_mstile310: "/imgs/icons/mstile-310x310.png",
   icon_safariPinnedTab: "/imgs/icons/safari-pinned-tab.png",
+  icon_close: "/imgs/icons/btns/close.svg",
   icon_adsenseSquare: "/imgs/ads/adsense-400x400.jpg",
   icon_adsenseWide: "/imgs/ads/adsense-wide.png"
 };
@@ -206,7 +207,6 @@ const Blueprint = {
         skills: [
           ["Convolutional Neural Networks", "Recurrent Neural Networks", "Parallel Computing (CUDA)"],
           ["Data Structures / Algorithms", "ML Project Pipelining", "Embedded Systems"],
-          ["Data Structures/Algorithms", "ML Project Pipelining", "Embedded Systems"],
           ["C, Python, Java, Js", "Matlab & Octave", "Windows/Unix System Admin."]
         ],
         technologies: [],
@@ -250,6 +250,7 @@ const Blueprint = {
         `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
       ]
     },
+    initBlog: {}
   },
   math: {
     initGraph: {
@@ -366,7 +367,7 @@ const Reducers = {
      contactState: function(state = Blueprint.chivingtoninc.initContact, action) {
        return state;
      },
-     // initializes/maintains resume state
+     // initializes/maintains cover state
      coverState: function(state = Blueprint.chivingtoninc.initCover, action) {
        return state;
      },
@@ -383,6 +384,10 @@ const Reducers = {
          "DEFAULT": () => state
        };
        return choices[action.type] ? Object.assign({}, sections, choices[action.type]()) : Object.assign({}, sections, choices["DEFAULT"]());
+     },
+     // initializes/maintains blog state
+     blogState: function(state = Blueprint.chivingtoninc.initBlog, action) {
+       return state;
      }
    })(state, action);
  },
@@ -438,8 +443,8 @@ const Reducers = {
    return Redux.combineReducers({
      ad: function(state = Blueprint.ad.initAd, action) {
        const choices = {
-         "SHOW_AD": () => Object.assign({}, state, action.payload),
-         "HIDE_AD": () => Object.assign({}, state, action.payload),
+         "SHOW_AD": () => Object.assign({}, state, {adVisibility: "VISIBLE"}, action.payload),
+         "HIDE_AD": () => Object.assign({}, state, {adVisibility: "HIDDEN"}),
          "GLANCE_AD": () => Object.assign({}, state, action.payload),
          "DEFAULT": () => state
        };
@@ -519,9 +524,13 @@ const Components = {
       // Ad Globals
       const state = props.store.getState();
       const { adTheme, adVisibility, adImg, adMsg } = state.adState.ad;
+      const { icon_close } = Assets;
       const DEV = state.uiState.windowState.mode.toLowerCase();
       const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
       const E = React.createElement;
+
+      // Bypass
+      if (adVisibility == "HIDDEN") return E("h3", {style: `display: none;`}, ["Hidden Ad"]);
 
       // Ad Styles
       const styles = {
@@ -533,7 +542,9 @@ const Components = {
         adImgDiv: `flex-direction: column;`,
         adImg: `height: 2em; margin: 1em 1em 0.65em; border: 1px solid #666;`,
         adMsgDiv: `flex: 1; flex-direction: column;`,
-        adMsg: `margin: 0;`
+        adMsg: `margin: 0;`,
+        adDismissDiv: `flex-direction: column; justify-content: flex-start; align-items: right; margin: 0; padding: 0 0.65em 1.25em 0;`,
+        adDismissIcon: `flex: 1; width: 1em; margin: 0; -webkit-box-shadow: 1px 1px 2px 1px rgba(10,10,10,0.5); border-radius: 100%;`
       };
 
       // Ad Image
@@ -546,8 +557,17 @@ const Components = {
         E("p", {style: styles.adMsg}, [adMsg])
       ]);
 
+      // Dismiss Ad
+      const dismiss = E("div", {style: styles.adDismissDiv}, [
+        E("img", {style: styles.adDismissIcon, src: icon_close, alt: "dismiss ad"}, [])
+      ]);
+
+      dismiss.addEventListener("click", function() {
+        dispatch({type: "HIDE_AD"});
+      });
+
       // Ad Element
-      const Ad = E("div", {style: styles.ad}, [img, msg]);
+      const Ad = E("div", {style: styles.ad}, [img, msg, dismiss]);
 
       return Ad;
     }
