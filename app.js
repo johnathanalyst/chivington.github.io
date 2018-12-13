@@ -252,7 +252,12 @@ const Blueprint = {
     }
   },
   ad: {
-    initAd: {}
+    initAd: {
+      adTheme: "FOOTER",
+      adVisibility: "SHOW",
+      adMsg: "Welcome to chivingtoninc.com",
+      adImg: Assets.icon_brain
+    }
   }
 };
 
@@ -334,7 +339,7 @@ const Reducers = {
      // initializes/maintains view state
      viewState: function (state = Blueprint.ui.initView, action) {
        const choices = {
-         "NAV_TO": () => Object.assign(action.payload, {prev: state.view}),
+         "NAV_TO": () => Object.assign({}, {view: action.payload, prev: state.view}),
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
@@ -422,6 +427,20 @@ const Reducers = {
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      }
    })(state, action);
+ },
+ // initializes/maintains ad state
+ adState: function(state = Blueprint.ad, action) {
+   return Redux.combineReducers({
+     ad: function(state = Blueprint.ad.initAd, action) {
+       const choices = {
+         "SHOW_AD": () => Object.assign({}, state, action.payload),
+         "HIDE_AD": () => Object.assign({}, state, action.payload),
+         "GLANCE_AD": () => Object.assign({}, state, action.payload),
+         "DEFAULT": () => state
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
+     }
+   });
  }
 };
 
@@ -494,6 +513,7 @@ const Components = {
     Ad: function(props, dispatch, children) {
       // Ad Globals
       const state = props.store.getState();
+      const { adTheme, adVisibility, adImg, adMsg } = state.adState;
       const DEV = state.uiState.windowState.mode.toLowerCase();
       const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
       const E = React.createElement;
@@ -501,13 +521,35 @@ const Components = {
       // Ad Styles
       const styles = {
         ad: `
-          position: absolute; top: 5.5em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 10;
-          display: flex; flex-direction: column; justify-content: center; align-items: center;
+          position: absolute; bottom: 0em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 10;
+          display: flex; flex-direction: row; justify-content: center; align-items: center;
+        `,
+        adImgDiv: `
+          flex-direction: column; border: 1px solid #0f0;
+        `,
+        adImg: `
+          width: 100%;
+        `,
+        adMsgDiv: `
+          flex-direction: column; flex: 1;
+        `,
+        adMsg: `
+          min-width: 70%;
         `
       };
 
+      // Ad Image
+      const img = E("div", {style: styles.adImgDiv}, [
+        E("img", {style: styles.adImg, src: adImg, alt: "ad image"}, [])
+      ]);
+
+      // Ad Message
+      const msg = E("div", {style: styles.adMsgDiv}, [
+        E("p", {style: styles.adMsg}, [adMsg])
+      ]);
+
       // Ad Element
-      const Ad = E("div", {style: styles.net}, [status]);
+      const Ad = E("div", {style: styles.ad}, [img, msg]);
 
       return Ad;
     }
@@ -516,8 +558,7 @@ const Components = {
     // Shell - contains the Header, Menu, Router, and Guide modules.
     Shell: function(props, dispatch, children) {
       // Shell Globals
-      const store = props.store;
-      const state = store.getState();
+      const state = props.store.getState();
       const fullProps = Object.assign({}, props, {display: true});
       const { width, height, mode } = state.uiState.windowState;
       const MOB = state.uiState.windowState.mode == "MOBILE";
@@ -586,11 +627,11 @@ const Components = {
 
       // Title Element Listeners
       const title = E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
-      title.addEventListener("click", function() {
+      title.addEventListener("click", function(event) {
         const newScroll = {x: window, y: window};
         dispatch({type: "CLOSE_MENU"});
         dispatch({type: "HIDE_NOTIFICATION"});
-        dispatch({type: "NAV_TO", payload: {view: "HOME", scroll: newScroll}});
+        dispatch({type: "NAV_TO", payload: "HOME"});
       });
 
       // Header Element
