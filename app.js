@@ -162,7 +162,9 @@ const Blueprint = {
       height: window.innerHeight,
       mode: window.innerWidth < 950 ? "MOBILE" : (window.innerWidth < 1200 ? "TABLET" : "DESKTOP")
     },
-    initHeader: "VISIBLE",
+    initHeader: {
+      visibility: "VISIBLE", icon: Assets.icon_brain
+    },
     initMenu: "CLOSED",
     initNotification: {
       visibility: "HIDDEN", msg: "Welcome!", tile: Assets.icon_brain, alt: "brain icon", action: null
@@ -175,7 +177,15 @@ const Blueprint = {
       animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
      },
     initView: {
-      view: "HOME", prev: "@@INIT", scroll: {x: 0, y: 0}
+      view: "HOME", prev: "@@INIT", scroll: {x: 0, y: 0},
+      views: {
+        "HOME": [["login", "LOGIN", {user: "", pass: ""}]],
+        "BLOG": [["topics", "SHOW_BLOG_TOPICS", null]],
+        "PROJECTS": [["topics", "SHOW_PROJECTS_TOPICS", null]],
+        "COVER": [],
+        "RESUME": [],
+        "GUIDE": [],
+      }
     },
     initTheme: {
       headerColor: "background-image: linear-gradient(#333, #222);",
@@ -276,7 +286,7 @@ const Reducers = {
  uiState: function(state = Blueprint.ui, action) {
    return Redux.combineReducers({
      // initializes/maintains app subscription state
-     subscriptionState: function (state = Blueprint.ui.initSubscription, action) {
+     subscriptionState: function(state = Blueprint.ui.initSubscription, action) {
        const choices = {
          "SUBSCRIBED": () => true,
          "DEFAULT": () => state
@@ -284,7 +294,7 @@ const Reducers = {
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
      // initializes/maintains user state
-     userState: function (state = Blueprint.ui.initUser, action) {
+     userState: function(state = Blueprint.ui.initUser, action) {
        const choices = {
          "LANDING": () => Object.assign({}, state, {returning: true}),
          "APP_MSG": () => Object.assign({}, state, {appMsg: true}),
@@ -295,7 +305,7 @@ const Reducers = {
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
      // initializes/maintains window state
-     windowState: function (state = Blueprint.ui.initWindow, action) {
+     windowState: function(state = Blueprint.ui.initWindow, action) {
        const choices = {
          "RESIZE": () => action.payload,
          "DEFAULT": () => state
@@ -303,17 +313,17 @@ const Reducers = {
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
      // initializes/maintains header state
-     headerState: function (state = Blueprint.ui.initHeader, action) {
+     headerState: function(state = Blueprint.ui.initHeader, action) {
        const choices = {
          "TOGGLE_HEADER": () => (state == "VISIBLE") ? "HIDDEN" : "VISIBLE",
-         "SHOW_MENU": () => "VISIBLE",
-         "CLOSE_MENU": () => "HIDDEN",
+         "SHOW_SUB_MENU": () => "VISIBLE",
+         "CLOSE_SUB_MENU": () => "HIDDEN",
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
      // initializes/maintains menu state
-     menuState: function (state = Blueprint.ui.initMenu, action) {
+     menuState: function(state = Blueprint.ui.initMenu, action) {
        const choices = {
          "TOGGLE_MENU": () => (state == "OPEN") ? "CLOSING" : "OPEN",
          "OPEN_MENU": () => "OPEN",
@@ -323,7 +333,7 @@ const Reducers = {
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
      // initializes/maintains notification state
-     notificationState: function (state = Blueprint.ui.initNotification, action) {
+     notificationState: function(state = Blueprint.ui.initNotification, action) {
        const choices = {
          "SHOW_NOTIFICATION": () => Object.assign({visibility: "VISIBLE"}, action.payload),
          "HIDE_NOTIFICATION": () => Blueprint.ui.initNotification,
@@ -333,7 +343,7 @@ const Reducers = {
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
      // initializes/maintains guide state
-     guideState: function (state = Blueprint.ui.initGuide, action) {
+     guideState: function(state = Blueprint.ui.initGuide, action) {
        const choices = {
          "SHOW_GUIDE": () => Object.assign({visibility: "VISIBLE"}, action.payload),
          "HIDE_GUIDE": () => Blueprint.initGuide,
@@ -343,9 +353,9 @@ const Reducers = {
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      },
      // initializes/maintains view state
-     viewState: function (state = Blueprint.ui.initView, action) {
+     viewState: function(state = Blueprint.ui.initView, action) {
        const choices = {
-         "NAV_TO": () => Object.assign({}, {view: action.payload, prev: state.view}),
+         "NAV_TO": () => Object.assign({}, state, {view: action.payload, prev: state.view}),
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
@@ -513,7 +523,7 @@ const Components = {
         dispatch({type: "NETWORK_CHANGE", payload: {
           effectiveType: effectiveType, downlink: downlink, prev: effectiveType
         }});
-      }, 3500);
+      }, 2000);
 
       const Net = E("div", {style: styles.net}, [status]);
 
@@ -616,9 +626,11 @@ const Components = {
       // Header Globals
       const store = props.store;
       const state = store.getState();
-      const { notificationState, viewState } = state.uiState;
-      const view = viewState.view.toLowerCase();
-      const { icon_favicon } = Assets;
+      const { headerState, viewState, } = state.uiState;
+      const { view, views } = viewState;
+      const viewName = view.toLowerCase();
+      const submenu = views[view];
+      const { icon, visibility } = headerState;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
 
@@ -633,16 +645,18 @@ const Components = {
         icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
         superScript: `font-size: 0.3em; margin-left: 1px;`,
+        subMenu: `flex-direction: row; justify-content: flex-start; align-items: center; margin: ${MOB?"0 0.5em":"0 2em"}; padding: 0.5em 0; border-bottom: 1px solid #aaa;`,
+        smBtn: `font-size: 1em; cursor: pointer; color: #fff; margin: 0 0.5em;`
       };
 
       // Header Icon & Listeners
-      const icon = E("img", {style: styles.icon, src: icon_favicon, alt: "chivingtoninc Icon"}, []);
-      icon.addEventListener("click", function(event) {
+      const headerIcon = E("img", {style: styles.icon, src: icon, alt: "chivingtoninc Icon"}, []);
+      headerIcon.addEventListener("click", function(event) {
         dispatch({type: "TOGGLE_MENU"})
       });
 
       // Superscript for current view
-      const superScript = E("sup", {style: styles.superScript}, [view]);
+      const superScript = E("sup", {style: styles.superScript}, [viewName]);
 
       // Title Element Listeners
       const title = E("h1", {style: styles.title}, ["chivingtoninc", superScript]);
@@ -653,8 +667,17 @@ const Components = {
         dispatch({type: "NAV_TO", payload: "HOME"});
       });
 
+      // SubMenu for each view
+      const subMenu = E("div", {style: styles.subMenu}, submenu.map(btn => {
+        const smBtn = E("h3", {style: styles.smBtn}, [btn[0]]);
+        if (!!btn[1]) smBtn.addEventListener("click", function() {
+          dispatch({type: btn[1], payload: btn[2]});
+        });
+        return smBtn;
+      }));
+
       // Header Element
-      const Header = E("div", {style: styles.header}, [icon, title]);
+      const Header = E("div", {style: styles.header}, [headerIcon, title, subMenu]);
 
       return Header;
     },
@@ -1194,27 +1217,27 @@ const Views = {
   },
   // Blog View - description.
   Blog: function(props, dispatch, children) {
-    // Blog Styles
-    const styles = {
-      view: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        height: 100%;
-      `,
-      p: `
-        color: #fff; cursor: pointer;
-      `
-    }
-
     // Blog Globals
     const state = props.store.getState();
     const viewName = state.uiState.viewState.view.toLowerCase();
     const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
+    const DEV = state.uiState.windowState.mode.toLowerCase();
+    const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
+    const E = React.createElement;
 
-    // Blog Content
-    const p = React.createElement("p", {style: styles.p}, [capitalized]);
+    // Blog Styles
+    const styles = {
+      view: `display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;`,
+    }
+
+    // Thumbnail
+    // const thumb = E("", {}, []);
+    // thumb.addEventListener("click", dispatch({type: "SHOW_POST", payload: {
+    //   title: "Test Post", body: "This is a test blog post...", tags: ["#testPost"]
+    // }}));
 
     // Blog
-    const Blog = React.createElement("div", {style: styles.view}, [p]);
+    const Blog = E("div", {style: styles.view}, []);
 
     return Blog;
   },
