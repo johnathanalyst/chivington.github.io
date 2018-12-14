@@ -100,10 +100,11 @@ const Assets = {
   content_greeting: "/imgs/content/hello.png",
   content_step1: "/imgs/content/step1.jpg",
   content_step2: "/imgs/content/step2.jpg",
-  content_MeAndWinPath: "/imgs/me/me-n-win.jpg",
-  content_mePath: "/imgs/me/me.jpg",
-  wp_fragmentedPath: "/imgs/wp/fragmented.jpg",
-  wp_mathPath: "/imgs/wp/math.jpg",
+  content_meAndWin: "/imgs/me/me-n-win.jpg",
+  content_meAndWinBed: "/imgs/me/me-n-win-bed.jpg",
+  content_me: "/imgs/me/me.jpg",
+  wp_fragmented: "/imgs/wp/fragmented.jpg",
+  wp_math: "/imgs/wp/math.jpg",
   wp_pnw: "/imgs/wp/pnw.jpg",
   icon_favicon: "/favicon.ico",
   icon_wifi: "/imgs/icons/network/wifi.svg",
@@ -177,7 +178,7 @@ const Blueprint = {
       animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
      },
     initView: {
-      view: "HOME", prev: "@@INIT", scroll: {x: 0, y: 0},
+      view: "BLOG", prev: "@@INIT", scroll: {x: 0, y: 0},
       views: {
         "HOME": [["login", "LOGIN", {user: "", pass: ""}]],
         "BLOG": [["topics", "SHOW_BLOG_TOPICS", null]],
@@ -260,7 +261,24 @@ const Blueprint = {
         `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
       ]
     },
-    initBlog: {}
+    initBlog: {
+      viewingPost: 0,
+      visibility: "VISIBLE",
+      list: [{
+        title: "Sample Post Title",
+        summary: "Sample Post Summary",
+        img: Assets.icon_brain,
+        thumb: Assets.icon_brain,
+        body: `
+          Sample body... Sample body... Sample body... Sample body... Sample body...
+
+          Sample body... Sample body... Sample body... Sample body... Sample body...
+
+          Sample body... Sample body... Sample body...
+        `,
+        tags: ["#missing"]
+      }]
+    }
   },
   math: {
     initGraph: {
@@ -270,13 +288,15 @@ const Blueprint = {
   ad: {
     initAd: {
       adTheme: "FOOTER",
-      adVisibility: "VISIBLE",
+      adVisibility: "HIDDEN",
       adMsg: "Welcome to chivingtoninc.com",
       adImg: Assets.icon_adsenseSquare
     }
   }
 };
 
+for (let i = 0; i < 20; i++)
+  Blueprint.chivingtoninc.initBlog.list.push(Blueprint.chivingtoninc.initBlog.list[0]);
 
 /* ----------------------------------- Reducers ----------------------------------- *
  *   Functions that initialize & reduce state into store based on several choices.  *
@@ -397,7 +417,19 @@ const Reducers = {
      },
      // initializes/maintains blog state
      blogState: function(state = Blueprint.chivingtoninc.initBlog, action) {
-       return state;
+       const choices = {
+         "DISPLAY_POST": () => Object.assign({}, state, {displayingPost: action.payload}),
+         "SHOW_POST": () => Object.assign({}, state, {viewingPost: action.payload}),
+         "HIDE_POST": () => Object.assign({}, state, {visibility: "HIDDEN"}),
+         "ADD_POST": () => Object.assign({}, state, {list: [
+           ...state.list.slice(0, action.payload.position), action.payload.post, ...state.list.slice(action.payload.position)
+         ]}),
+         "DELETE_POST": () => Object.assign({}, state, {list: [
+           ...state.list.slice(0, action.payload.position), ...state.list.slice(action.payload.position+1)
+         ]}),
+         "DEFAULT": () => state.list[0] ? state : Blueprint.chivingtoninc.initBlog
+       };
+       return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
      }
    })(state, action);
  },
@@ -855,7 +887,7 @@ const Components = {
       const viewName = state.uiState.viewState.view.toLowerCase();
       const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
       const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook } = state.chivingtonincState.contactState;
-      const { icon_download, content_MeAndWinPath, icon_phone, icon_email, icon_linkedin, icon_github, icon_twitter, icon_facebook, wp_mathPath } = Assets;
+      const { icon_download, content_meAndWin, icon_phone, icon_email, icon_linkedin, icon_github, icon_twitter, icon_facebook, wp_math } = Assets;
       const doc = Assets[`${viewName}DocxPath`];
       const pdf = Assets[`${viewName}PdfPath`];
       const alt = `Download ${capitalized}`;
@@ -864,7 +896,7 @@ const Components = {
 
       // Responsive Styles
       const rowStyle = MOB ? styles.right.rowMobile : styles.right.row;
-      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common(wp_mathPath);
+      const headerStyle = (MOB ? styles.headerMobile : styles.header) + styles.common(wp_math);
       // const
 
       // Download Link
@@ -886,7 +918,7 @@ const Components = {
       // DocHeader Element
       const DocHeader = E("div", {style: headerStyle}, [
         E("div", {style: MOB ? styles.left.mobile : styles.left.window}, [
-          E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: content_MeAndWinPath, alt: "Winston and I"}, []),
+          E("img", {style: MOB ? styles.left.imgMobile : styles.left.img, src: content_meAndWin, alt: "Winston and I"}, []),
           E("h2", {style: styles.left.name}, [`${firstName} ${lastName}`]),
           E("p", {style: styles.left.title}, [title])
         ]),
@@ -928,7 +960,7 @@ const Components = {
 
       // View Styles
       const styles = {
-        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; overflow-x: hidden; padding: 8em 0 0 0;`,
+        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; overflow-x: hidden; padding: 8.25em 0 0 0;`,
         appNotification: `display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;`,
         notificationTxt: `margin: 0.1em auto;`,
         notificationBtn: `padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;`
@@ -1155,7 +1187,7 @@ const Views = {
     const landing = !state.uiState.userState.returning;
     const appMsg = state.uiState.userState.appMsg;
     const loggedIn = state.uiState.userState.user != "GUEST";
-    const { content_mePath, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
+    const { content_meAndWinBed, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.chivingtonincState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
@@ -1164,7 +1196,7 @@ const Views = {
     // Home View Styles
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%;`,
-      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: ${MB ? `1em` : `0 3em`};`,
+      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: ${MB ? `1em` : `0 3em`}; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
       cardBody: `padding: 0.5em; background-color: #fff; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; ${MB?``:`height: 25em;`}`,
       leftImg: `border: 1px solid #222; ${MB ? `width: 100%;` : `height: 100%;`}`,
@@ -1173,7 +1205,7 @@ const Views = {
       greetingImg: `height: 4em; margin: 0.5em 0;`,
       name: `margin: 0; font-size: 1.5em;`,
       title: `margin: 0; font-size: 0.9em; font-weight: 300;`,
-      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 0 1em; background-color: #aaa;`,
+      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em; background-color: #aaa;`,
       row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.5em 0`};`,
       label: `font-size: 1em; margin: 0;`,
       text: `font-size: 0.8em; margin: 0;`,
@@ -1186,7 +1218,7 @@ const Views = {
     const card = E("div", {style: styles.card}, [
       E("div", {style: styles.cardBody}, [
         E("div", {style: styles.bodyLeft}, [
-          E("img", {style: styles.leftImg, src: content_mePath, alt: "my beautiful face"}, [])
+          E("img", {style: styles.leftImg, src: content_meAndWinBed, alt: "my beautiful face"}, [])
         ]),
         E("div", {style: styles.bodyRight}, [
           E("div", {style: styles.rightTop}, [
@@ -1219,25 +1251,59 @@ const Views = {
   Blog: function(props, dispatch, children) {
     // Blog Globals
     const state = props.store.getState();
-    const viewName = state.uiState.viewState.view.toLowerCase();
-    const capitalized = viewName.charAt(0).toUpperCase() + viewName.slice(1);
+    const { blogState } = state.chivingtonincState;
+    const { viewingPost, visibility, list } = blogState;
+    const { img, thumb, title, summary, body } = list[viewingPost];
+    const [ imgAlt, thumbAlt ] = [ `${title} - Image`, `${title} - Thumbnail` ];
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
     const E = React.createElement;
 
     // Blog Styles
     const styles = {
-      view: `display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;`,
-    }
-
-    // Thumbnail
-    // const thumb = E("", {}, []);
-    // thumb.addEventListener("click", dispatch({type: "SHOW_POST", payload: {
-    //   title: "Test Post", body: "This is a test blog post...", tags: ["#testPost"]
-    // }}));
+      blog: `display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center; ${MB?``:`height: 100%;`};`,
+      post: `display: flex; flex-direction: column; justify-content: flex-start; height: 100%; width: ${MB?`100%`:`75%`}; overflow-x: hidden; overflow-y: scroll; background-image: linear-gradient(to right, #333, #444);`,
+      postImg: `background-color: #224; display: flex; max-height: 20em; padding: 1em; border-bottom: 1px solid #333;`,
+      postCaption: `
+        display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center;
+        position: absolute; padding: 1em; margin: 2em 0;
+        background-image: linear-gradient(to right, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
+        border: 1px solid #333;
+      `,
+      postTitle: `display: flex; color: 555; margin: 0 ${MB?`0`:`1em`} 0 0; border-bottom: 1px solid #555;`,
+      postSummary: `display: flex; margin: 0;`,
+      postBody: `
+        display: flex; flex-direction: column; align-items: center; padding: 0 1em; text-align: center;
+        min-height: 100%; background-image: linear-gradient(to right, #eee,#fff);
+      `,
+      postBodyLine: `display: flex; padding: 1em; background-image: linear-gradient(to left, #eee, #fff); -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
+      list: `display: flex; flex-direction: column; justify-content: flex-start; height: 100%; width: ${MB?`100%`:`25%`}; overflow-x: hidden; overflow-y: scroll; background-image: linear-gradient(to right, #333, #444);`,
+      listRow: `display: flex; padding: 1em; display: flex; flex-direction: row; border: 3px solid #fff;`,
+      listThumb: `display: flex; max-height: 3em; border: 1px solid #0f0;`,
+      listTitle: `display: flex; border: 1px solid #f0a;`,
+      listSummary: `display: flex; border: 1px solid #aaf;`
+    };
 
     // Blog
-    const Blog = E("div", {style: styles.view}, []);
+    const Blog = E("div", {style: styles.blog}, [
+      E("div", {style: styles.post}, [
+        E("img", {style: styles.postImg, src: img, alt: imgAlt}, []),
+        E("div", {style: styles.postCaption}, [
+          E("h3", {style: styles.postTitle}, [title]),
+          E("p", {style: styles.postSummary}, [summary]),
+        ]),
+        E("div", {style: styles.postBody}, [E("p", {style: styles.postBodyLine}, [body])])
+      ]),
+      E("div", {style: styles.list}, list.map(post => {
+        return E("div", {style: styles.listRow}, [
+          E("img", {style: styles.listThumb, src: post.img, alt: `${post.title} Thumbnail`}, []),
+          E("div", {style: styles.listCaption} ,[
+            E("h4", {style: styles.listTitle}, [post.title]),
+            E("p", {style: styles.listSummary}, [post.summary])
+          ])
+        ])
+      }) )
+    ]);
 
     return Blog;
   },
@@ -1276,11 +1342,10 @@ const Views = {
         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
       `,
       coverBody: `
-        padding: 1em 3em; background-color: #fff; color: #222;
+        padding: 1em 3em; background-image: linear-gradient(to right, #eee,#fff); color: #222;
       `,
       coverLine: `
-        margin: 0 auto 2em; padding: 1em; text-align: center;
-        background-color: rgba(100,100,200,0.15);
+        margin: 0 auto 2em; padding: 1em; text-align: center; background-image: linear-gradient(to left, rgba(225,225,225,0.8), rgba(225,225,225,0.9)); -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
       `
     };
 
@@ -1305,12 +1370,15 @@ const Views = {
         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
       `,
       body: `
-        padding: 1em; background-color: #fff; color: #000;
+        padding: 1em;  background-image: linear-gradient(to right, #eee, #fff); color: #000;
       `,
       section: {
+        win: `background-image: linear-gradient(to left, rgba(225,225,225,0.8), rgba(225,225,225,0.9)); -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
         title: `
           margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-          padding: 0 0.25em; font-size: 1.15em; border-bottom: 1px solid #000; cursor: pointer;
+          font-weight: 200;
+          padding: 0.25em 1em; font-size: 1.15em; border-bottom: 1px solid #000; cursor: pointer; background-color: #336; color: #fff;
+
         `,
         hidden: `
           display: none;
@@ -1319,11 +1387,9 @@ const Views = {
       skills: {
         window: `
           display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-          background-color: rgba(100,100,200,0.15);
         `,
         mobile: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          background-color: rgba(100,100,200,0.15);
         `,
         column: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
@@ -1336,23 +1402,22 @@ const Views = {
       history: {
         window: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          padding: 0.5em; background-color: rgba(100,100,200,0.15);
+
         `,
         mobile: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          background-color: rgba(100,100,200,0.15);
         `,
         position: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
           margin: 0.5em;
         `,
         infoRow: `
-          display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+          display: flex; flex-direction: row; justify-content: center; align-items: center;
           margin: 0; padding: 0 0.5em; border-bottom: 1px solid #222;
         `,
         infoField: `
           display: flex; flex-direction: column; justify-content: center; align-items: center;
-          margin: 0; font-size: 0.95em;
+          margin: 0; font-size: 0.95em; width: 33.3%
         `,
         descriptionRow: `
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
@@ -1367,11 +1432,9 @@ const Views = {
       edu: {
         window: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          background-color: rgba(100,100,200,0.15);
         `,
         mobile: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          background-color: rgba(100,100,200,0.15);
         `,
         row: `
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
@@ -1385,11 +1448,9 @@ const Views = {
       certs: {
         window: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; flex-wrap: wrap;
-          background-color: rgba(100,100,200,0.15);
         `,
         mobile: `
           display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          background-color: rgba(100,100,200,0.15);
         `,
         row: `
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
@@ -1491,11 +1552,11 @@ const Views = {
     // Resume
     const resume = E("div", {style: styles.resume}, [Components.UI.DocHeader(props, dispatch, []),
       E("div", {style: styles.body}, [
-        E("div", {style: styles.skillsSection}, [skillsButton, skillsWindow]),
-        E("div", {style: styles.skillsSection}, [historyButton, historyWindow]),
-        E("div", {style: styles.skillsSection}, [eduButton, eduWindow]),
-        E("div", {style: styles.skillsSection}, [certsButton, certsWindow]),
-        E("div", {style: styles.skillsSection}, [volunteerButton, volunteerWindow])
+        E("div", {style: styles.section.win}, [skillsButton, skillsWindow]),
+        E("div", {style: styles.section.win}, [historyButton, historyWindow]),
+        E("div", {style: styles.section.win}, [eduButton, eduWindow]),
+        E("div", {style: styles.section.win}, [certsButton, certsWindow]),
+        E("div", {style: styles.section.win}, [volunteerButton, volunteerWindow])
       ])
     ]);
 
