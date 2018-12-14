@@ -89,8 +89,8 @@ const Redux = {
  * --------------------------------------------------------------------------------- */
 const Assets = {
   resource_index: "/index.html",
-  resource_appPath: "/app.js",
-  resource_swPath: "/sw.js",
+  resource_app: "/app.js",
+  resource_sw: "/sw.js",
   resource_webmanifest: "/site.webmanifest",
   resource_coverDocx: "/includes/docs/j.Chivington.Cover.docx",
   resource_coverPdf: "/includes/docs/j.Chivington.Cover.pdf",
@@ -178,11 +178,11 @@ const Blueprint = {
       animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
      },
     initView: {
-      view: "HOME", prev: "@@INIT", scroll: {x: 0, y: 0},
+      view: "BLOG", prev: "@@INIT", scroll: {x: 0, y: 0},
       views: {
-        "HOME": [["login", "LOGIN", {user: "", pass: ""}]],
-        "BLOG": [["topics", "SHOW_BLOG_TOPICS", null]],
-        "PROJECTS": [["topics", "SHOW_PROJECTS_TOPICS", null]],
+        "HOME": [],
+        "BLOG": [],
+        "PROJECTS": [],
         "COVER": [],
         "RESUME": [],
         "GUIDE": [],
@@ -269,13 +269,17 @@ const Blueprint = {
         summary: "Sample Post Summary",
         img: Assets.icon_brain,
         thumb: Assets.icon_brain,
-        body: `
-          Sample body... Sample body... Sample body... Sample body... Sample body...
-
-          Sample body... Sample body... Sample body... Sample body... Sample body...
-
-          Sample body... Sample body... Sample body...
-        `,
+        body: [
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`,
+          `Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body... Sample body...`
+        ],
         tags: ["#missing"]
       }]
     }
@@ -288,8 +292,8 @@ const Blueprint = {
   ad: {
     initAd: {
       adTheme: "FOOTER",
-      adVisibility: "VISIBLE",
-      adMsg: "Welcome to chivingtoninc.github.io",
+      adVisibility: "HIDDEN",
+      adMsg: "Welcome to chivingtoninc.com",
       adImg: Assets.icon_adsenseSquare
     }
   }
@@ -960,7 +964,7 @@ const Components = {
 
       // View Styles
       const styles = {
-        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; overflow-x: hidden; padding: 8.25em 0 0 0;`,
+        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: ${currentView=="BLOG"?`hidden`:`scroll`}; overflow-x: hidden; padding: 8.25em 0 0 0;`,
         appNotification: `display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;`,
         notificationTxt: `margin: 0.1em auto;`,
         notificationBtn: `padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;`
@@ -1261,27 +1265,56 @@ const Views = {
 
     // Blog Styles
     const styles = {
-      blog: `display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center; ${MB?``:`height: 100%;`};`,
-      post: `display: flex; flex-direction: column; justify-content: flex-start; height: 100%; width: ${MB?`100%`:`75%`}; overflow-x: hidden; overflow-y: scroll; background-image: linear-gradient(to right, #333, #444);`,
-      postImg: `background-color: #224; display: flex; max-height: 20em; padding: 1em; border-bottom: 1px solid #333;`,
-      postCaption: `
-        display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center;
-        position: absolute; padding: 1em; margin: 2em 0;
-        background-image: linear-gradient(to right, rgba(255,255,255,0.7), rgba(255,255,255,0.6));
-        border: 1px solid #333;
+      blog: `
+        display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center; ${MB?``:`height: 100%;`};
       `,
-      postTitle: `display: flex; color: 555; margin: 0 ${MB?`0`:`1em`} 0 0; border-bottom: 1px solid #555;`,
-      postSummary: `display: flex; margin: 0;`,
+      post: `
+        display: flex; flex-direction: column; justify-content: flex-start; height: 100%; width: ${MB?`100%`:`70%`};
+        overflow-x: hidden; overflow-y: scroll; background-image: linear-gradient(to right, #eee, #fff);
+      `,
+      postImg: `
+        background-color: #224; display: flex; max-height: 20em; padding: 1em; border-bottom: 1px solid #333;
+      `,
+      postCaption: `
+        display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center; position: absolute;
+        padding: 1em; margin: 2em 0; background-image: linear-gradient(to right, rgba(255,255,255,0.7), rgba(255,255,255,0.6)); border: 1px solid #333;
+      `,
+      postTitle: `
+        display: flex; color: 555; margin: 0 ${MB?`0`:`1em`} 0 0; border-bottom: 1px solid #555;
+      `,
+      postSummary: `
+        display: flex; margin: 0;
+      `,
       postBody: `
         display: flex; flex-direction: column; align-items: center; padding: 0 1em; text-align: center;
-        min-height: 100%; background-image: linear-gradient(to right, #eee,#fff);
+        min-height: 100%; background-image: linear-gradient(to right, rgba(225,225,225,0.8), rgba(225,225,225,0.9));
       `,
-      postBodyLine: `display: flex; padding: 1em; background-image: linear-gradient(to left, #eee, #fff); -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
-      list: `display: flex; flex-direction: column; justify-content: flex-start; height: 100%; width: ${MB?`100%`:`25%`}; overflow-x: hidden; overflow-y: scroll; background-image: linear-gradient(to right, #333, #444);`,
-      listRow: `display: flex; padding: 1em; display: flex; flex-direction: row; border: 3px solid #fff;`,
-      listThumb: `display: flex; max-height: 3em; border: 1px solid #0f0;`,
-      listTitle: `display: flex; border: 1px solid #f0a;`,
-      listSummary: `display: flex; border: 1px solid #aaf;`
+      postBodyLine: `
+        display: flex; padding: 1em; background-image: linear-gradient(to left, rgba(225,225,225,0.8), rgba(225,225,225,0.9)); -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
+      `,
+      list: `
+        display: flex; flex-direction: column; justify-content: flex-start; height: 100%; width: ${MB?`100%`:`30%`};
+        overflow-x: hidden; overflow-y: scroll; background-image: linear-gradient(to right, rgba(225,225,225,0.8), rgba(225,225,225,0.9));
+        border: 1px solid #f00;
+      `,
+      listRow: `
+        display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
+        border: 1px solid #00f;
+        background-image: linear-gradient(to right, rgba(225,225,225,0.8), rgba(225,225,225,0.9))
+      `,
+      listThumb: `
+        display: flex; max-height: 3em; border: 1px solid #0f0;
+      `,
+      listCaption: ` padding: 1em;
+        display: flex; flex-direction: column; overflow: hidden; white-space: nowrap;
+        -webkit-box-shadow: inset 1px 1px 2px 0 rgba(10,10,10,0.4); border: 1px solid #f00;
+      `,
+      listTitle: `
+        margin: 0; border: 1px solid #faf;
+      `,
+      listSummary: `
+        margin: 0; border: 1px solid #aaf;
+      `
     };
 
     // Blog
@@ -1292,7 +1325,7 @@ const Views = {
           E("h3", {style: styles.postTitle}, [title]),
           E("p", {style: styles.postSummary}, [summary]),
         ]),
-        E("div", {style: styles.postBody}, [E("p", {style: styles.postBodyLine}, [body])])
+        E("div", {style: styles.postBody}, body.map(line => E("p", {style: styles.postBodyLine}, [line])) )
       ]),
       E("div", {style: styles.list}, list.map(post => {
         return E("div", {style: styles.listRow}, [
