@@ -299,7 +299,7 @@ const Blueprint = {
   }
 };
 
-for (let i = 0; i < 20; i++)
+for (let i = 0; i < 30; i++)
   Blueprint.chivingtoninc.initBlog.list.push(Blueprint.chivingtoninc.initBlog.list[0]);
 
 /* ----------------------------------- Reducers ----------------------------------- *
@@ -605,7 +605,7 @@ const Components = {
 
       // Dismiss Ad
       const dismiss = E("div", {style: styles.adDismissDiv}, [
-        E("img", {style: styles.adDismissIcon, src: icon_close, alt: "dismiss ad"}, [])
+        E("img", {style: styles.adDismissIcon, src: icon_close, alt: "dismiss ad", xmlns:"http://www.w3.org/2000/svg"}, [])
       ]);
 
       dismiss.addEventListener("click", function() {
@@ -678,7 +678,7 @@ const Components = {
           height: 4em; padding: 0.1em 0 0 1em; border-bottom: 1px solid #fff;
           background-image: linear-gradient(#333, #222); -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
         `,
-        icon: `height: 2.25em; width: 2.25em; cursor: pointer;`,
+        icon: `height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
         superScript: `font-size: 0.3em; margin-left: 1px;`,
         subMenu: `flex-direction: row; justify-content: flex-start; align-items: center; margin: ${MOB?"0 0.5em":"0 2em"}; padding: 0.5em 0; border-bottom: 1px solid #aaa;`,
@@ -686,7 +686,7 @@ const Components = {
       };
 
       // Header Icon & Listeners
-      const headerIcon = E("img", {style: styles.icon, src: icon, alt: "chivingtoninc Icon"}, []);
+      const headerIcon = E("img", {style: styles.icon, src: icon, alt: "chivingtoninc Icon", type:"image/svg+xml"}, []);
       headerIcon.addEventListener("click", function(event) {
         dispatch({type: "TOGGLE_MENU"})
       });
