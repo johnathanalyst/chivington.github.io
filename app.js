@@ -178,7 +178,7 @@ const Blueprint = {
       animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
      },
     initView: {
-      view: "BLOG", prev: "@@INIT", scroll: {x: 0, y: 0},
+      view: "HOME", prev: "@@INIT", scroll: {x: 0, y: 0},
       views: {
         "HOME": [["login", "LOGIN", {user: "", pass: ""}]],
         "BLOG": [["topics", "SHOW_BLOG_TOPICS", null]],
@@ -288,8 +288,8 @@ const Blueprint = {
   ad: {
     initAd: {
       adTheme: "FOOTER",
-      adVisibility: "HIDDEN",
-      adMsg: "Welcome to chivingtoninc.com",
+      adVisibility: "VISIBLE",
+      adMsg: "Welcome to chivingtoninc.github.io",
       adImg: Assets.icon_adsenseSquare
     }
   }
