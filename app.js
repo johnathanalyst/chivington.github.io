@@ -582,8 +582,8 @@ const Components = {
       const styles = {
         ad: `
           position: absolute; bottom: 0; left: 50%; width: 100%; margin: 0; padding: 0; z-index: 10;
-          display: flex; flex-direction: row; justify-content: center; align-items: center;
-          transform: translate(-50%, 0); background-color: #aaa; border-top: 1px solid #222; box-shadow: 0 0 1px -5px #000;
+          display: flex; flex-direction: row; justify-content: center; align-items: center; -webkit-box-shadow: 1px 1px 2px 1px rgba(10,10,10,0.5);
+          transform: translate(-50%, 0); background-color: #aaa; border-top: 1px solid #222;
         `,
         adImgDiv: `flex-direction: column;`,
         adImg: `height: 2em; margin: 1em 1em 0.65em; border: 1px solid #666;`,
@@ -945,26 +945,25 @@ const Components = {
     View: function(props, dispatch, children) {
       // View Globals
       const state = props.store.getState();
-      const landing = !state.uiState.userState.returning;
-      const appMsg = state.uiState.userState.appMsg;
-      const loggedIn = state.uiState.userState.user != "GUEST";
-      const notificationState = state.uiState.notificationState;
-      const menuState = state.uiState.menuState;
-      const actionHistory = state.appState.actionHistory;
+      const { appState, uiState, adState } = state;
+      const { userState, notificationState, menuState, viewState } = uiState;
+      const { user, returning, appMsg } = userState;
+      const [ landing, loggedIn ] = [ (!returning), (user!="GUEST") ];
+      const { actionHistory } = appState;
       const lastAction = actionHistory[actionHistory.length - 1];
       const navAction = lastAction == "NAV_TO";
-      const viewState = state.uiState.viewState;
       const currentView = viewState.view;
       const previousView = viewState.prev;
       const isCurrent = props.viewName == currentView;
       const isPrevious = props.viewName == previousView;
       const sameView = currentView == previousView;
       const MOB = state.uiState.windowState.mode == "MOBILE";
+      const AD = adState.ad.adVisibility == "VISIBLE";
       const E = React.createElement;
 
       // View Styles
       const styles = {
-        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: ${currentView=="BLOG"?`hidden`:`scroll`}; overflow-x: hidden; padding: 8.25em 0 0 0;`,
+        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: ${currentView=="BLOG"?`hidden`:`scroll`}; overflow-x: hidden; padding: 8.25em 0 ${AD?`4em`:`0`} 0;`,
         appNotification: `display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;`,
         notificationTxt: `margin: 0.1em auto;`,
         notificationBtn: `padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;`
