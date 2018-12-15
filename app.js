@@ -1190,7 +1190,7 @@ const Views = {
     const landing = !state.uiState.userState.returning;
     const appMsg = state.uiState.userState.appMsg;
     const loggedIn = state.uiState.userState.user != "GUEST";
-    const { content_meAndWinBed, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
+    const { content_me, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.chivingtonincState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
@@ -1221,7 +1221,7 @@ const Views = {
     const card = E("div", {style: styles.card}, [
       E("div", {style: styles.cardBody}, [
         E("div", {style: styles.bodyLeft}, [
-          E("img", {style: styles.leftImg, src: content_meAndWinBed, alt: "my beautiful face"}, [])
+          E("img", {style: styles.leftImg, src: content_me, alt: "my beautiful face"}, [])
         ]),
         E("div", {style: styles.bodyRight}, [
           E("div", {style: styles.rightTop}, [
@@ -1410,7 +1410,6 @@ const Views = {
           margin: 1em 0 0; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
           font-weight: 200;
           padding: 0.25em 1em; font-size: 1.15em; border-bottom: 1px solid #000; cursor: pointer; background-color: #336; color: #fff;
-
         `,
         hidden: `
           display: none;
@@ -1521,10 +1520,9 @@ const Views = {
     };
 
     // ResumeView Globals
-    const store = props.store;
-    const state = store.getState();
-    const resumeState = state.chivingtonincState.resumeState;
-    const { visible, sections } = state.chivingtonincState.resumeState;
+    const state = props.store.getState();
+    const { resumeState } = state.chivingtonincState;
+    const { visible, sections } = resumeState;
     const { skills, history, education, certifications, volunteering } = sections;
     const MOB = state.uiState.windowState.mode == "MOBILE";
     const E = React.createElement;
