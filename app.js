@@ -118,17 +118,17 @@ const Assets = {
   icon_linkedin: "/imgs/icons/sm/li.svg",
   icon_phone: "/imgs/icons/sm/phone.svg",
   icon_twitter: "/imgs/icons/sm/twt.svg",
-  icon_androidChrome192: "/imgs/icons/android-chrome-192x192.png",
-  icon_androidChrome512: "/imgs/icons/android-chrome-512x512.png",
-  icon_appleTouchIcon: "/imgs/icons/apple-touch-icon.png",
-  icon_browserconfig: "/imgs/icons/browserconfig.xml",
-  icon_favicon16: "/imgs/icons/favicon-16x16.png",
-  icon_favicon32: "/imgs/icons/favicon-32x32.png",
-  icon_mstile70: "/imgs/icons/mstile-70x70.png",
-  icon_mstile144: "/imgs/icons/mstile-144x144.png",
-  icon_mstile150: "/imgs/icons/mstile-150x150.png",
-  icon_mstile310: "/imgs/icons/mstile-310x310.png",
-  icon_safariPinnedTab: "/imgs/icons/safari-pinned-tab.png",
+  icon_androidChrome192: "/imgs/icons/manifest/android-chrome-192x192.png",
+  icon_androidChrome512: "/imgs/icons/manifest/android-chrome-512x512.png",
+  icon_appleTouchIcon: "/imgs/icons/manifest/apple-touch-icon.png",
+  icon_browserconfig: "/imgs/icons/manifest/browserconfig.xml",
+  icon_favicon16: "/imgs/icons/manifest/favicon-16x16.png",
+  icon_favicon32: "/imgs/icons/manifest/favicon-32x32.png",
+  icon_mstile70: "/imgs/icons/manifest/mstile-70x70.png",
+  icon_mstile144: "/imgs/icons/manifest/mstile-144x144.png",
+  icon_mstile150: "/imgs/icons/manifest/mstile-150x150.png",
+  icon_mstile310: "/imgs/icons/manifest/mstile-310x310.png",
+  icon_safariPinnedTab: "/imgs/icons/manifest/safari-pinned-tab.png",
   icon_close: "/imgs/icons/btns/close.svg",
   icon_adsenseSquare: "/imgs/ads/adsense-400x400.jpg",
   icon_adsenseWide: "/imgs/ads/adsense-wide.png"
@@ -138,7 +138,6 @@ const Assets = {
  *    This object specifies the initial app features, such as themes, wallpapers,    *
  *  guides, notifications, etc.                                                      *
  * --------------------------------------------------------------------------------- */
-
 const Blueprint = {
   app: {
     initConnection: {
@@ -200,7 +199,7 @@ const Blueprint = {
     initContact: {
       firstName: "Johnathan",
       lastName: "Chivington",
-      title: "Deep Learning & AI Engineer",
+      title: "Experienced Full-Stack Engineer & Aspiring AI Engineer",
       phone: "303.900.2861",
       email: "j.chivington@bellevuecollege.edu",
       linkedin: "https://linkedin.com/in/johnathan-chivington",
@@ -212,7 +211,7 @@ const Blueprint = {
     },
     initResume: {
       visible: {
-        skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteering: "OPEN"
+        skills: "OPEN", history: "OPEN", education: "OPEN", certifications: "OPEN", volunteer: "OPEN"
       },
       sections: {
         skills: [
@@ -248,7 +247,7 @@ const Blueprint = {
           ["Convolutional Neural Networks","deeplearning.ai on Coursera", "(11.05.2018)", "https://www.coursera.org/account/accomplishments/verify/PBHCCPXZWFGY"],
           ["Certified Nurse Aide", "Queen's University of Charlotte", "2012", "http://www.queens.edu/academics/schools-colleges/presbyterian-school-of-nursing.html"]
         ],
-        volunteering: [
+        volunteer: [
           ["Hands-On Atlanta", "Maintenance and repair work for low/no-rent community helping single parents and families near or recovering from homelessness.", "(2012-2013)"]
         ]
       }
@@ -410,11 +409,11 @@ const Reducers = {
        const { visible, sections } = Blueprint.chivingtoninc.initResume;
        const { skills, history, education, certifications, volunteer } = visible;
        const choices = {
-         "TOGGLE_SKILLS_SECTION": () => Object.assign({}, visible, {skills: skills == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_HIST_SECTION": () => Object.assign({}, visible, {history: history == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_EDU_SECTION": () => Object.assign({}, visible, {education: education == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_CERTS_SECTION": () => Object.assign({}, visible, {certifications: certifications == "OPEN" ? "CLOSED" : "OPEN"}),
-         "TOGGLE_VOLUNTEER_SECTION": () => Object.assign({}, visible, {volunteering: volunteering == "OPEN" ? "CLOSED" : "OPEN"}),
+         "TOGGLE_SKILLS_SECTION": () => Object.assign({}, state, {visible: Object.assign(visible, {visible: {} }, {skills: skills == "OPEN" ? "CLOSED" : "OPEN"} )}),
+         "TOGGLE_HIST_SECTION": () => Object.assign({}, state, {visible: Object.assign(visible, {visible: {} }, {history: history == "OPEN" ? "CLOSED" : "OPEN"} )}),
+         "TOGGLE_EDU_SECTION": () => Object.assign({}, state, {visible: Object.assign(visible, {visible: {} }, {education: education == "OPEN" ? "CLOSED" : "OPEN"} )}),
+         "TOGGLE_CERTS_SECTION": () => Object.assign({}, state, {visible: Object.assign(visible, {visible: {} }, {certifications: certifications == "OPEN" ? "CLOSED" : "OPEN"} )}),
+         "TOGGLE_VOLUNTEER_SECTION": () => Object.assign({}, state, {visible: Object.assign(visible, {visible: {} }, {volunteer: volunteer == "OPEN" ? "CLOSED" : "OPEN"} )}),
          "DEFAULT": () => state
        };
        return choices[action.type] ? Object.assign({}, sections, choices[action.type]()) : Object.assign({}, sections, choices["DEFAULT"]());
@@ -645,6 +644,9 @@ const Components = {
           width: newWidth, height: event.target.innerWidth, mode: newMode
         }});
       });
+
+      // Check Menu State
+      if (state.uiState.menuState == "CLOSING") dispatch({type: "CLOSE_MENU"});
 
       // Shell Element
       const Shell = React.createElement("div", {style: styles.shell}, [
@@ -1245,6 +1247,22 @@ const Views = {
       ])))
     ]);
 
+    // About This App
+    // 1. https/http2
+    // 2. TLSv1.2
+    // 3. A+ Qualsys SSL Labs Score:
+    //      - https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com
+    // 4. A+ ImmuniWeb SSLScan Score:
+    //      - https://www.htbridge.com/ssl/?id=uAXLxfew
+    // 5. 100% on Google PageSpeed Insights:
+    //      - https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com
+    // 6. Mail Proxy?
+
+    // Widgets
+    // 1. Todo
+    // 2. Stock ticker
+    // 3. Img slider
+
     // Home View
     const HomeView = E("div", {style: styles.view}, [card]);
 
@@ -1523,7 +1541,7 @@ const Views = {
     const state = props.store.getState();
     const { resumeState } = state.chivingtonincState;
     const { visible, sections } = resumeState;
-    const { skills, history, education, certifications, volunteering } = sections;
+    const { skills, history, education, certifications, volunteer } = sections;
     const MOB = state.uiState.windowState.mode == "MOBILE";
     const E = React.createElement;
 
@@ -1573,9 +1591,9 @@ const Views = {
     const volunteerButton = E("h2", {style: styles.section.title}, ["Volunteering"]);
     volunteerButton.addEventListener("click", (e) => dispatch({type: "TOGGLE_VOLUNTEER_SECTION"}));
 
-    const showVolunteer = visible.volunteering == "OPEN";
+    const showVolunteer = visible.volunteer == "OPEN";
     const volunteerWindow = E("div", {style: showVolunteer ? (MOB ? styles.volunteer.mobile : styles.volunteer.window) : styles.section.hidden},
-      volunteering.map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
+      volunteer.map(row => E("div", {style: styles.volunteer.row}, row.map((field,idx) => (idx==0)
         ? E("h3", {style: styles.volunteer.org}, [field]) : E("p", {style: styles.volunteer.description}, [field])
     ))));
 
@@ -1631,7 +1649,6 @@ const Views = {
     return GuideView;
   }
 };
-
 
 /* ---------------------------------- Rendering ----------------------------------- *
  *   Render to the DOM once, passing in Redux Store. App renders based on state     *
