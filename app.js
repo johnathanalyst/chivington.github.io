@@ -199,7 +199,7 @@ const Blueprint = {
     initContact: {
       firstName: "Johnathan",
       lastName: "Chivington",
-      title: "Experienced Full-Stack Engineer & Aspiring AI Engineer",
+      title: "Experienced Full-Stack Engineer",
       phone: "303.900.2861",
       email: "j.chivington@bellevuecollege.edu",
       linkedin: "https://linkedin.com/in/johnathan-chivington",
@@ -254,10 +254,58 @@ const Blueprint = {
     },
     initCover: {
       lines: [
-        `I am an adept software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
+        `I am an experienced software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
         `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
         `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
         `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
+      ]
+    },
+    initStory: {
+      background: [
+        `Data Science has been a curious journey for me. I've never had ambitions of becoming any kind of scientist, other than a mad
+        one. College isn't something a lot of people did where I'm from. Calculus, physics and other higher maths & sciences weren't
+        needed in the "real world." Instead, importance was placed on family and continuity.`,
+        `Monotony and lack of stimulation in a small town, among other causes, bred alcoholism, drug abuse, petty crime and plenty of
+        other obstacles to intelligence. Certainly others are even further removed from academia, but it feels safe to say that data &
+        computational sciences are a far leap from where my interested should have landed, statistically.`
+      ],
+      journey: [
+        `I wanted to build cool things though, and I wasn't going to let a lack of a degree or a small-town mentality stop me. I knew I wanted
+        to build networked robotics (and later, industrial) applications. So, nearly a decade ago, I got some server space with a brand new
+        startup called Digitalocean, found their tutorials and began absorbing information.`,
+        `Countless iterations of LAMP/LEMP stacks, Bind DNS servers, Postfix/Dovecot/RoundCube/Gmail configurations, elaborate, multi
+        server networks with load balancers & failovers, and  has forced me to become an efficient researcher. In doing so, it's also ignited a
+        passion for research itself and an obsession with the idea of "learning to learn."`
+      ],
+      vision: [
+        `Over the past several years, my passions for building cool and inspiring gadgets, harvesting data from everyday sources, using
+        technology to effect positive change has coalesced into a desire to pursue Data Science roles, specifically within the field of
+        Artificial Intelligence. I am pursuing a Bachelor's CS degree, but mostly as a means to circumvent HR filters.`,
+        `I see a great deal more value in industry than academia. I've learned to maintain and expand my education as an individual with no
+        research experience because I know that's what it takes in industry to maintian a competitive advantage. I want to implement AI
+        models and tools to get work done now, while simultaneously acheiving my research goals in that field. I see entry level AI roles
+        as the perfect environment for that.`
+      ],
+      company: [
+        `To me, a company isn't a place you go to perform labor in exchange for money. It's a place where like minded people come, to
+        accomplish a common goal. It's a culture.`,
+        `I am currently writing this at 4am on a Sunday morning. I spend 5+ hours per day on code and research, outside of my full-time day
+        job and courseloads. Closer to 10+ hour days on weekends. I sleep about 2-5 hours per day and regularly skip 1-2 days. I do not get
+        paid extra for these sacrifices. To most people, I am in insane person.`,
+        `...but I'm starting to see the same behaviors in others, from a far. When I read about Tesla manufacturing teams working mountains
+        of overtime to hit production goals. When I submit a help request to TD Ameritrade in the middle of the night, well outside business
+        hours, but I get a response within a few minutes anyway. There are companies out there full of crazies like me. If you've read this
+        much, you're likely one of them.`
+      ],
+      summary: [
+        `When you research what it takes to make a compelling website-based resume, you encounter countless design-oriented examples. The web
+        is definitely very beautiful these days. I believe in meticulous design aesthetics, but I've always been more interested in the
+        moving pieces... the places where the interface touches the network. Where human actions & interactions reduce to raw bytes, and then
+        into electrical pulses.`,
+        `This web app, aside from the actual Word/PDF resume hosted here, is itself a form of a resume. It's meant to demonstrate my aesthetic
+        design choices, architectural choices, technology implementations and configurations, use of best practices and industry standards,
+        as well as security considerations, across the entire stack. Hopefully, it leaves you with the idea that I most value efficient,
+        modular code combined with attractive, easy to understand interfaces.`
       ]
     },
     initBlog: {
@@ -298,7 +346,7 @@ const Blueprint = {
   }
 };
 
-for (let i = 0; i < 30; i++)
+for (let i = 0; i < 50; i++)
   Blueprint.chivingtoninc.initBlog.list.push(Blueprint.chivingtoninc.initBlog.list[0]);
 
 /* ----------------------------------- Reducers ----------------------------------- *
@@ -1010,6 +1058,12 @@ const Components = {
         children[0](props, dispatch, children), Components.UI.Notification(props, dispatch, [])
       ]);
 
+      // console.log("\n SCROLL HEIGHT: ", View.scrollHeight);
+      // console.log("\n SCROLL TOP: ", View.scrollTop);
+      // console.log("\n CLIENT HEIGHT: ", View.clientHeight);
+      console.log("\n WINDOW CHILDS: ");
+      console.dir(document.querySelector("body").childNodes[1]);
+
       // View Scroll Position
       // if (sameView) {
       //   console.log("scrollTop: ", View.scrollTop);
@@ -1200,23 +1254,23 @@ const Views = {
 
     // Home View Styles
     const styles = {
-      view: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%;`,
-      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: ${MB ? `1em` : `0 3em`}; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
-      cardBody: `padding: 0.5em; background-color: #fff; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
-      bodyLeft: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; ${MB?``:`height: 25em;`}`,
-      leftImg: `border: 1px solid #222; ${MB ? `width: 100%;` : `height: 100%;`}`,
-      bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,
-      rightTop: `background-color: #ddd; padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
-      greetingImg: `height: 4em; margin: 0.5em 0;`,
+      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%; background-color: rgba(10,10,10,0.7);`,
+      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: 1em; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
+      cardBody: `background-color: rgba(255,255,255,0.2); display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
+      bodyLeft: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;`,
+      leftImg: `border: 1px solid #222; ${MB ? `width: 100%;` : `height: 15.65em;`}`,
+      bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: 0;`,
+      rightTop: `background-color: rgba(); padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
+      greetingImg: `height: 4em; margin: 0;`,
       name: `margin: 0; font-size: 1.5em;`,
       title: `margin: 0; font-size: 0.9em; font-weight: 300;`,
-      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em; background-color: #aaa;`,
-      row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.5em 0`};`,
+      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 0.25em 1em; background-color: #aaa;`,
+      row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.25em 0`};`,
       label: `font-size: 1em; margin: 0;`,
       text: `font-size: 0.8em; margin: 0;`,
-      footer: `display: flex; flex-direction: row; justify-content: space-around; align-items: center;background-color: #222; padding: 1.15em 0 0.85em;`,
-      footerLink: `color: #fff`,
-      footerIcon: `height: 1.25em; width: 1.25em;`
+      footer: `display: flex; flex-direction: row; justify-content: space-around; align-items: center; background-color: rgba(50,50,50,0.5); padding: 0; border: 1px solid rgba(50,50,50,0.5);`,
+      footerLink: `color: #fff;`,
+      footerIcon: `height: 1.25em; width: 1.25em; margin: 0.285em 0 0;`
     };
 
     // Card
@@ -1250,13 +1304,15 @@ const Views = {
     // About This App
     // 1. https/http2
     // 2. TLSv1.2
-    // 3. A+ Qualsys SSL Labs Score:
+    // 3. Modeled after React & Redux
+    // 4. Responsive
+    // 5. A+ Qualsys SSL Labs Score:
     //      - https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com
-    // 4. A+ ImmuniWeb SSLScan Score:
+    // 6. A+ ImmuniWeb SSLScan Score:
     //      - https://www.htbridge.com/ssl/?id=uAXLxfew
-    // 5. 100% on Google PageSpeed Insights:
+    // 7. 100% on Google PageSpeed Insights:
     //      - https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com
-    // 6. Mail Proxy?
+    // 8. Mail Proxy?
 
     // Widgets
     // 1. Todo
@@ -1392,10 +1448,10 @@ const Views = {
         margin: 0.75em; background-color: rgba(100,100,100,0.9); border: 1px solid #000;
       `,
       coverBody: `
-        padding: 1em 3em; background-image: linear-gradient(to right, #eee,#fff); color: #222;
+        padding: 1em; background-image: linear-gradient(to right, #eee,#fff); color: #222;
       `,
       coverLine: `
-        margin: 0 auto 2em; padding: 1em; text-align: center; background-image: linear-gradient(to left, rgba(225,225,225,0.8), rgba(225,225,225,0.9)); -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
+        margin: 0 auto 1em; padding: 1em; text-align: center; background-image: linear-gradient(to left, rgba(225,225,225,0.8), rgba(225,225,225,0.9)); -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
       `
     };
 
@@ -1611,6 +1667,8 @@ const Views = {
     // ResumeView
     const ResumeView = E("div", {style: styles.view}, [resume]);
 
+    window.scrollTo({top: 500, left: 0, behavior: "smooth"});
+
     return ResumeView;
   },
   // Guide View - description.
@@ -1651,23 +1709,15 @@ const Views = {
 };
 
 /* ---------------------------------- Rendering ----------------------------------- *
- *   Render to the DOM once, passing in Redux Store. App renders based on state     *
- * of the Redux Store. Then subscribe Render method to the Redux Store. Any change  *
- * in the store state and the UI "React"s accordingly.                              *
+ *   Subscribe the ReactDOM.render method to the Redux Store, passing the root app
+ * component, the Shell. App renders based on state of the Redux Store. Any changes *
+ * to the application state  *
  * -------------------------------------------------------------------------------- */
 
  /*  Currently results in refresh of entire app. For most apps, this is fine. For
-   very large apps like Googe Sheets, Word Online, etc., this is a problem. Soon to
-   add app/ui state diffing engine so that only a particular "branch of ui tree"
-   refreshes, based on corresponding changes in the "app state tree" or subtree of. */
-
-// Initial render
-ReactDOM.render({
-  elem: Components.UI.Shell,
-  props: {store: ReduxStore},
-  dispatch: ReduxStore.dispatch,
-  children: []
-}, document.getElementById("AppRoot"));
+   very large apps like Googe Sheets, Word Online, etc., this can be a problem. Soon
+   to add React-style state diffing engine so that only a particular "branch" of the
+   app refreshes, based on changes in the corresponding branch of state. */
 
 // Subscribe render method to ReduxStore
 ReduxStore.subscribe({
