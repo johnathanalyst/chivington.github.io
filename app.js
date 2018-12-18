@@ -46,12 +46,12 @@ const Redux = {
       if (middlewares && middlewares.logActions) middlewares.logActions("before", state, action);
       state = stateReducer(state, action);
       if (middlewares && middlewares.logActions) middlewares.logActions("after", state, action);
-      listeners.forEach(listener => listener.func(...listener.params));
+      listeners.forEach(listener => listener.func(...listener.params, document.getElementById("View")));
     }
 
     function subscribe(listener) {
       listeners.push(listener);
-      dispatch({type: "SUBSCRIBED"});
+      dispatch({type: "APP_SUBSCRIBED"});
       return () => {
         listeners = listeners.filter(l => l !== listener);
       }
@@ -103,6 +103,9 @@ const Assets = {
   content_meAndWin: "/imgs/me/me-n-win.jpg",
   content_meAndWinBed: "/imgs/me/me-n-win-bed.jpg",
   content_me: "/imgs/me/me.jpg",
+  content_qualys: "/imgs/content/qualys.png",
+  content_htBridge: "/imgs/content/ht-bridge.svg",
+  content_pageSpeed: "/imgs/content/google-pageSpeed.jpg",
   wp_fragmented: "/imgs/wp/fragmented.jpg",
   wp_math: "/imgs/wp/math.jpg",
   wp_pnw: "/imgs/wp/pnw.jpg",
@@ -134,6 +137,7 @@ const Assets = {
   icon_adsenseWide: "/imgs/ads/adsense-wide.png"
 };
 
+
 /* ----------------------------------- Blueprint ----------------------------------- *
  *    This object specifies the initial app features, such as themes, wallpapers,    *
  *  guides, notifications, etc.                                                      *
@@ -150,6 +154,15 @@ const Blueprint = {
     },
     initWorkers: {
       installed:  false, domain: null
+    },
+    initAbout: {
+      scores: [
+        {org: "Qualys SSL Labs", score: "A+", link: "https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com", img: Assets.content_qualys},
+        {org: "ImmuniWeb SSLScan", score: "A+", link: "https://www.htbridge.com/ssl/?id=uAXLxfew", img: Assets.content_htBridge},
+        {org: "Google PageSpeed", score: "100%", link: "https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com", img: Assets.content_pageSpeed}
+      ],
+      security: ["POODLE", "CVE-2016-2017", "Insecure Renegotiation", "ROBOT", "HEARTBLEED", "CVE-2014-0224"],
+      features: ["https/http2", "hsts", "TLSv1.2", "CAA Compliant", "React & Redux-Style Design", "Responsive", "Mail", "Cloud Storage"]
     }
   },
   ui: {
@@ -177,7 +190,7 @@ const Blueprint = {
       animation: "animation: menuGuide 750ms 1 ease-in-out forwards;"
      },
     initView: {
-      view: "HOME", prev: "@@INIT", scroll: {x: 0, y: 0},
+      view: "HOME", prev: "@@INIT", scrollHeight: 0,
       views: {
         "HOME": [],
         "BLOG": [],
@@ -260,6 +273,54 @@ const Blueprint = {
         `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
       ]
     },
+    initStory: {
+      background: [
+        `Data Science has been a curious journey for me. I've never had ambitions of becoming any kind of scientist, other than a mad
+        one. College isn't something a lot of people did where I'm from. Calculus, physics and other higher maths & sciences weren't
+        needed in the "real world." Instead, importance was placed on family and continuity.`,
+        `Monotony and lack of stimulation in a small town, among other causes, bred alcoholism, drug abuse, petty crime and plenty of
+        other obstacles to intelligence. Certainly others are even further removed from academia, but it feels safe to say that data &
+        computational sciences are a far leap from where my interested should have landed, statistically.`
+      ],
+      journey: [
+        `I wanted to build cool things though, and I wasn't going to let a lack of a degree or a small-town mentality stop me. I knew I wanted
+        to build networked robotics (and later, industrial) applications. So, nearly a decade ago, I got some server space with a brand new
+        startup called Digitalocean, found their tutorials and began absorbing information.`,
+        `Countless iterations of LAMP/LEMP stacks, Bind DNS servers, Postfix/Dovecot/RoundCube/Gmail configurations, elaborate, multi
+        server networks with load balancers & failovers, and  has forced me to become an efficient researcher. In doing so, it's also ignited a
+        passion for research itself and an obsession with the idea of "learning to learn."`
+      ],
+      vision: [
+        `Over the past several years, my passions for building cool and inspiring gadgets, harvesting data from everyday sources, using
+        technology to effect positive change has coalesced into a desire to pursue Data Science roles, specifically within the field of
+        Artificial Intelligence. I am pursuing a Bachelor's CS degree, but mostly as a means to circumvent HR filters.`,
+        `I see a great deal more value in industry than academia. I've learned to maintain and expand my education as an individual with no
+        research experience because I know that's what it takes in industry to maintian a competitive advantage. I want to implement AI
+        models and tools to get work done now, while simultaneously acheiving my research goals in that field. I see entry level AI roles
+        as the perfect environment for that.`
+      ],
+      company: [
+        `To me, a company isn't a place you go to perform labor in exchange for money. It's a place where like minded people come, to
+        accomplish a common goal. It's a culture.`,
+        `I am currently writing this at 4am on a Sunday morning. I spend 5+ hours per day on code and research, outside of my full-time day
+        job and courseloads. Closer to 10+ hour days on weekends. I sleep about 2-5 hours per day and regularly skip 1-2 days. I do not get
+        paid extra for these sacrifices. To most people, I am in insane person.`,
+        `...but I'm starting to see the same behaviors in others, from a far. When I read about Tesla manufacturing teams working mountains
+        of overtime to hit production goals. When I submit a help request to TD Ameritrade in the middle of the night, well outside business
+        hours, but I get a response within a few minutes anyway. There are companies out there full of crazies like me. If you've read this
+        much, you're likely one of them.`
+      ],
+      summary: [
+        `When you research what it takes to make a compelling website-based resume, you encounter countless design-oriented examples. The web
+        is definitely very beautiful these days. I believe in meticulous design aesthetics, but I've always been more interested in the
+        moving pieces... the places where the interface touches the network. Where human actions & interactions reduce to raw bytes, and then
+        into electrical pulses.`,
+        `This web app, aside from the actual Word/PDF resume hosted here, is itself a form of a resume. It's meant to demonstrate my aesthetic
+        design choices, architectural choices, technology implementations and configurations, use of best practices and industry standards,
+        as well as security considerations, across the entire stack. Hopefully, it leaves you with the idea that I most value efficient,
+        modular code combined with attractive, easy to understand interfaces.`
+      ]
+    },
     initBlog: {
       viewingPost: 0,
       visibility: "VISIBLE",
@@ -291,7 +352,7 @@ const Blueprint = {
   ad: {
     initAd: {
       adTheme: "FOOTER",
-      adVisibility: "VISIBLE",
+      adVisibility: "HIDDEN",
       adMsg: "Welcome to chivingtoninc.com",
       adImg: Assets.icon_adsenseSquare
     }
@@ -300,6 +361,7 @@ const Blueprint = {
 
 for (let i = 0; i < 50; i++)
   Blueprint.chivingtoninc.initBlog.list.push(Blueprint.chivingtoninc.initBlog.list[0]);
+
 
 /* ----------------------------------- Reducers ----------------------------------- *
  *   Functions that initialize & reduce state into store based on several choices.  *
@@ -311,7 +373,7 @@ const Reducers = {
      // initializes/maintains app subscription state
      subscriptionState: function(state = Blueprint.ui.initSubscription, action) {
        const choices = {
-         "SUBSCRIBED": () => true,
+         "APP_SUBSCRIBED": () => true,
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
@@ -480,7 +542,11 @@ const Reducers = {
          "DEFAULT": () => state
        };
        return choices[action.type] ? choices[action.type]() : choices["DEFAULT"]();
-     }
+     },
+     // initializes/maintains about state
+     aboutState: function(state = Blueprint.app.initAbout, action) {
+       return state;
+     },
    })(state, action);
  },
  // initializes/maintains ad state
@@ -531,7 +597,7 @@ const Components = {
           position: absolute; top: 5.5em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 10;
           display: flex; flex-direction: column; justify-content: center; align-items: center;
           background-color: ${offline?`#e44`:`#4e4`}; font-size: 0.75em; color: #222; font-weight: bold;
-          ${changed ? `animation: flashNetwork 2500ms ease-in-out 1 forwards;` : `display: none;`}
+          ${changed ? `animation: flashNetwork 1000ms ease-in-out 1 forwards;` : `display: none;`}
         `
       };
 
@@ -558,7 +624,7 @@ const Components = {
         dispatch({type: "NETWORK_CHANGE", payload: {
           effectiveType: effectiveType, downlink: downlink, prev: effectiveType
         }});
-      }, 2000);
+      }, 1000);
 
       const Net = E("div", {style: styles.net}, [status]);
 
@@ -619,7 +685,7 @@ const Components = {
   },
   UI: {
     // Shell - contains the Header, Menu, Router, and Guide modules.
-    Shell: function(props, dispatch, children) {
+    Shell: function(props, dispatch, children, doc) {
       // Shell Globals
       const state = props.store.getState();
       const fullProps = Object.assign({}, props, {display: true});
@@ -678,7 +744,7 @@ const Components = {
           position: absolute; top: 0; left: 0; right: 0; z-index: 15;
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
           height: 4em; padding: 0.1em 0 0 1em; border-bottom: 1px solid #fff;
-          background-image: linear-gradient(#333, #222); -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
+          background-color: #225; -webkit-box-shadow: 1px 3px 1px 1px rgba(0,0,0,0.3);
         `,
         icon: `height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
@@ -721,18 +787,6 @@ const Components = {
     },
     // Menu - layered/collapsible full-route menu.
     Menu: function(props, dispatch, children) {
-      const styles = {
-        menu: (m) => `
-          position: absolute; top: 4em; left: 0; bottom: 0; width: ${m ? "100%" : "20em"}; padding: 0.25em 1em 0 0; z-index: 10;
-          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-          background-image: linear-gradient(to bottom right, rgba(25,110,214,1), rgba(6,90,204,1));
-          border-right: 1px solid #000; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
-        `,
-        link: `
-          padding: 1em; border-bottom: 0.5px solid #ddd; color: #fff; cursor: pointer;
-        `
-      };
-
       // Menu Globals
       const store = props.store;
       const state = store.getState();
@@ -740,6 +794,19 @@ const Components = {
       const notificationState = state.uiState.notificationState;
       const MOB = state.uiState.windowState.mode == "MOBILE";
       const E = React.createElement;
+
+      // Menu Styles
+      const styles = {
+        menu:  `
+          position: absolute; top: 4em; left: 0; bottom: 0; width: ${MOB?"100%":"20em"}; padding: 0.25em 1em 0 0; z-index: 10;
+          display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+          background-image: linear-gradient(to bottom right, #27c, #15c);
+          border-right: 1px solid #000; -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
+        `,
+        link: `
+          padding: 1em; border-bottom: 0.5px solid #ddd; color: #fff; cursor: pointer;
+        `
+      };
 
       // Home Link & Listeners
       const home = React.createElement("a", {style: styles.link}, ["Home"]);
@@ -777,7 +844,7 @@ const Components = {
       });
 
       // Menu Styles & Animation
-      const menuStyles = styles.menu(MOB) + ((menuState == "OPEN") ? `animation: menuOpen 150MS 1 forwards;`
+      const menuStyles = styles.menu + ((menuState == "OPEN") ? `animation: menuOpen 150MS 1 forwards;`
         : (menuState == "CLOSING" ? `animation: menuClosing 150MS 1 forwards;` : `display: none;`));
 
       // Menu Element
@@ -787,6 +854,13 @@ const Components = {
     },
     // Router - maintains views/routes. (viewing, tabs, minimized...)
     Router: function(props, dispatch, children) {
+      // Router Globals
+      const state = props.store.getState();
+      const viewName = state.uiState.viewState.view;
+      const prevName = state.uiState.viewState.prev;
+      const MOB = state.uiState.windowState.mode == "MOBILE";
+      const E = React.createElement;
+
       // Router Styles
       const styles = {
         router: `
@@ -795,14 +869,6 @@ const Components = {
           background-image: linear-gradient(rgba(25,110,214,1), rgba(6,90,204,1));
         `
       };
-
-      // Router Globals
-      const store = props.store;
-      const state = store.getState();
-      const viewName = state.uiState.viewState.view;
-      const prevName = state.uiState.viewState.prev;
-      const MOB = state.uiState.windowState.mode == "MOBILE";
-      const E = React.createElement;
 
       // Views
       const views = {
@@ -965,7 +1031,7 @@ const Components = {
 
       // View Styles
       const styles = {
-        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: ${currentView=="BLOG"?`hidden`:`scroll`}; overflow-x: hidden; padding: 8.25em 0 ${AD?`4em`:`0`} 0;`,
+        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: ${currentView=="BLOG"?(MOB?`scroll`:`hidden`):`scroll`}; overflow-x: hidden; padding: 8.25em 0 ${AD?`4em`:`0`} 0;`,
         appNotification: `display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;`,
         notificationTxt: `margin: 0.1em auto;`,
         notificationBtn: `padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;`
@@ -1006,15 +1072,17 @@ const Components = {
       styles.view += ` background-image: linear-gradient(rgba(20,20,20,0.3), rgba(30,30,30,0.3)), url("./${wallpaper}"); background-position: center; background-repeat: no-repeat; background-size: cover;`;
 
       // View
-      const View = React.createElement("div", {style: styles.view}, [
+      const View = React.createElement("div", {style: styles.view, id: "View"}, [
         children[0](props, dispatch, children), Components.UI.Notification(props, dispatch, [])
       ]);
+
+      View.scrollHeight = 0;
 
       // console.log("\n SCROLL HEIGHT: ", View.scrollHeight);
       // console.log("\n SCROLL TOP: ", View.scrollTop);
       // console.log("\n CLIENT HEIGHT: ", View.clientHeight);
-      console.log("\n WINDOW CHILDS: ");
-      console.dir(document.querySelector("body").childNodes[1]);
+      // console.log("\n WINDOW CHILDS: ");
+      // console.dir(document.querySelector("body").childNodes[1]);
 
       // View Scroll Position
       // if (sameView) {
@@ -1193,36 +1261,62 @@ const Views = {
   // Home View - contains contact card.
   Home: function(props, dispatch, children) {
     // Home View Globals
-    const store = props.store;
-    const state = store.getState();
-    const landing = !state.uiState.userState.returning;
-    const appMsg = state.uiState.userState.appMsg;
-    const loggedIn = state.uiState.userState.user != "GUEST";
-    const { content_me, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
-    const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.chivingtonincState.contactState;
+    const state = props.store.getState();
+    const { uiState, chivingtonincState, appState } = state;
+    const { user, returning, appMsg } = uiState;
+    const [landing, loggedIn] = [(!returning), (user != "GUEST")];
+    const { content_me, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, icon_brain, wp_pnw } = Assets;
+    const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = chivingtonincState.contactState;
+    const { aboutState } = appState;
+    const { scores, security, features } = aboutState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
     const E = React.createElement;
 
     // Home View Styles
     const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%; background-color: rgba(10,10,10,0.7);`,
-      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: 1em; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
-      cardBody: `background-color: rgba(255,255,255,0.2); display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
-      bodyLeft: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;`,
-      leftImg: `border: 1px solid #222; ${MB ? `width: 100%;` : `height: 15.65em;`}`,
-      bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: 0;`,
-      rightTop: `background-color: rgba(); padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
+      view: `
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%; width: 100%;
+        background-image: url(${icon_brain}); background-position: calc(${MB?`5%`:`-2%`}) calc(50%); background-size: cover; background-repeat: no-repeat; background-color: rgba(255,255,255,0.9);
+      `,
+
+      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; background-color: rgba(255,255,255,0.8); border-bottom: 0.5px solid #222;`,
+      cardBody: `display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`center`};`,
+      bodyLeft: `display: flex; flex-direction: column; justify-content: ${MB?`center`:`flex-start`}; align-items: ${MB?`center`:`stretch`};`,
+      leftImg: `${MB ? `width: 50%;` : `height: 12em;`} margin: 1em 1em 0.75em; border: 1px solid #222; border-radius: 100%;`,
+      bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; margin: 0;`,
+      rightTop: `padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
       greetingImg: `height: 4em; margin: 0;`,
       name: `margin: 0; font-size: 1.5em;`,
       title: `margin: 0; font-size: 0.9em; font-weight: 300;`,
-      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 0.25em 1em; background-color: #aaa;`,
-      row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.25em 0`};`,
+      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 0.25em 1em;`,
+      row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`0.5em 0`:`0.25em 0`};`,
       label: `font-size: 1em; margin: 0;`,
-      text: `font-size: 0.8em; margin: 0;`,
-      footer: `display: flex; flex-direction: row; justify-content: space-around; align-items: center; background-color: rgba(50,50,50,0.5); padding: 0; border: 1px solid rgba(50,50,50,0.5);`,
+      text: `font-size: 0.9em; margin: 0;`,
+      footer: `display: flex; flex-direction: row; justify-content: space-around; align-items: center; padding: 0.25em; background-color: rgba(10,10,10,0.5); border-top: 0.5px solid #222;`,
       footerLink: `color: #fff;`,
-      footerIcon: `height: 1.25em; width: 1.25em; margin: 0.285em 0 0;`
+      footerIcon: `height: 1.25em; width: 1.25em; margin: 0.285em 0 0;`,
+
+      about: `
+        display: flex; flex-direction: column; justify: flex-start; align-items: stretch;
+        width: 100%; margin: 0; color: #000; background-color: rgba(255,255,255,0.8);
+      `,
+      aboutHeading: `margin: 1em auto; padding: 0 1em; text-align: center; font-size: 2.75em;  color: #223;`,
+
+      aboutSection: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin: 0 0.5em 0.5em; padding: 0.75em; background-color: rgba(255,255,255,0.9); -webkit-box-shadow: 1px 1px 1px 1px rgba(10,10,10,0.1);`,
+      aboutSubHeading: `margin: 0; border-bottom: 0.5px solid #666;`,
+
+      aboutWindow: `display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 0 1em;`,
+      aboutCell: `padding: 1em; background-color: rgba(1,1,1,0.01); -webkit-box-shadow: 10px 10px 15px 0px rgba(50,50,50,0.1);`,
+
+      scoresWindow: `
+        display: flex; flex-direction: row; justify-content: space-around; align-items: center;
+        width: 100%; margin: 0; overflow-x: scroll; -webkit-box-shadow: inset 0px 0px 10px 5px rgba(100,100,100,0.1);
+      `,
+      scoreCell: `display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0.25em 1em; border: 1px solid #000;`,
+      scoreImg: `max-height: 8em; max-width: 15em; margin: 0; padding: 0;`,
+      scoreOrg: `text-align: center; margin: 0;`,
+      scoreLink: `margin: 0; text-align: center; text-decoration: underline; color: #07e;`,
     };
 
     // Card
@@ -1253,18 +1347,27 @@ const Views = {
       ])))
     ]);
 
-    // About This App
-    // 1. https/http2
-    // 2. TLSv1.2
-    // 3. Modeled after React & Redux
-    // 4. Responsive
-    // 5. A+ Qualsys SSL Labs Score:
-    //      - https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com
-    // 6. A+ ImmuniWeb SSLScan Score:
-    //      - https://www.htbridge.com/ssl/?id=uAXLxfew
-    // 7. 100% on Google PageSpeed Insights:
-    //      - https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com
-    // 8. Mail Proxy?
+    // About this app
+    const about = E("div", {style: styles.about}, [
+      E("h2", {style: styles.aboutHeading}, ["About This App"]),
+      E("div", {style: styles.aboutSection}, [
+        E("h3", {style: styles.aboutSubHeading}, ["Performance & Security Scores"]),
+        E("div", {style: styles.scoresWindow}, scores.map(score => E("div", {style: styles.scoreCell}, [
+          E("img", {style: styles.scoreImg, src: score.img, alt: `${score.org} Logo`}, []),
+          E("h4", {style: styles.scoreOrg}, [`${score.score} ${score.org} Score`]),
+          E("a", {style: styles.scoreLink, href: score.link}, [`${score.org} Report`])
+        ])))
+      ]),
+      E("div", {style: styles.aboutSection}, [
+        E("h3", {style: styles.aboutSubHeading}, ["Attack Prevention"]),
+        E("div", {style: styles.aboutWindow}, security.map(attack => E("h4", {style: styles.aboutCell}, [attack])))
+      ]),
+      E("div", {style: styles.aboutSection}, [
+        E("h3", {style: styles.aboutSubHeading}, ["Features"]),
+        E("div", {style: styles.aboutWindow}, features.map(feature => E("h4" ,{style: styles.aboutCell}, [feature])))
+      ])
+    ]);
+
 
     // Widgets
     // 1. Todo
@@ -1272,11 +1375,11 @@ const Views = {
     // 3. Img slider
 
     // Home View
-    const HomeView = E("div", {style: styles.view}, [card]);
+    const HomeView = E("div", {style: styles.view}, [card, about]);
 
     return HomeView;
   },
-  // Blog View - description.
+  // Blog View - News and events about me or that I'm interested in.
   Blog: function(props, dispatch, children) {
     // Blog Globals
     const state = props.store.getState();
@@ -1291,7 +1394,7 @@ const Views = {
     // Blog Styles
     const styles = {
       blog: `
-        display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center; ${MB?``:`height: 100%;`};
+        display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: center; align-items: center; ${MB?`overflow-y: scroll;`:`height: 100%;`};
       `,
       post: `
         display: flex; flex-direction: column; justify-content: flex-start; height: 100%; width: ${MB?`100%`:`70%`};
@@ -1324,13 +1427,13 @@ const Views = {
       `,
       listRow: `
         display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-        border: 1px solid #00f;
+        border: 1px solid #00f; height: 5em;
         background-image: linear-gradient(to right, rgba(225,225,225,0.8), rgba(225,225,225,0.9))
       `,
       listThumb: `
         display: flex; max-height: 3em; border: 1px solid #0f0;
       `,
-      listCaption: ` padding: 1em;
+      listCaption: `
         display: flex; flex-direction: column; overflow: hidden; white-space: nowrap;
         -webkit-box-shadow: inset 1px 1px 2px 0 rgba(10,10,10,0.4); border: 1px solid #f00;
       `,
@@ -1365,7 +1468,7 @@ const Views = {
 
     return Blog;
   },
-  // Projects View - description.
+  // Projects View - Various projects I'm working on.
   Projects: function(props, dispatch, children) {
     // ProjectsView Styles
     const styles = {
@@ -1392,7 +1495,7 @@ const Views = {
 
     return ProjectsView;
   },
-  // Cover View - description.
+  // Cover View - My generic cover letter.
   Cover: function(props, dispatch, children) {
     // CoverView Styles
     const styles = {
@@ -1420,7 +1523,7 @@ const Views = {
 
     return CoverView;
   },
-  // Resume View - description.
+  // Resume View - My generic resume.
   Resume: function(props, dispatch, children) {
     // ResumeView Styles
     const styles = {
@@ -1623,7 +1726,7 @@ const Views = {
 
     return ResumeView;
   },
-  // Guide View - description.
+  // Guide View - A walkthrough/guide to demo complex parts of the app.
   Guide: function(props, dispatch, children) {
     // GuideView Styles
     const styles = {
