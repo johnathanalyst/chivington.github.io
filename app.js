@@ -162,7 +162,7 @@ const Blueprint = {
         {org: "Google PageSpeed", score: "100%", link: "https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com", img: Assets.content_pageSpeed}
       ],
       security: ["POODLE", "CVE-2016-2017", "Insecure Renegotiation", "ROBOT", "HEARTBLEED", "CVE-2014-0224"],
-      features: ["https/http2", "hsts", "TLSv1.2", "CAA Compliant", "React & Redux-Style Design", "Responsive", "Mail", "Cloud Storage"]
+      features: ["https / http2", "hsts", "TLSv1.2", "CAA Compliant", "React & Redux-Style Architecture", "Responsive", "Mail", "Cloud Storage"]
     }
   },
   ui: {
@@ -743,8 +743,8 @@ const Components = {
         header: `
           position: absolute; top: 0; left: 0; right: 0; z-index: 15;
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-          height: 4em; padding: 0.1em 0 0 1em; border-bottom: 1px solid #fff;
-          background-color: #225; -webkit-box-shadow: 1px 3px 1px 1px rgba(0,0,0,0.3);
+          height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
+          background-color: #226; -webkit-box-shadow: 1px 3px 1px 1px rgba(0,0,0,0.3);
         `,
         icon: `height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
@@ -1280,7 +1280,7 @@ const Views = {
         background-image: url(${icon_brain}); background-position: calc(${MB?`5%`:`-2%`}) calc(50%); background-size: cover; background-repeat: no-repeat; background-color: rgba(255,255,255,0.9);
       `,
 
-      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; background-color: rgba(255,255,255,0.8); border-bottom: 0.5px solid #222;`,
+      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; background-color: rgba(255,255,255,0.9); border-bottom: 0.5px solid #222;`,
       cardBody: `display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`center`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: ${MB?`center`:`flex-start`}; align-items: ${MB?`center`:`stretch`};`,
       leftImg: `${MB ? `width: 50%;` : `height: 12em;`} margin: 1em 1em 0.75em; border: 1px solid #222; border-radius: 100%;`,
@@ -1299,15 +1299,15 @@ const Views = {
 
       about: `
         display: flex; flex-direction: column; justify: flex-start; align-items: stretch;
-        width: 100%; margin: 0; color: #000; background-color: rgba(255,255,255,0.8);
+        width: 100%; margin: 0; color: #000; background-color: rgba(255,255,255,0.9);
       `,
       aboutHeading: `margin: 1em auto; padding: 0 1em; text-align: center; font-size: 2.75em;  color: #223;`,
 
       aboutSection: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin: 0 0.5em 0.5em; padding: 0.75em; background-color: rgba(255,255,255,0.9); -webkit-box-shadow: 1px 1px 1px 1px rgba(10,10,10,0.1);`,
       aboutSubHeading: `margin: 0; border-bottom: 0.5px solid #666;`,
 
-      aboutWindow: `display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 0 1em;`,
-      aboutCell: `padding: 1em; background-color: rgba(1,1,1,0.01); -webkit-box-shadow: 10px 10px 15px 0px rgba(50,50,50,0.1);`,
+      aboutWindow: `display: flex; flex-direction: row; justify-content: space-around; align-items: center; padding: 0 1em; flex-wrap: wrap;`,
+      aboutCell: `margin: 0.75em auto; padding: 0.75em 1em; background-color: rgba(1,1,1,0.01); -webkit-box-shadow: 10px 10px 15px 0px rgba(50,50,50,0.1);`,
 
       scoresWindow: `
         display: flex; flex-direction: row; justify-content: space-around; align-items: center;
