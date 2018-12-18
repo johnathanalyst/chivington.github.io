@@ -352,7 +352,7 @@ const Blueprint = {
   ad: {
     initAd: {
       adTheme: "FOOTER",
-      adVisibility: "HIDDEN",
+      adVisibility: "VISIBLE",
       adMsg: "Welcome to chivingtoninc.com",
       adImg: Assets.icon_adsenseSquare
     }
@@ -648,7 +648,7 @@ const Components = {
         ad: `
           position: absolute; bottom: 0; left: 50%; width: 100%; margin: 0; padding: 0; z-index: 10;
           display: flex; flex-direction: row; justify-content: center; align-items: center; -webkit-box-shadow: 1px 1px 2px 1px rgba(10,10,10,0.5);
-          transform: translate(-50%, 0); background-color: #aaa; border-top: 1px solid #222;
+          transform: translate(-50%, 0); background-color: #45a; border-top: 1px solid #222;
         `,
         adImgDiv: `flex-direction: column;`,
         adImg: `height: 2em; margin: 1em 1em 0.65em; border: 1px solid #666;`,
@@ -744,7 +744,7 @@ const Components = {
           position: absolute; top: 0; left: 0; right: 0; z-index: 15;
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
           height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
-          background-color: #226; -webkit-box-shadow: 1px 3px 1px 1px rgba(0,0,0,0.3);
+          background-color: #336; -webkit-box-shadow: 1px 3px 1px 1px rgba(0,0,0,0.3);
         `,
         icon: `height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
