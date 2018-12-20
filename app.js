@@ -171,9 +171,9 @@ const Blueprint = {
       user: "GUEST", returning: false, appMsg: false
     },
     initWindow: {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      mode: window.innerWidth < 950 ? "MOBILE" : (window.innerWidth < 1200 ? "TABLET" : "DESKTOP")
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+      windowMode: window.innerWidth < 950 ? "MOBILE" : (window.innerWidth < 1200 ? "TABLET" : "DESKTOP")
     },
     initHeader: {
       visibility: "VISIBLE", icon: Assets.icon_brain
@@ -648,7 +648,7 @@ const Components = {
         ad: `
           position: absolute; bottom: 0; left: 50%; width: 100%; margin: 0; padding: 0; z-index: 10;
           display: flex; flex-direction: row; justify-content: center; align-items: center; -webkit-box-shadow: 1px 1px 2px 1px rgba(10,10,10,0.5);
-          transform: translate(-50%, 0); background-color: #45a; border-top: 1px solid #222;
+          transform: translate(-50%, 0); background-color: #ddd; border-top: 1px solid #222;
         `,
         adImgDiv: `flex-direction: column;`,
         adImg: `height: 2em; margin: 1em 1em 0.65em; border: 1px solid #666;`,
@@ -744,7 +744,7 @@ const Components = {
           position: absolute; top: 0; left: 0; right: 0; z-index: 15;
           display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
           height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
-          background-color: #336; -webkit-box-shadow: 1px 3px 1px 1px rgba(0,0,0,0.3);
+          background-color: #222; -webkit-box-shadow: 1px 3px 1px 1px rgba(0,0,0,0.3);
         `,
         icon: `height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
         title: `margin-left: 0.35em; color: #fff; font-size: 2.15em; cursor: pointer;`,
@@ -1031,7 +1031,7 @@ const Components = {
 
       // View Styles
       const styles = {
-        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: ${currentView=="BLOG"?(MOB?`scroll`:`hidden`):`scroll`}; overflow-x: hidden; padding: 8.25em 0 ${AD?`4em`:`0`} 0;`,
+        view: `position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: ${currentView=="BLOG"?(MOB?`scroll`:`hidden`):`scroll`}; overflow-x: hidden; padding: 8em 0 ${AD?`4em`:`0`} 0;`,
         appNotification: `display: flex; flex-direction: column; justify: center; align-items: center; text-align: center;`,
         notificationTxt: `margin: 0.1em auto;`,
         notificationBtn: `padding: 0.25em 0.75em; margin: 0.5em 0 0 0; border: 1px solid #fff; border-radius: 5px; background: rgba(25,110,214,1); color: #fff;`
@@ -1210,6 +1210,18 @@ const Components = {
       });
 
       return Guide;
+    },
+    // Walkthrough - responsive vertical/horizontal step-by-step guides
+    Walkthrough: function(props, dispatch, children) {
+      // Walkthrough Globals
+      const state = props.store.getState();
+      const { uiState } = state;
+      const { windowWidth, windowHeight, windowMode } = uiState.windowState;
+      const DEV = state.uiState.windowState.mode.toLowerCase();
+      const MB = DEV == "mobile", TB = DEV == "tablet", DT = DEV == "desktop";
+      const E = React.createElement;
+
+      //
     }
   },
   Math: {
@@ -1280,16 +1292,16 @@ const Views = {
         background-image: url(${icon_brain}); background-position: calc(${MB?`5%`:`-2%`}) calc(50%); background-size: cover; background-repeat: no-repeat; background-color: rgba(255,255,255,0.9);
       `,
 
-      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; background-color: rgba(255,255,255,0.9); border-bottom: 0.5px solid #222;`,
+      card: ` margin: 0; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; background-color: rgba(255,255,255,0.9); border-bottom: 0.5px solid #222;`,
       cardBody: `display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`center`};`,
-      bodyLeft: `display: flex; flex-direction: column; justify-content: ${MB?`center`:`flex-start`}; align-items: ${MB?`center`:`stretch`};`,
-      leftImg: `${MB ? `width: 50%;` : `height: 12em;`} margin: 1em 1em 0.75em; border: 1px solid #222; border-radius: 100%;`,
+      bodyLeft: `display: flex; flex-direction: column; justify-content: ${MB?`center`:`flex-start`}; align-items: ${MB?`center`:`stretch`}; padding: 0.5em;`,
+      leftImg: `height: 12em; margin: 1em 1em 0.75em; border: 1px solid #222; border-radius: 100%;`,
       bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; margin: 0;`,
       rightTop: `padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
       greetingImg: `height: 4em; margin: 0;`,
       name: `margin: 0; font-size: 1.5em;`,
       title: `margin: 0; font-size: 0.9em; font-weight: 300;`,
-      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 0.25em 1em;`,
+      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 0.5em 1em;`,
       row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`0.5em 0`:`0.25em 0`};`,
       label: `font-size: 1em; margin: 0;`,
       text: `font-size: 0.9em; margin: 0;`,
@@ -1297,30 +1309,26 @@ const Views = {
       footerLink: `color: #fff;`,
       footerIcon: `height: 1.25em; width: 1.25em; margin: 0.285em 0 0;`,
 
-      about: `
-        display: flex; flex-direction: column; justify: flex-start; align-items: stretch;
-        width: 100%; margin: 0; color: #000; background-color: rgba(255,255,255,0.9);
-      `,
+      about: `display: flex; flex-direction: column; justify: flex-start; align-items: stretch; width: 100%; margin: 0; color: #000; background-color: rgba(255,255,255,0.9);`,
       aboutHeading: `margin: 1em auto; padding: 0 1em; text-align: center; font-size: 2.75em;  color: #223;`,
-
       aboutSection: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin: 0 0.5em 0.5em; padding: 0.75em; background-color: rgba(255,255,255,0.9); -webkit-box-shadow: 1px 1px 1px 1px rgba(10,10,10,0.1);`,
       aboutSubHeading: `margin: 0; border-bottom: 0.5px solid #666;`,
-
       aboutWindow: `display: flex; flex-direction: row; justify-content: space-around; align-items: center; padding: 0 1em; flex-wrap: wrap;`,
       aboutCell: `margin: 0.75em auto; padding: 0.75em 1em; background-color: rgba(1,1,1,0.01); -webkit-box-shadow: 10px 10px 15px 0px rgba(50,50,50,0.1);`,
-
-      scoresWindow: `
-        display: flex; flex-direction: row; justify-content: space-around; align-items: center;
-        width: 100%; margin: 0; overflow-x: scroll; -webkit-box-shadow: inset 0px 0px 10px 5px rgba(100,100,100,0.1);
-      `,
+      scoresWindow: `display: flex; flex-direction: row; justify-content: space-around; align-items: center; width: 100%; margin: 0; overflow-x: scroll; -webkit-box-shadow: inset 0px 0px 10px 5px rgba(100,100,100,0.1);`,
       scoreCell: `display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0.25em 1em; border: 1px solid #000;`,
       scoreImg: `max-height: 8em; max-width: 15em; margin: 0; padding: 0;`,
       scoreOrg: `text-align: center; margin: 0;`,
       scoreLink: `margin: 0; text-align: center; text-decoration: underline; color: #07e;`,
+
+
     };
 
-    // Card
-    const card = E("div", {style: styles.card}, [
+    // About Me
+    const aboutMe = E("div", {style: styles.aboutMe}, []);
+
+    // Contact Card
+    const contactCard = E("div", {style: styles.card}, [
       E("div", {style: styles.cardBody}, [
         E("div", {style: styles.bodyLeft}, [
           E("img", {style: styles.leftImg, src: content_me, alt: "my beautiful face"}, [])
@@ -1347,8 +1355,8 @@ const Views = {
       ])))
     ]);
 
-    // About this app
-    const about = E("div", {style: styles.about}, [
+    // About App
+    const aboutApp = E("div", {style: styles.about}, [
       E("h2", {style: styles.aboutHeading}, ["About This App"]),
       E("div", {style: styles.aboutSection}, [
         E("h3", {style: styles.aboutSubHeading}, ["Performance & Security Scores"]),
@@ -1368,6 +1376,14 @@ const Views = {
       ])
     ]);
 
+    // Journey
+    const journey = E("div", {style: styles.journey}, [landing, aboutMe, aboutApp, contactCard]);
+
+    // --- Icons ---
+    // http2 = multi-stream
+    // tls/hsts (w/CAA) = lock
+    // React/Redux icons
+    // responsive = devices
 
     // Widgets
     // 1. Todo
