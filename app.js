@@ -273,54 +273,6 @@ const Blueprint = {
         `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
       ]
     },
-    initStory: {
-      background: [
-        `Data Science has been a curious journey for me. I've never had ambitions of becoming any kind of scientist, other than a mad
-        one. College isn't something a lot of people did where I'm from. Calculus, physics and other higher maths & sciences weren't
-        needed in the "real world." Instead, importance was placed on family and continuity.`,
-        `Monotony and lack of stimulation in a small town, among other causes, bred alcoholism, drug abuse, petty crime and plenty of
-        other obstacles to intelligence. Certainly others are even further removed from academia, but it feels safe to say that data &
-        computational sciences are a far leap from where my interested should have landed, statistically.`
-      ],
-      journey: [
-        `I wanted to build cool things though, and I wasn't going to let a lack of a degree or a small-town mentality stop me. I knew I wanted
-        to build networked robotics (and later, industrial) applications. So, nearly a decade ago, I got some server space with a brand new
-        startup called Digitalocean, found their tutorials and began absorbing information.`,
-        `Countless iterations of LAMP/LEMP stacks, Bind DNS servers, Postfix/Dovecot/RoundCube/Gmail configurations, elaborate, multi
-        server networks with load balancers & failovers, and  has forced me to become an efficient researcher. In doing so, it's also ignited a
-        passion for research itself and an obsession with the idea of "learning to learn."`
-      ],
-      vision: [
-        `Over the past several years, my passions for building cool and inspiring gadgets, harvesting data from everyday sources, using
-        technology to effect positive change has coalesced into a desire to pursue Data Science roles, specifically within the field of
-        Artificial Intelligence. I am pursuing a Bachelor's CS degree, but mostly as a means to circumvent HR filters.`,
-        `I see a great deal more value in industry than academia. I've learned to maintain and expand my education as an individual with no
-        research experience because I know that's what it takes in industry to maintian a competitive advantage. I want to implement AI
-        models and tools to get work done now, while simultaneously acheiving my research goals in that field. I see entry level AI roles
-        as the perfect environment for that.`
-      ],
-      company: [
-        `To me, a company isn't a place you go to perform labor in exchange for money. It's a place where like minded people come, to
-        accomplish a common goal. It's a culture.`,
-        `I am currently writing this at 4am on a Sunday morning. I spend 5+ hours per day on code and research, outside of my full-time day
-        job and courseloads. Closer to 10+ hour days on weekends. I sleep about 2-5 hours per day and regularly skip 1-2 days. I do not get
-        paid extra for these sacrifices. To most people, I am in insane person.`,
-        `...but I'm starting to see the same behaviors in others, from a far. When I read about Tesla manufacturing teams working mountains
-        of overtime to hit production goals. When I submit a help request to TD Ameritrade in the middle of the night, well outside business
-        hours, but I get a response within a few minutes anyway. There are companies out there full of crazies like me. If you've read this
-        much, you're likely one of them.`
-      ],
-      summary: [
-        `When you research what it takes to make a compelling website-based resume, you encounter countless design-oriented examples. The web
-        is definitely very beautiful these days. I believe in meticulous design aesthetics, but I've always been more interested in the
-        moving pieces... the places where the interface touches the network. Where human actions & interactions reduce to raw bytes, and then
-        into electrical pulses.`,
-        `This web app, aside from the actual Word/PDF resume hosted here, is itself a form of a resume. It's meant to demonstrate my aesthetic
-        design choices, architectural choices, technology implementations and configurations, use of best practices and industry standards,
-        as well as security considerations, across the entire stack. Hopefully, it leaves you with the idea that I most value efficient,
-        modular code combined with attractive, easy to understand interfaces.`
-      ]
-    },
     initBlog: {
       viewingPost: 0,
       visibility: "VISIBLE",
