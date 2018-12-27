@@ -1,68 +1,123 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang='en' dir='ltr'>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="manifest" href="./site.webmanifest">
-    <link rel="apple-touch-icon" sizes="180x180" href="./imgs/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./imgs/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./imgs/icons/favicon-16x16.png">
-    <link rel="mask-icon" href="/imgs/icons/safari-pinned-tab.svg" color="#5bf">
-    <meta name="msapplication-TileColor" content="#224">
-    <meta name="theme-color" content="#224">
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <link rel='manifest' href='./site.webmanifest'>
+    <link rel='apple-touch-icon' sizes='180x180' href='./imgs/icons/manifest/apple-touch-icon.png'>
+    <link rel='icon' type='image/png' sizes='32x32' href='./imgs/icons/manifest/favicon-32x32.png'>
+    <link rel='icon' type='image/png' sizes='16x16' href='./imgs/icons/manifest/favicon-16x16.png'>
+    <link rel='mask-icon' href='/imgs/icons/manifest/safari-pinned-tab.svg' color='#5bf'>
+    <meta name='msapplication-TileColor' content='#224'>
+    <meta name='theme-color' content='#224'>
     <title>chivingtoninc</title>
   </head>
 
-  <style media="screen">
+  <style media='screen'>
     @font-face {
       font-family: 'Avenir-Book'; src: url('./includes/fonts/Avenir-Free/Avenir-Book.otf');
     }
     * {
-      font-family: "Avenir-Book", Fallback, sans-serif; scroll-behavior: smooth;
+      font-family: 'Avenir-Book', Fallback, sans-serif; font-weight: lighter; scroll-behavior: auto;
     }
-    #NoJsApp {
-      display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-      position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: auto; background-color: #5bf;
+    *::-webkit-scrollbar {
+      width: 0.5px; height: 0.5px;
     }
+    *::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+    }
+    *::-webkit-scrollbar-thumb {
+      background-color: #224;
+      outline: 1px solid #666;
+    }
+
+    #AppRoot {
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%;
+      position: absolute; top: 0; left: 0; bottom: 0; width: 100%; margin: 0; padding: 4em 0 0 0; overflow-x: hidden;
+      overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: rgba(100,100,100,1);
+    }
+
     #NoJsHeader {
-      position: absolute; top: 0; left: 0; right: 0; z-index: 15;
-      display: flex; flex-direction: row; justify-content: flex-start; align-items: center;
-      height: 4em; padding: 0 0 0 1em; border-bottom: 1px solid #fff;
-      background-image: linear-gradient(#333, #222); -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
+      display: flex; flex-direction: row; justify-content: flext-start; align-items: center; z-index: 90;
+      position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; border-bottom: 1px solid rgba(255,255,255,0.9);
+      background-color: rgba(10,10,10,0.9); -webkit-box-shadow: 1px 1px 15px 0 rgba(10,10,10,0.5);
     }
-    #NoJsIcon {
-      height: 2.25em; width: 2.25em;
+    #NoJsHeaderIcon {
+      margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;
     }
-    #NoJsTitle {
-      margin-left: 0.25em; color: #fff; font-size: 2.15em;
+    #NoJsHeaderTitle {
+      margin: 0; color: #fff; font-size: 2em; cursor: pointer;
     }
-    #NoJsView {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow-y: scroll; padding: 8em 0 0 0;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    #NoJsHeaderSup {
+      font-size: 0.4em; color: #fff; margin: -10px 0 0 3px;
     }
-    #NoJsWp {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;
+
+    #NoJsCard {
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: 0; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
     }
-    #NoJsFilter {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;
-      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5;
-      background-color: rgba(100,100,100,0.2); text-align: center; color: #fff;
+    #NoJsCardBody {
+      padding: 0; background-color: #252525; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
     }
-    #NoJsImg {
-      height: 50%; margin: 1em 0 1em 0; animation: float 5.5s infinite;
+    #NoJsCardBodyLeft {
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: center; margin: 0;
     }
-    .NoJsRow {
-      display: flex; flex-direction: row; justify-content: center; align-items: center;
+    #NoJsCardImg {
+      border: 1px solid #222; height: 15em; border-radius: 100%; margin: 1em auto 4em;
     }
-    .NoJsRow * {
-      margin: 0.25em 0.2em 0;
+    #NoJsCardBodyRight {
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: 0;
     }
-    .NoJsRow a {
-      font-style: italic; color: #5bf; text-decoration: none;
+    #NoJsCardBodyRightTop {
+      background-color: #ddd; padding: 0.5em; border-bottom: 1px solid #444; text-align: center;
     }
-    #NoJsMsg {
-      margin: 1em; font-size: 0.85em; font-style: italic;
+    #NoJsCardGreetingImg {
+      height: 4em; margin: 0.5em 0;
     }
+    #NoJsCardName {
+      margin: 0; font-size: 1.5em;
+    }
+    #NoJsCardTitle {
+      margin: 0; font-size: 0.9em; font-weight: 300;
+    }
+    #NoJsCardBodyRightBottom {
+      display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em;
+      background-color: #aaa;
+    }
+    .NoJsCardBodyRow {
+      display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: 1em 0;
+    }
+    .NoJsCardBodyLabel {
+      font-size: 1em; margin: 0;
+    }
+    .NoJsCardBodyText {
+      font-size: 0.8em; margin: 0;
+    }
+    .NoJsCardBodyLink {
+      font-size: 0.8em; margin: 0; text-decoration: underline; color: #000;
+    }
+    #NoJsCardFooter {
+      display: flex; flex-direction: row; justify-content: space-around; align-items: center; background-color: #222; padding: 1.15em 0 0.85em;
+    }
+    .NoJsCardFooterLink {
+      color: #fff;
+    }
+    .NoJsCardFooterIcon {
+      height: 1.25em; width: 1.25em;
+    }
+
+    /* @media screen and (max-device-width: 400px) and (-webkit-min-device-pixel-ratio: 1) {
+      #NoJsCardBody { flex-direction: column; }
+      #NoJsCardBodyLeft {`height: 25em;`}`,}
+      #NoJsCardBodyRight {border: 1px solid #222; ${MB ? `width: 100%;`  {height: 100%;`}`,}
+      bodyRight {display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,}
+      rightTop {background-color: #ddd; padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,}
+      greetingImg {height: 4em; margin: 0.5em 0;`,}
+      name {margin: 0; font-size: 1.5em;`,}
+      title {margin: 0; font-size: 0.9em; font-weight: 300;`,}
+      rightBottom {display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em; background-color: #aaa;`,}
+      row {display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.5em 0`};`,}
+    } */
+
     @keyframes float {
       0% 100% { transform: translateY(0); }
       50% { transform: translateY(-1em); }
@@ -100,62 +155,128 @@
       100% { opacity: 0%; transform: translateY(0); }
     }
     @keyframes viewSlideIn {
-      0% { transform: translateX(-15em); }
-      100% { transform: translateX(0); }
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(0%); }
     }
     @keyframes viewSlideOut {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(1000em); }
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(500%); }
     }
     @keyframes flashNetwork {
-      0% { transform: translateY(-8em); }
-      40% { transform: translateY(0); }
-      60% { transform: translateY(0); }
-      100% { transform: translateY(-8em); }
+      0% { transform: translateY(-2em); opacity: 0; }
+      15% { opacity: 0.2; }
+      30% { transform: translateY(0); opacity: 1; }
+      70% { transform: translateY(0); opacity: 1; }
+      85% { opacity: 0.3; }
+      100% { transform: translateY(-2em); opacity: 0; }
     }
   </style>
 
   <body>
-    <div id="AppRoot">
-      <div id="NoJsApp">
-        <div id="NoJsHeader">
-          <img id="NoJsIcon" src="./favicon.ico" alt="chivingtoninc Icon">
-          <h1 id="NoJsTitle">chivingtoninc<sup style="font-size: 0.3em; margin-left: 1px;">noJs</sup></h1>
-        </div>
-
-        <div id="NoJsView">
-          <img id="NoJsWp" src="./imgs/wp/pnw.jpg" alt="chivingtoninc Wallpaper">
-
-          <div id="NoJsFilter">
-            <img id="NoJsImg" src="./imgs/icons/safari-pinned-tab.svg" alt="chivingtoninc Icon">
-
-            <div class="NoJsRow">
-              <h3>View GitHub:</h3>
-              <a href="https://github.com/chivingtoninc/chivingtoninc.github.io">(web app)</a>
-              <p>|</p>
-              <a href="https://github.com/chivingtoninc">(main)</a>
+    <div id='AppRoot'>
+      <div id='NoJsHeader'>
+        <img id='NoJsHeaderIcon' src='/imgs/icons/sm/brain.svg' alt='chivingtoninc Icon'>
+        <h1 id='NoJsHeaderTitle'>chivingtoninc<sup id='NoJsHeaderSup'>noJs</sup></h1>
+      </div>
+      <div id='NoJsCard'>
+        <div id='NoJsCardBody'>
+          <div id='NoJsCardBodyLeft'>
+            <img id='NoJsCardImg' src='/imgs/me/me.jpg' alt='Portrait Image' />
+          </div>
+          <div id='NoJsCardBodyRight'>
+            <div id='NoJsCardBodyRightTop'>
+              <img id='NoJsCardGreetingImg' src='/imgs/content/hello.png' alt='Greeting Image' />
+              <h2 id='NoJsCardName'>Johnathan Chivington</h2>
+              <h2 id='NoJsCardTitle'>Experienced Full-Stack Engineer</h2>
             </div>
-
-            <div class="NoJsRow">
-              <h3>Download Cover:</h3>
-              <a href="./includes/docs/j.Chivington.Cover.docx" download>(.docx)</a>
-              <p>|</p>
-              <a href="./includes/docs/j.Chivington.Cover.pdf" download>(.pdf)</a>
+            <div id='NoJsCardBodyRightBottom'>
+              <div class='NoJsCardBodyRow'>
+                <h3 class='NoJsCardBodyLabel'>Location</h3>
+                <p class='NoJsCardBodyText'>Seattle, WA</p>
+              </div>
+              <div class='NoJsCardBodyRow'>
+                <h3 class='NoJsCardBodyLabel'>Phone</h3>
+                <p class='NoJsCardBodyText'>303.900.2861</p>
+              </div>
+              <div class='NoJsCardBodyRow'>
+                <h3 class='NoJsCardBodyLabel'>Email</h3>
+                <p class='NoJsCardBodyText'>j.chivington@bellevuecollege.edu</p>
+              </div>
+              <div class='NoJsCardBodyRow'>
+                <h3 class='NoJsCardBodyLabel'>Search</h3>
+                <p class='NoJsCardBodyText'>Actively Seeking (local & remote)</p>
+              </div>
+              <div class='NoJsCardBodyRow'>
+                <h3 class='NoJsCardBodyLabel'>Resume</h3>
+                <a class='NoJsCardBodyLink' href='./includes/docs/j.Chivington.Resume.docx' alt='Resume Download Link' download>Download Resume</a>
+              </div>
+              <div class='NoJsCardBodyRow'>
+                <h3 class='NoJsCardBodyLabel'>Cover Letter</h3>
+                <a class='NoJsCardBodyLink' href='./includes/docs/j.Chivington.Cover.docx' alt='Cover Letter Download Link' download>Download Cover Letter</a>
+              </div>
             </div>
-
-            <div class="NoJsRow">
-              <h3>Download Resume:</h3>
-              <a href="./includes/docs/j.Chivington.Resume.docx" download>(.docx)</a>
-              <p>|</p>
-              <a href="./includes/docs/j.Chivington.Resume.pdf" download>(.pdf)</a>
-            </div>
-
-            <p id="NoJsMsg">Javascript is likely disabled. <br/> You will need Javascript to use this app.</p>
           </div>
         </div>
+        <div id='NoJsCardFooter'>
+          <a class='NoJsCardFooterLink' href='https://github.com/chivingtoninc' alt='GitHub Link' target='_blank'>
+            <img class='NoJsCardFooterIcon' src='/imgs/icons/sm/git.svg' alt='GitHub Icon' />
+          </a>
+          <a class='NoJsCardFooterLink' href='https://linkedin.com/in/johnathan-chivington' alt='LinkedIn Link' target='_blank'>
+            <img class='NoJsCardFooterIcon' src='/imgs/icons/sm/li.svg' alt='LinnkedIn Icon' />
+          </a>
+          <a class='NoJsCardFooterLink' href='https://twitter.com/chivingtoninc' alt='Twitter Link' target='_blank'>
+            <img class='NoJsCardFooterIcon' src='/imgs/icons/sm/twt.svg' alt='Twitter Icon' />
+          </a>
+          <a class='NoJsCardFooterLink' href='tel:303-900-2861' alt='Phone Link' target='_blank'>
+            <img class='NoJsCardFooterIcon' src='/imgs/icons/sm/phone.svg' alt='Phone Icon' />
+          </a>
+          <a class='NoJsCardFooterLink' href='mailto:j.chivington@bellevuecollege.edu' alt='Email Link' target='_blank'>
+            <img class='NoJsCardFooterIcon' src='/imgs/icons/sm/email.svg' alt='Email Icon' />
+          </a>
+        </div>
       </div>
+
+
+      <!-- <div id='NoJsApp'>
+        <div id='NoJsHeader'>
+          <img id='NoJsIcon' src='/imgs/icons/sm/brain.svg' alt='chivingtoninc Icon'>
+          <h1 id='NoJsTitle'>chivingtoninc<sup style='font-size: 0.3em; margin-left: 1px;'>noJs</sup></h1>
+        </div>
+
+        <div id='NoJsView'>
+          <img id='NoJsWp' src='/imgs/wp/pnw.jpg' alt='chivingtoninc Wallpaper'>
+
+          <div id='NoJsFilter'>
+            <img id='NoJsImg' src='/imgs/icons/manifest/safari-pinned-tab.svg' alt='chivingtoninc Icon'>
+
+            <div class='NoJsRow'>
+              <h3>View GitHub:</h3>
+              <a href='https://github.com/chivingtoninc/chivingtoninc.github.io'>(web app)</a>
+              <p>|</p>
+              <a href='https://github.com/chivingtoninc'>(main)</a>
+            </div>
+
+            <div class='NoJsRow'>
+              <h3>Download Cover:</h3>
+              <a href='./includes/docs/j.Chivington.Cover.docx' download>(.docx)</a>
+              <p>|</p>
+              <a href='./includes/docs/j.Chivington.Cover.pdf' download>(.pdf)</a>
+            </div>
+
+            <div class='NoJsRow'>
+              <h3>Download Resume:</h3>
+              <a href='./includes/docs/j.Chivington.Resume.docx' download>(.docx)</a>
+              <p>|</p>
+              <a href='./includes/docs/j.Chivington.Resume.pdf' download>(.pdf)</a>
+            </div>
+
+            <p id='NoJsMsg'>Javascript is likely disabled. <br/> You will need Javascript to use this app.</p>
+          </div>
+        </div>
+      </div> -->
+
     </div>
   </body>
 
-  <script src="./app.js" charset="utf-8"></script>
+  <script src='/js/app.js' charset='utf-8'></script>
 </html>
