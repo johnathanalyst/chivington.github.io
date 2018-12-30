@@ -220,8 +220,9 @@ const Blueprint = {
     window: {
       width: window.innerWidth,
       height: window.innerHeight,
-      mode: window.innerWidth < 800 ? 'mobile'
-        : (window.innerWidth < 950 ? 'small_tab' : (window.innerWidth < 1200 ? 'large_tab' : 'desktop'))
+      mode: window.innerWidth < 800 ? 'mobile' : (
+        window.innerWidth < 950 ? 'small_tab' : (window.innerWidth < 1200 ? 'large_tab' : 'desktop')
+      )
     },
     header: {
       icon: Assets.icon_brain,
@@ -261,15 +262,15 @@ const Blueprint = {
       location: 'Seattle, WA',
       search: 'Actively Seeking (local & remote)'
     },
-    covers: [{
-      name: 'WORK_STUDY', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf], lines: [
+    covers: [
+      {name: 'WORK_STUDY', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf], lines: [
         `I am a Computer Science student at Bellevue College seeking research, administrative and other work-study opportunities. I am very well-organized, punctual, have strong interpersonal and customer service skills, and work well in teams as well as individually, without supervision.`,
         `Currently, I am an Accounts Receivable Specialist at a large legal services company downtown, ABC Legal Services. The job is really engaging, my coworkers and boss are all great to work with and be around, and the hours are very flexible.`,
         `Still, I have worked to position my education as the primary objective in my life and it is a large commitment. This coming quarter I will be enrolled 15 or 21 credit hours, with classes in calculus, computer science, Chinese and hopefully physics.`,
         `With such a commitment, working on campus will be a significant aid. The fuel, parking and time savings gained by working on campus, as well as the ongoing networking and internship opportunities available through the school will be key in achieving my personal and educational goals.`,
         `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work in a diverse environment like Bellevue College where I will be exposed to many new “education-focused” people from various cultures.`
-      ]},{
-      name: 'DEEP_LEARNING', links: [Assets.resource_cover_DL_docx, Assets.resource_cover_DL_pdf], lines: [
+      ]},
+      {name: 'DEEP_LEARNING', links: [Assets.resource_cover_DL_docx, Assets.resource_cover_DL_pdf], lines: [
         `I am an experienced software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
         `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
         `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
@@ -491,18 +492,20 @@ const Components = {
   },
   Network: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { networkState } = state.appState;
+    const { networkState, historyState } = state.appState;
     const { downlink, effectiveType, previousType } = networkState;
     const offline = downlink == 0 ? true : false;
     const status = offline ? 'OFFLINE' : effectiveType.toUpperCase();
     const changed = (effectiveType != previousType);
+    const lastAction = historyState.slice(-1);
+    const lastActionShow = (lastAction == 'NETWORK_STATE_CHANGE' || lastAction == '@@INIT');
 
     const styles = {
       net: `
         position: absolute; top: 5.45em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 85;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: ${offline?`#e44`:`#4e4`}; font-size: 0.75em; color: #222; font-weight: bold;
-        ${changed ? `animation: flashNetwork 1000ms ease-in-out 1 forwards;` : `display: none;`}
+        ${(changed && lastActionShow || offline) ? `animation: flashNetwork 1000ms ease-in-out 1 forwards;` : `display: none;`}
       `
     };
 
@@ -512,7 +515,23 @@ const Components = {
       }});
     }, 1000);
 
-    const Net = React.createElement('div', {style: styles.net}, [`Connected  - ${status}`]);
+    const Net = React.createElement('div', {style: styles.net}, [`Connection  - ${status}`]);
+
+    window.addEventListener('online', function(event) {
+      if (changed) dispatch({type: 'NETWORK_STATE_CHANGE',  payload: {
+        downlink: navigator.connection ? navigator.connection.downlink : 10,
+        effectiveType: navigator.connection ? navigator.connection.effectiveType : 'Connecting...',
+        previousType: effectiveType
+      }});
+    });
+
+    window.addEventListener('offline', function(event) {
+      if (changed) dispatch({type: 'NETWORK_STATE_CHANGE',  payload: {
+        downlink: navigator.connection ? navigator.connection.downlink : 10,
+        effectiveType: 'OFFLINE',
+        previousType: effectiveType
+      }});
+    });
 
     return Net;
   },
@@ -589,10 +608,12 @@ const Components = {
   },
   View: function(store, view, viewName) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { viewState } = state.uiState;
-    const { current, previous, scrollTop } = state.uiState.viewState;
-    const [ isCurrentView, isPreviousView, isSameView, lastActionWasNav ] = [ (viewName == current),
-      (viewName == previous), (current == previous), (state.appState.historyState.slice(-1) == 'NAV_TO')];
+    const { windowState, viewState } = state.uiState;
+    const { width, height, mode } = windowState;
+    const { current, previous, scrollTop } = viewState;
+    const [ isCurrentView, isPreviousView, isSameView, lastActionWasNav ] = [
+      (viewName == current), (viewName == previous), (current == previous), (state.appState.historyState.slice(-1) == 'NAV_TO')
+    ];
     const animation = `${
       (lastActionWasNav && isCurrentView && !isSameView) ? `animation: viewSlideIn 250ms 1 forwards;` : (
       (lastActionWasNav && isCurrentView && !isSameView) ? `animation: viewSlideIn 250ms 1 forwards;` : (
@@ -618,6 +639,14 @@ const Components = {
         dispatch({type: 'UPDATE_SCROLL', payload: eventScrollTop});
     }, false);
 
+    let resizeCounter = 0;
+    window.addEventListener('resize', function(event) {
+      const [ newWidth, newHeight ] = [ window.innerWidth, window.innerHeight ];
+      const newMode = newWidth < 800 ? 'mobile' : (newWidth < 950 ? 'small_tab' : (newWidth < 1200 ? 'large_tab' : 'desktop'));
+      if (resizeCounter++ % 10 == 0 && newMode != mode)
+        dispatch({type: 'RESIZE', payload: {width: newWidth, height: newHeight, mode: newMode} });
+    });
+
     return View;
   },
   Tabs: function(store) {
@@ -640,17 +669,17 @@ const Views = {
     const E = React.createElement;
 
     const styles = {
-      view: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%; background-color: #069;`,
-      card: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; margin: ${MB ? `1em` : `0 3em`}; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
-      cardBody: `padding: 0.5em; background-color: #fff; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
-      bodyLeft: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; ${MB?``:`height: 25em;`}`,
-      leftImg: `border: 1px solid #222; ${MB ? `width: 100%;` : `height: 100%;`}`,
+      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; height: 100% background-color: #069;`,
+      card: `position: absolute; margin: 0.75em 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
+      cardBody: `padding: 0; background-color: #353535; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
+      bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
+      leftImg: `border: 1px solid #222; height: ${MB?`17em`:`22em`}; border-radius: 100%; margin: 1em;`,
       bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,
       rightTop: `background-color: #ddd; padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
       greetingImg: `height: 4em; margin: 0.5em 0;`,
       name: `margin: 0; font-size: 1.5em;`,
       title: `margin: 0; font-size: 0.9em; font-weight: 300;`,
-      rightBottom: `display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em; background-color: #aaa;`,
+      rightBottom: `display: flex; ${MB?``:`height: 13em;`} flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em; background-color: #aaa;`,
       row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.5em 0`};`,
       label: `font-size: 1em; margin: 0;`,
       text: `font-size: 0.8em; margin: 0;`,
@@ -781,22 +810,12 @@ const Views = {
  * -------------------------------------------------------------------------------- */
 const App = function(store) {
   const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-  const { width, height, mode } = state.uiState.windowState;
-  const E = React.createElement;
 
   const styles = {
     app: `position: fixed; top: 0; bottom: 0; left: 0; width: 100%; margin: 0; padding: 0; z-index: 0;`
   };
 
-  window.addEventListener('resize', function(event) {
-    const [ newWidth, newHeight ] = [ event.target.innerWidth, event.target.innerHeight ];
-    const newMode = newWidth < 800 ? 'mobile' : (newWidth < 950 ? 'small_tab' : (newWidth < 1200 ? 'large_tab' : 'desktop'));
-    if (!(mode == newMode)) dispatch({type: 'RESIZE', payload: {width: newWidth, height: newHeight, mode: newMode} });
-  });
-
-  if (state.uiState.menuState == 'CLOSING') dispatch({type: 'CLOSE_MENU'});
-
-  return E('div', {style: styles.app}, [
+  return React.createElement('div', {style: styles.app}, [
     Components.Header(store), Components.Menu(store), Components.Router(store),
     Components.Network(store)// , Components.Ads(store)
   ]);
