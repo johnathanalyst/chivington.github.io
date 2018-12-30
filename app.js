@@ -37,19 +37,19 @@ const ReactDOM = {
 const Redux = {
   createStore: function(rootReducer, middlewares = {}) {
     var state = {}, listeners = [];
+    const { logActions, listenerBypass } = middlewares;
 
     function getState() {
       return state;
     }
 
     function dispatch(action) {
-      if (middlewares.logActions) middlewares.logActions('before', state, action);
+      if (logActions) logActions('before', state, action);
       state = rootReducer(state, action);
-      if (middlewares.logActions) middlewares.logActions('after', state, action);
+      if (logActions) logActions('after', state, action);
 
-      if (middlewares.listenerBypass && middlewares.listenerBypass(action.type)[0])
-        listeners.forEach(listener => middlewares.listenerBypass(action.type).forEach(bypassName => {
-          console.log('CHECKING BYPASS');
+      if (listenerBypass && listenerBypass(action.type)[0])
+        listeners.forEach(listener => listenerBypass(action.type).forEach(bypassName => {
           if (bypassName != listener.name) listener.function(...listener.params);
         }));
       else listeners.forEach(listener => listener.function(...listener.params));
@@ -103,10 +103,12 @@ const Assets = {
   resource_app: '/app.js',
   resource_sw: '/sw.js',
   resource_webmanifest: '/site.webmanifest',
-  resource_coverDocx: '/includes/docs/j.Chivington.Cover.docx',
-  resource_coverPdf: '/includes/docs/j.Chivington.Cover.pdf',
-  resource_resumeDocx: '/includes/docs/j.Chivington.Resume.docx',
-  resource_resumePdf: '/includes/docs/j.Chivington.Resume.pdf',
+  resource_cover_DL_docx: '/includes/docs/j.Chivington.DL.Cover.docx',
+  resource_cover_DL_pdf: '/includes/docs/j.Chivington.DL.Cover.pdf',
+  resource_cover_WS_docx: '/includes/docs/j.Chivington.WS.Cover.docx',
+  resource_cover_WS_pdf: '/includes/docs/j.Chivington.WS.Cover.pdf',
+  resource_resume_GEN_docx: '/includes/docs/j.Chivington.Resume.docx',
+  resource_resume_GEN_pdf: '/includes/docs/j.Chivington.Resume.pdf',
   resource_avenir: '/includes/fonts/Avenir-Book.otf',
   content_greeting: '/imgs/content/hello.png',
   content_step1: '/imgs/content/step1.jpg',
@@ -259,13 +261,22 @@ const Blueprint = {
       location: 'Seattle, WA',
       search: 'Actively Seeking (local & remote)'
     },
-    cover: [
-      `I am an experienced software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
-      `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
-      `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
-      `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
+    covers: [{
+      name: 'WORK_STUDY', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf], lines: [
+        `I am a Computer Science student at Bellevue College seeking research, administrative and other work-study opportunities. I am very well-organized, punctual, have strong interpersonal and customer service skills, and work well in teams as well as individually, without supervision.`,
+        `Currently, I am an Accounts Receivable Specialist at a large legal services company downtown, ABC Legal Services. The job is really engaging, my coworkers and boss are all great to work with and be around, and the hours are very flexible.`,
+        `Still, I have worked to position my education as the primary objective in my life and it is a large commitment. This coming quarter I will be enrolled 15 or 21 credit hours, with classes in calculus, computer science, Chinese and hopefully physics.`,
+        `With such a commitment, working on campus will be a significant aid. The fuel, parking and time savings gained by working on campus, as well as the ongoing networking and internship opportunities available through the school will be key in achieving my personal and educational goals.`,
+        `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work in a diverse environment like Bellevue College where I will be exposed to many new “education-focused” people from various cultures.`
+      ]},{
+      name: 'DEEP_LEARNING', links: [Assets.resource_cover_DL_docx, Assets.resource_cover_DL_pdf], lines: [
+        `I am an experienced software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
+        `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
+        `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
+        `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
+      ]}
     ],
-    resume: []
+    resumes: []
   }
 };
 
@@ -413,7 +424,7 @@ const Reducers = {
   },
   workState: function(state = Blueprint.work, action) {
     return Redux.combineReducers({
-      coverState: function(state = Blueprint.work.cover, action) {
+      coverState: function(state = Blueprint.work.covers, action) {
         return state;
       },
       contactState: function(state = Blueprint.work.contact, action) {
@@ -693,7 +704,7 @@ const Views = {
 
     return E('div', {style: styles.view}, [card]);
   },
-  Blog: function(store, offset) {
+  Blog: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const E = React.createElement;
 
@@ -716,24 +727,25 @@ const Views = {
       E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG'])
     ]);
   },
-  Cover: function(store, offset) {
+  Cover: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { coverState } = state.workState;
     const E = React.createElement;
 
     const styles = {
-      cover: `margin: 0; background-color: rgba(100,100,100,0.9); border: 1px solid #000;`,
+      view: `margin: 0; background-color: rgba(100,100,100,0.9); border: 1px solid #000;`,
       coverBody: `padding: 1em; background-image: linear-gradient(to right, #eee,#fff); color: #222;`,
       coverLine: `margin: 0 auto 1em; padding: 1em; text-align: center; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
         background-image: linear-gradient(to left, rgba(225,225,225,0.8), rgba(225,225,225,0.9));`
     };
 
-    return E('div', {style: styles.cover}, [
+    return E('div', {style: styles.view}, [
+      // E('div', {style: styles.coverSelector}, []),
       // Components.UI.DocHeader(props, dispatch, []),
-      E('div', {style: styles.coverBody}, coverState.map(l => E('p', {style: styles.coverLine}, [l])))
+      E('div', {style: styles.coverBody}, coverState[0].lines.map(l => E('p', {style: styles.coverLine}, [l])))
     ]);
   },
-  Resume: function(store, offset) {
+  Resume: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const E = React.createElement;
 
@@ -796,11 +808,11 @@ const App = function(store) {
  * of the app refreshes, based on changes in the corresponding branch of state.     *
  * -------------------------------------------------------------------------------- */
 
- //  Populate initial state from RootReducer.
- const InitialState = Redux.combineReducers(Reducers);
+//  Create root state reducer from Reducers.
+const RootReducer = Redux.combineReducers(Reducers);
 
-// Create ReduxStore, using InitialState & StoreMiddlewares
-const ReduxStore = Redux.createStore(InitialState, StoreMiddlewares);
+// Create ReduxStore, using RootReducer & StoreMiddlewares
+const ReduxStore = Redux.createStore(RootReducer, StoreMiddlewares);
 
 // Render app once initially
 ReactDOM.render(App, ReduxStore, AppRoot);
