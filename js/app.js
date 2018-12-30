@@ -522,16 +522,17 @@ const Components = {
     const { aboutState, historyState } = appState;
     const { company, author, version } = aboutState;
     const lastActionClosed = !!(historyState.slice(-1) == 'CLOSE_MENU' || historyState.slice(-1) == 'TOGGLE_MENU');
-    const { windowState, menuState } = uiState;
+    const { windowState, viewState, menuState } = uiState;
     const { width, height, mode } = windowState;
-    const { current, previous } = menuState;
+    const [ currentView, isPreviousView ] = [ viewState.current, viewState.previous ];
+    const [ currentMenu, previousMenu ] = [ menuState.current, menuState.previous ];
     const E = React.createElement;
 
     const styles = {
       menu: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: fixed;
         top: 4em; left: 0; bottom: 0; width: ${mode != 'desktop' ? `100%` : `25%`}; z-index: 80; overflow: hidden;
-        background-color: #000; ${(current == 'OPEN') ? (previous == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
+        background-color: #000; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
           : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)}
       `,
       menuBtn: `
@@ -546,13 +547,15 @@ const Components = {
     };
 
     const menuBtns = [
-      [`Home`, [{type: 'CLOSE_MENU'}, {type: 'NAV_TO', payload: 'HOME'}]],
-      [`Blog`, [{type: 'CLOSE_MENU'}, {type: 'NAV_TO', payload: 'BLOG'}]],
-      [`Cover`, [{type: 'CLOSE_MENU'}, {type: 'NAV_TO', payload: 'COVER'}]],
-      [`Resume`, [{type: 'CLOSE_MENU'}, {type: 'NAV_TO', payload: 'RESUME'}]]
+      [`Home`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'HOME', check: currentView != 'HOME' }]],
+      [`Blog`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'BLOG', check: currentView != 'BLOG' }]],
+      [`Cover`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'COVER', check: currentView != 'COVER' }]],
+      [`Resume`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'RESUME', check: currentView != 'RESUME' }]]
     ].map(btn => {
       const b = E('h3', {style: styles.menuBtn}, [btn[0]]);
-      b.addEventListener('click', () => btn[1].forEach(action => dispatch(action)));
+      b.addEventListener('click', () => btn[1].forEach(action => {
+        if (action.check) dispatch({type: action.type, payload: action.payload});
+      }));
       return b;
     });
 
@@ -610,7 +613,9 @@ const Components = {
     let scrollCounter = 0;
     View.addEventListener('scroll', function(event) {
       const eventScrollTop = event.target.scrollTop;
-      if (scrollCounter++ % 2 == 0) dispatch({type: 'UPDATE_SCROLL', payload: eventScrollTop});
+      const diff = (eventScrollTop - scrollTop) < 0 ? -(eventScrollTop - scrollTop) : (eventScrollTop - scrollTop);
+      if (scrollCounter++ % 2 == 0 && diff > 5)
+        dispatch({type: 'UPDATE_SCROLL', payload: eventScrollTop});
     }, false);
 
     return View;
