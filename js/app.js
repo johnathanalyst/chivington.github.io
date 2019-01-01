@@ -234,9 +234,12 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'HOME',
+      current: 'COVER',
       previous: '@@INIT',
       scrollTop: 0
+    },
+    tabs: {
+
     },
     ads: [{
       type: 'message',
@@ -263,19 +266,8 @@ const Blueprint = {
       search: 'Actively Seeking (local & remote)'
     },
     covers: [
-      {name: 'WORK_STUDY', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf], lines: [
-        `I am a Computer Science student at Bellevue College seeking research, administrative and other work-study opportunities. I am very well-organized, punctual, have strong interpersonal and customer service skills, and work well in teams as well as individually, without supervision.`,
-        `Currently, I am an Accounts Receivable Specialist at a large legal services company downtown, ABC Legal Services. The job is really engaging, my coworkers and boss are all great to work with and be around, and the hours are very flexible.`,
-        `Still, I have worked to position my education as the primary objective in my life and it is a large commitment. This coming quarter I will be enrolled 15 or 21 credit hours, with classes in calculus, computer science, Chinese and hopefully physics.`,
-        `With such a commitment, working on campus will be a significant aid. The fuel, parking and time savings gained by working on campus, as well as the ongoing networking and internship opportunities available through the school will be key in achieving my personal and educational goals.`,
-        `Finally, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work in a diverse environment like Bellevue College where I will be exposed to many new “education-focused” people from various cultures.`
-      ]},
-      {name: 'DEEP_LEARNING', links: [Assets.resource_cover_DL_docx, Assets.resource_cover_DL_pdf], lines: [
-        `I am an experienced software engineer, experienced with object-oriented, algorithmic design in C, Python, Java & Javascript, as well as learning algorithms & models, and I am seeking entry-level Deep Learning roles in Computer Vision & Natural Language Processing.`,
-        `I am a Computer Science student at Bellevue College and have completed additional courses in Machine & Deep Learning from Stanford & deeplearning.ai through Coursera. Currently, I am focused on creating CV, NLP, and SLAM applications for embedded & cloud-based systems. I am building a modular ecosystem of AI tools from embedded & IoT devices to cloud-based fleet management systems.`,
-        `Deep Learning is revolutionizing many industries and I am learning to leverage it’s incredible capabilities for enhancing daily life. My primary career interests are in automated robotics for manufacturing, food production and sustainable technologies.`,
-        `Lastly, I am a conversational Spanish speaker, a beginner in several other languages, and I enjoy connecting with people from different cultures and backgrounds. It would be a rewarding experience to work alongside dedicated professionals who are also passionate about bringing useful AI technologies to life.`
-      ]}
+      {name: 'Work Study', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf]},
+      {name: 'Deep Learning', links: [Assets.resource_cover_DL_docx, Assets.resource_cover_DL_pdf]}
     ],
     resumes: []
   }
@@ -290,8 +282,8 @@ const Reducers = {
     return Redux.combineReducers({
       networkState: function(state = Blueprint.app.network, action) {
         const choices = {
-          'NETWORK_STATE_CHANGE': () => action.payload,
-          'NETWORK_STATE_INIT': () => action.payload,
+          'NET_STATE_CHANGE': () => action.payload,
+          'NET_STATE_INIT': () => action.payload,
           'DEFAULT': () => state
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
@@ -468,9 +460,9 @@ const Components = {
 
     const styles = {
       header: `
-        display: flex; flex-direction: row; justify-content: flext-start; align-items: center; z-index: 90;
-        position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; border-bottom: 1px solid rgba(255,255,255,0.9);
-        background-color: rgba(10,10,10,0.9); -webkit-box-shadow: 1px 1px 15px 0 rgba(10,10,10,0.5);
+        position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
+        display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
+        background-color: rgba(10,10,10,0.9); border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 rgba(10,10,10,0.5);
       `,
       icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
       title: `margin: 0; color: #fff; font-size: 2em; cursor: pointer;`,
@@ -497,20 +489,21 @@ const Components = {
     const offline = downlink == 0 ? true : false;
     const status = offline ? 'OFFLINE' : effectiveType.toUpperCase();
     const changed = (effectiveType != previousType);
-    const lastAction = historyState.slice(-1);
-    const lastActionShow = (lastAction == 'NETWORK_STATE_CHANGE' || lastAction == '@@INIT');
+    const menuOpen = state.uiState.menuState.current == 'OPEN'
+    const lastAction = historyState.slice(-1);;
+    const display = lastAction == '@@INIT' || lastAction == 'NET_STATE_CHANGE' || (offline && !menuOpen);
 
     const styles = {
       net: `
         position: absolute; top: 5.45em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 85;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: ${offline?`#e44`:`#4e4`}; font-size: 0.75em; color: #222; font-weight: bold;
-        ${(changed && lastActionShow || offline) ? `animation: flashNetwork 1000ms ease-in-out 1 forwards;` : `display: none;`}
+        ${display ? `animation: flashNetwork 1000ms ease-in-out 1 forwards;` : `display: none;`}
       `
     };
 
     if (previousType == '@@INIT') window.setTimeout(function() {
-      dispatch({type: 'NETWORK_STATE_INIT', payload: {
+      dispatch({type: 'NET_STATE_INIT', payload: {
         downlink: downlink, effectiveType: effectiveType, previousType: effectiveType
       }});
     }, 1000);
@@ -518,7 +511,7 @@ const Components = {
     const Net = React.createElement('div', {style: styles.net}, [`Connection  - ${status}`]);
 
     window.addEventListener('online', function(event) {
-      if (changed) dispatch({type: 'NETWORK_STATE_CHANGE',  payload: {
+      if (changed) dispatch({type: 'NET_STATE_CHANGE',  payload: {
         downlink: navigator.connection ? navigator.connection.downlink : 10,
         effectiveType: navigator.connection ? navigator.connection.effectiveType : 'Connecting...',
         previousType: effectiveType
@@ -526,7 +519,7 @@ const Components = {
     });
 
     window.addEventListener('offline', function(event) {
-      if (changed) dispatch({type: 'NETWORK_STATE_CHANGE',  payload: {
+      if (changed) dispatch({type: 'NET_STATE_CHANGE',  payload: {
         downlink: navigator.connection ? navigator.connection.downlink : 10,
         effectiveType: 'OFFLINE',
         previousType: effectiveType
@@ -560,9 +553,9 @@ const Components = {
       `,
       appInfo: `
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
-        position: absolute; bottom: 0; left: 0; width: 100%; padding: 1em 0; width: 100%; border-top: 1px solid #252525;
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid #252525;
       `,
-      appInfoRow: `margin: 0.25em auto; color: #353535;`
+      appInfoRow: `margin: 0.25em auto; color: #454545;`
     };
 
     const menuBtns = [
@@ -584,11 +577,12 @@ const Components = {
   },
   Router: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { headerState, viewState } = state.uiState;
-    const { current, previous } = viewState;
+    const { current, previous } = state.uiState.viewState;
+    const [ sameView, lastActionNav ] = [ (current == previous), (state.appState.historyState.slice(-1) == 'NAV_TO') ];
+    const animate = lastActionNav && !sameView;
 
     const styles = {
-      router: `position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: hidden; z-index: 5;`
+      router: `position: fixed; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; z-index: 5;`
     };
 
     const views = {
@@ -602,55 +596,76 @@ const Components = {
     const view = views[current] ? views[current] : views['DEFAULT'];
     const prev = views[previous] ? views[previous] : views['DEFAULT'];
 
+    const currentAnimation = animate ? `animation: viewSlideIn 250ms 1 forwards;` : ``;
+    const previousAnimation = animate ? `animation: viewSlideOut 500ms 1 forwards;` : ``;
+
     return React.createElement('div', {style: styles.router}, [
-      Components.View(store, prev, previous), Components.View(store, view, current)
+      Components.View(store, prev, previousAnimation), Components.View(store, view, currentAnimation)
     ]);
   },
-  View: function(store, view, viewName) {
+  View: function(store, viewComponent, animation) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { windowState, viewState } = state.uiState;
     const { width, height, mode } = windowState;
-    const { current, previous, scrollTop } = viewState;
-    const [ isCurrentView, isPreviousView, isSameView, lastActionWasNav ] = [
-      (viewName == current), (viewName == previous), (current == previous), (state.appState.historyState.slice(-1) == 'NAV_TO')
-    ];
-    const animation = `${
-      (lastActionWasNav && isCurrentView && !isSameView) ? `animation: viewSlideIn 250ms 1 forwards;` : (
-      (lastActionWasNav && isCurrentView && !isSameView) ? `animation: viewSlideIn 250ms 1 forwards;` : (
-      (!lastActionWasNav && isPreviousView && !isSameView) ? `display: none;` : ``
-    ))}`;
 
     const styles = {
-      view: `position: fixed; top: 0; left: 0; bottom: 0; width: 100%; margin: 0; padding: 4em 0 0 0; overflow-x: hidden;
-        overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: rgba(100,100,100,1); ${animation}`
+      view: `position: fixed; top: 0; left: 0; height: 100%; width: 100%; margin: 0; padding: 4em 0 0 0; overflow-x: hidden;
+        overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: #353535; ${animation}`
     };
 
-    const View = React.createElement('div', {style: styles.view}, [view(store)]);
+    const View = React.createElement('div', {style: styles.view}, [viewComponent(store)]);
+    setTimeout(event => View.scrollTo({top: viewState.scrollTop, left: 0, behavior: 'auto'}), 0);
 
-    setTimeout(function(event) {
-      View.scrollTo({top: scrollTop, left: 0, behavior: 'auto'});
-    }, 0);
-
-    let scrollCounter = 0;
+    let scrollCtr = 0;
     View.addEventListener('scroll', function(event) {
-      const eventScrollTop = event.target.scrollTop;
-      const diff = (eventScrollTop - scrollTop) < 0 ? -(eventScrollTop - scrollTop) : (eventScrollTop - scrollTop);
-      if (scrollCounter++ % 2 == 0 && diff > 5)
-        dispatch({type: 'UPDATE_SCROLL', payload: eventScrollTop});
+      const [ currentST, eventST ] = [ viewState.scrollTop, event.target.scrollTop ];
+      const diff = (eventST - currentST) < 0 ? -(eventST - currentST) : (eventST - currentST);
+      if (scrollCtr++ % 2 == 0 && diff > 5) dispatch({type: 'UPDATE_SCROLL', payload: eventST});
     }, false);
 
-    let resizeCounter = 0;
+    let resizeCtr = 0;
     window.addEventListener('resize', function(event) {
-      const [ newWidth, newHeight ] = [ window.innerWidth, window.innerHeight ];
-      const newMode = newWidth < 800 ? 'mobile' : (newWidth < 950 ? 'small_tab' : (newWidth < 1200 ? 'large_tab' : 'desktop'));
-      if (resizeCounter++ % 10 == 0 && newMode != mode)
-        dispatch({type: 'RESIZE', payload: {width: newWidth, height: newHeight, mode: newMode} });
+      const [ nw, nh ] = [ window.innerWidth, window.innerHeight ];
+      const nm = nw < 800 ? 'mobile' : (nw < 950 ? 'small_tab' : (nw < 1200 ? 'large_tab' : 'desktop'));
+      if (resizeCtr++ % 10 == 0 && nm != mode) dispatch({type: 'RESIZE', payload: {width: nw, height: nh, mode: nm} });
     });
 
     return View;
   },
   Tabs: function(store) {
-    // z-index: 15;
+    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
+    const { tabState } = state.uiState;
+    const DEV = state.uiState.windowState.mode.toLowerCase();
+    const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
+    const E = React.createElement;
+
+    const styles = {
+      tabComponent: `
+        border: 1px solid #f33; background-color: #333;
+      `,
+      tabView: `
+        position: absolute; top: 0; left: ${MB?`0`:`20`}%; height: ${MB?`95`:`100`}%; width: ${MB?`100`:`80`}%;
+        border: 1px solid #33f; background-color: #aaa;
+      `,
+      tabBar: `
+        position: absolute; ${MB?`bottom: 0`:`top: 0`}; left: 0; height: ${MB?`5`:`100`}%; width: ${MB?`100`:`20`}%;
+        display: flex; flex-direction: ${MB?`row`:`column`}; justify-content: center; align-items: stretch;
+        border: 1px solid #3f3; background-color: #333;
+      `,
+      tabBtn: `
+        background-color: #224; border: 1px solid #aaa;
+      `
+    };
+
+    const Tab = E('div', {style: styles.tabComponent}, [
+      E('div', {style: styles.tabView}, ['TAB VIEW']),
+      E('div', {style: styles.tabBar}, [
+        E('div', {style: styles.tabBtn}, ['Deep Learning']),
+        E('div', {style: styles.tabBtn}, ['Work Study'])
+      ])
+    ]);
+
+    return Tab;
   }
 };
 
@@ -665,12 +680,12 @@ const Views = {
     const { content_me, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email } = Assets;
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.workState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
-    const [ MB, TB, DT ] = [ DEV == 'mobile', DEV == 'tablet', DEV == 'desktop' ];
+    const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
     const E = React.createElement;
 
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; height: 100% background-color: #069;`,
-      card: `position: absolute; margin: 0.75em 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);`,
+      card: `position: absolute; margin: 1em 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 5px 0 rgba(10,10,10,0.4);`,
       cardBody: `padding: 0; background-color: #353535; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
       leftImg: `border: 1px solid #222; height: ${MB?`17em`:`22em`}; border-radius: 100%; margin: 1em;`,
@@ -764,20 +779,16 @@ const Views = {
   Cover: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { coverState } = state.workState;
-    const E = React.createElement;
+    const DEV = state.uiState.windowState.mode.toLowerCase();
+    const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
 
     const styles = {
-      view: `margin: 0; background-color: rgba(100,100,100,0.9); border: 1px solid #000;`,
-      coverBody: `padding: 1em; background-image: linear-gradient(to right, #eee,#fff); color: #222;`,
-      coverLine: `margin: 0 auto 1em; padding: 1em; text-align: center; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
-        background-image: linear-gradient(to left, rgba(225,225,225,0.8), rgba(225,225,225,0.9));`
+      coverView: `
+        background-color: #aaf; border: 1px solid #f33; color: #fff;
+      `
     };
 
-    return E('div', {style: styles.view}, [
-      // E('div', {style: styles.coverSelector}, []),
-      // Components.UI.DocHeader(props, dispatch, []),
-      E('div', {style: styles.coverBody}, coverState[0].lines.map(l => E('p', {style: styles.coverLine}, [l])))
-    ]);
+    return React.createElement('div', {style: styles.coverView}, [Components.Tabs(store)]);
   },
   Resume: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -812,7 +823,7 @@ const App = function(store) {
   const [ state, dispatch ] = [ store.getState(), store.dispatch ];
 
   const styles = {
-    app: `position: fixed; top: 0; bottom: 0; left: 0; width: 100%; margin: 0; padding: 0; z-index: 0;`
+    app: `position: fixed; top: 0; left: 0; height: 0%; width: 100%; margin: 0; padding: 0; z-index: 0;`
   };
 
   return React.createElement('div', {style: styles.app}, [
