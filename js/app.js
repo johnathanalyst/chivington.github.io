@@ -685,7 +685,7 @@ const Views = {
 
     const styles = {
       homeView: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; height: 100%; background-color: #069;`,
-      card: `position: absolute; margin: 0.75em 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
+      card: `position: absolute; margin: 0.75em 2.5% 4em; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
       cardBody: `padding: 0; background-color: #353535; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
       leftImg: `border: 1px solid #222; height: ${MB?`17em`:`22em`}; border-radius: 100%; margin: 1em;`,
