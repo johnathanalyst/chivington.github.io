@@ -434,7 +434,8 @@ const Reducers = {
 const StoreMiddlewares = {
   logActions: Redux.storeMiddlewares.logActions('@@INIT'),
   listenerBypass: Redux.storeMiddlewares.listenerBypass({
-    'UPDATE_SCROLL': ['Render_App']
+    'UPDATE_SCROLL': ['Render_App'],
+    'NET_STATE_INIT': ['Render_App']
   })
 };
 
