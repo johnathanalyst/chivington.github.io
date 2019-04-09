@@ -662,7 +662,7 @@ const Components = {
       E('div', {style: styles.tabView}, ['TAB VIEW']),
       E('div', {style: styles.tabBar}, [
         E('div', {style: styles.tabBtn}, ['Deep Learning']),
-        E('div', {style: styles.tabBtn}, ['Work Study'])
+        E('div', {style: styles.tabBtn}, ['Computer Architecture'])
       ])
     ]);
 
