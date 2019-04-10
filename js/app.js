@@ -4,11 +4,8 @@
  * Description: Single page GitHub app, modeled after Redux/React.                   *
  * --------------------------------------------------------------------------------- */
 
-// Root node in which to render app.
-const AppRoot = document.getElementById('AppRoot');
-
 /* ------------------------------------- Libs -------------------------------------- *
- *           Barebones modules for initializing/maintaining app state/UI.            *
+ *           Barebones modules for initializing/maintaining app/UI state.            *
  * --------------------------------------------------------------------------------- */
 // Creates elements and diffs/maintains vdom tree
 const React = {
@@ -645,11 +642,11 @@ const Components = {
         border: 1px solid #f33; background-color: #333;
       `,
       tabView: `
-        position: absolute; top: 0; left: ${MB?`0`:`20`}%; height: ${MB?`95`:`100`}%; width: ${MB?`100`:`80`}%;
+        position: absolute; top: 0; left: ${MB?`0`:`20`}%; height: ${MB?`75`:`100`}%; width: ${MB?`100`:`80`}%;
         border: 1px solid #33f; background-color: #aaa;
       `,
       tabBar: `
-        position: absolute; ${MB?`bottom: 0`:`top: 0`}; left: 0; height: ${MB?`5`:`100`}%; width: ${MB?`100`:`20`}%;
+        position: absolute; ${MB?`bottom: 0`:`top: 0`}; left: 0; height: ${MB?`25`:`100`}%; width: ${MB?`100`:`20`}%;
         display: flex; flex-direction: ${MB?`row`:`column`}; justify-content: center; align-items: stretch;
         border: 1px solid #3f3; background-color: #333;
       `,
@@ -661,6 +658,7 @@ const Components = {
     const Tab = E('div', {style: styles.tabComponent}, [
       E('div', {style: styles.tabView}, ['TAB VIEW']),
       E('div', {style: styles.tabBar}, [
+        E('div', {style: styles.tabBtn}, ['UI/UX']),
         E('div', {style: styles.tabBtn}, ['Deep Learning']),
         E('div', {style: styles.tabBtn}, ['Computer Architecture'])
       ])
@@ -849,6 +847,9 @@ const RootReducer = Redux.combineReducers(Reducers);
 
 // Create ReduxStore, using RootReducer & StoreMiddlewares
 const ReduxStore = Redux.createStore(RootReducer, StoreMiddlewares);
+
+// Root node in which to render app.
+const AppRoot = document.getElementById('AppRoot');
 
 // Render app once initially
 ReactDOM.render(App, ReduxStore, AppRoot);
