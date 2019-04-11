@@ -639,7 +639,8 @@ const Components = {
 
     const styles = {
       tabComponent: `
-        border: 1px solid #f33; background-color: #333;
+        position: absolute; margin: 1em;
+        border: 3px solid #f33; background-color: #333;
       `,
       tabView: `
         position: absolute; top: 0; left: ${MB?`0`:`20`}%; height: ${MB?`75`:`100`}%; width: ${MB?`100`:`80`}%;
@@ -842,14 +843,14 @@ const App = function(store) {
  * of the app refreshes, based on changes in the corresponding branch of state.     *
  * -------------------------------------------------------------------------------- */
 
+// Root node to render app into.
+const AppRoot = document.getElementById('AppRoot');
+
 //  Create root state reducer from Reducers.
 const RootReducer = Redux.combineReducers(Reducers);
 
 // Create ReduxStore, using RootReducer & StoreMiddlewares
 const ReduxStore = Redux.createStore(RootReducer, StoreMiddlewares);
-
-// Root node in which to render app.
-const AppRoot = document.getElementById('AppRoot');
 
 // Render app once initially
 ReactDOM.render(App, ReduxStore, AppRoot);
