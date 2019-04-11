@@ -639,6 +639,7 @@ const Components = {
 
     const styles = {
       tabComponent: `
+        position: absolute; margin: 1em; width: 90%; height: 25em;
         border: 3px solid #f33; background-color: #333;
       `,
       tabView: `
@@ -783,8 +784,7 @@ const Views = {
 
     const styles = {
       coverView: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%;
-        ${MB?`padding: 0 0 6.5em;`:``} background-color: #aaf; border: 1px solid #f33; color: #fff;
+        background-color: #aaf; border: 1px solid #f33; color: #fff;
       `
     };
 
