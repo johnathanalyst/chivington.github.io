@@ -639,7 +639,7 @@ const Components = {
 
     const styles = {
       tabComponent: `
-        position: absolute; top: 1em; left: 0; min-height: 100%;
+        position: absolute; top: 4em; left: 0; min-height: 100%;
         border: 3px solid #f33; background-color: #333;
       `,
       tabView: `
