@@ -640,19 +640,19 @@ const Components = {
     const styles = {
       tabComponent: `
         position: absolute; top: 4em; left: 0; min-height: 100%;
-        border: 3px solid #f33; background-color: #333;
+        border: 3px solid #f33; background-color: #d77;
       `,
       tabView: `
         position: absolute; top: 0; left: ${MB?`0`:`20`}%; height: ${MB?`75`:`100`}%; width: ${MB?`100`:`80`}%;
-        border: 1px solid #33f; background-color: #aaa;
+        border: 1px solid #33f; background-color: #77d;
       `,
       tabBar: `
         position: absolute; ${MB?`bottom: 0`:`top: 0`}; left: 0; height: ${MB?`25`:`100`}%; width: ${MB?`100`:`20`}%;
         display: flex; flex-direction: ${MB?`row`:`column`}; justify-content: center; align-items: stretch;
-        border: 1px solid #3f3; background-color: #333;
+        border: 1px solid #3f3; background-color: #7d7;
       `,
       tabBtn: `
-        background-color: #224; border: 1px solid #aaa;
+        border: 1px solid #339; background-color: #224;
       `
     };
 
