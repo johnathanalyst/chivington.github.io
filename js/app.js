@@ -641,18 +641,19 @@ const Components = {
       tabComponent: `
         min-height: 100%;
         display: flex; flex-direction: column; justify-contents: flex-start; align-items: stretch;
-        border: 2px solid #3f3; background-color: #33d;
+        border: 1px solid #f33; background-color: #daa;
       `,
       tabWindow: `
-        display: flex; flex: 1;
-        border: 2px solid #3ff; background-color: #3d3;
+        display: flex; flex: 1; flex-direction: column; justify-contents: flex-start; align-items: stretch;
+        border: 1px solid #3f3; background-color: #ada;
       `,
       tabBtns: `
-        border: 2px solid #ff3; background-color: #d33;
+        display: flex; flex-direction: row; justify-contents: space-around; align-items: center;
+        border: 1px solid #33f; background-color: #aad;
       `,
       tabBtn: `
         height: 2em;
-        border: 2px solid #000; background-color: #999;
+        border: 1px solid #000; background-color: #999;
       `
     };
 
