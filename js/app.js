@@ -788,7 +788,7 @@ const Views = {
       `
     };
 
-    return React.createElement('div', {style: styles.coverView}, [Components.Tabs(store)]);
+    return React.createElement('div', {style: styles.coverView}, []);
   },
   Resume: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
