@@ -647,14 +647,17 @@ const Components = {
         border: 2px solid #3ff; background-color: #3d3;
       `,
       tabBtns: `
-        height: 3em;
         border: 2px solid #ff3; background-color: #d33;
+      `,
+      tabBtn: `
+        height: 2em;
+        border: 2px solid #000; background-color: #999;
       `
     };
 
     const Tab = E('div', {style: styles.tabComponent}, [
-      E('div', {style: styles.tabView}, ['TAB VIEW']),
-      E('div', {style: styles.tabBar}, [
+      E('div', {style: styles.tabWindow}, ['TAB VIEW']),
+      E('div', {style: styles.tabBtns}, [
         E('div', {style: styles.tabBtn}, ['UI/UX']),
         E('div', {style: styles.tabBtn}, ['Deep Learning']),
         E('div', {style: styles.tabBtn}, ['Computer Architecture'])
