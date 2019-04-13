@@ -785,6 +785,7 @@ const Views = {
 
     const styles = {
       coverView: `
+        border: 3px solid #ff3;
         background-color: #aaf;
       `
     };
