@@ -648,11 +648,11 @@ const Components = {
         border: 1px solid #3f3; background-color: #ada;
       `,
       tabBtns: `
-        display: flex; flex-direction: row; justify-contents: space-around; align-items: center;
+        display: flex; flex-direction: row; justify-contents: space-between; align-items: center;
         border: 1px solid #33f; background-color: #aad;
       `,
       tabBtn: `
-        height: 2em;
+        display: flex; flex-direction: column; justify-contents: center; align-items: center;
         border: 1px solid #000; background-color: #999;
       `
     };
@@ -785,7 +785,7 @@ const Views = {
 
     const styles = {
       coverView: `
-        background-color: #aaf; border: 2px solid #f33; color: #fff;
+        background-color: #aaf;
       `
     };
 
