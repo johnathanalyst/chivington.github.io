@@ -644,11 +644,11 @@ const Components = {
         border: 1px solid #f33; background-color: #daa;
       `,
       tabWindow: `
-        display: flex; flex: 1; flex-direction: column; justify-contents: flex-start; align-items: stretch;
+        display: flex; flex-direction: column; justify-contents: flex-start; align-items: stretch;
         border: 1px solid #3f3; background-color: #ada;
       `,
       tabBtns: `
-        display: flex; flex-direction: row; justify-contents: space-between; align-items: center;
+        display: flex; flex-direction: row; justify-content: space-between; align-items: center;
         border: 1px solid #33f; background-color: #aad;
       `,
       tabBtn: `
@@ -785,7 +785,6 @@ const Views = {
 
     const styles = {
       coverView: `
-        border: 3px solid #ff3;
         background-color: #aaf;
       `
     };
