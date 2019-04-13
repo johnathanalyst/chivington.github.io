@@ -644,8 +644,12 @@ const Components = {
       `,
       tabWindow: `
         display: flex; flex: 1;
+        border: 2px solid #3ff; background-color: #3d3;
       `,
-      tabBtns: `height: 3em;`
+      tabBtns: `
+        height: 3em;
+        border: 2px solid #ff3; background-color: #d33;
+      `
     };
 
     const Tab = E('div', {style: styles.tabComponent}, [
