@@ -231,7 +231,7 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'HOME',
+      current: 'COVER',
       previous: '@@INIT',
       scrollTop: 0
     },
