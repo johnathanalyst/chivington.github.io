@@ -647,11 +647,11 @@ const Components = {
       `,
       tabBtns: `
         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-        height: 4em; border-top: 1px solid #000; background-color: #000;
+        border-top: 1px solid #000; background-color: #000;
       `,
       tabBtn: `
         display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center;
-        margin: 0 1px; background-color: #aaa;
+        height: 4em; margin: 0 1px; background-color: #aaa;
       `
     };
 
