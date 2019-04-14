@@ -651,7 +651,7 @@ const Components = {
       `,
       tabBtn: `
         display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center;
-        height: 3em; margin: 0 1px; background-color: #aaa;
+        height: 3em; margin: 0 1px; background-color: #aaa; cursor: pointer;
       `
     };
 
@@ -758,22 +758,18 @@ const Views = {
 
     const styles = {
       blogView: `
+        position: absolute; top: 4em; left: 0; bottom: 0; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        width: 100%; margin: 0 auto; padding: 1em 0; background-color: #960;
       `
+      'margin: 1em 1em 0 1em; border: 1px solid #333;'
     };
 
-    return React.createElement('div', {style: styles.blogView}, [
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['BLOG'])
-    ]);
+    const post = count => Array(count).map(p => E('div', {style: styles.blogPost}, [
+      E('div', {style: styles.blogBody}, ['This is blog post.']),
+      E('div', {style: styles.blogTags}, ['#these #are #blog #tags'])
+    ]))
+
+    return React.createElement('div', {style: styles.blogView}, [ post(5) ]);
   },
   Cover: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
