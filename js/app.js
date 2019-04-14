@@ -658,9 +658,9 @@ const Components = {
     const Tab = E('div', {style: styles.tabComponent}, [
       E('div', {style: styles.tabWindow}, ['TAB VIEW']),
       E('div', {style: styles.tabBtns}, [
-        E('div', {style: styles.tabBtn}, ['UI/UX']),
+        E('div', {style: `${styles.tabBtn} margin: 0 1px 0 0`}, ['UI/UX']),
         E('div', {style: styles.tabBtn}, ['Deep Learning']),
-        E('div', {style: styles.tabBtn}, ['Computer Architecture'])
+        E('div', {style: `${styles.tabBtn} margin: 0 0 0 1px`}, ['Computer Architecture'])
       ])
     ]);
 
