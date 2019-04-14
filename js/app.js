@@ -758,12 +758,12 @@ const Views = {
 
     const styles = {
       blogView: `
-        position: absolute; top: 4em; left: 0; bottom: 0; width: 100%;
+        position: absolute; top: 4em; left: 0; bottom: 0; width: 100%; background-color: #eee;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
       `,
-      blogPost: 'margin: 1em 1em 0 1em; border: 1px solid #333;',
-      blogBody: `margin: 1em; border: 1px solid #33f;`,
-      blogTags: `margin: 1em; border: 1px solid #3f3;`
+      blogPost: 'margin: 1em 1em 0 1em; width: 60%; border: 1px solid #333;',
+      blogBody: `margin: 1em;`,
+      blogTags: `margin: 0 1em 1em 1em; border-top: 1px solid #333;`
     };
 
     return React.createElement('div', {style: styles.blogView}, [
