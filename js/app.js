@@ -651,7 +651,7 @@ const Components = {
       `,
       tabBtn: `
         display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center;
-        height: 4em; margin: 0 1px; background-color: #aaa;
+        height: 3em; margin: 0 1px; background-color: #aaa;
       `
     };
 
