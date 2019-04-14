@@ -647,7 +647,7 @@ const Components = {
       `,
       tabBtns: `
         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-        border-top: 1px solid #000; background-color: #000;
+        height: 4em; border-top: 1px solid #000; background-color: #000;
       `,
       tabBtn: `
         display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center;
