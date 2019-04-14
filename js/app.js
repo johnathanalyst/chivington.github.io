@@ -760,8 +760,10 @@ const Views = {
       blogView: `
         position: absolute; top: 4em; left: 0; bottom: 0; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-      `
-      'margin: 1em 1em 0 1em; border: 1px solid #333;'
+      `,
+      blogPost: 'margin: 1em 1em 0 1em; border: 1px solid #333;',
+      blogBody: `margin: 1em; border: 1px solid #33f;`,
+      blogTags: `margin: 1em; border: 1px solid #3f3;`
     };
 
     const post = count => Array(count).keys().map(p => E('div', {style: styles.blogPost}, [
