@@ -639,6 +639,7 @@ const Components = {
 
     const styles = {
       tabComponent: `
+        position: absolute; height: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         border: 1px solid #f33; background-color: #daa;
       `,
@@ -647,11 +648,11 @@ const Components = {
         border: 1px solid #3f3; background-color: #ada;
       `,
       tabBtns: `
-        display: flex; flex-direction: row; justify-content: stretch; align-items: center;
+        display: flex; flex-direction: row; justify-content: space-between; align-items: center;
         border: 1px solid #33f; background-color: #aad;
       `,
       tabBtn: `
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center;
         border: 1px solid #000; background-color: #999;
       `
     };
