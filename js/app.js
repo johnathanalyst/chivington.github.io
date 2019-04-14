@@ -639,12 +639,12 @@ const Components = {
 
     const styles = {
       tabComponent: `
-        min-height: 100%;
+        position: absolute; min-height: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         border: 1px solid #f33; background-color: #daa;
       `,
       tabWindow: `
-        display: flex; flex-direction: column; flex: 1; justify-content: flex-start; align-items: stretch;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         border: 1px solid #3f3; background-color: #ada;
       `,
       tabBtns: `
