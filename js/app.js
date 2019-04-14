@@ -763,7 +763,7 @@ const Views = {
       `,
       blogPost: 'margin: 1em 1em 0 1em; width: 60%; border: 1px solid #333;',
       blogBody: `margin: 1em;`,
-      blogTags: `margin: 0 1em 1em 1em; border-top: 1px solid #333;`
+      blogTags: `margin: 0 1em; padding: 0.5em 1em; border-top: 1px solid #333;`
     };
 
     return React.createElement('div', {style: styles.blogView}, [
