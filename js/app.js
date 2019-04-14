@@ -231,7 +231,7 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'BLOG',
+      current: 'HOME',
       previous: '@@INIT',
       scrollTop: 0
     },
@@ -761,9 +761,9 @@ const Views = {
         position: absolute; top: 4em; left: 0; bottom: 0; width: 100%; background-color: #eee;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
       `,
-      blogPost: 'margin: 1em 1em 0 1em; width: 60%; border: 1px solid #333;',
+      blogPost: 'margin: 1.5em 1em 0; width: 60%; border: 1px solid #333;',
       blogBody: `margin: 1em;`,
-      blogTags: `margin: 0 1em; padding: 0.5em 1em; border-top: 1px solid #333;`
+      blogTags: `margin: 0 1em; padding: 0.5em; border-top: 1px solid #333;`
     };
 
     return React.createElement('div', {style: styles.blogView}, [
