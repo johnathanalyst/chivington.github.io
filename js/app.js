@@ -766,12 +766,16 @@ const Views = {
       blogTags: `margin: 1em; border: 1px solid #3f3;`
     };
 
-    const post = count => Array(count).keys().map(p => E('div', {style: styles.blogPost}, [
-      E('div', {style: styles.blogBody}, ['This is blog post.']),
-      E('div', {style: styles.blogTags}, ['#these #are #blog #tags'])
-    ]))
-
-    return React.createElement('div', {style: styles.blogView}, [ post(5) ]);
+    return React.createElement('div', {style: styles.blogView}, [
+      E('div', {style: styles.blogPost}, [
+        E('div', {style: styles.blogBody}, ['This is a blog post.']),
+        E('div', {style: styles.blogTags}, ['#these #are #blog #tags'])
+      ]),
+      E('div', {style: styles.blogPost}, [
+        E('div', {style: styles.blogBody}, ['This is another blog post.']),
+        E('div', {style: styles.blogTags}, ['#these #are #more #blog #tags'])
+      ])
+    ]);
   },
   Cover: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
