@@ -641,15 +641,12 @@ const Components = {
       tabComponent: `
         position: absolute; top: 0; left: 0; bottom: 4em; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        border: 1px solid #f33; background-color: #daa;
       `,
       tabWindow: `
         display: flex; flex-direction: column; flex: 1; justify-content: flex-start; align-items: stretch;
-        border: 1px solid #3f3; background-color: #ada;
       `,
       tabBtns: `
         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-        border: 1px solid #33f; background-color: #aad;
       `,
       tabBtn: `
         display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center;
