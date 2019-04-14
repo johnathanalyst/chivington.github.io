@@ -231,7 +231,7 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'HOME',
+      current: 'COVER',
       previous: '@@INIT',
       scrollTop: 0
     },
@@ -639,7 +639,6 @@ const Components = {
 
     const styles = {
       tabComponent: `
-        position: absolute; bottom: 0; top: 4em; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         border: 1px solid #f33; background-color: #daa;
       `,
@@ -785,6 +784,7 @@ const Views = {
 
     const styles = {
       coverView: `
+        position: absolute; top: 4em; left: 0; bottom: 0; width: 100%;
         background-color: #aaf;
       `
     };
