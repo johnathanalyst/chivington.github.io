@@ -639,7 +639,7 @@ const Components = {
 
     const styles = {
       tabComponent: `
-        position: absolute; top: 0; left: 0; bottom: 0; width: 100%;
+        position: absolute; top: 0; left: 0; bottom: 4em; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
         border: 1px solid #f33; background-color: #daa;
       `,
