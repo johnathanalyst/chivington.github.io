@@ -764,7 +764,7 @@ const Views = {
       'margin: 1em 1em 0 1em; border: 1px solid #333;'
     };
 
-    const post = count => Array(count).map(p => E('div', {style: styles.blogPost}, [
+    const post = count => Array(count).keys().map(p => E('div', {style: styles.blogPost}, [
       E('div', {style: styles.blogBody}, ['This is blog post.']),
       E('div', {style: styles.blogTags}, ['#these #are #blog #tags'])
     ]))
