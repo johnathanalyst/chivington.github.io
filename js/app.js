@@ -553,7 +553,7 @@ const Components = {
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
         position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid #252525;
       `,
-      appInfoRow: `margin: 0.25em auto; color: #454545;`
+      appInfoRow: `margin: 0.25em auto; color: #fff;`
     };
 
     const menuBtns = [
