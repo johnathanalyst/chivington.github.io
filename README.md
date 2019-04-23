@@ -35,7 +35,7 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 ```
 
 ## Testing
-Navigate to an example in the chivingtoninc.github.io directory and open in browser.
+Navigate to the chivingtoninc.github.io directory and open in browser.
 ```
   1. cd /path/to/chivingtoninc.github.io
   2. Open "index.html" in a web browser that supports Javascript.
