@@ -829,11 +829,14 @@ const Views = {
 
     const styles = {
       resumeView: `
-        position: absolute; top: 1em; right: 1em; left: 1em; bottom: 5em;
+        position: absolute; top: 1em; right: 1em; left: 1em; bottom: 1em;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
         margin: auto; border: 1px solid #f00;
       `,
-      resume: `margin: 0.5em; border: 1px solid #000;`
+      resume: `
+        position: absolute; top: 1em; right: 1em; left: 1em; bottom: 1em;
+        margin: 0.5em; border: 1px solid #000;
+      `
     };
 
     return E('div', {style: styles.resumeView}, [
