@@ -484,7 +484,7 @@ const Components = {
     const { networkState, historyState } = state.appState;
     const { downlink, effectiveType, previousType } = networkState;
     const offline = downlink == 0 ? true : false;
-    const status = offline ? 'OFFLINE' : effectiveType.toUpperCase();
+    const status = offline ? 'Offline' : 'Connected';
     const changed = (effectiveType != previousType);
     const menuOpen = state.uiState.menuState.current == 'OPEN'
     const lastAction = historyState.slice(-1);;
@@ -505,7 +505,7 @@ const Components = {
       }});
     }, 1000);
 
-    const Net = React.createElement('div', {style: styles.net}, [`Connection  - ${status}`]);
+    const Net = React.createElement('div', {style: styles.net}, [status]);
 
     window.addEventListener('online', function(event) {
       if (changed) dispatch({type: 'NET_STATE_CHANGE',  payload: {
