@@ -100,12 +100,8 @@ const Assets = {
   resource_app: '/app.js',
   resource_sw: '/sw.js',
   resource_webmanifest: '/site.webmanifest',
-  resource_cover_DL_docx: '/includes/docs/j.Chivington.DL.Cover.docx',
-  resource_cover_DL_pdf: '/includes/docs/j.Chivington.DL.Cover.pdf',
-  resource_cover_WS_docx: '/includes/docs/j.Chivington.WS.Cover.docx',
-  resource_cover_WS_pdf: '/includes/docs/j.Chivington.WS.Cover.pdf',
-  resource_resume_GEN_docx: '/includes/docs/j.Chivington.Resume.docx',
-  resource_resume_GEN_pdf: '/includes/docs/j.Chivington.Resume.pdf',
+  resource_resume_DL_docx: '/includes/docs/j.Chivington.Resume.docx',
+  resource_resume_DL_pdf: '/includes/docs/j.Chivington.Resume.pdf',
   resource_avenir: '/includes/fonts/Avenir-Book.otf',
   content_greeting: '/imgs/content/hello.png',
   content_step1: '/imgs/content/step1.jpg',
@@ -252,7 +248,7 @@ const Blueprint = {
     contact: {
       firstName: 'Johnathan',
       lastName: 'Chivington',
-      title: 'Experienced Full-Stack Engineer',
+      title: 'AI Researcher & Data Scientist',
       phone: '303.900.2861',
       email: 'j.chivington@bellevuecollege.edu',
       linkedin: 'https://linkedin.com/in/johnathan-chivington',
@@ -260,13 +256,11 @@ const Blueprint = {
       twitter: 'https://twitter.com/chivingtoninc',
       facebook: 'https://facebook.com/chivingtoninc',
       location: 'Seattle, WA',
-      search: 'Actively Seeking (local & remote)'
+      search: 'Open to offers'
     },
-    covers: [
-      {name: 'Work Study', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf]},
-      {name: 'Deep Learning', links: [Assets.resource_cover_DL_docx, Assets.resource_cover_DL_pdf]}
-    ],
-    resumes: []
+    resumes: [
+      {name: 'Deep Learning', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf]}
+    ]
   }
 };
 
@@ -460,7 +454,7 @@ const Components = {
       header: `
         position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: #222; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
+        background-color: #151515; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
       `,
       icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
       title: `margin: 0; color: #fff; font-size: 2em; cursor: pointer;`,
