@@ -608,7 +608,7 @@ const Components = {
     const { width, height, mode } = windowState;
 
     const styles = {
-      view: `position: fixed; top: 4em; left: 0; height: 100%; width: 100%; margin: 0; padding: 0; overflow-x: hidden;
+      view: `position: fixed; top: 4em; right: 0; bottom: 0; left: 0; margin: 0; padding: 0; overflow-x: hidden;
         overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: ${Blueprint.ui.theme.view}; ${animation}`
     };
 
