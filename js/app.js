@@ -460,7 +460,7 @@ const Components = {
       header: `
         position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: #000; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
+        background-color: #111; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
       `,
       icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
       title: `margin: 0; color: #fff; font-size: 2em; cursor: pointer;`,
