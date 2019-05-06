@@ -802,26 +802,61 @@ const Views = {
   },
   Contact: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
+    const { returning, username } = state.userState;
+    const { content_me, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email } = Assets;
+    const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.workState.contactState;
+    const DEV = state.uiState.windowState.mode.toLowerCase();
+    const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
     const E = React.createElement;
 
     const styles = {
-      contactView: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        width: 100%; margin: 0 auto; padding: 1em 0;
-      `
+      homeView: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%; ${MB?`padding: 0 0 6.5em;`:``}`,
+      card: `position: absolute; margin: 1em 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
+      cardBody: `padding: 0; background-color: #353535; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
+      bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
+      leftImg: `border: 1px solid #222; height: ${MB?`17em`:`22em`}; border-radius: 100%; margin: 1em;`,
+      bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,
+      rightTop: `background-color: #ddd; padding: 0.5em; border-bottom: 1px solid #444; ${MB?` text-align: center;`:``}`,
+      greetingImg: `height: 4em; margin: 0.5em 0;`,
+      name: `margin: 0; font-size: 1.5em;`,
+      title: `margin: 0; font-size: 0.9em; font-weight: 300;`,
+      rightBottom: `display: flex; ${MB?``:`height: 13em;`} flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em; background-color: #aaa;`,
+      row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.5em 0`};`,
+      label: `font-size: 1em; margin: 0;`,
+      text: `font-size: 0.8em; margin: 0;`,
+      footer: `display: flex; flex-direction: row; justify-content: space-around; align-items: center;background-color: #222; padding: 1.15em 0 0.85em;`,
+      footerLink: `color: #fff`,
+      footerIcon: `height: 1.25em; width: 1.25em;`
     };
 
-    return React.createElement('div', {style: styles.contactView}, [
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT'])
+    const card = E('div', {style: styles.card}, [
+      E('div', {style: styles.cardBody}, [
+        E('div', {style: styles.bodyLeft}, [
+          E('img', {style: styles.leftImg, src: content_me, alt: 'my beautiful face'}, [])
+        ]),
+        E('div', {style: styles.bodyRight}, [
+          E('div', {style: styles.rightTop}, [
+            E('img', {style: styles.greetingImg, src: content_greeting, alt: 'greeting image'}, []),
+            E('h2', {style: styles.name}, [`${firstName} ${lastName}`]),
+            E('h2', {style: styles.title}, [title])
+          ]),
+          E('div', {style: styles.rightBottom}, ['location', 'phone', 'email', 'search'].map(k => {
+            return E('div', {style: styles.row}, [
+              E('h3', {style: styles.label}, [k[0].toUpperCase()+k.slice(1)]),
+              E('p', {style: styles.text}, [{location, phone, email, search}[k]])
+            ])
+          }))
+        ])
+      ]),
+      E('div', {style: styles.footer}, [
+        [icon_github, 'gihub icon', github], [icon_linkedin, 'linkedin icon', linkedin], [icon_twitter, 'twitter icon', twitter],
+        [icon_phone, 'phone icon', `tel:${phone}`], [icon_email, 'email icon', `mailto:${email}`]
+      ].map(icon => E('a', {style: styles.footerLink, href: icon[2], alt: icon[2], target: '_blank'}, [
+        E('img', {style: styles.footerIcon, src: icon[0], alt: icon[1]}, [])
+      ])))
     ]);
+
+    return E('div', {style: styles.homeView}, [card]);
   },
   Resume: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -829,7 +864,7 @@ const Views = {
 
     const styles = {
       resumeView: `
-        position: absolute; top: 1em; right: 1em; left: 1em; bottom: 1em;
+        position: absolute; top: 0; left: 0; height: 100%; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
         margin: auto; border: 1px solid #f00;
       `,
