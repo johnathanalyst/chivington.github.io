@@ -231,7 +231,7 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'HOME',
+      current: 'BLOG',
       previous: '@@INIT',
       scrollTop: 0
     },
@@ -460,7 +460,7 @@ const Components = {
       header: `
         position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: rgba(45,45,75,0.9); border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 rgba(10,10,10,0.5);
+        background-color: #222; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
       `,
       icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
       title: `margin: 0; color: #fff; font-size: 2em; cursor: pointer;`,
@@ -542,16 +542,16 @@ const Components = {
       menu: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: fixed;
         top: 4em; left: 0; bottom: 0; width: ${mode != 'desktop' ? `100%` : `25%`}; z-index: 80; overflow: hidden;
-        background-color: #454565; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
+        background-color: #062f4f; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
           : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)}
       `,
       menuBtn: `
-        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid rgba(255,255,255,0.3);
+        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #813722;
         color: #fff; font-size: 1.1em; font-weight: 100; cursor: pointer;
       `,
       appInfo: `
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
-        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid #252525;
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid #813722;
       `,
       appInfoRow: `margin: 0.25em auto; color: #fff;`
     };
@@ -559,8 +559,9 @@ const Components = {
     const menuBtns = [
       [`Home`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'HOME', check: currentView != 'HOME' }]],
       [`Blog`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'BLOG', check: currentView != 'BLOG' }]],
-      [`Cover`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'COVER', check: currentView != 'COVER' }]],
-      [`Resume`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'RESUME', check: currentView != 'RESUME' }]]
+      [`Projects`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'PROJECTS', check: currentView != 'PROJECTS' }]],
+      [`Resume`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'RESUME', check: currentView != 'RESUME' }]],
+      [`Contact`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'CONTACT', check: currentView != 'CONTACT' }]]
     ].map(btn => {
       const b = E('h3', {style: styles.menuBtn}, [btn[0]]);
       b.addEventListener('click', () => btn[1].forEach(action => {
@@ -580,14 +581,15 @@ const Components = {
     const animate = lastActionNav && !sameView;
 
     const styles = {
-      router: `position: fixed; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; z-index: 5;`
+      router: `position: fixed; top: 4em; left: 0; height: 100%; width: 100%; overflow: hidden; z-index: 5;`
     };
 
     const views = {
       'HOME': Views.Home,
       'BLOG': Views.Blog,
-      'COVER': Views.Cover,
+      'PROJECTS': Views.Projects,
       'RESUME': Views.Resume,
+      'CONTACT': Views.Contact,
       'DEFAULT': Views.Home
     };
 
@@ -607,7 +609,7 @@ const Components = {
     const { width, height, mode } = windowState;
 
     const styles = {
-      view: `position: fixed; top: 0; left: 0; height: 100%; width: 100%; margin: 0; padding: 4em 0 0 0; overflow-x: hidden;
+      view: `position: fixed; top: 4em; left: 0; height: 100%; width: 100%; margin: 0; padding: 0; overflow-x: hidden;
         overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: #353535; ${animation}`
     };
 
@@ -659,8 +661,7 @@ const Components = {
       E('div', {style: styles.tabWindow}, ['TAB VIEW']),
       E('div', {style: styles.tabBtns}, [
         E('div', {style: `${styles.tabBtn} margin: 0 1px 0 0`}, ['UI/UX']),
-        E('div', {style: styles.tabBtn}, ['Deep Learning']),
-        E('div', {style: `${styles.tabBtn} margin: 0 0 0 1px`}, ['Computer Architecture'])
+        E('div', {style: styles.tabBtn}, ['Deep Learning'])
       ])
     ]);
 
@@ -758,7 +759,7 @@ const Views = {
 
     const styles = {
       blogView: `
-        position: absolute; top: 4em; left: 0; bottom: 0; width: 100%; background-color: #eee;
+        position: absolute; top: 0; left: 0; bottom: 0; width: 100%; background-color: #eee;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
       `,
       blogPost: 'margin: 1.5em 1em 0; width: 60%; border: 1px solid #333;',
@@ -777,19 +778,51 @@ const Views = {
       ])
     ]);
   },
-  Cover: function(store) {
+  Projects: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { coverState } = state.workState;
-    const DEV = state.uiState.windowState.mode.toLowerCase();
-    const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
+    const E = React.createElement;
 
     const styles = {
-      coverView: `
-        position: absolute; top: 4em; left: 0; bottom: 0; width: 100%;
+      projectsView: `
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+        width: 100%; margin: 0 auto; padding: 1em 0; background-color: #a09;
       `
     };
 
-    return React.createElement('div', {style: styles.coverView}, [Components.Tabs(store)]);
+    return React.createElement('div', {style: styles.projectsView}, [
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS'])
+    ]);
+  },
+  Contact: function(store) {
+    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
+    const E = React.createElement;
+
+    const styles = {
+      contactView: `
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+        width: 100%; margin: 0 auto; padding: 1em 0; background-color: #907;
+      `
+    };
+
+    return React.createElement('div', {style: styles.contactView}, [
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT']),
+      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['CONTACT'])
+    ]);
   },
   Resume: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];

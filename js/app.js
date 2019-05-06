@@ -545,8 +545,9 @@ const Components = {
         background-color: #062f4f; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
           : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)}
       `,
+      // #813722
       menuBtn: `
-        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #813722;
+        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #b82681;
         color: #fff; font-size: 1.1em; font-weight: 100; cursor: pointer;
       `,
       appInfo: `
