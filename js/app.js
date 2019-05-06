@@ -759,7 +759,7 @@ const Views = {
 
     const styles = {
       blogView: `
-        position: absolute; top: 4em; left: 0; bottom: 0; width: 100%; background-color: #eee;
+        position: absolute; top: 0; left: 0; bottom: 0; width: 100%; background-color: #eee;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
       `,
       blogPost: 'margin: 1.5em 1em 0; width: 60%; border: 1px solid #333;',
