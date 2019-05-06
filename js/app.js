@@ -831,12 +831,12 @@ const Views = {
       resumeView: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
         width: 100%; margin: 0 auto; padding: 1em 0;
-      `
+      `,
+      resume: `margin: 0.5em; height: 95%; width: 95%; border: 1px solid #000;`
     };
 
     return E('div', {style: styles.resumeView}, [
-      E('embed', {style: 'margin: 0.5em; border: 1px solid #000;',
-        src: `${Assets.resource_resume_DL_pdf}#toolbar=0&navpanes=0&scrollbar=0`, type: 'application/pdf'}, [])
+      E('embed', {style: styles.resume, src: `${Assets.resource_resume_DL_pdf}#toolbar=0&navpanes=0&scrollbar=0`, type: 'application/pdf'}, [])
     ]);
   }
 };
