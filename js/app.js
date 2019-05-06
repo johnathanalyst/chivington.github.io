@@ -866,7 +866,6 @@ const Views = {
       resumeView: `
         position: absolute; top: 0; left: 0; height: 100%; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        margin: auto; border: 1px solid #f00;
       `,
       resume: `
         position: absolute; top: 0; left: 0; height: 100%; width: 100%;
@@ -876,7 +875,7 @@ const Views = {
 
     return E('div', {style: styles.resumeView}, [
       E('embed', {style: styles.resume, width: '95%',
-        src: `${Assets.resource_resume_DL_pdf}#toolbar=0&navpanes=0&scrollbar=0`, type: 'application/pdf'}, [])
+        src: `${Assets.resource_resume_DL_pdf}`, type: 'application/pdf'}, [])
     ]);
   }
 };
