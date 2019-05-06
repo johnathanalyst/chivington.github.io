@@ -836,7 +836,7 @@ const Views = {
     };
 
     return E('div', {style: styles.resumeView}, [
-      E('embed', {style: styles.resume, width: '95%', height: '30em',
+      E('embed', {style: styles.resume, width: '95%',
         src: `${Assets.resource_resume_DL_pdf}#toolbar=0&navpanes=0&scrollbar=0`, type: 'application/pdf'}, [])
     ]);
   }
