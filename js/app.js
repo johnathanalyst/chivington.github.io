@@ -835,7 +835,7 @@ const Views = {
     };
 
     return React.createElement('div', {style: styles.resumeView}, [
-      E('object', {style: 'margin: 1em; border: 1px solid #000;', data: Assets.resource_resume_DL_pdf}, [])
+      E('object', {style: 'margin: auto; height: 95%; width: 95%; border: 1px solid #000;', data: Assets.resource_resume_DL_pdf}, [])
     ]);
   }
 };
