@@ -460,7 +460,7 @@ const Components = {
       header: `
         position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: rgba(45,45,75,0.9); border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 rgba(10,10,10,0.5);
+        background-color: #000; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
       `,
       icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
       title: `margin: 0; color: #fff; font-size: 2em; cursor: pointer;`,
@@ -542,16 +542,16 @@ const Components = {
       menu: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: fixed;
         top: 4em; left: 0; bottom: 0; width: ${mode != 'desktop' ? `100%` : `25%`}; z-index: 80; overflow: hidden;
-        background-color: #454565; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
+        background-color: 062f4f; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
           : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)}
       `,
       menuBtn: `
-        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid rgba(255,255,255,0.3);
+        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #813722;
         color: #fff; font-size: 1.1em; font-weight: 100; cursor: pointer;
       `,
       appInfo: `
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
-        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid #252525;
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid #813722;
       `,
       appInfoRow: `margin: 0.25em auto; color: #fff;`
     };
