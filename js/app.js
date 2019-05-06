@@ -834,9 +834,9 @@ const Views = {
       `
     };
 
-    return React.createElement('div', {style: styles.resumeView}, [
-      E('embed', {style: 'margin: 0.5em; border: 1px solid #000;', src: Assets.resource_resume_DL_pdf,
-        type: 'application/pdf'}, [])
+    return E('div', {style: styles.resumeView}, [
+      E('embed', {style: 'margin: 0.5em; border: 1px solid #000;',
+        src: `${Assets.resource_resume_DL_pdf}#toolbar=0&navpanes=0&scrollbar=0`, type: 'application/pdf'}, [])
     ]);
   }
 };
