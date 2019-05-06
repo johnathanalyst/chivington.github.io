@@ -829,7 +829,7 @@ const Views = {
 
     const styles = {
       resumeView: `
-        position: absolute; top: 1em; right: 1em; left: 1em; bottom: 1em;
+        position: absolute; top: 1em; right: 1em; left: 1em; bottom: 5em;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
         margin: auto; border: 1px solid #f00;
       `,
