@@ -834,7 +834,7 @@ const Views = {
         margin: auto; border: 1px solid #f00;
       `,
       resume: `
-        position: absolute; top: 1em; right: 1em; left: 1em; bottom: 1em;
+        position: absolute; top: 2em; right: 2em; left: 2em; bottom: 2em;
         margin: 0.5em; border: 1px solid #000;
       `
     };
