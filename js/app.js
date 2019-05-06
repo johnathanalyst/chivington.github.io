@@ -831,7 +831,7 @@ const Views = {
       resumeView: `
         position: absolute; top: 1em; right: 1em; left: 1em; bottom: 1em;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        width: 100%; margin: 0 auto; padding: 1em 0; border: 1px solid #f00;
+        margin: auto; border: 1px solid #f00;
       `,
       resume: `margin: 0.5em; border: 1px solid #000;`
     };
