@@ -242,7 +242,12 @@ const Blueprint = {
       txt: 'Welcome to chivingtoninc.com!',
       btn: Assets.icon_close,
       action: 'DISABLE_ADS'
-    }]
+    }],
+    theme: {
+      header: '#151515',
+      menu: '#062f4f',
+      view: '#069',
+    }
   },
   work: {
     contact: {
@@ -454,7 +459,7 @@ const Components = {
       header: `
         position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: #151515; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
+        background-color: ${Blueprint.ui.theme.header}; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
       `,
       icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
       title: `margin: 0; color: #fff; font-size: 2em; cursor: pointer;`,
@@ -536,12 +541,11 @@ const Components = {
       menu: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: fixed;
         top: 4em; left: 0; bottom: 0; width: ${mode != 'desktop' ? `100%` : `25%`}; z-index: 80; overflow: hidden;
-        background-color: #062f4f; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
+        background-color: ${Blueprint.ui.theme.menu}; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
           : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)}
       `,
-      // #813722
       menuBtn: `
-        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #b82681;
+        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #813722;
         color: #fff; font-size: 1.1em; font-weight: 100; cursor: pointer;
       `,
       appInfo: `
@@ -605,7 +609,7 @@ const Components = {
 
     const styles = {
       view: `position: fixed; top: 4em; left: 0; height: 100%; width: 100%; margin: 0; padding: 0; overflow-x: hidden;
-        overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: #353535; ${animation}`
+        overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: ${Blueprint.ui.theme.view}; ${animation}`
     };
 
     const View = React.createElement('div', {style: styles.view}, [viewComponent(store)]);
@@ -679,7 +683,7 @@ const Views = {
     const E = React.createElement;
 
     const styles = {
-      homeView: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%; background-color: #069; ${MB?`padding: 0 0 6.5em;`:``}`,
+      homeView: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100%; ${MB?`padding: 0 0 6.5em;`:``}`,
       card: `position: absolute; margin: 1em 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
       cardBody: `padding: 0; background-color: #353535; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
@@ -754,7 +758,7 @@ const Views = {
 
     const styles = {
       blogView: `
-        position: absolute; top: 0; left: 0; bottom: 0; width: 100%; background-color: #eee;
+        position: absolute; top: 0; left: 0; bottom: 0; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
       `,
       blogPost: 'margin: 1.5em 1em 0; width: 60%; border: 1px solid #333;',
@@ -780,7 +784,7 @@ const Views = {
     const styles = {
       projectsView: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        width: 100%; margin: 0 auto; padding: 1em 0; background-color: #a09;
+        width: 100%; margin: 0 auto; padding: 1em 0;
       `
     };
 
@@ -803,7 +807,7 @@ const Views = {
     const styles = {
       contactView: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        width: 100%; margin: 0 auto; padding: 1em 0; background-color: #907;
+        width: 100%; margin: 0 auto; padding: 1em 0;
       `
     };
 
@@ -826,20 +830,12 @@ const Views = {
     const styles = {
       resumeView: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        width: 100%; margin: 0 auto; padding: 1em 0; background-color: #609;
+        width: 100%; margin: 0 auto; padding: 1em 0;
       `
     };
 
     return React.createElement('div', {style: styles.resumeView}, [
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['RESUME'])
+      E('object', {style: 'margin: 1em; border: 1px solid #000;', data: Assets.resource_resume_DL_pdf}, [])
     ]);
   }
 };
