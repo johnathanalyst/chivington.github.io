@@ -227,7 +227,7 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'RESUME',
+      current: 'HOME',
       previous: '@@INIT',
       scrollTop: 0
     },
@@ -869,12 +869,11 @@ const Views = {
       `,
       resume: `
         position: absolute; top: 0; left: 0; height: 100%; width: 100%;
-        margin: 0.5em; border: 1px solid #000;
       `
     };
 
     return E('div', {style: styles.resumeView}, [
-      E('embed', {style: styles.resume, width: '95%',
+      E('embed', {style: styles.resume, width: '100%',
         src: `${Assets.resource_resume_DL_pdf}`, type: 'application/pdf'}, [])
     ]);
   }
