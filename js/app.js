@@ -257,7 +257,7 @@ const Blueprint = {
     contact: {
       firstName: 'Johnathan',
       lastName: 'Chivington',
-      title: 'Computer Vision Researcher',
+      title: 'Data Scientist & Engineer',
       phone: '303.900.2861',
       email: 'j.chivington@bellevuecollege.edu',
       linkedin: 'https://linkedin.com/in/johnathan-chivington',
