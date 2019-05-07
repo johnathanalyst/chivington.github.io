@@ -269,6 +269,11 @@ const Blueprint = {
     },
     resumes: [
       {name: 'Deep Learning', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf]}
+    ],
+    about: [
+      `life; beacon;`,
+      `learning; self-taught`,
+      `goals; AI --> Quantum`,
     ]
   }
 };
@@ -499,7 +504,7 @@ const Components = {
         position: absolute; top: 5.45em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 85;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: ${offline?`#e44`:`#4e4`}; font-size: 0.75em; color: #222; font-weight: bold;
-        ${display ? `animation: flashNetwork 1000ms ease-in-out 1 forwards;` : `display: none;`}
+        ${display ? `animation: flashNetwork 1500ms ease-in-out 1 forwards;` : `display: none;`}
       `
     };
 
@@ -550,7 +555,7 @@ const Components = {
       `,
       menuBtn: `
         margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #813722;
-        color: #fff; font-size: 1.1em; font-weight: 100; cursor: pointer;
+        color: #fff; font-size: 1.1em; font-weight: 100; cursor: pointer; text-align: left;
       `,
       appInfo: `
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
@@ -562,6 +567,7 @@ const Components = {
     const menuBtns = [
       [`Home`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'HOME', check: currentView != 'HOME' }]],
       [`Blog`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'BLOG', check: currentView != 'BLOG' }]],
+      [`About`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'ABOUT', check: currentView != 'ABOUT' }]],
       [`Projects`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'PROJECTS', check: currentView != 'PROJECTS' }]],
       [`Resume`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'RESUME', check: currentView != 'RESUME' }]],
       [`Contact`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'CONTACT', check: currentView != 'CONTACT' }]]
@@ -590,6 +596,7 @@ const Components = {
     const views = {
       'HOME': Views.Home,
       'BLOG': Views.Blog,
+      'ABOUT': Views.About,
       'PROJECTS': Views.Projects,
       'RESUME': Views.Resume,
       'CONTACT': Views.Contact,
@@ -686,32 +693,14 @@ const Views = {
 
     const styles = {
       homeView: `
-        position: absolute; top: 0; left: 0; height: 200%; width: 100%; overflow-y: scroll; overflow-x: hidden;
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-      `,
-      landing: `
+        position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_yolo}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
-        height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;
       `,
-      landingTitle: `margin: 0; color: #fff; font-size: 3em; font-weight: 900;`,
-      landingSummary: `margin: 0.5em 0 0; color: #fff; font-size: 1.5em;`,
-      scrollIcon: `margin: 5em 0 0; height: 3em; width: 3em; animation: float 3000ms ease-in-out infinite;`,
-      appInfo: `
-        height: 100%; width: 100%; background-color: #222;
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-      `
+      title: `margin: 0; color: #fff; font-size: 3em; font-weight: 900;`,
+      summary: `margin: 0.5em 0 0; color: #fff; font-size: 1.5em;`,
     };
-
-    const landing = E('div', {style: styles.landing}, [
-      E('h1', {style: styles.landingTitle}, [Blueprint.work.contact.title]),
-      E('p', {style: styles.landingSummary}, [`Tackling industrial challenges with AI.`]),
-      E('img', {style: styles.scrollIcon, src: icon_scroll, alt: 'scroll icon'}, [])
-    ]);
-
-    const appInfo = E('div', {style: styles.appInfo}, [
-      Blueprint.work.contact.lastName
-    ]);
 
     // About This App
     // 1. https/http2
@@ -720,7 +709,10 @@ const Views = {
     // 4. A+ ImmuniWeb SSLScan Score (https://www.htbridge.com/ssl/?id=uAXLxfew)
     // 5. 100% on Google PageSpeed Insights (https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com)
 
-    return E('div', {style: styles.homeView}, [landing, appInfo]);
+    return E('div', {style: styles.homeView}, [
+      E('h1', {style: styles.title}, [Blueprint.work.contact.title]),
+      E('p', {style: styles.summary}, [`Tackling difficult industrial challenges with AI.`])
+    ]);
   },
   About: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -731,21 +723,22 @@ const Views = {
 
     const styles = {
       aboutView: `
-        position: absolute; top: 0; left: 0; height: 200%; width: 100%; overflow-y: scroll; overflow-x: hidden;
+        position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-      `
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_sphere}');
+        background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
+      `,
+      about: `margin: 1em; border: 1px solid #f00;`,
+      title: `color: #fff`,
+      summary: `color: #fff`
     };
 
-    const landing = E('div', {style: styles.landing}, [
-      E('h1', {style: styles.landingTitle}, [Blueprint.work.contact.title]),
-      E('p', {style: styles.landingSummary}, [`Tackling industrial challenges with AI.`])
+    const about = E('div', {style: styles.about}, [
+      E('h1', {style: styles.title}, [Blueprint.work.contact.title]),
+      E('div', {style: styles.summary}, Blueprint.work.about.map(p => E('p', {style: styles.summary}, [p])))
     ]);
 
-    const appInfo = E('div', {style: styles.appInfo}, [
-      Blueprint.work.contact.lastName
-    ]);
-
-    return E('div', {style: styles.homeView}, [landing, appInfo]);
+    return E('div', {style: styles.aboutView}, [about]);
   },
   Blog: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -807,7 +800,7 @@ const Views = {
     const styles = {
       contactView: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%; ${MB?`padding: 0 0 6.5em;`:``} background-image: url("${wp_pnw}"); background-position: center; background-repeat: no-repeat;`,
       card: `position: absolute; margin: auto 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
-      cardBody: `padding: 0; background-color: #353535; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
+      cardBody: `padding: 0; background-color: ${Blueprint.ui.theme.menu}; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
       leftImg: `border: 1px solid #222; height: ${MB?`17em`:`22em`}; border-radius: 100%; margin: 1em;`,
       bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,
@@ -886,8 +879,7 @@ const App = function(store) {
   };
 
   return React.createElement('div', {style: styles.app}, [
-    Components.Header(store), Components.Menu(store), Components.Router(store),
-    Components.Network(store)// , Components.Ads(store)
+    Components.Header(store), Components.Menu(store), Components.Router(store), Components.Network(store)
   ]);
 }
 

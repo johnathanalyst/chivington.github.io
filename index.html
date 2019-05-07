@@ -36,6 +36,8 @@
       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; height: 100%;
       position: absolute; top: 0; left: 0; bottom: 0; width: 100%; margin: 0; padding: 0; overflow-x: hidden;
       overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: rgba(100,100,100,1);
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('/imgs/wp/yolo.png');
+      background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
     }
 
     #NoJsHeader {
@@ -55,10 +57,10 @@
 
     #NoJsCard {
       position: absolute; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-      z-index: 5; margin: 4.75em 2.5% 0.75em; width: 95%; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
+      z-index: 5; margin: 10em 10%; width: 80%; -webkit-box-shadow: 1px 1px 2px 0 rgba(10,10,10,0.4);
     }
     #NoJsCardBody {
-      padding: 0; background-color: #252525;
+      padding: 0; background-color: #062f4f;
       display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
     }
     #NoJsCardBodyLeft {
@@ -87,7 +89,7 @@
       background-color: #aaa;
     }
     .NoJsCardBodyRow {
-      display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: 1em 0;
+      display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: 0.25em 0;
     }
     .NoJsCardBodyLabel {
       font-size: 1em; margin: 0;
@@ -99,7 +101,7 @@
       font-size: 0.8em; margin: 0; text-decoration: underline; color: #000;
     }
     #NoJsCardFooter {
-      display: flex; flex-direction: row; justify-content: space-around; align-items: center; background-color: #222; padding: 1.15em 0 0.85em;
+      display: flex; flex-direction: row; justify-content: space-around; align-items: center; background-color: #222; padding: 1em 0;
     }
     .NoJsCardFooterLink {
       color: #fff;
@@ -187,13 +189,13 @@
       <div id='NoJsCard'>
         <div id='NoJsCardBody'>
           <div id='NoJsCardBodyLeft'>
-            <img id='NoJsCardImg' src='/imgs/me/me.jpg' alt='Portrait Image' />
+            <img id='NoJsCardImg' src='/imgs/me/me-n-loaf.jpg' alt='Portrait Image' />
           </div>
           <div id='NoJsCardBodyRight'>
             <div id='NoJsCardBodyRightTop'>
               <img id='NoJsCardGreetingImg' src='/imgs/content/hello.png' alt='Greeting Image' />
               <h2 id='NoJsCardName'>Johnathan Chivington</h2>
-              <h2 id='NoJsCardTitle'>Experienced Full-Stack Engineer</h2>
+              <h2 id='NoJsCardTitle'>Data Scientist & Engineer</h2>
             </div>
 
             <div id='NoJsCardBodyRightBottom'>
@@ -211,7 +213,7 @@
               </div>
               <div class='NoJsCardBodyRow'>
                 <h3 class='NoJsCardBodyLabel'>Search</h3>
-                <p class='NoJsCardBodyText'>Actively Seeking (local & remote)</p>
+                <p class='NoJsCardBodyText'>Open to offers</p>
               </div>
               <div class='NoJsCardBodyRow'>
                 <h3 class='NoJsCardBodyLabel'>Resume</h3>
