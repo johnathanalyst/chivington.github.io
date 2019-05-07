@@ -168,7 +168,7 @@ const Blueprint = {
     about: {
       company: 'chivingtoninc.com',
       author: 'Johnathan Chivington',
-      version: '0.0.2',
+      version: '1.0.2',
       reports: [
         {org: 'Qualys SSL Labs', score: 'A+', img: Assets.content_qualys, link: 'https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com'},
         {org: 'ImmuniWeb SSLScan', score: 'A+', img: Assets.content_htBridge, link: 'https://www.htbridge.com/ssl/?id=uAXLxfew'},
