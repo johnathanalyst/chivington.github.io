@@ -251,13 +251,18 @@ const Blueprint = {
       header: '#151515',
       menu: '#062f4f',
       view: '#069',
+      accent: '#813722;',
+      accentSubtle: 'rgba(160,80,40,0.6)',
+      text: '#fff',
+      textSubtle: 'rgba(255,255,255,0.6)',
+      shadow: '#333'
     }
   },
   work: {
     contact: {
       firstName: 'Johnathan',
       lastName: 'Chivington',
-      title: 'Data Scientist & Engineer',
+      title: ['Full-Stack Engineer', '(...and aspiring Data Scientist.)'],
       phone: '303.900.2861',
       email: 'j.chivington@bellevuecollege.edu',
       linkedin: 'https://linkedin.com/in/johnathan-chivington',
@@ -436,7 +441,7 @@ const Reducers = {
 /* --------------------------------- Middlewares ---------------------------------- *
  *                      Functions that intercept state changes.                     *
  * -------------------------------------------------------------------------------- */
-const StoreMiddlewares = {
+const Middlewares = {
   logActions: Redux.storeMiddlewares.logActions('@@INIT'),
   listenerBypass: Redux.storeMiddlewares.listenerBypass({
     'UPDATE_SCROLL': ['Render_App'],
@@ -462,17 +467,18 @@ const Components = {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { headerState, viewState, menuState } = state.uiState;
     const { icon, alt, title } = headerState;
+    const { header, text, textSubtle, shadow } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       header: `
         position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: ${Blueprint.ui.theme.header}; border-bottom: 1px solid #aaa; -webkit-box-shadow: 1px 1px 15px 0 #333;
+        background-color: ${header}; border-bottom: 1px solid ${textSubtle}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
       `,
-      icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: #fff;`,
-      title: `margin: 0; color: #fff; font-size: 2em; cursor: pointer;`,
-      superScript: `font-size: 0.9em; color: #fff; margin: -10px 0 0 3px;`
+      icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: ${text};`,
+      title: `margin: 0; color: ${text}; font-size: 2em; cursor: pointer;`,
+      superScript: `font-size: 0.9em; color: ${text}; margin: -10px 0 0 3px;`
     };
 
     const headerIcon = E('img', {style: styles.icon, src: icon, alt: alt}, []);
@@ -544,24 +550,25 @@ const Components = {
     const { width, height, mode } = windowState;
     const [ currentView, isPreviousView ] = [ viewState.current, viewState.previous ];
     const [ currentMenu, previousMenu ] = [ menuState.current, menuState.previous ];
+    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       menu: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: fixed;
         top: 4em; left: 0; bottom: 0; width: ${mode != 'desktop' ? `100%` : `25%`}; z-index: 80; overflow: hidden;
-        background-color: ${Blueprint.ui.theme.menu}; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
-          : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)}
+        background-color: ${menu}; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
+          : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)} border-right: 1px solid ${accentSubtle};
       `,
       menuBtn: `
-        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid #813722;
-        color: #fff; font-size: 1.1em; font-weight: 100; cursor: pointer; text-align: left;
+        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid ${accent};
+        color: ${text}; font-size: 1.1em; font-weight: 100; cursor: pointer; text-align: left;
       `,
       appInfo: `
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
-        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid #813722;
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid ${accentSubtle};
       `,
-      appInfoRow: `margin: 0.25em auto; color: #fff;`
+      appInfoRow: `margin: 0.1em auto; color: ${textSubtle}`
     };
 
     const menuBtns = [
@@ -615,7 +622,7 @@ const Components = {
   },
   View: function(store, viewComponent, animation) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { windowState, viewState } = state.uiState;
+    const { windowState, viewState, menuState } = state.uiState;
     const { width, height, mode } = windowState;
 
     const styles = {
@@ -632,6 +639,10 @@ const Components = {
       const diff = (eventST - currentST) < 0 ? -(eventST - currentST) : (eventST - currentST);
       if (scrollCtr++ % 2 == 0 && diff > 5) dispatch({type: 'UPDATE_SCROLL', payload: eventST});
     }, false);
+
+    View.addEventListener('click', function(event) {
+      if (menuState.current == 'OPEN') dispatch({type: 'CLOSE_MENU'});
+    })
 
     let resizeCtr = 0;
     window.addEventListener('resize', function(event) {
@@ -689,6 +700,7 @@ const Views = {
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
     const { wp_yolo, icon_scroll } = Assets;
+    const { text, textSubtle } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
@@ -698,20 +710,15 @@ const Views = {
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_yolo}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
-      title: `margin: 0; color: #fff; font-size: 3em; font-weight: 900;`,
-      summary: `margin: 0.5em 0 0; color: #fff; font-size: 1.5em;`,
+      title: `margin: 0; color: ${text}; font-size: 3em; font-weight: 900;`,
+      subtitle: `margin: 0; color: ${text}; font-size: 1em;`,
+      summary: `margin: 0.5em 0 0; color: ${text}; font-size: 1.5em;`,
     };
 
-    // About This App
-    // 1. https/http2
-    // 2. TLSv1.2
-    // 3. A+ Qualsys SSL Labs Score (https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com)
-    // 4. A+ ImmuniWeb SSLScan Score (https://www.htbridge.com/ssl/?id=uAXLxfew)
-    // 5. 100% on Google PageSpeed Insights (https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com)
-
     return E('div', {style: styles.homeView}, [
-      E('h1', {style: styles.title}, [Blueprint.work.contact.title]),
-      E('p', {style: styles.summary}, [`Tackling difficult industrial challenges with AI.`])
+      E('h1', {style: styles.title}, [Blueprint.work.contact.title[0]]),
+      E('p', {style: styles.subtitle}, [Blueprint.work.contact.title[1]]),
+      E('p', {style: styles.summary}, [`Always ascending gradients when I should be descending...`])
     ]);
   },
   About: function(store) {
@@ -734,7 +741,7 @@ const Views = {
     };
 
     const about = E('div', {style: styles.about}, [
-      E('h1', {style: styles.title}, [Blueprint.work.contact.title]),
+      E('h1', {style: styles.title}, [Blueprint.work.contact.title[0]]),
       E('div', {style: styles.summary}, Blueprint.work.about.map(p => E('p', {style: styles.summary}, [p])))
     ]);
 
@@ -742,6 +749,7 @@ const Views = {
   },
   Blog: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
+    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
@@ -753,6 +761,13 @@ const Views = {
       blogBody: `margin: 1em;`,
       blogTags: `margin: 0 1em; padding: 0.5em; border-top: 1px solid #333;`
     };
+
+    // First Blog Post - Deploy & Secure a Server
+    // 1. https/http2
+    // 2. TLSv1.2
+    // 3. A+ Qualsys SSL Labs Score (https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com)
+    // 4. A+ ImmuniWeb SSLScan Score (https://www.htbridge.com/ssl/?id=uAXLxfew)
+    // 5. 100% on Google PageSpeed Insights (https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com)
 
     return React.createElement('div', {style: styles.blogView}, [
       E('div', {style: styles.blogPost}, [
@@ -767,6 +782,7 @@ const Views = {
   },
   Projects: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
+    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
@@ -795,12 +811,13 @@ const Views = {
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.workState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
+    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       contactView: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%; ${MB?`padding: 0 0 6.5em;`:``} background-image: url("${wp_pnw}"); background-position: center; background-repeat: no-repeat;`,
       card: `position: absolute; margin: auto 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
-      cardBody: `padding: 0; background-color: ${Blueprint.ui.theme.menu}; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
+      cardBody: `padding: 0; background-color: ${menu}; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
       leftImg: `border: 1px solid #222; height: ${MB?`17em`:`22em`}; border-radius: 100%; margin: 1em;`,
       bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,
@@ -826,7 +843,7 @@ const Views = {
           E('div', {style: styles.rightTop}, [
             E('img', {style: styles.greetingImg, src: content_greeting, alt: 'greeting image'}, []),
             E('h2', {style: styles.name}, [`${firstName} ${lastName}`]),
-            E('h2', {style: styles.title}, [title])
+            E('h2', {style: styles.title}, [title[0]])
           ]),
           E('div', {style: styles.rightBottom}, ['location', 'phone', 'email', 'search'].map(k => {
             return E('div', {style: styles.row}, [
@@ -900,8 +917,8 @@ const AppRoot = document.getElementById('AppRoot');
 //  Create root state reducer from Reducers.
 const RootReducer = Redux.combineReducers(Reducers);
 
-// Create ReduxStore, using RootReducer & StoreMiddlewares
-const ReduxStore = Redux.createStore(RootReducer, StoreMiddlewares);
+// Create ReduxStore, using RootReducer & Middlewares
+const ReduxStore = Redux.createStore(RootReducer, Middlewares);
 
 // Render app once initially
 ReactDOM.render(App, ReduxStore, AppRoot);
