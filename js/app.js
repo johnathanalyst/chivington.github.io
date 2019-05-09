@@ -146,8 +146,13 @@ const Assets = {
   icon_adsenseSquare: '/imgs/ads/adsense-400x400.jpg',
   icon_adsenseWide: '/imgs/ads/adsense-wide.png',
   thumb_knn: '/imgs/thumbs/knn.png',
-  thumb_linearRegression: '/imgs/thumbs/linearRegression.jpg',
-  thumb_logisticRegression: '/imgs/thumbs/logisticRegression.jpg',
+  thumb_linear: '/imgs/thumbs/linear.jpg',
+  thumb_logistic: '/imgs/thumbs/logistic.png',
+  thumb_svm: '/imgs/thumbs/svm.png',
+  project_knn: '/imgs/projects/knn.py',
+  project_linear: '/imgs/projects/linear.py',
+  project_logistic: '/imgs/projects/logistic.py',
+  project_svm: '/imgs/projects/svm.py',
 };
 
 
@@ -254,9 +259,9 @@ const Blueprint = {
       header: '#151515',
       menu: '#062f4f',
       view: '#069',
-      accent: '#813722;',
-      accentSubtle: 'rgba(160,80,40,0.6)',
-      text: '#fff',
+      accent: 'rgba(200,100,65,1)',
+      accentSubtle: 'rgba(200,100,65,0.6)',
+      text: 'rgba(255,255,255,1)',
       textSubtle: 'rgba(255,255,255,0.6)',
       shadow: '#333'
     }
@@ -284,9 +289,12 @@ const Blueprint = {
     `learning; self-taught`,
     `goals; AI --> Quantum`,
   ],
-  projects: {
-    knn: [' K-Nearest Neighbors', Assets.thumb_knn]
-  }
+  projects: [
+    ['K-Nearest Neighbors', Assets.thumb_knn, Assets.project_knn.py],
+    ['Linear Regression', Assets.thumb_linear, Assets.project_linear.py],
+    ['Logistic Regression', Assets.thumb_logistic, Assets.project_logistic.py]
+    ['Support Vector Machine', Assets.thumb_svm, Assets.project_svm.py]
+  ]
 };
 
 
@@ -694,8 +702,22 @@ const Components = {
 
     return Tab;
   },
-  Gallery: function(store, map) {
-    //
+  Gallery: function(store, list) {
+    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
+    const { menu, accent, shadow, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
+    const E = React.createElement;
+
+    const styles = {
+      galleryComponent: `
+        position: absolute; top: 0; left: 0; width: 99.5%; height: 99.5%;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+        background-color: #fff; border: 2px solid ${accent}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
+      `
+    };
+
+    return E('div', {style: styles.galleryComponent}, list.map(tile => {
+      //
+    }));
   }
 };
 
@@ -791,19 +813,21 @@ const Views = {
   },
   Projects: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
-    const { Gallery } = Components;
+    const { menu, view, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       projectsView: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-        width: 100%; margin: 0 auto; padding: 1em 0;
-      `
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        background-color: ${menu};
+      `,
+      galleryRoot: `
+        position: absolute; top: 2.5%; left: 2.5%; width: 95%; height: 95%;`
     };
 
-    return React.createElement('div', {style: styles.projectsView}, [
-      'Gallery()'
+    return E('div', {style: styles.projectsView}, [
+      E('div', {style: styles.galleryRoot}, [ Components.Gallery(store, Blueprint.projects) ])
     ]);
   },
   Contact: function(store) {
