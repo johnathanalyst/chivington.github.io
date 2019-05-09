@@ -239,7 +239,7 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'PROJECTS',
+      current: 'HOME',
       previous: '@@INIT',
       scrollTop: 0
     },
