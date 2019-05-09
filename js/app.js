@@ -144,7 +144,10 @@ const Assets = {
   icon_close: '/imgs/icons/btns/close.svg',
   icon_scroll: '/imgs/icons/btns/scroll.svg',
   icon_adsenseSquare: '/imgs/ads/adsense-400x400.jpg',
-  icon_adsenseWide: '/imgs/ads/adsense-wide.png'
+  icon_adsenseWide: '/imgs/ads/adsense-wide.png',
+  thumb_knn: '/imgs/thumbs/knn.png',
+  thumb_linearRegression: '/imgs/thumbs/linearRegression.jpg',
+  thumb_logisticRegression: '/imgs/thumbs/logisticRegression.jpg',
 };
 
 
@@ -231,7 +234,7 @@ const Blueprint = {
       previous: 'CLOSED'
     },
     view: {
-      current: 'HOME',
+      current: 'PROJECTS',
       previous: '@@INIT',
       scrollTop: 0
     },
@@ -274,12 +277,15 @@ const Blueprint = {
     },
     resumes: [
       {name: 'Deep Learning', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf]}
-    ],
-    about: [
-      `life; beacon;`,
-      `learning; self-taught`,
-      `goals; AI --> Quantum`,
     ]
+  },
+  about: [
+    `life; beacon;`,
+    `learning; self-taught`,
+    `goals; AI --> Quantum`,
+  ],
+  projects: {
+    knn: [' K-Nearest Neighbors', Assets.thumb_knn]
   }
 };
 
@@ -687,6 +693,9 @@ const Components = {
     ]);
 
     return Tab;
+  },
+  Gallery: function(store, map) {
+    //
   }
 };
 
@@ -742,7 +751,7 @@ const Views = {
 
     const about = E('div', {style: styles.about}, [
       E('h1', {style: styles.title}, [Blueprint.work.contact.title[0]]),
-      E('div', {style: styles.summary}, Blueprint.work.about.map(p => E('p', {style: styles.summary}, [p])))
+      E('div', {style: styles.summary}, Blueprint.about.map(p => E('p', {style: styles.summary}, [p])))
     ]);
 
     return E('div', {style: styles.aboutView}, [about]);
@@ -783,6 +792,7 @@ const Views = {
   Projects: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
+    const { Gallery } = Components;
     const E = React.createElement;
 
     const styles = {
@@ -793,15 +803,7 @@ const Views = {
     };
 
     return React.createElement('div', {style: styles.projectsView}, [
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS']),
-      E('h1', {style: 'margin: 1em; border: 1px solid #000;'}, ['PROJECTS'])
+      'Gallery()'
     ]);
   },
   Contact: function(store) {
