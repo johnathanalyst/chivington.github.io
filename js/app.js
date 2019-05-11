@@ -100,8 +100,8 @@ const Assets = {
   resource_app: '/app.js',
   resource_sw: '/sw.js',
   resource_webmanifest: '/site.webmanifest',
-  resource_resume_DL_docx: '/includes/docs/j.Chivington.Resume.docx',
-  resource_resume_DL_pdf: '/includes/docs/j.Chivington.Resume.pdf',
+  resource_resume_docx: '/includes/docs/j.Chivington.Resume.docx',
+  resource_resume_pdf: '/includes/docs/j.Chivington.Resume.pdf',
   resource_avenir: '/includes/fonts/Avenir-Book.otf',
   content_greeting: '/imgs/content/hello.png',
   content_step1: '/imgs/content/step1.jpg',
@@ -256,14 +256,15 @@ const Blueprint = {
       action: 'DISABLE_ADS'
     }],
     theme: {
-      header: '#151515',
-      menu: '#062f4f',
-      view: '#069',
+      dark: 'rgba(50,50,50,1)',
+      shadow: 'rgba(100,100,100,0.3)',
+      component: 'rgba(6,47,79,1)',
+      view: 'rgba(0,102,153,1)',
       accent: 'rgba(200,100,65,1)',
-      accentSubtle: 'rgba(200,100,65,0.6)',
-      text: 'rgba(255,255,255,1)',
-      textSubtle: 'rgba(255,255,255,0.6)',
-      shadow: '#333'
+      accentOpaque: 'rgba(200,100,65,0.6)',
+      light: 'rgba(255,255,255,1)',
+      lightSubtle: 'rgba(245,245,245,1)',
+      lightOpaque: 'rgba(255,255,255,0.6)'
     }
   },
   work: {
@@ -289,12 +290,15 @@ const Blueprint = {
     `learning; self-taught`,
     `goals; AI --> Quantum`,
   ],
-  projects: [
-    ['K-Nearest Neighbors', Assets.thumb_knn, Assets.project_knn.py],
-    ['Linear Regression', Assets.thumb_linear, Assets.project_linear.py],
-    ['Logistic Regression', Assets.thumb_logistic, Assets.project_logistic.py]
-    ['Support Vector Machine', Assets.thumb_svm, Assets.project_svm.py]
-  ]
+  projects: {
+    summary: `Welcome to my projects gallery. Select a project for more details.`,
+    tiles: [
+      ['K-Nearest Neighbors', Assets.thumb_knn, Assets.project_knn],
+      ['Linear Regression', Assets.thumb_linear, Assets.project_linear],
+      ['Logistic Regression', Assets.thumb_logistic, Assets.project_logistic],
+      ['Support Vector Machine', Assets.thumb_svm, Assets.project_svm]
+    ]
+  }
 };
 
 
@@ -481,18 +485,18 @@ const Components = {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { headerState, viewState, menuState } = state.uiState;
     const { icon, alt, title } = headerState;
-    const { header, text, textSubtle, shadow } = Blueprint.ui.theme;
+    const { dark, light, lightOpaque, shadow } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       header: `
         position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: ${header}; border-bottom: 1px solid ${textSubtle}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
+        background-color: ${dark}; border-bottom: 1px solid ${lightOpaque}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
       `,
-      icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: ${text};`,
-      title: `margin: 0; color: ${text}; font-size: 2em; cursor: pointer;`,
-      superScript: `font-size: 0.9em; color: ${text}; margin: -10px 0 0 3px;`
+      icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: ${light};`,
+      title: `margin: 0; color: ${light}; font-size: 2em; cursor: pointer;`,
+      superScript: `font-size: 0.9em; color: ${light}; margin: -10px 0 0 3px;`
     };
 
     const headerIcon = E('img', {style: styles.icon, src: icon, alt: alt}, []);
@@ -564,25 +568,25 @@ const Components = {
     const { width, height, mode } = windowState;
     const [ currentView, isPreviousView ] = [ viewState.current, viewState.previous ];
     const [ currentMenu, previousMenu ] = [ menuState.current, menuState.previous ];
-    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       menu: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: fixed;
         top: 4em; left: 0; bottom: 0; width: ${mode != 'desktop' ? `100%` : `25%`}; z-index: 80; overflow: hidden;
-        background-color: ${menu}; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
-          : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)} border-right: 1px solid ${accentSubtle};
+        background-color: ${component}; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
+          : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)} border-right: 1px solid ${accentOpaque};
       `,
       menuBtn: `
         margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid ${accent};
-        color: ${text}; font-size: 1.1em; font-weight: 100; cursor: pointer; text-align: left;
+        color: ${light}; font-size: 1.1em; font-weight: 100; cursor: pointer; text-align: left;
       `,
       appInfo: `
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
-        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid ${accentSubtle};
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid ${accentOpaque};
       `,
-      appInfoRow: `margin: 0.1em auto; color: ${textSubtle}`
+      appInfoRow: `margin: 0.1em auto; color: ${lightOpaque}`
     };
 
     const menuBtns = [
@@ -634,7 +638,7 @@ const Components = {
       Components.View(store, prev, previousAnimation), Components.View(store, view, currentAnimation)
     ]);
   },
-  View: function(store, viewComponent, animation) {
+  View: function(store, view, animation) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { windowState, viewState, menuState } = state.uiState;
     const { width, height, mode } = windowState;
@@ -644,7 +648,7 @@ const Components = {
         overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: ${Blueprint.ui.theme.view}; ${animation}`
     };
 
-    const View = React.createElement('div', {style: styles.view}, [viewComponent(store)]);
+    const View = React.createElement('div', {style: styles.view}, [view(store)]);
     setTimeout(event => View.scrollTo({top: viewState.scrollTop, left: 0, behavior: 'auto'}), 0);
 
     let scrollCtr = 0;
@@ -702,22 +706,42 @@ const Components = {
 
     return Tab;
   },
-  Gallery: function(store, list) {
+  Gallery: function(store, tiles, cols) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { menu, accent, shadow, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
+    const { dark, component, accent, accentOpaque, light, lightSubtle, lightOpaque, shadow } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
-      galleryComponent: `
+      gallery: `
         position: absolute; top: 0; left: 0; width: 99.5%; height: 99.5%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background-color: #fff; border: 2px solid ${accent}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
-      `
+        background-color: ${lightSubtle}; border: 2px solid ${shadow}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
+      `,
+      row: `
+        display: flex; flex-direction: row; justify-content: space-around; align-items: center;
+        margin: 0 0.5em; padding: 0 0.5em; border-bottom: 1px solid ${shadow};
+      `,
+      tile: `
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        width: ${Math.floor(100/cols)}%; margin: 1em 0.5em; cursor: pointer; border: 1px solid #000;
+        background-color: ${light}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
+      `,
+      tileImg: `margin: 1em 1em 0.5em; width: 15em; height: 10em; border: 1px solid ${dark};`,
+      tileTitle: `font-size: 1em;`
     };
 
-    return E('div', {style: styles.galleryComponent}, list.map(tile => {
-      //
-    }));
+    const Gallery = E('div', {style: styles.gallery}, []);
+
+    for (let i in tiles) {
+      if (i%cols == 0) Gallery.appendChild(E('div', {style: styles.row}, []));
+
+      Gallery.lastChild.appendChild(E('div', {style: styles.tile}, [
+        E('img', {style: styles.tileImg, src: tiles[i][1], alt: `${tiles[i][0]}-thumb`}, []),
+        E('h2', {style: styles.tileTitle}, [tiles[i][0]])
+      ]));
+    }
+
+    return Gallery;
   }
 };
 
@@ -731,7 +755,7 @@ const Views = {
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
     const { wp_yolo, icon_scroll } = Assets;
-    const { text, textSubtle } = Blueprint.ui.theme;
+    const { light, lightOpaque } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
@@ -741,9 +765,9 @@ const Views = {
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_yolo}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
-      title: `margin: 0; color: ${text}; font-size: 3em; font-weight: 900;`,
-      subtitle: `margin: 0; color: ${text}; font-size: 1em;`,
-      summary: `margin: 0.5em 0 0; color: ${text}; font-size: 1.5em;`,
+      title: `margin: 0; color: ${light}; font-size: 3em; font-weight: 900;`,
+      subtitle: `margin: 0; color: ${light}; font-size: 1em;`,
+      summary: `margin: 0.5em 0 0; color: ${light}; font-size: 1.5em;`,
     };
 
     return E('div', {style: styles.homeView}, [
@@ -780,7 +804,7 @@ const Views = {
   },
   Blog: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
@@ -813,21 +837,23 @@ const Views = {
   },
   Projects: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { menu, view, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
+    const { component, view, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
+    const { summary, tiles } = Blueprint.projects;
     const E = React.createElement;
 
     const styles = {
       projectsView: `
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
-        background-color: ${menu};
+        background-color: ${component};
       `,
       galleryRoot: `
         position: absolute; top: 2.5%; left: 2.5%; width: 95%; height: 95%;`
     };
 
     return E('div', {style: styles.projectsView}, [
-      E('div', {style: styles.galleryRoot}, [ Components.Gallery(store, Blueprint.projects) ])
+      E('h1', {style: styles.summary}, [summary]),
+      E('div', {style: styles.galleryRoot}, [ Components.Gallery(store, tiles, 4) ])
     ]);
   },
   Contact: function(store) {
@@ -837,13 +863,13 @@ const Views = {
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.workState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
-    const { menu, accent, accentSubtle, text, textSubtle } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       contactView: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%; ${MB?`padding: 0 0 6.5em;`:``} background-image: url("${wp_pnw}"); background-position: center; background-repeat: no-repeat;`,
       card: `position: absolute; margin: auto 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
-      cardBody: `padding: 0; background-color: ${menu}; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
+      cardBody: `padding: 0; background-color: ${component}; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
       leftImg: `border: 1px solid #222; height: ${MB?`17em`:`22em`}; border-radius: 100%; margin: 1em;`,
       bodyRight: `display: flex; flex: 1; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: #ccc; margin: ${MB?`0`:`0 0 0 0.5em`};`,
@@ -905,7 +931,7 @@ const Views = {
 
     return E('div', {style: styles.resumeView}, [
       E('embed', {style: styles.resume, width: '100%',
-        src: `${Assets.resource_resume_DL_pdf}`, type: 'application/pdf'}, [])
+        src: `${Assets.resource_resume_pdf}`, type: 'application/pdf'}, [])
     ]);
   }
 };
