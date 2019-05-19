@@ -1,28 +1,31 @@
 /* --------------------------------------------------------------------------------- *
  * Name: Johnathan Chivington                                                        *
  * Project: GitHub Web App                                                           *
- * Description: Single page GitHub app, modeled after Redux/React.                   *
+ * Description: Single page web app, modeled after Redux/React.                      *
  * --------------------------------------------------------------------------------- */
 
-/* ------------------------------------- Libs -------------------------------------- *
+/* ----------------------------------- Libraries ----------------------------------- *
  *           Barebones modules for initializing/maintaining app/UI state.            *
  * --------------------------------------------------------------------------------- */
-// Creates elements and diffs/maintains vdom tree
+// Creates elements
 const React = {
-  createElement: function(elem, attrs, children) {
-    const element = document.createElement(elem);
+  createElement: function(type, attrs, children) {
+    // Create element
+    const ReactElement = document.createElement(type);
 
-    if (attrs) Object.keys(attrs).forEach(k => element.setAttribute(k, attrs[k]));
+    // Set attributes
+    if (attrs) Object.keys(attrs).forEach(k => ReactElement.setAttribute(k, attrs[k]));
 
-    if (children.length >= 1) children.forEach(child => element.appendChild((typeof child == 'string')
-      ? document.createTextNode(child) : ((child.elem) ? child.elem(child.props, child.dispatch, child.children) : child)
+    // Append children
+    if (children.length >= 1) children.forEach(child => ReactElement.appendChild((typeof child == 'string')
+      ? document.createTextNode(child) : ((child.type) ? child.type(child.props, child.dispatch, child.children) : child)
     ));
 
-    return element;
+    return ReactElement;
   }
 };
 
-// Renders/updates dom based on vdom tree
+// Renders/maintains vdom
 const ReactDOM = {
   render: function(component, store, root) {
     while (root.lastChild) root.lastChild.remove();
@@ -96,63 +99,75 @@ const Redux = {
  *                      Defines everything needed to cache app.                      *
  * --------------------------------------------------------------------------------- */
 const Assets = {
-  resource_index: '/index.html',
-  resource_app: '/app.js',
-  resource_sw: '/sw.js',
-  resource_webmanifest: '/site.webmanifest',
-  resource_resume_docx: '/includes/docs/j.Chivington.Resume.docx',
-  resource_resume_pdf: '/includes/docs/j.Chivington.Resume.pdf',
-  resource_avenir: '/includes/fonts/Avenir-Book.otf',
-  content_greeting: '/imgs/content/hello.png',
-  content_step1: '/imgs/content/step1.jpg',
-  content_step2: '/imgs/content/step2.jpg',
-  content_meAndLoaf: '/imgs/me/me-n-loaf.jpg',
-  content_meAndWin: '/imgs/me/me-n-win.jpg',
-  content_meAndWinBed: '/imgs/me/me-n-win-bed.jpg',
-  content_me: '/imgs/me/me.jpg',
-  content_qualys: '/imgs/content/qualys.png',
-  content_htBridge: '/imgs/content/ht-bridge.svg',
-  content_pageSpeed: '/imgs/content/google-pageSpeed.jpg',
-  wp_yolo: '/imgs/wp/yolo.png',
-  wp_fragmented: '/imgs/wp/fragmented.jpg',
-  wp_math: '/imgs/wp/math.jpg',
-  wp_pnw: '/imgs/wp/pnw.jpg',
-  wp_sphere: '/imgs/wp/geoSphere.png',
-  icon_favicon: '/favicon.ico',
-  icon_wifi: '/imgs/icons/network/wifi.svg',
-  icon_noWifi: '/imgs/icons/network/noWifi.svg',
-  icon_noWifi2: '/imgs/icons/network/noWifi2.svg',
-  icon_brain: '/imgs/icons/sm/brain.svg',
-  icon_download: '/imgs/icons/sm/dl.svg',
-  icon_email: '/imgs/icons/sm/email.svg',
-  icon_phone: '/imgs/icons/sm/phone.svg',
-  icon_facebook: '/imgs/icons/sm/fb.svg',
-  icon_github: '/imgs/icons/sm/git.svg',
-  icon_linkedin: '/imgs/icons/sm/li.svg',
-  icon_twitter: '/imgs/icons/sm/twt.svg',
-  icon_androidChrome192: '/imgs/icons/manifest/android-chrome-192x192.png',
-  icon_androidChrome512: '/imgs/icons/manifest/android-chrome-512x512.png',
-  icon_appleTouchIcon: '/imgs/icons/manifest/apple-touch-icon.png',
-  icon_browserconfig: '/imgs/icons/manifest/browserconfig.xml',
-  icon_favicon16: '/imgs/icons/manifest/favicon-16x16.png',
-  icon_favicon32: '/imgs/icons/manifest/favicon-32x32.png',
-  icon_mstile70: '/imgs/icons/manifest/mstile-70x70.png',
-  icon_mstile144: '/imgs/icons/manifest/mstile-144x144.png',
-  icon_mstile150: '/imgs/icons/manifest/mstile-150x150.png',
-  icon_mstile310: '/imgs/icons/manifest/mstile-310x310.png',
-  icon_safariPinnedTab: '/imgs/icons/manifest/safari-pinned-tab.png',
-  icon_close: '/imgs/icons/btns/close.svg',
-  icon_scroll: '/imgs/icons/btns/scroll.svg',
-  icon_adsenseSquare: '/imgs/ads/adsense-400x400.jpg',
-  icon_adsenseWide: '/imgs/ads/adsense-wide.png',
-  thumb_knn: '/imgs/thumbs/knn.png',
-  thumb_linear: '/imgs/thumbs/linear.jpg',
-  thumb_logistic: '/imgs/thumbs/logistic.png',
-  thumb_svm: '/imgs/thumbs/svm.png',
-  project_knn: '/imgs/projects/knn.py',
-  project_linear: '/imgs/projects/linear.py',
-  project_logistic: '/imgs/projects/logistic.py',
-  project_svm: '/imgs/projects/svm.py',
+  resource: {
+    index: '/index.html',
+    app: '/app.js',
+    sw: '/sw.js',
+    webmanifest: '/site.webmanifest',
+    resume_docx: '/includes/docs/j.Chivington.Resume.docx',
+    resume_pdf: '/includes/docs/j.Chivington.Resume.pdf',
+    avenir: '/includes/fonts/Avenir-Book.otf'
+  },
+  content: {
+    greeting: '/imgs/content/hello.png',
+    step1: '/imgs/content/step1.jpg',
+    step2: '/imgs/content/step2.jpg',
+    meAndLoaf: '/imgs/me/me-n-loaf.jpg',
+    meAndWin: '/imgs/me/me-n-win.jpg',
+    meAndWinBed: '/imgs/me/me-n-win-bed.jpg',
+    me: '/imgs/me/me.jpg',
+    qualys: '/imgs/content/qualys.png',
+    htBridge: '/imgs/content/ht-bridge.svg',
+    pageSpeed: '/imgs/content/google-pageSpeed.jpg'
+  },
+  wp: {
+    yolo: '/imgs/wp/yolo.png',
+    fragmented: '/imgs/wp/fragmented.jpg',
+    math: '/imgs/wp/math.jpg',
+    pnw: '/imgs/wp/pnw.jpg',
+    sphere: '/imgs/wp/geoSphere.png'
+  },
+  icon: {
+    favicon: '/favicon.ico',
+    wifi: '/imgs/icons/network/wifi.svg',
+    noWifi: '/imgs/icons/network/noWifi.svg',
+    noWifi2: '/imgs/icons/network/noWifi2.svg',
+    brain: '/imgs/icons/sm/brain.svg',
+    download: '/imgs/icons/sm/dl.svg',
+    email: '/imgs/icons/sm/email.svg',
+    phone: '/imgs/icons/sm/phone.svg',
+    facebook: '/imgs/icons/sm/fb.svg',
+    github: '/imgs/icons/sm/git.svg',
+    linkedin: '/imgs/icons/sm/li.svg',
+    twitter: '/imgs/icons/sm/twt.svg',
+    androidChrome192: '/imgs/icons/manifest/android-chrome-192x192.png',
+    androidChrome512: '/imgs/icons/manifest/android-chrome-512x512.png',
+    appleTouchIcon: '/imgs/icons/manifest/apple-touch-icon.png',
+    browserconfig: '/imgs/icons/manifest/browserconfig.xml',
+    favicon16: '/imgs/icons/manifest/favicon-16x16.png',
+    favicon32: '/imgs/icons/manifest/favicon-32x32.png',
+    mstile70: '/imgs/icons/manifest/mstile-70x70.png',
+    mstile144: '/imgs/icons/manifest/mstile-144x144.png',
+    mstile150: '/imgs/icons/manifest/mstile-150x150.png',
+    mstile310: '/imgs/icons/manifest/mstile-310x310.png',
+    safariPinnedTab: '/imgs/icons/manifest/safari-pinned-tab.png',
+    close: '/imgs/icons/btns/close.svg',
+    scroll: '/imgs/icons/btns/scroll.svg',
+    adsenseSquare: '/imgs/ads/adsense-400x400.jpg',
+    adsenseWide: '/imgs/ads/adsense-wide.png'
+  },
+  thumb: {
+    knn: '/imgs/thumbs/knn.png',
+    linear: '/imgs/thumbs/linear.jpg',
+    logistic: '/imgs/thumbs/logistic.png',
+    svm: '/imgs/thumbs/svm.png'
+  },
+  project: {
+    knn: '/imgs/projects/knn.py',
+    linear: '/imgs/projects/linear.py',
+    logistic: '/imgs/projects/logistic.py',
+    svm: '/imgs/projects/svm.py'
+  }
 };
 
 
@@ -160,77 +175,40 @@ const Assets = {
  *                           Specifies initial app state.                            *
  * --------------------------------------------------------------------------------- */
 const Blueprint = {
-  app: {
+  about: {
+    author: 'Johnathan Chivington',
+    version: '1.0.0',
+    reports: [
+      {org: 'Qualys SSL Labs', score: 'A+', img: Assets.content.qualys, link: 'https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com'},
+      {org: 'ImmuniWeb SSLScan', score: 'A+', img: Assets.content.htBridge, link: 'https://www.htbridge.com/ssl/?id=uAXLxfew'},
+      {org: 'Google PageSpeed', score: '100%', img: Assets.content.pageSpeed, link: 'https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com'}
+    ],
+    security: [
+      'https/http2', 'hsts', 'TLSv1.2', 'CAA Compliant', 'POODLE', 'CVE-2016-2017', 'Insecure Renegotiation', 'ROBOT', 'HEARTBLEED', 'CVE-2014-0224'
+    ],
+    features: [
+      'React/Redux-Style Architecture', 'Responsive Design', 'Offline Capable', 'Network Detection', 'Customizable Themes', 'Plugins'
+    ]
+  },
+  device: {
     network: {
       downlink: navigator.connection ? navigator.connection.downlink : 10,
       effectiveType: navigator.connection ? navigator.connection.effectiveType : 'Connecting...',
       previousType: '@@INIT'
     },
-    battery: {
-      percentage: 100
-    },
     workers: {
-      available: true,
-      installed: false
-    },
-    about: {
-      company: 'chivingtoninc.com',
-      author: 'Johnathan Chivington',
-      version: '1.0.2',
-      reports: [
-        {org: 'Qualys SSL Labs', score: 'A+', img: Assets.content_qualys, link: 'https://www.ssllabs.com/ssltest/analyze.html?d=chivingtoninc.com'},
-        {org: 'ImmuniWeb SSLScan', score: 'A+', img: Assets.content_htBridge, link: 'https://www.htbridge.com/ssl/?id=uAXLxfew'},
-        {org: 'Google PageSpeed', score: '100%', img: Assets.content_pageSpeed, link: 'https://developers.google.com/speed/pagespeed/insights/?url=chivingtoninc.com'}
-      ],
-      security: [
-        'https/http2', 'hsts', 'TLSv1.2', 'CAA Compliant', 'POODLE', 'CVE-2016-2017', 'Insecure Renegotiation', 'ROBOT', 'HEARTBLEED', 'CVE-2014-0224'
-      ],
-      features: [
-        'React/Redux-Style Architecture', 'Responsive Design', 'Offline Capable', 'Network Detection', 'Customizable Themes', 'Plugins'
-      ]
-    },
-    history: []
-  },
-  user: {
-    name: {
-      first: 'John', last: 'Doe'
-    },
-    username: 'Guest',
-    keys: null,
-    returning: false,
-    notifications: [{
-      icon: Assets.icon_brain,
-      alt: 'brain icon',
-      txt: 'Welcome!',
-      btn: Assets.icon_close,
-      action: 'HIDE_NOTIFICATION'
-    }],
-    guides: [{
-      box: {
-        x:0, y:0, h:0, w:0, r:0
-      },
-      msg: {
-        x:0, y:0, h:0, w:0, r:0,
-        txt: 'Tap the brain icon for more...',
-        action: 'HIDE_GUIDE',
-        btn: Assets.icon_close
-      },
-    }],
-    theme: {
-      color: 'light',
-      landing: 'HOME'
+      available: null,
+      installed: null
     }
   },
   ui: {
     window: {
       width: window.innerWidth,
       height: window.innerHeight,
-      mode: window.innerWidth < 800 ? 'mobile' : (
-        window.innerWidth < 950 ? 'small_tab' : (window.innerWidth < 1200 ? 'large_tab' : 'desktop')
-      )
+      mode: window.innerWidth < 800 ? 'mobile' : (window.innerWidth < 1200 ? 'large_tab' : 'desktop')
     },
     header: {
-      icon: Assets.icon_brain,
+      icon: Assets.icon.brain,
       alt: 'brain icon',
       title: 'chivingtoninc'
     },
@@ -243,61 +221,94 @@ const Blueprint = {
       previous: '@@INIT',
       scrollTop: 0
     },
-    tabs: {
-
-    },
+    history: [],
     ads: [{
       type: 'message',
       placement: 'bottom',
-      icon: Assets.icon_brain,
+      icon: Assets.icon.brain,
       alt: 'brain icon',
       txt: 'Welcome to chivingtoninc.com!',
-      btn: Assets.icon_close,
+      btn: Assets.icon.close,
       action: 'DISABLE_ADS'
     }],
-    theme: {
-      dark: 'rgba(50,50,50,1)',
-      shadow: 'rgba(100,100,100,0.3)',
-      component: 'rgba(6,47,79,1)',
-      view: 'rgba(0,102,153,1)',
-      accent: 'rgba(200,100,65,1)',
-      accentOpaque: 'rgba(200,100,65,0.6)',
-      light: 'rgba(255,255,255,1)',
-      lightSubtle: 'rgba(245,245,245,1)',
-      lightOpaque: 'rgba(255,255,255,0.6)'
+    notifications: [{
+      icon: Assets.icon.brain,
+      alt: 'brain icon',
+      txt: 'Welcome!',
+      btn: Assets.icon.close,
+      action: 'HIDE_NOTIFICATION'
+    }],
+    guides: [{
+      name: ,
+      steps: [{
+        box: {
+          x:0, y:0, h:0, w:0, r:0
+        },
+        msg: {
+          x:0, y:0, h:0, w:0, r:0,
+          txt: 'Tap the brain icon for more...',
+          action: 'HIDE_GUIDE',
+          btn: Assets.icon.close
+        }
+      }],
+    }],
+    themes: {
+      dark: {
+        primary: 'rgba(21,31,42,1)',
+        primaryLight: 'rgba(27,40,56,1)',
+        primaryDark: 'rgba(16,24,30,1)',
+        primaryGradient: 'rgba(16,24,30,1), rgba(27,40,56,1)',
+        secondary: 'rgba(69,161,242,1)',
+        secondaryLight: 'rgba(120,212,255,1)',
+        secondaryDark: 'rgba(18,110,191,1)',
+        secondaryGradient: 'rgba(120,212,255,1), rgba(18,110,191,1)',
+        shadow: 'rgba(100,100,100,0.5)',
+        textPrimary: 'rgba(255,255,255,1)',
+        textSecondary: 'rgba(103,117,130,1)'
+      },
+      light: {
+        primary: 'rgba(255,255,255,1)',
+        primaryLight: 'rgba(230,236,240,1)',
+        primaryDark: 'rgba(255,255,255,1)',
+        primaryGradient: 'rgba(230,236,240,1), rgba(255,255,255,1)',
+        secondary: 'rgba(69,161,242,1)',
+        secondaryLight: 'rgba(120,212,255,1)',
+        secondaryDark: 'rgba(18,110,191,1)',
+        secondaryGradient: 'rgba(120,212,255,1), rgba(18,110,191,1)',
+        shadow: 'rgba(100,100,100,0.5)',
+        textPrimary: 'rgba(0,0,0,1)',
+        textSecondary: 'rgba(150,150,150,1)'
+      }
     }
   },
-  work: {
-    contact: {
-      firstName: 'Johnathan',
-      lastName: 'Chivington',
-      title: ['Full-Stack Engineer', '(...and aspiring Data Scientist.)'],
-      phone: '303.900.2861',
-      email: 'j.chivington@bellevuecollege.edu',
-      linkedin: 'https://linkedin.com/in/johnathan-chivington',
-      github: 'https://github.com/chivingtoninc',
-      twitter: 'https://twitter.com/chivingtoninc',
-      facebook: 'https://facebook.com/chivingtoninc',
-      location: 'Seattle, WA',
-      search: 'Open to offers'
+  personal: {
+    work: {
+      contact: {
+        firstName: 'Johnathan',
+        lastName: 'Chivington',
+        title: ['Full-Stack Engineer', '(...and aspiring Data Scientist.)'],
+        phone: '303.900.2861',
+        email: 'j.chivington@bellevuecollege.edu',
+        linkedin: 'https://linkedin.com/in/johnathan-chivington',
+        github: 'https://github.com/chivingtoninc',
+        twitter: 'https://twitter.com/chivingtoninc',
+        facebook: 'https://facebook.com/chivingtoninc',
+        location: 'Seattle, WA',
+        search: 'Open to offers'
+      },
+      resumes: [
+        {name: 'Deep Learning', links: [Assets.resource.cover_WS_docx, Assets.resource.cover_WS_pdf]}
+      ]
     },
-    resumes: [
-      {name: 'Deep Learning', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf]}
-    ]
-  },
-  about: [
-    `life; beacon;`,
-    `learning; self-taught`,
-    `goals; AI --> Quantum`,
-  ],
-  projects: {
-    summary: `Welcome to my projects gallery. Select a project for more details.`,
-    tiles: [
-      ['K-Nearest Neighbors', Assets.thumb_knn, Assets.project_knn],
-      ['Linear Regression', Assets.thumb_linear, Assets.project_linear],
-      ['Logistic Regression', Assets.thumb_logistic, Assets.project_logistic],
-      ['Support Vector Machine', Assets.thumb_svm, Assets.project_svm]
-    ]
+    projects: {
+      summary: `Welcome to my projects gallery. Select a project for more details.`,
+      tiles: [
+        ['K-Nearest Neighbors', Assets.thumb.knn, Assets.project.knn],
+        ['Linear Regression', Assets.thumb.linear, Assets.project.linear],
+        ['Logistic Regression', Assets.thumb.logistic, Assets.project.logistic],
+        ['Support Vector Machine', Assets.thumb.svm, Assets.project.svm]
+      ]
+    }
   }
 };
 
@@ -308,7 +319,7 @@ const Blueprint = {
 const Reducers = {
   appState: function(state = Blueprint.app, action) {
     return Redux.combineReducers({
-      networkState: function(state = Blueprint.app.network, action) {
+      network: function(state = Blueprint.app.network, action) {
         const choices = {
           'NET_STATE_CHANGE': () => action.payload,
           'NET_STATE_INIT': () => action.payload,
@@ -316,7 +327,7 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      batteryState: function(state = Blueprint.app.battery, action) {
+      battery: function(state = Blueprint.app.battery, action) {
         const choices = {
           'BATTERY_STATE_CHANGE': () => action.payload,
           'BATTERY_STATE_INIT': () => action.payload,
@@ -324,7 +335,7 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      workerState: function(state = Blueprint.app.workers, action) {
+      workers: function(state = Blueprint.app.workers, action) {
         const choices = {
           'CHANGE_WORKER_AVAILABILITY': () => ({available: !state.available, installed: state.installed}),
           'INSTALL_WORKER': () => ({available: state.available, installed: true}),
@@ -332,25 +343,23 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      aboutState: function(state = Blueprint.app.about, action) {
+      about: function(state = Blueprint.app.about, action) {
         return state;
       },
-      historyState: function(state = Blueprint.app.history, action) {
+      history: function(state = Blueprint.app.history, action) {
         return state.length == 5 ? [...state.slice(1), action.type] : [...state, action.type];
       }
     })(state, action);
   },
   userState: function(state = Blueprint.user, action) {
     return Redux.combineReducers({
-      nameState: function(state = Blueprint.user.name, action) {
+      contact: function(state = Blueprint.work.contact, action) {
         const choices = {
-          'HOME': () => action.payload.name,
-          'LOGOUT': () => Blueprint.user.name,
           'DEFAULT': () => state
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      usernameState: function(state = Blueprint.user.username, action) {
+      username: function(state = Blueprint.user.username, action) {
         const choices = {
           'HOME': () => action.payload.username,
           'LOGOUT': () => Blueprint.user.username,
@@ -358,7 +367,7 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      keyState: function(state = Blueprint.user.keys, action) {
+      key: function(state = Blueprint.user.keys, action) {
         const choices = {
           'HOME': () => action.payload.keys,
           'LOGOUT': () => null,
@@ -366,14 +375,14 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      returningState: function(state = Blueprint.user.returning, action) {
+      returning: function(state = Blueprint.user.returning, action) {
         const choices = {
           'LANDING': () => true,
           'DEFAULT': () => state
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      notificationState: function(state = Blueprint.user.notifications, action) {
+      notification: function(state = Blueprint.user.notifications, action) {
         const choices = {
           'HIDE_NOTIFICATION': () => [...state.slice(0, action.payload.idx), ...state.slice(action.payload.idx)],
           'SHOW_NOTIFICATION': () => [...state.slice(0, action.payload.idx), action.payload.notification, ...state.slice(action.payload.idx)],
@@ -381,18 +390,10 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      guideState: function(state = Blueprint.user.guides, action) {
+      guide: function(state = Blueprint.user.guides, action) {
         const choices = {
           'HIDE_GUIDE': () => [...state.slice(0, action.idx), ...state.slice(action.idx)],
           'SHOW_GUIDE': () => [...state.slice(0, action.idx), action.guide, ...state.slice(action.idx)],
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      themeState: function(state = Blueprint.user.theme, action) {
-        const choices = {
-          'CHANGE_COLOR': () => ({color: action.payload.color, landing: state.landing}),
-          'CHANGE_LANDING': () => ({color: action.payload.color, landing: state.landing}),
           'DEFAULT': () => state
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
@@ -401,14 +402,14 @@ const Reducers = {
   },
   uiState: function (state = Blueprint.ui, action) {
     return Redux.combineReducers({
-      windowState: function(state = Blueprint.ui.window, action) {
+      window: function(state = Blueprint.ui.window, action) {
         const choices = {
           'RESIZE': () => action.payload,
           'DEFAULT': () => state
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      headerState: function(state = Blueprint.ui.header, action) {
+      header: function(state = Blueprint.ui.header, action) {
         const choices = {
           'CHANGE_HEADER_ICON': () => ({icon: action.payload.icon, title: state.title}),
           'CHANGE_HEADER_TITLE': () => ({icon: state.icon, title: action.payload.title}),
@@ -416,7 +417,7 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      menuState: function(state = Blueprint.ui.menu, action) {
+      menu: function(state = Blueprint.ui.menu, action) {
         const choices = {
           'TOGGLE_MENU': () => ({current: state.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: state.current}),
           'OPEN_MENU': () => ({current: 'OPEN', previous: state.current}),
@@ -425,7 +426,7 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      viewState: function(state = Blueprint.ui.view, action) {
+      view: function(state = Blueprint.ui.view, action) {
         const choices = {
           'NAV_TO': () => ({current: action.payload, previous: state.current, scrollTop: 0}),
           'UPDATE_SCROLL': () => ({current: state.current, previous: state.previous, scrollTop: action.payload}),
@@ -433,23 +434,36 @@ const Reducers = {
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      adState: function(state = Blueprint.ui.ads, action) {
+      ad: function(state = Blueprint.ui.ads, action) {
         const choices = {
           'HIDE_AD': () => [...state.slice(0, action.idx), ...state.slice(action.idx)],
           'SHOW_AD': () => [...state.slice(0, action.idx), action.ad, ...state.slice(action.idx)],
           'DEFAULT': () => state
         };
         return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
+      },
+      theme: function(state = {name: 'DARK', palette: Blueprint.ui.themes.dark, wp: Assets.wp}, action) {
+        const choices = {
+          'CHANGE_THEME': () => (action.payload == 'DARK' ? Blueprint.ui.themes.dark : Blueprint.ui.themes.light),
+          'DEFAULT': () => state
+        };
+        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       }
     })(state, action);
   },
-  workState: function(state = Blueprint.work, action) {
+  personalState: function (state = Blueprint.personal, action) {
     return Redux.combineReducers({
-      coverState: function(state = Blueprint.work.covers, action) {
-        return state;
+      projects: function(state = Blueprint.personal.projects, action) {
+        const choices = {
+          'DEFAULT': () => state
+        };
+        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       },
-      contactState: function(state = Blueprint.work.contact, action) {
-        return state;
+      work: function(state = Blueprint.personal.work, action) {
+        const choices = {
+          'DEFAULT': () => state
+        };
+        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
       }
     })(state, action);
   }
@@ -468,7 +482,7 @@ const Middlewares = {
 };
 
 
-/* ----------------------------------- Components --------------------------------- *
+/* ---------------------------------- Components ---------------------------------- *
  *                        Important/reused modules, UI, etc.                        *
  * -------------------------------------------------------------------------------- */
 const Components = {
@@ -485,7 +499,7 @@ const Components = {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { headerState, viewState, menuState } = state.uiState;
     const { icon, alt, title } = headerState;
-    const { dark, light, lightOpaque, shadow } = Blueprint.ui.theme;
+    const { dark, light, lightOpaque, shadow } = Blueprint.ui.themes.standard;
     const E = React.createElement;
 
     const styles = {
@@ -568,7 +582,7 @@ const Components = {
     const { width, height, mode } = windowState;
     const [ currentView, isPreviousView ] = [ viewState.current, viewState.previous ];
     const [ currentMenu, previousMenu ] = [ menuState.current, menuState.previous ];
-    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.themes.standard;
     const E = React.createElement;
 
     const styles = {
@@ -645,7 +659,7 @@ const Components = {
 
     const styles = {
       view: `position: fixed; top: 4em; right: 0; bottom: 0; left: 0; margin: 0; padding: 0; overflow-x: hidden;
-        overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: ${Blueprint.ui.theme.view}; ${animation}`
+        overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: ${Blueprint.ui.themes.standard.view}; ${animation}`
     };
 
     const View = React.createElement('div', {style: styles.view}, [view(store)]);
@@ -708,7 +722,7 @@ const Components = {
   },
   Gallery: function(store, tiles, cols) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { dark, component, accent, accentOpaque, light, lightSubtle, lightOpaque, shadow } = Blueprint.ui.theme;
+    const { dark, component, accent, accentOpaque, light, lightSubtle, lightOpaque, shadow } = Blueprint.ui.themes.standard;
     const E = React.createElement;
 
     const styles = {
@@ -752,51 +766,48 @@ const Components = {
 const Views = {
   Home: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const DEV = state.uiState.windowState.mode.toLowerCase();
-    const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
-    const { wp_yolo, icon_scroll } = Assets;
-    const { light, lightOpaque } = Blueprint.ui.theme;
+    const { palette, wp } = state.uiState.themeState;
+    const { title } = state.userState.contactState;
     const E = React.createElement;
 
     const styles = {
       homeView: `
         position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_yolo}');
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp.yolo}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
-      title: `margin: 0; color: ${light}; font-size: 3em; font-weight: 900;`,
-      subtitle: `margin: 0; color: ${light}; font-size: 1em;`,
-      summary: `margin: 0.5em 0 0; color: ${light}; font-size: 1.5em;`,
+      title: `margin: 0; color: ${palette.textPrimary}; font-size: 3em; font-weight: 900;`,
+      subtitle: `margin: 0; color: ${palette.textPrimary}; font-size: 1em;`,
+      summary: `margin: 0.5em 0 0; color: ${palette.textPrimary}; font-size: 1.5em;`,
     };
 
     return E('div', {style: styles.homeView}, [
-      E('h1', {style: styles.title}, [Blueprint.work.contact.title[0]]),
-      E('p', {style: styles.subtitle}, [Blueprint.work.contact.title[1]]),
+      E('h1', {style: styles.title}, [title[0]]),
+      E('p', {style: styles.subtitle}, [title[1]]),
       E('p', {style: styles.summary}, [`Always ascending gradients when I should be descending...`])
     ]);
   },
   About: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const DEV = state.uiState.windowState.mode.toLowerCase();
-    const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
+    const { palette, wp } = state.uiState.themeState;
+    const { title } = state.userState.contactState;
     const E = React.createElement;
-    const { wp_sphere } = Assets;
 
     const styles = {
       aboutView: `
         position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_sphere}');
+        background: linear-gradient(${palette.primaryDark}), url('${wp.sphere}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
-      about: `margin: 1em; border: 1px solid #f00;`,
-      title: `color: #fff`,
-      summary: `color: #fff`
+      about: `margin: 1em; border: 1px solid ${palette.text};`,
+      title: `color: ${palette.text};`,
+      summary: `color: ${palette.text};`
     };
 
     const about = E('div', {style: styles.about}, [
-      E('h1', {style: styles.title}, [Blueprint.work.contact.title[0]]),
+      E('h1', {style: styles.title}, [title[0]]),
       E('div', {style: styles.summary}, Blueprint.about.map(p => E('p', {style: styles.summary}, [p])))
     ]);
 
@@ -804,7 +815,7 @@ const Views = {
   },
   Blog: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.themes.standard;
     const E = React.createElement;
 
     const styles = {
@@ -837,7 +848,7 @@ const Views = {
   },
   Projects: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { component, view, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
+    const { component, view, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.themes.standard;
     const { summary, tiles } = Blueprint.projects;
     const E = React.createElement;
 
@@ -859,15 +870,15 @@ const Views = {
   Contact: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { returning, username } = state.userState;
-    const { content_meAndLoaf, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
+    const { content.meAndLoaf, content.greeting, icon.github, icon.linkedin, icon.twitter, icon.phone, icon.email, wp.pnw } = Assets;
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.workState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
-    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.themes.standard;
     const E = React.createElement;
 
     const styles = {
-      contactView: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%; ${MB?`padding: 0 0 6.5em;`:``} background-image: url("${wp_pnw}"); background-position: center; background-repeat: no-repeat;`,
+      contactView: `display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 100%; ${MB?`padding: 0 0 6.5em;`:``} background-image: url("${wp.pnw}"); background-position: center; background-repeat: no-repeat;`,
       card: `position: absolute; margin: auto 2.5%; width: 95%; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; z-index: 5; border: 1px solid #000; -webkit-box-shadow: 1px 1px 7px 0 rgba(10,10,10,0.4);`,
       cardBody: `padding: 0; background-color: ${component}; display: flex; flex-direction: ${MB?`column`:`row`}; justify-content: ${MB?`flex-start`:`space-between`}; align-items: ${MB?`stretch`:`flex-start`};`,
       bodyLeft: `display: flex; flex-direction: column; justify-content: center; align-items: center;`,
@@ -889,11 +900,11 @@ const Views = {
     const card = E('div', {style: styles.card}, [
       E('div', {style: styles.cardBody}, [
         E('div', {style: styles.bodyLeft}, [
-          E('img', {style: styles.leftImg, src: content_meAndLoaf, alt: 'my beautiful face'}, [])
+          E('img', {style: styles.leftImg, src: content.meAndLoaf, alt: 'my beautiful face'}, [])
         ]),
         E('div', {style: styles.bodyRight}, [
           E('div', {style: styles.rightTop}, [
-            E('img', {style: styles.greetingImg, src: content_greeting, alt: 'greeting image'}, []),
+            E('img', {style: styles.greetingImg, src: content.greeting, alt: 'greeting image'}, []),
             E('h2', {style: styles.name}, [`${firstName} ${lastName}`]),
             E('h2', {style: styles.title}, [title[0]])
           ]),
@@ -906,8 +917,8 @@ const Views = {
         ])
       ]),
       E('div', {style: styles.footer}, [
-        [icon_github, 'gihub icon', github], [icon_linkedin, 'linkedin icon', linkedin], [icon_twitter, 'twitter icon', twitter],
-        [icon_phone, 'phone icon', `tel:${phone}`], [icon_email, 'email icon', `mailto:${email}`]
+        [icon.github, 'gihub icon', github], [icon.linkedin, 'linkedin icon', linkedin], [icon.twitter, 'twitter icon', twitter],
+        [icon.phone, 'phone icon', `tel:${phone}`], [icon.email, 'email icon', `mailto:${email}`]
       ].map(icon => E('a', {style: styles.footerLink, href: icon[2], alt: icon[2], target: '_blank'}, [
         E('img', {style: styles.footerIcon, src: icon[0], alt: icon[1]}, [])
       ])))
@@ -931,7 +942,7 @@ const Views = {
 
     return E('div', {style: styles.resumeView}, [
       E('embed', {style: styles.resume, width: '100%',
-        src: `${Assets.resource_resume_pdf}`, type: 'application/pdf'}, [])
+        src: `${Assets.resource.resume_pdf}`, type: 'application/pdf'}, [])
     ]);
   }
 };
@@ -941,8 +952,6 @@ const Views = {
  *                          Contains all root Components                            *
  * -------------------------------------------------------------------------------- */
 const App = function(store) {
-  const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-
   const styles = {
     app: `position: fixed; top: 0; left: 0; height: 0%; width: 100%; margin: 0; padding: 0; z-index: 0;`
   };
@@ -950,7 +959,7 @@ const App = function(store) {
   return React.createElement('div', {style: styles.app}, [
     Components.Header(store), Components.Menu(store), Components.Router(store), Components.Network(store)
   ]);
-}
+};
 
 
 /* ---------------------------------- Rendering ----------------------------------- *
