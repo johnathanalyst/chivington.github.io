@@ -17,8 +17,8 @@ const React = {
     if (attrs) Object.keys(attrs).forEach(k => ReactElement.setAttribute(k, attrs[k]));
 
     // Append children
-    if (children.length >= 1) children.forEach(child => ReactElement.appendChild((typeof child == 'string')
-      ? document.createTextNode(child) : ((child.type) ? child.type(child.props, child.dispatch, child.children) : child)
+    if (children.length >= 1) children.forEach(c => ReactElement.appendChild((typeof c == 'string')
+      ? document.createTextNode(c) : ((c.type) ? c.type(c.props, c.dispatch, c.children) : c)
     ));
 
     return ReactElement;
@@ -36,7 +36,7 @@ const ReactDOM = {
 // Maintains application state
 const Redux = {
   createStore: function(rootReducer, middlewares = {}) {
-    var state = {}, listeners = [];
+    let state = {}, listeners = [];
     const { logActions, listenerBypass } = middlewares;
 
     function getState() {
@@ -64,6 +64,11 @@ const Redux = {
 
     dispatch({type: '@@INIT'});
     return { getState, dispatch, subscribe };
+  },
+  createReducer: function(initialState, map) {
+    return function(state = initialState, action) {
+      return map[action.type] ? map[action.type](action) : state;
+    }
   },
   combineReducers: function(reducers) {
     return function(state, action) {
@@ -319,36 +324,16 @@ const Blueprint = {
 const Reducers = {
   appState: function(state = Blueprint.app, action) {
     return Redux.combineReducers({
-      network: function(state = Blueprint.app.network, action) {
-        const choices = {
-          'NET_STATE_CHANGE': () => action.payload,
-          'NET_STATE_INIT': () => action.payload,
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      battery: function(state = Blueprint.app.battery, action) {
-        const choices = {
-          'BATTERY_STATE_CHANGE': () => action.payload,
-          'BATTERY_STATE_INIT': () => action.payload,
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      workers: function(state = Blueprint.app.workers, action) {
-        const choices = {
-          'CHANGE_WORKER_AVAILABILITY': () => ({available: !state.available, installed: state.installed}),
-          'INSTALL_WORKER': () => ({available: state.available, installed: true}),
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      about: function(state = Blueprint.app.about, action) {
-        return state;
-      },
-      history: function(state = Blueprint.app.history, action) {
-        return state.length == 5 ? [...state.slice(1), action.type] : [...state, action.type];
-      }
+      network: Redux.createReducer(Blueprint.device.network, {
+        'NET_STATE_CHANGE': (s,a) => a.payload,
+        'NET_STATE_INIT': (s,a) => a.payload
+      }),
+      workers: Redux.createReducer(Blueprint.device.workers, {
+        'CHANGE_WORKER_AVAILABILITY': (s,a) => ({available: !s.available, installed: s.installed}),
+        'INSTALL_WORKER': (s,a) => ({available: s.available, installed: true}),
+      }),
+      about: Redux.createReducer(Blueprint.app.about, {}),
+      history: Redux.createReducer(Blueprint.ui.history, {}),
     })(state, action);
   },
   userState: function(state = Blueprint.user, action) {
