@@ -2,7 +2,7 @@
  * Name: Johnathan Chivington                                                        *
  * Project: Personal Web App                                                         *
  * Description: Single page web app, modeled after Redux/React.                      *
- * Version: 1.1.0 - (production) major revisions to Redux to eliminate redundancy.   *
+ * Version: 0.1.0 - (production) major revisions to Redux to eliminate redundancy.   *
  * --------------------------------------------------------------------------------- */
 
 /* ------------------------------------- Libs -------------------------------------- *
