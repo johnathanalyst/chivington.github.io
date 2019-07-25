@@ -277,7 +277,11 @@ const Blueprint = {
     contact: {
       firstName: 'Johnathan',
       lastName: 'Chivington',
-      title: ['Full-Stack Engineer', '(...and future Data Scientist.)'],
+      titles: [
+        'Fiscal Specialist @ UW Surgery APM',
+        'CS/EE Student @ North Seattle College > UW',
+        'CS/DS/AI/ML/EE internships, co-ops &| entry-level roles'
+      ],
       phone: '303.900.2861',
       email: 'j.chivington@bellevuecollege.edu',
       linkedin: 'https://linkedin.com/in/johnathan-chivington',
@@ -285,7 +289,7 @@ const Blueprint = {
       twitter: 'https://twitter.com/chivingtoninc',
       facebook: 'https://facebook.com/chivingtoninc',
       location: 'Seattle, WA',
-      search: 'Open to offers'
+      search: 'Available for CS/DS/AI/ML/EE internships, co-ops &| entry-level roles.'
     },
     resumes: [
       {name: 'Deep Learning', links: [Assets.resource_cover_WS_docx, Assets.resource_cover_WS_pdf]}
@@ -297,7 +301,7 @@ const Blueprint = {
     `goals; AI --> Quantum`,
   ],
   projects: {
-    summary: `Welcome to my projects gallery. Select a project for more details.`,
+    summary: `Select a project for more details.`,
     tiles: [
       ['K-Nearest Neighbors', Assets.thumb_knn, Assets.project_knn],
       ['Linear Regression', Assets.thumb_linear, Assets.project_linear],
@@ -748,6 +752,7 @@ const Views = {
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
     const { wp_yolo, icon_scroll } = Assets;
     const { light, lightOpaque } = Blueprint.ui.theme;
+    const { titles } = workState.contactState;
     const E = React.createElement;
 
     const styles = {
@@ -757,15 +762,15 @@ const Views = {
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_yolo}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
-      title: `margin: 0; color: ${light}; font-size: 3em; font-weight: 900;`,
-      subtitle: `margin: 0; color: ${light}; font-size: 1em;`,
-      summary: `margin: 0.5em 0 0; color: ${light}; font-size: 1.5em;`,
+      work: `margin: 0; color: ${light}; font-size: 3em; font-weight: 900;`,
+      school: `margin: 0; color: ${light}; font-size: 1.25em; font-weight: 700;`,
+      intern: `margin: 0; color: ${light}; font-size: 1em; font-weight: 500;`
     };
 
     return E('div', {style: styles.homeView}, [
-      E('h1', {style: styles.title}, [Blueprint.work.contact.title[0]]),
-      E('p', {style: styles.subtitle}, [Blueprint.work.contact.title[1]]),
-      E('p', {style: styles.summary}, [`Always ascending gradients when I should be descending...`])
+      E('h1', {style: styles.work}, [titles[0]]),
+      E('h2', {style: styles.school}, [titles[1]]),
+      E('h3', {style: styles.intern}, [titles[2]]),
     ]);
   },
   About: function(store) {
@@ -942,7 +947,7 @@ const App = function(store) {
   return React.createElement('div', {style: styles.app}, [
     Components.Header(store), Components.Menu(store), Components.Router(store), Components.Network(store)
   ]);
-}
+};
 
 
 /* ---------------------------------- Rendering ----------------------------------- *
