@@ -22,14 +22,14 @@ Single-page web app for hosting my resume, cover letter, blog, and projects. Bui
 
 ## Inspiration
 A love of React & Redux design simplicity and a desire to learn more, combined with a need for a place to host a web app.
-<br/>
+<br/></br>
 
 ## What It Does
 * Teaches me about modern user interfaces.
 * Provides fairly low-level insights into common UI/UX patterns.
 * Hosts my personal web app, blog, resume, contact information, cool projects, etc.
 * Serves as a testing area for anything I want to play around with.
-
+</br>
 
 ## How I Built It
 Pure Javascript with CSS animations.
@@ -79,4 +79,4 @@ This project is licensed under the DO_WHATEVER_YOU_WANT License - see the [LICEN
 <br/><br/>
 
 ## Built With
-[HTML5](https://img.shields.io/badge/HTML5-red.svg) [CSS3](https://img.shields.io/badge/CSS3-red.svg) [ES6 JS](https://img.shields.io/badge/ES6_JS-yellow.svg)
+![HTML5](https://img.shields.io/badge/HTML5-red.svg) [CSS3](https://img.shields.io/badge/CSS3-red.svg) [ES6 JS](https://img.shields.io/badge/ES6_JS-yellow.svg)
