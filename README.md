@@ -1,7 +1,6 @@
 # chivingtoninc.github.io
 Single-page web app for hosting my resume, cover letter, blog, and projects. Built on three tiny "libraries" modeled after barebones versions of React, ReactDOM & Redux.
 
-
 ![Build Status](https://img.shields.io/badge/build-NOT_Stable-red.svg)
 ![License](https://img.shields.io/badge/license-DO_WHATEVER_YOU_WANT-green.svg)
 <br/><br/>
@@ -21,27 +20,32 @@ Single-page web app for hosting my resume, cover letter, blog, and projects. Bui
 * [Built With](https://github.com/chivingtoninc/chivingtoninc.github.io#built-with)
 <br/>
 
-
 ## Inspiration
-A love of React & Redux design simplicity and a desire to learn more.
+A love of React & Redux design simplicity and a desire to learn more, combined with a need for a place to host a web app.
+<br/>
 
 ## What It Does
 * Teaches me about modern user interfaces.
 * Provides fairly low-level insights into common UI/UX patterns.
 * Hosts my personal web app, blog, resume, contact information, cool projects, etc.
 * Serves as a testing area for anything I want to play around with.
+<br/>
 
 ## How I Built It
 Pure Javascript with CSS animations.
+<br/>
 
 ## Challenges I Ran Into
 React vDOM & Diffing Engine...
+<br/>
 
 ## Accomplishments I'm Proud Of
 It works reasonably well and helps me continually learn.
+<br/>
 
 ## What I Learned
 Building a reliable component tree isn't as straightforward as one might think.
+<br/>
 
 ## What's Next
 *(0.1.0) - Basic app.*
