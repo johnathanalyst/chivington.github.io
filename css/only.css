@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Avenir-Book'; src: url('./includes/fonts/Avenir-Free/Avenir-Book.otf');
+  font-family: 'Avenir-Book'; src: url('./fonts/Avenir-Free/Avenir-Book.otf');
 }
 * {
   font-family: 'Avenir-Book', Fallback, sans-serif; font-weight: lighter; scroll-behavior: auto;
