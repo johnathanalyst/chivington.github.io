@@ -154,11 +154,7 @@ const Assets = {
   thumb_knn: '/imgs/thumbs/knn.png',
   thumb_linear: '/imgs/thumbs/linear.jpg',
   thumb_logistic: '/imgs/thumbs/logistic.png',
-  thumb_svm: '/imgs/thumbs/svm.png',
-  project_knn: '/imgs/projects/knn.py',
-  project_linear: '/imgs/projects/linear.py',
-  project_logistic: '/imgs/projects/logistic.py',
-  project_svm: '/imgs/projects/svm.py',
+  thumb_svm: '/imgs/thumbs/svm.png'
 };
 
 
