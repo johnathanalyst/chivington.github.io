@@ -8,22 +8,22 @@ Single-page web app for hosting my resume, cover letter, blog, and projects. Bui
 
 ## Contents
 * [Inspiration](https://github.com/chivingtoninc/chivingtoninc.github.io#inspiration)
-* [What It Does](https://github.com/chivingtoninc/chivingtoninc.github.io#What_It_Does)
-* [How I Built It](https://github.com/chivingtoninc/chivingtoninc.github.io#How_I_Built_It)
-* [Challenges I Ran Into](https://github.com/chivingtoninc/chivingtoninc.github.io#Challenges_I_Ran_Into)
-* [Accomplishments I'm Proud Of](https://github.com/chivingtoninc/chivingtoninc.github.io#Accomplishments_Im_Proud_Of)
-* [What I Learned](https://github.com/chivingtoninc/chivingtoninc.github.io#What_I_Learned)
-* [What's Next](https://github.com/chivingtoninc/chivingtoninc.github.io#Whats_Next)
+* [What It Does](https://github.com/chivingtoninc/chivingtoninc.github.io#what-it-does)
+* [How I Built It](https://github.com/chivingtoninc/chivingtoninc.github.io#how-i-built-it)
+* [Challenges I Ran Into](https://github.com/chivingtoninc/chivingtoninc.github.io#challenges-i-ran-into)
+* [Accomplishments I'm Proud Of](https://github.com/chivingtoninc/chivingtoninc.github.io#accomplishments-im-proud-of)
+* [What I Learned](https://github.com/chivingtoninc/chivingtoninc.github.io#what-i-learned)
+* [What's Next](https://github.com/chivingtoninc/chivingtoninc.github.io#whats-next)
 * [Authors](https://github.com/chivingtoninc/chivingtoninc.github.io#authors)
 * [Acknowledgments](https://github.com/chivingtoninc/chivingtoninc.github.io#acknowledgments)
 * [Contributing](https://github.com/chivingtoninc/chivingtoninc.github.io#contributing)
 * [License](https://github.com/chivingtoninc/chivingtoninc.github.io#license)
-* [Built With](https://github.com/chivingtoninc/chivingtoninc.github.io#Built_With)
+* [Built With](https://github.com/chivingtoninc/chivingtoninc.github.io#built-with)
 <br/>
 
 
 ## Inspiration
-A love of React/Redux design simplicity and a desire to learn more.
+A love of React & Redux design simplicity and a desire to learn more.
 
 ## What It Does
 * Teaches me about modern user interfaces.
