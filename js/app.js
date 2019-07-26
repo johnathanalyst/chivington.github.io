@@ -791,8 +791,13 @@ const Views = {
     };
 
     const about = E('div', {style: styles.about}, [
-      E('h1', {style: styles.title}, [Blueprint.work.contact.title[0]]),
-      E('div', {style: styles.summary}, Blueprint.about.map(p => E('p', {style: styles.summary}, [p])))
+      E('h1', {style: styles.title}, ['Fiscal Specialist']),
+      E('div', {style: styles.summary}, [
+        'Super cool',
+        'Fun guy',
+        'Do awesome things',
+        'Am the man girlfran'
+      ].map(p => E('p', {style: styles.summary}, [p])))
     ]);
 
     return E('div', {style: styles.aboutView}, [about]);
