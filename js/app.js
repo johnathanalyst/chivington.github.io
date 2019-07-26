@@ -758,9 +758,9 @@ const Views = {
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_yolo}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
-      work: `margin: 0; color: ${light}; font-size: 2em; font-weight: 900;`,
-      school: `margin: 0; color: ${light}; font-size: 1.5em; font-weight: 700;`,
-      intern: `margin: 0; color: ${light}; font-size: 1.25em; font-weight: 500;`
+      work: `margin: 1em; color: ${light}; font-size: 1.5em; font-weight: 900;`,
+      school: `margin: 0; color: ${light}; font-size: 1.25em; font-weight: 700;`,
+      intern: `margin: 0; color: ${light}; font-size: 1em; font-weight: 500;`
     };
 
     return E('div', {style: styles.homeView}, [
