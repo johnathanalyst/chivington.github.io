@@ -33,19 +33,19 @@ A love of React & Redux design simplicity and a desire to learn more, combined w
 
 ## How I Built It
 Pure Javascript with CSS animations.
-<br/>
+<br/></br>
 
 ## Challenges I Ran Into
 React vDOM & Diffing Engine...
-<br/>
+<br/></br>
 
 ## Accomplishments I'm Proud Of
 It works reasonably well and helps me continually learn.
-<br/>
+<br/></br>
 
 ## What I Learned
 Building a reliable component tree isn't as straightforward as one might think.
-<br/>
+<br/></br>
 
 ## What's Next
 *(0.1.0) - Basic app.*
