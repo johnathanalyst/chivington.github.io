@@ -895,7 +895,7 @@ const Views = {
           E('div', {style: styles.rightTop}, [
             E('img', {style: styles.greetingImg, src: content_greeting, alt: 'greeting image'}, []),
             E('h2', {style: styles.name}, [`${firstName} ${lastName}`]),
-            E('h2', {style: styles.title}, [title[0]])
+            E('h2', {style: styles.title}, ['Fiscal Specialist'])
           ]),
           E('div', {style: styles.rightBottom}, ['location', 'phone', 'email', 'search'].map(k => {
             return E('div', {style: styles.row}, [
