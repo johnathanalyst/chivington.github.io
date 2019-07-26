@@ -18,7 +18,7 @@ Single-page web app for hosting my resume, cover letter, blog, and projects. Bui
 * [Contributing](https://github.com/chivingtoninc/chivingtoninc.github.io#contributing)
 * [License](https://github.com/chivingtoninc/chivingtoninc.github.io#license)
 * [Built With](https://github.com/chivingtoninc/chivingtoninc.github.io#built-with)
-<br/>
+
 
 ## Inspiration
 A love of React & Redux design simplicity and a desire to learn more, combined with a need for a place to host a web app.
@@ -29,7 +29,7 @@ A love of React & Redux design simplicity and a desire to learn more, combined w
 * Provides fairly low-level insights into common UI/UX patterns.
 * Hosts my personal web app, blog, resume, contact information, cool projects, etc.
 * Serves as a testing area for anything I want to play around with.
-<br/>
+
 
 ## How I Built It
 Pure Javascript with CSS animations.
