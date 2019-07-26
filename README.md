@@ -32,7 +32,7 @@ A love of React & Redux design simplicity and a desire to learn more.
 * Serves as a testing area for anything I want to play around with.
 
 ## How I Built It
-* Pure Javascript with CSS animations.
+Pure Javascript with CSS animations.
 
 ## Challenges I Ran Into
 React vDOM & Diffing Engine...
