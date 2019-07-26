@@ -751,8 +751,6 @@ const Views = {
     const { titles } = state.workState.contactState;
     const E = React.createElement;
 
-    console.log('titles: ', titles);
-
     const styles = {
       homeView: `
         position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden;
