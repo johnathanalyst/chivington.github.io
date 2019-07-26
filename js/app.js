@@ -752,7 +752,7 @@ const Views = {
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
     const { wp_yolo, icon_scroll } = Assets;
     const { light, lightOpaque } = Blueprint.ui.theme;
-    const { titles } = workState.contactState;
+    const { titles } = state.workState.contactState;
     const E = React.createElement;
 
     console.log('titles: ', titles);
