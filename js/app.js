@@ -279,7 +279,7 @@ const Blueprint = {
         `Available for CS/DS/AI/ML/EE internships, co-ops & entry-level roles.`
       ],
       phone: '303.900.2861',
-      email: 'j.chivington@bellevuecollege.edu',
+      email: 'johnchiv@uw.edu',
       linkedin: 'https://linkedin.com/in/johnathan-chivington',
       github: 'https://github.com/chivingtoninc',
       twitter: 'https://twitter.com/chivingtoninc',
@@ -893,7 +893,7 @@ const Views = {
           E('div', {style: styles.rightTop}, [
             E('img', {style: styles.greetingImg, src: content_greeting, alt: 'greeting image'}, []),
             E('h2', {style: styles.name}, [`${firstName} ${lastName}`]),
-            E('h2', {style: styles.title}, ['Fiscal Specialist'])
+            E('h2', {style: styles.title}, ['Fiscal Specialist @ UW Surg. & APM'])
           ]),
           E('div', {style: styles.rightBottom}, ['location', 'phone', 'email', 'search'].map(k => {
             return E('div', {style: styles.row}, [
