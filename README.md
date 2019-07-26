@@ -79,4 +79,4 @@ This project is licensed under the DO_WHATEVER_YOU_WANT License - see the [LICEN
 <br/><br/>
 
 ## Built With
-![HTML5](https://img.shields.io/badge/HTML5-red.svg) ![CSS3](https://img.shields.io/badge/CSS3-red.svg) ![ES6 JS](https://img.shields.io/badge/ES6_JS-yellow.svg)
+![HTML5](https://img.shields.io/badge/HTML5-red.svg) ![CSS3](https://img.shields.io/badge/CSS3-blueviolet.svg) ![ES6 JS](https://img.shields.io/badge/ES6_JS-yellow.svg)
