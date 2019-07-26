@@ -1,5 +1,5 @@
 # chivingtoninc.github.io
-Single-page web app for hosting my resume, cover letter, blog, and cool projects. This app is a single page of Javascript, with no external links, libraries, or frameworks. Built on three tiny "libraries" modeled after barebones versions of React, ReactDOM & Redux.
+Single-page web app for hosting my resume, cover letter, blog, and projects. Built on three tiny "libraries" modeled after barebones versions of React, ReactDOM & Redux.
 
 
 ![Build Status](https://img.shields.io/badge/build-NOT_Stable-red.svg)
@@ -7,42 +7,57 @@ Single-page web app for hosting my resume, cover letter, blog, and cool projects
 <br/><br/>
 
 ## Contents
-* [Features](https://github.com/chivingtoninc/chivingtoninc.github.io#features)
-* [Prerequisites](https://github.com/chivingtoninc/chivingtoninc.github.io#prerequisites)
-* [Installation](https://github.com/chivingtoninc/chivingtoninc.github.io#installation)
-* [Testing](https://github.com/chivingtoninc/chivingtoninc.github.io#testing)
-* [Usage](https://github.com/chivingtoninc/chivingtoninc.github.io#usage)
+* [Inspiration](https://github.com/chivingtoninc/chivingtoninc.github.io#inspiration)
+* [What It Does](https://github.com/chivingtoninc/chivingtoninc.github.io#What_It_Does)
+* [How I Built It](https://github.com/chivingtoninc/chivingtoninc.github.io#How_I_Built_It)
+* [Challenges I Ran Into](https://github.com/chivingtoninc/chivingtoninc.github.io#Challenges_I_Ran_Into)
+* [Accomplishments I'm Proud Of](https://github.com/chivingtoninc/chivingtoninc.github.io#Accomplishments_Im_Proud_Of)
+* [What I Learned](https://github.com/chivingtoninc/chivingtoninc.github.io#What_I_Learned)
+* [What's Next](https://github.com/chivingtoninc/chivingtoninc.github.io#Whats_Next)
 * [Authors](https://github.com/chivingtoninc/chivingtoninc.github.io#authors)
-* [Contributing](https://github.com/chivingtoninc/chivingtoninc.github.io#contributing)
 * [Acknowledgments](https://github.com/chivingtoninc/chivingtoninc.github.io#acknowledgments)
+* [Contributing](https://github.com/chivingtoninc/chivingtoninc.github.io#contributing)
 * [License](https://github.com/chivingtoninc/chivingtoninc.github.io#license)
+* [Built With](https://github.com/chivingtoninc/chivingtoninc.github.io#Built_With)
 <br/>
 
-## Features
- * Mobile 1st / Responsive
- * Offline App
- * "Add To Desktop/Homescreen" compatibility for iOS, Android, Mac, Linux & Windows
- * Pure Javascript
- * ...probably more.
 
-## Prerequisites
-  * A web browser.
+## Inspiration
+A love of React/Redux design simplicity and a desire to learn more.
 
-## Installation
-```
-  1. cd /path/to/where/you/want/it
-  2. git clone https://github.com/chivingtoninc/chivingtoninc.github.io.git
-```
+## What It Does
+* Teaches me about modern user interfaces.
+* Provides fairly low-level insights into common UI/UX patterns.
+* Hosts my personal web app, blog, resume, contact information, cool projects, etc.
+* Serves as a testing area for anything I want to play around with.
 
-## Testing
-Navigate to the chivingtoninc.github.io directory and open in browser.
-```
-  1. cd /path/to/chivingtoninc.github.io
-  2. Open "index.html" in a web browser that supports Javascript.
-```
+## How I Built It
+* Pure Javascript with CSS animations.
 
-## Usage
-Only real use is for learning about complex User Interfaces or if you want to view my work and/or hire me. That said, feel free to clone, copy/paste, alter, etc. as you wish for your usage.
+## Challenges I Ran Into
+React vDOM & Diffing Engine...
+
+## Accomplishments I'm Proud Of
+It works reasonably well and helps me continually learn.
+
+## What I Learned
+Building a reliable component tree isn't as straightforward as one might think.
+
+## What's Next
+*(0.1.0) - Basic app.*
+* Redux-like, reducer-function-composed application state manager.
+* Full responsiveness and browser compatibility.
+* App-like interface.
+* Native-App "Add to Homescreen" compatibility for iOS & Android.
+* Offline mode.
+
+*(0.2.0) - React implementation phase.*
+* React-like Component Tree
+* React-like Diffing Engine
+
+*(0.3.0) - ReactDOM implementation phase.*
+* ReactDOM-like vDOM
+* Localized UI updates.
 <br/><br/>
 
 
@@ -58,3 +73,6 @@ Thanks to [Dan Abramov](https://github.com/gaearon) for Redux as well as his bri
 ## License
 This project is licensed under the DO_WHATEVER_YOU_WANT License - see the [LICENSE](https://github.com/chivingtoninc/Data-Structures-C/blob/master/LICENSE) file for details
 <br/><br/>
+
+## Built With
+[HTML5](https://img.shields.io/badge/HTML5-red.svg) [CSS3](https://img.shields.io/badge/CSS3-red.svg) [ES6 JS](https://img.shields.io/badge/ES6_JS-yellow.svg)

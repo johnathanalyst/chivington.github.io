@@ -2,7 +2,7 @@
  * Name: Johnathan Chivington                                                        *
  * Project: Personal Web App                                                         *
  * Description: Single page web app, modeled after Redux/React.                      *
- * Version: 0.1.0 - (production) major revisions to Redux to eliminate redundancy.   *
+ * Version: 0.1.5 - (production - see README.md)                                     *
  * --------------------------------------------------------------------------------- */
 
 /* ------------------------------------- Libs -------------------------------------- *
@@ -764,7 +764,7 @@ const Views = {
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_yolo}');
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
-      work: `margin: 0; color: ${light}; font-size: 3em; font-weight: 900;`,
+      work: `margin: 0; color: ${light}; font-size: 2.5em; font-weight: 900;`,
       school: `margin: 0; color: ${light}; font-size: 1.25em; font-weight: 700;`,
       intern: `margin: 0; color: ${light}; font-size: 1em; font-weight: 500;`
     };
