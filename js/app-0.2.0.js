@@ -3,8 +3,8 @@
  * Project: Personal Web App                                                         *
  * Description: Single page web app, modeled after Redux/React.                      *
  * Version: 0.2.0                                                                    *
- *  - implementation of createReducer                                                *
- *  - refactoring of combineReducers                                                 *
+ *  - createReducer implementation                                                   *
+ *  - combineReducers refactoring                                                    *
  * --------------------------------------------------------------------------------- */
 
 /* ----------------------------------- Libraries ----------------------------------- *
