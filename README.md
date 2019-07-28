@@ -66,7 +66,7 @@ Building a reliable component tree for a dynamic web app isn't as straightforwar
 
 
 ## Authors
-* **Johnathan Chivington:** [Web](https://chivingtoninc.github.io) [GitHub](https://github.com/chivingtoninc) | [Twitter](https://twitter.com/chivingtoninc) | [Facebook](https://facebook.com/chivingtoninc) | [LinkedIn](https://www.linkedin.com/in/johnathan-chivington/)
+* **Johnathan Chivington:** [Web](https://chivingtoninc.github.io) | [GitHub](https://github.com/chivingtoninc) | [Twitter](https://twitter.com/chivingtoninc) | [Facebook](https://facebook.com/chivingtoninc) | [LinkedIn](https://www.linkedin.com/in/johnathan-chivington/)
 
 ## Contributing
 Not currently accepting outside contributors, but feel free to clone, fork, modify and use as you wish.

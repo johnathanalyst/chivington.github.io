@@ -334,115 +334,67 @@ const Reducers = {
   },
   userState: function(state = Blueprint.user, action) {
     return Redux.combineReducers({
-      nameState: function(state = Blueprint.user.name, action) {
-        const choices = {
-          'HOME': () => action.payload.name,
-          'LOGOUT': () => Blueprint.user.name,
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      usernameState: function(state = Blueprint.user.username, action) {
-        const choices = {
-          'HOME': () => action.payload.username,
-          'LOGOUT': () => Blueprint.user.username,
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      keyState: function(state = Blueprint.user.keys, action) {
-        const choices = {
-          'HOME': () => action.payload.keys,
-          'LOGOUT': () => null,
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      returningState: function(state = Blueprint.user.returning, action) {
-        const choices = {
-          'LANDING': () => true,
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      notificationState: function(state = Blueprint.user.notifications, action) {
-        const choices = {
-          'HIDE_NOTIFICATION': () => [...state.slice(0, action.payload.idx), ...state.slice(action.payload.idx)],
-          'SHOW_NOTIFICATION': () => [...state.slice(0, action.payload.idx), action.payload.notification, ...state.slice(action.payload.idx)],
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      guideState: function(state = Blueprint.user.guides, action) {
-        const choices = {
-          'HIDE_GUIDE': () => [...state.slice(0, action.idx), ...state.slice(action.idx)],
-          'SHOW_GUIDE': () => [...state.slice(0, action.idx), action.guide, ...state.slice(action.idx)],
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      themeState: function(state = Blueprint.user.theme, action) {
-        const choices = {
-          'CHANGE_COLOR': () => ({color: action.payload.color, landing: state.landing}),
-          'CHANGE_LANDING': () => ({color: action.payload.color, landing: state.landing}),
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      }
+      nameState: Redux.createReducer(Blueprint.user.name, {
+        'HOME': (s,a) => a.payload.name,
+        'LOGOUT': (s,a) => Blueprint.user.name
+      }),
+      usernameState: Redux.createReducer(Blueprint.user.username, {
+        'HOME': (s,a) => a.payload.username,
+        'LOGOUT': (s,a) => Blueprint.user.username
+      }),
+      keyState: Redux.createReducer(Blueprint.user.keys, {
+        'HOME': (s,a) => a.payload.keys,
+        'LOGOUT': (s,a) => null
+      }),
+      returningState: Redux.createReducer(Blueprint.user.returning, {
+        'LANDING': (s,a) => true
+      }),
+      notificationState: Redux.createReducer(Blueprint.user.notifications, {
+        'HIDE_NOTIFICATION': (s,a) => [...s.slice(0, a.payload.idx), ...s.slice(a.payload.idx)],
+        'SHOW_NOTIFICATION': (s,a) => [...s.slice(0, a.payload.idx), a.payload.notification, ...s.slice(a.payload.idx)]
+      }),
+      guideState: Redux.createReducer(Blueprint.user.guides, {
+        'HIDE_GUIDE': (s,a) => [...s.slice(0, a.idx), ...s.slice(a.idx)],
+        'SHOW_GUIDE': (s,a) => [...s.slice(0, a.idx), a.guide, ...s.slice(a.idx)]
+      }),
+      themeState: Redux.createReducer(Blueprint.user.theme, {
+        'CHANGE_COLOR': (s,a) => ({color: a.payload.color, landing: s.landing}),
+        'CHANGE_LANDING': (s,a) => ({color: a.payload.color, landing: s.landing})
+      })
     })(state, action);
   },
   uiState: function (state = Blueprint.ui, action) {
     return Redux.combineReducers({
-      windowState: function(state = Blueprint.ui.window, action) {
-        const choices = {
-          'RESIZE': () => action.payload,
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      headerState: function(state = Blueprint.ui.header, action) {
-        const choices = {
-          'CHANGE_HEADER_ICON': () => ({icon: action.payload.icon, title: state.title}),
-          'CHANGE_HEADER_TITLE': () => ({icon: state.icon, title: action.payload.title}),
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      menuState: function(state = Blueprint.ui.menu, action) {
-        const choices = {
-          'TOGGLE_MENU': () => ({current: state.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: state.current}),
-          'OPEN_MENU': () => ({current: 'OPEN', previous: state.current}),
-          'CLOSE_MENU': () => ({current: 'CLOSED', previous: state.current}),
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      viewState: function(state = Blueprint.ui.view, action) {
-        const choices = {
-          'NAV_TO': () => ({current: action.payload, previous: state.current, scrollTop: 0}),
-          'UPDATE_SCROLL': () => ({current: state.current, previous: state.previous, scrollTop: action.payload}),
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      },
-      adState: function(state = Blueprint.ui.ads, action) {
-        const choices = {
-          'HIDE_AD': () => [...state.slice(0, action.idx), ...state.slice(action.idx)],
-          'SHOW_AD': () => [...state.slice(0, action.idx), action.ad, ...state.slice(action.idx)],
-          'DEFAULT': () => state
-        };
-        return choices[action.type] ? choices[action.type]() : choices['DEFAULT']();
-      }
+      nameState: Redux.createReducer(Blueprint.user.name, {
+        'HOME': (s,a) => a.payload.name,
+        'LOGOUT': (s,a) => Blueprint.user.name
+      }),
+      windowState: Redux.createReducer(Blueprint.ui.window, {
+        'RESIZE': () => action.payload
+      }),
+      headerState: Redux.createReducer(Blueprint.ui.header, {
+        'CHANGE_HEADER_ICON': () => ({icon: action.payload.icon, title: state.title}),
+        'CHANGE_HEADER_TITLE': () => ({icon: state.icon, title: action.payload.title})
+      }),
+      menuState: Redux.createReducer(Blueprint.ui.menu, {
+        'TOGGLE_MENU': () => ({current: state.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: state.current}),
+        'OPEN_MENU': () => ({current: 'OPEN', previous: state.current}),
+        'CLOSE_MENU': () => ({current: 'CLOSED', previous: state.current})
+      }),
+      viewState: Redux.createReducer(Blueprint.ui.view, {
+        'NAV_TO': () => ({current: action.payload, previous: state.current, scrollTop: 0}),
+        'UPDATE_SCROLL': () => ({current: state.current, previous: state.previous, scrollTop: action.payload})
+      }),
+      adState: Redux.createReducer(Blueprint.ui.ads, {
+        'HIDE_AD': () => [...state.slice(0, action.idx), ...state.slice(action.idx)],
+        'SHOW_AD': () => [...state.slice(0, action.idx), action.ad, ...state.slice(action.idx)]
+      })
     })(state, action);
   },
   workState: function(state = Blueprint.work, action) {
     return Redux.combineReducers({
-      coverState: function(state = Blueprint.work.covers, action) {
-        return state;
-      },
-      contactState: function(state = Blueprint.work.contact, action) {
-        return state;
-      }
+      coverState: Redux.createReducer(Blueprint.work.cover, {}),
+      contactState: Redux.createReducer(Blueprint.work.contact, {})
     })(state, action);
   }
 };
@@ -878,7 +830,7 @@ const Views = {
       rightBottom: `display: flex; ${MB?``:`height: 13em;`} flex-direction: column; justify-content: space-between; align-items: stretch; padding: 1em; background-color: #aaa;`,
       row: `display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0; margin: ${MB?`1em 0`:`0.5em 0`};`,
       label: `font-size: 1em; margin: 0;`,
-      text: `font-size: 0.8em; margin: 0;`,
+      text: `text-align: right; font-size: 0.8em; margin: 0;`,
       footer: `display: flex; flex-direction: row; justify-content: space-around; align-items: center;background-color: #222; padding: 1.15em 0 0.85em;`,
       footerLink: `color: #fff`,
       footerIcon: `height: 1.25em; width: 1.25em;`
