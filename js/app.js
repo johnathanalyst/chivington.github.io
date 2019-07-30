@@ -154,7 +154,19 @@ const Assets = {
   thumb_knn: '/imgs/thumbs/knn.png',
   thumb_linear: '/imgs/thumbs/linear.jpg',
   thumb_logistic: '/imgs/thumbs/logistic.png',
-  thumb_svm: '/imgs/thumbs/svm.png'
+  thumb_svm: '/imgs/thumbs/svm.png',
+  wp: {
+    net: `
+      background-color: #000000; background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='769' cy='229' r='5'/%3E%3Ccircle cx='539' cy='269' r='5'/%3E%3Ccircle cx='603' cy='493' r='5'/%3E%3Ccircle cx='731' cy='737' r='5'/%3E%3Ccircle cx='520' cy='660' r='5'/%3E%3Ccircle cx='309' cy='538' r='5'/%3E%3Ccircle cx='295' cy='764' r='5'/%3E%3Ccircle cx='40' cy='599' r='5'/%3E%3Ccircle cx='102' cy='382' r='5'/%3E%3Ccircle cx='127' cy='80' r='5'/%3E%3Ccircle cx='370' cy='105' r='5'/%3E%3Ccircle cx='578' cy='42' r='5'/%3E%3Ccircle cx='237' cy='261' r='5'/%3E%3Ccircle cx='390' cy='382' r='5'/%3E%3C/g%3E%3C/svg%3E");
+    `,
+    scales: `
+      background-color: #b459ff; background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='100' y1='33' x2='100' y2='-3'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='100' y1='135' x2='100' y2='97'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23994cd9' fill-opacity='0.6'%3E%3Crect x='100' width='100' height='100'/%3E%3Crect y='100' width='100' height='100'/%3E%3C/g%3E%3Cg fill-opacity='0.5'%3E%3Cpolygon fill='url(%23a)' points='100 30 0 0 200 0'/%3E%3Cpolygon fill='url(%23b)' points='100 100 0 130 0 100 200 100 200 130'/%3E%3C/g%3E%3C/svg%3E");
+    `,
+    tiled: `
+      background-color: #ffffff; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50' height='25' viewBox='0 0 50 25'%3E%3Cdefs%3E%3Crect stroke='%23ffffff' stroke-width='0.1' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='2' height='2' patternUnits='userSpaceOnUse'%3E%3Cg stroke='%23ffffff' stroke-width='0.1'%3E%3Crect fill='%23fafafa' width='1' height='1'/%3E%3Crect fill='%23ffffff' width='1' height='1' x='1' y='1'/%3E%3Crect fill='%23f5f5f5' width='1' height='1' y='1'/%3E%3Crect fill='%23f0f0f0' width='1' height='1' x='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='b' width='5' height='11' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ebebeb'%3E%3Cuse xlink:href='%23s' x='2' y='0'/%3E%3Cuse xlink:href='%23s' x='4' y='1'/%3E%3Cuse xlink:href='%23s' x='1' y='2'/%3E%3Cuse xlink:href='%23s' x='2' y='4'/%3E%3Cuse xlink:href='%23s' x='4' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='8'/%3E%3Cuse xlink:href='%23s' x='3' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='7' height='7' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23e5e5e5'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='3' y='4'/%3E%3Cuse xlink:href='%23s' x='5' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='11' height='5' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ffffff'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='6' y='3'/%3E%3Cuse xlink:href='%23s' x='8' y='2'/%3E%3Cuse xlink:href='%23s' x='3' y='0'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3Cg fill='%23e0e0e0'%3E%3Cuse xlink:href='%23s' x='8' y='3'/%3E%3Cuse xlink:href='%23s' x='4' y='2'/%3E%3Cuse xlink:href='%23s' x='5' y='4'/%3E%3Cuse xlink:href='%23s' x='10' y='0'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='23' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='2' y='5'/%3E%3Cuse xlink:href='%23s' x='23' y='13'/%3E%3Cuse xlink:href='%23s' x='4' y='18'/%3E%3Cuse xlink:href='%23s' x='35' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='61' height='31' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='16' y='0'/%3E%3Cuse xlink:href='%23s' x='13' y='22'/%3E%3Cuse xlink:href='%23s' x='44' y='15'/%3E%3Cuse xlink:href='%23s' x='12' y='11'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='50' height='25'/%3E%3Crect fill='url(%23b)' width='50' height='25'/%3E%3Crect fill='url(%23c)' width='50' height='25'/%3E%3Crect fill='url(%23d)' width='50' height='25'/%3E%3Crect fill='url(%23e)' width='50' height='25'/%3E%3Crect fill='url(%23f)' width='50' height='25'/%3E%3C/svg%3E");background-attachment: fixed;background-size: cover;
+    `,
+    shattered: `/imgs/wp/shattered.gif`
+  }
 };
 
 
@@ -258,15 +270,17 @@ const Blueprint = {
       action: 'DISABLE_ADS'
     }],
     theme: {
-      dark: 'rgba(50,50,50,1)',
-      shadow: 'rgba(100,100,100,0.3)',
+      dark: 'rgba(25,25,25,1)',
+      shadow: 'rgba(0,0,0,0.6)',
       component: 'rgba(6,47,79,1)',
       view: 'rgba(0,102,153,1)',
-      accent: 'rgba(200,100,65,1)',
-      accentOpaque: 'rgba(200,100,65,0.6)',
+      accent: 'rgba(0,102,153,1)',
+      accentOpaque: 'rgba(0,102,153,0.6)',
       light: 'rgba(255,255,255,1)',
       lightSubtle: 'rgba(245,245,245,1)',
-      lightOpaque: 'rgba(255,255,255,0.6)'
+      lightOpaque: 'rgba(255,255,255,0.6)',
+      frost: 'rgba(225,225,225,0.5)',
+      darkFrost: 'rgba(100,100,100,0.4)'
     }
   },
   work: {
@@ -370,24 +384,24 @@ const Reducers = {
         'LOGOUT': (s,a) => Blueprint.user.name
       }),
       windowState: Redux.createReducer(Blueprint.ui.window, {
-        'RESIZE': () => action.payload
+        'RESIZE': (s,a) => a.payload
       }),
       headerState: Redux.createReducer(Blueprint.ui.header, {
-        'CHANGE_HEADER_ICON': () => ({icon: action.payload.icon, title: state.title}),
-        'CHANGE_HEADER_TITLE': () => ({icon: state.icon, title: action.payload.title})
+        'CHANGE_HEADER_ICON': (s,a) => ({icon: a.payload.icon, title: s.title}),
+        'CHANGE_HEADER_TITLE': (s,a) => ({icon: s.icon, title: a.payload.title})
       }),
       menuState: Redux.createReducer(Blueprint.ui.menu, {
-        'TOGGLE_MENU': () => ({current: state.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: state.current}),
-        'OPEN_MENU': () => ({current: 'OPEN', previous: state.current}),
-        'CLOSE_MENU': () => ({current: 'CLOSED', previous: state.current})
+        'TOGGLE_MENU': (s,a) => ({current: s.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: s.current}),
+        'OPEN_MENU': (s,a) => ({current: 'OPEN', previous: s.current}),
+        'CLOSE_MENU': (s,a) => ({current: 'CLOSED', previous: s.current})
       }),
       viewState: Redux.createReducer(Blueprint.ui.view, {
-        'NAV_TO': () => ({current: action.payload, previous: state.current, scrollTop: 0}),
-        'UPDATE_SCROLL': () => ({current: state.current, previous: state.previous, scrollTop: action.payload})
+        'NAV_TO': (s,a) => ({current: a.payload, previous: s.current, scrollTop: 0}),
+        'UPDATE_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload})
       }),
       adState: Redux.createReducer(Blueprint.ui.ads, {
-        'HIDE_AD': () => [...state.slice(0, action.idx), ...state.slice(action.idx)],
-        'SHOW_AD': () => [...state.slice(0, action.idx), action.ad, ...state.slice(action.idx)]
+        'HIDE_AD': (s,a) => [...s.slice(0, a.idx), ...s.slice(a.idx)],
+        'SHOW_AD': (s,a) => [...s.slice(0, a.idx), a.ad, ...s.slice(a.idx)]
       })
     })(state, action);
   },
@@ -429,17 +443,17 @@ const Components = {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { headerState, viewState, menuState } = state.uiState;
     const { icon, alt, title } = headerState;
-    const { dark, light, lightOpaque, shadow } = Blueprint.ui.theme;
+    const { dark, light, lightOpaque, accentOpaque, shadow } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       header: `
-        position: fixed; top: 0; left: 0; height: 4em; width: 100%; margin: 0; padding: 0; z-index: 90;
+        position: fixed; top: 0; left: 0; height: 4.25em; width: 100%; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: flext-start; align-items: center;
-        background-color: ${dark}; border-bottom: 1px solid ${lightOpaque}; -webkit-box-shadow: 1px 1px 15px 0 ${shadow};
+        background-color: ${dark}; border-bottom: 1px solid ${accentOpaque}; -webkit-box-shadow: 1px 5px 15px 0 ${shadow};
       `,
-      icon: `margin: 0 1em; height: 2.25em; width: 2.25em; cursor: pointer; fill: ${light};`,
-      title: `margin: 0; color: ${light}; font-size: 2em; cursor: pointer;`,
+      icon: `margin: 0.15em 1em 0; height: 2.5em; width: 2.5em; cursor: pointer; fill: ${light};`,
+      title: `margin: 0.15em 0 0; color: ${light}; font-size: 2em; cursor: pointer;`,
       superScript: `font-size: 0.9em; color: ${light}; margin: -10px 0 0 3px;`
     };
 
@@ -512,25 +526,23 @@ const Components = {
     const { width, height, mode } = windowState;
     const [ currentView, isPreviousView ] = [ viewState.current, viewState.previous ];
     const [ currentMenu, previousMenu ] = [ menuState.current, menuState.previous ];
-    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque, frost, darkFrost } = Blueprint.ui.theme;
     const E = React.createElement;
 
     const styles = {
       menu: `
         display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: fixed;
         top: 4em; left: 0; bottom: 0; width: ${mode != 'desktop' ? `100%` : `25%`}; z-index: 80; overflow: hidden;
-        background-color: ${component}; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
-          : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)} border-right: 1px solid ${accentOpaque};
+        background-color: ${darkFrost}; ${(currentMenu == 'OPEN') ? (previousMenu == 'OPEN' ? `` : `animation: menuOpen 300ms ease-in-out 1 forwards;`)
+          : (lastActionClosed ? `animation: menuClosing 300ms ease-in-out 1 forwards;` : ` display: none;`)} border-right: 1px solid ${accent};
       `,
-      menuBtn: `
-        margin: 0 2em; padding: 1em 0.25em 0.5em; border-bottom: 0.05em solid ${accent};
-        color: ${light}; font-size: 1.1em; font-weight: 100; cursor: pointer; text-align: left;
-      `,
+      menuBtn: `margin: 0; padding: 0 2em; cursor: pointer;`,
+      menuBtnLabel: `margin: 0; padding: 1.5em 0 0.5em; border-bottom: 0.05em solid ${accentOpaque}; color: ${light}; font-size: 1.25em; font-weight: 100;`,
       appInfo: `
         display: flex; flex-direction: column; justify-content: center; align-items: center; align-self: flex-end;
-        position: absolute; bottom: 0; left: 0; width: 100%; padding: 0.5em 0; width: 100%; border-top: 1px solid ${accentOpaque};
+        position: absolute; bottom: 0; left: 0; width: 100%; padding: 1em 0; width: 100%; border-top: 1px solid ${accentOpaque};
       `,
-      appInfoRow: `margin: 0.1em auto; color: ${lightOpaque}`
+      appInfoRow: `margin: 0.1em auto; color: ${light}`
     };
 
     const menuBtns = [
@@ -541,7 +553,7 @@ const Components = {
       [`Resume`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'RESUME', check: currentView != 'RESUME' }]],
       [`Contact`, [{type: 'CLOSE_MENU', check: true}, {type: 'NAV_TO', payload: 'CONTACT', check: currentView != 'CONTACT' }]]
     ].map(btn => {
-      const b = E('h3', {style: styles.menuBtn}, [btn[0]]);
+      const b = E('div', {style: styles.menuBtn}, [ E('h3', {style: styles.menuBtnLabel}, [btn[0]]) ]);
       b.addEventListener('click', () => btn[1].forEach(action => {
         if (action.check) dispatch({type: action.type, payload: action.payload});
       }));
@@ -588,8 +600,9 @@ const Components = {
     const { width, height, mode } = windowState;
 
     const styles = {
-      view: `position: fixed; top: 4em; right: 0; bottom: 0; left: 0; margin: 0; padding: 0; overflow-x: hidden;
-        overflow-y: scroll; z-index: 10; -webkit-overflow-scrolling: touch; background-color: ${Blueprint.ui.theme.view}; ${animation}`
+      view: `position: fixed; top: 4em; right: 0; bottom: 0; left: 0; margin: 0; padding: 0; overflow-x: hidden; overflow-y: scroll; z-index: 10;
+        ${menuState.current == 'OPEN' ? ' filter: blur(10px);' : ''} -webkit-overflow-scrolling: touch; background-color: ${Blueprint.ui.theme.view}; ${animation}
+      `
     };
 
     const View = React.createElement('div', {style: styles.view}, [view(store)]);
@@ -726,13 +739,12 @@ const Views = {
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
     const E = React.createElement;
-    const { wp_sphere } = Assets;
+    const { net, tiled } = Assets.wp;
 
     const styles = {
       aboutView: `
         position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden;
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7) ), url('${wp_sphere}');
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; ${net}
         background-position: center; background-size: cover; background-repeat: no-repeat; text-align: center;
       `,
       about: `margin: 1em; border: 1px solid #f00;`,
@@ -754,17 +766,22 @@ const Views = {
   },
   Blog: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { component, accent, accentOpaque, light, lightOpaque } = Blueprint.ui.theme;
+    const { component, accent, accentOpaque, light, lightOpaque, darkFrost } = Blueprint.ui.theme;
+    const { scales } = Assets.wp;
     const E = React.createElement;
 
     const styles = {
       blogView: `
         position: absolute; top: 0; left: 0; bottom: 0; width: 100%;
         display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+        ${scales} background-position: center; background-size: cover; background-repeat: no-repeat;
       `,
-      blogPost: 'margin: 1.5em 1em 0; width: 60%; border: 1px solid #333;',
-      blogBody: `margin: 1em;`,
-      blogTags: `margin: 0 1em; padding: 0.5em; border-top: 1px solid #333;`
+      blogPost: `
+        margin: 1.25em auto 0; width: 85%; border: 1px solid ${accent}; border-radius: 10px;
+        background-color: ${darkFrost}; color: ${light};
+      `,
+      blogBody: `margin: 1.5em;`,
+      blogTags: `margin: 0 1em; padding: 1em; border-top: 1px solid ${accent}; color: ${lightOpaque};`
     };
 
     // First Blog Post - Deploy & Secure a Server
@@ -809,7 +826,7 @@ const Views = {
   Contact: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { returning, username } = state.userState;
-    const { content_meAndLoaf, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
+    const { content_me, content_meAndLoaf, content_greeting, icon_github, icon_linkedin, icon_twitter, icon_phone, icon_email, wp_pnw } = Assets;
     const { firstName, lastName, title, phone, email, linkedin, github, twitter, facebook, location, search } = state.workState.contactState;
     const DEV = state.uiState.windowState.mode.toLowerCase();
     const [ MB, TB_SM, TB_LG, DT ] = [ DEV == 'mobile', DEV == 'small_tab', DEV == 'large_tab', DEV == 'desktop' ];
@@ -839,7 +856,7 @@ const Views = {
     const card = E('div', {style: styles.card}, [
       E('div', {style: styles.cardBody}, [
         E('div', {style: styles.bodyLeft}, [
-          E('img', {style: styles.leftImg, src: content_meAndLoaf, alt: 'my beautiful face'}, [])
+          E('img', {style: styles.leftImg, src: content_me, alt: 'my beautiful face'}, [])
         ]),
         E('div', {style: styles.bodyRight}, [
           E('div', {style: styles.rightTop}, [
