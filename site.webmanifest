@@ -1,8 +1,8 @@
 {
-    "name": "chivingtoninc",
-    "short_name": "chivingtoninc",
-    "description": "Personal blog, resume, portfolio, etc. in a custom, single page web app, modeled after React and Redux.",
-    "icons": [
+  "name": "chivington.io",
+  "short_name": "chivington.io",
+  "description": "Personal blog, projects, etc. in a custom, single page web app, modeled after React & Redux.",
+  "icons": [
         {
             "src": "/imgs/icons/manifest/android-chrome-192x192.png",
             "sizes": "192x192",
@@ -14,9 +14,7 @@
             "type": "image/png"
         }
     ],
-    "start_url": "./index.html",
-    "display": "standalone",
-    "orientation": "landscape",
     "theme_color": "#222244",
-    "background_color": "#222244"
+    "background_color": "#222244",
+    "display": "standalone"
 }
