@@ -601,7 +601,7 @@ const Components = {
 
     const selected = views[current[0]] ? views[current[0]] : views['DEFAULT'];
     const animation = animate ? `animation: viewSlideIn 250ms 1 forwards;` : ``;
-    document.title = `chivington.io | ${selected[1]}`;
+    document.title = `${state.userState.infoState.name} | ${selected[1]}`;
 
     return Unity.createElement('div', {style:styles.router}, [Components.View(store, selected[0], animation)]);
   },
