@@ -82,46 +82,6 @@ const Unity = {
 
     return element;
   },
-  elementAttributes: function(elem_type, attr) {
-    const types = {
-      // display[0] flex[1] flex-direction[2] justify-content[3] align-items[4] margin[5]
-      // padding[6] width[7] border[8] border-radius[9] background[10] background-color[11]
-      'div': () => `
-        display: ${!!attr[0]?attr[0]:'flex'}; ${!!attr[1]?'flex: 1;':''} flex-direction: ${!!attr[2]?attr[2]:'column'}; justify-content: ${!!attr[3]?attr[3]:'flex-start'}; align-items: ${!!attr[4]?attr[4]:'center'};
-        margin: ${!!attr[5]?attr[5]:'0.25em'}; padding: ${!!attr[6]?attr[6]:'0.25em'}; width: ${!!attr[7]?attr[7]:'auto'}; ${!!attr[8]?`border: 1pt solid ${attr[8]};`:''} ${!!attr[9]?`border-radius: ${attr[9]};`:''}
-        ${!!attr[10]?`background: ${attr[10]}; background-position: center; background-size: cover; background-repeat: no-repeat;`:''} ${!!attr[11]?`background-color: ${attr[11]};`:''}
-      `,
-      // top[0] right[1] bottom[2] left[3] margin[4] padding[5] border[6] border-radius[7]
-      // background[8] background-color[9] overflow-x[10] overflow-y[11] z-index[12]
-      'fixed_div': () => `
-        position: fixed; top: ${!!attr[0]?attr[0]:0}; right: ${!!attr[1]?attr[1]:0}; bottom: ${!!attr[2]?attr[2]:0}; left: ${!!attr[3]?attr[3]:0};
-        margin: ${!!attr[4]?attr[4]:0}; padding: ${!!attr[5]?attr[5]:0}; ${!!attr[6]?`border: 1pt solid ${attr[6]};`:''} ${!!attr[7]?`border-radius: ${attr[7]};`:''}
-        ${!!attr[8]?`background: ${attr[8]}; background-position: center; background-size: cover; background-repeat: no-repeat;`:''} ${!!attr[9]?`background-color: ${attr[9]};`:''}
-        overflow-x: ${!!attr[10]?attr[10]:'hidden'}; overflow-y: ${!!attr[11]?attr[11]:'hidden'}; z-index: ${!!attr[12]?attr[12]:100};
-      `,
-      // margin[0] padding[1] color[2] font-size[3] font-weight[4] text-align[5] border[6] border-radius[7] text-decoration[8]
-      'p': () => `
-        margin: ${!!attr[0]?attr[0]:'0.25em'}; padding: ${!!attr[1]?attr[1]:'0.25em'}; color: ${!!attr[2]?attr[2]:'#f00'}; font-size: ${!!attr[3]?attr[3]:'1em'}; font-weight: ${!!attr[4]?attr[4]:'500'};
-        ${!!attr[5]?`text-align: ${attr[5]};`:''} ${!!attr[6]?`border: 1pt solid ${attr[6]};`:''} ${!!attr[7]?`border-radius: ${attr[7]};`:''} text-decoration: ${!!attr[8]?attr[8]:'none'};
-      `,
-      // margin[0] padding[1] color[2] font-size[3] font-weight[4] text-align[5] border[6] border-radius[7] text-decoration[8] href[9]
-      'a': () => `
-        margin: ${!!attr[0]?attr[0]:'0.25em'}; padding: ${!!attr[1]?attr[1]:'0.25em'}; color: ${!!attr[2]?attr[2]:'#f00'}; font-size: ${!!attr[3]?attr[3]:'1em'}; font-weight: ${!!attr[4]?attr[4]:'500'};
-        ${!!attr[5]?`text-align: ${attr[5]};`:''} ${!!attr[6]?`border: 1pt solid ${attr[6]};`:''} ${!!attr[7]?`border-radius: ${attr[7]};`:''} text-decoration: ${!!attr[8]?attr[8]:'none'}; ${!!attr[9]?`href: ${attr[9]};`:``}
-      `,
-      // margin[0] padding[1] color[2] font-size[3] font-weight[4] text-align[5] border[6] border-radius[7] text-decoration[8]
-     'h': () => `
-        margin: ${!!attr[0]?attr[0]:'0.25em'}; padding: ${!!attr[1]?attr[1]:'0.25em'}; color: ${!!attr[2]?attr[2]:'#f00'}; font-size: ${!!attr[3]?attr[3]:'1em'}; font-weight: ${!!attr[4]?attr[4]:'500'};
-        ${!!attr[5]?`text-align: ${attr[5]};`:''} ${!!attr[6]?`border: 1pt solid ${attr[6]};`:''} ${!!attr[7]?`border-radius: ${attr[7]};`:''} text-decoration: ${!!attr[8]?attr[8]:'none'};
-     `,
-     // src[0] alt[1] margin[2] padding[3] width[4] height[5] border[6] border-radius[7]
-     'img': () => `
-        src: ${!!attr[0]?attr[0]:''}; alt: ${!!attr[1]?attr[1]:'Missing Image'}; margin: ${!!attr[2]?attr[2]:'0.25em'}; padding: ${!!attr[3]?attr[3]:'0.25em'}; width: ${!!attr[4]?attr[4]:'100px'}; height: ${!!attr[5]?attr[5]:'100px'};
-        ${!!attr[6]?`border: 1pt solid ${attr[6]};`:''} ${!!attr[7]?`border-radius: ${attr[7]};`:''}
-     `
-    };
-    return types[elem_type] ? types[elem_type]() : '';
-  },
   render: function(component, store, root) {
     while (root.lastChild) root.lastChild.remove();
     root.appendChild(component(store));
@@ -143,297 +103,36 @@ const Unity = {
 
    if (!app_root) terminate(`No Application Root supplied...`);
    if (!blueprint) terminate(`No Blueprint supplied...`);
-
    if (!!load_screen_root) {
      console.log(`${app_title} | Killing load screen...`);
      load_screen_root.style.display = 'none';
-   }
+   };
 
    console.log(`${app_title} | Killing static application...`);
    app_root.firstElementChild.style.display = 'none';
 
+   // const inital_state = Object.keys(blueprint).reduce((s,b) => {
+   //   s[`${b}State`] = function(state = blueprint[b], action) {
+   //     return Unity.combineReducers(Object.keys(blueprint[b]).reduce((ss,sb) => {
+   //       if (!!blueprint[b][sb]['@@ACTIONS']) ss[`${sb}State`] = Unity.createReducer(blueprint[b][sb],blueprint[b][sb]['@@ACTIONS']);
+   //       else ss[sb] = blueprint[b][sb];
+   //       return ss;
+   //     }, {}))(state,action);
+   //   };
+   //   return s;
+   // }, {});
+
+   // const state_root = Unity.combineReducers(inital_state);
    const state_root = Unity.combineReducers(state_reducers);
    const UnityStore = Unity.createStore(state_root, store_middlewares);
 
    Unity.render(Components.App, UnityStore, App_Root);
-
    UnityStore.subscribe({
      name: 'Render_App',
      function: Unity.render,
      params: [Components.App, UnityStore, App_Root]
    });
  }
-};
-
-/* ------------------------------- Asset Manifest --------------------------------- *
- *                         Everything needed to cache app.                          *
- * -------------------------------------------------------------------------------- */
-const Assets = {
-  css: {
-    fonts: {
-      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Book.otf',
-      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Light.otf',
-      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Roman.otf'
-    },
-    only_css_file: '/css/only.css'
-  },
-  imgs: {
-    icons: {
-      btns: {
-        close_wht: '/imgs/icons/btns/close-wht.svg',
-        close_blk: '/imgs/icons/btns/close-blk.svg',
-        scroll: '/imgs/icons/btns/scroll.svg',
-        menu_wht: '/imgs/icons/btns/menu-wht.svg',
-        menu_blk: '/imgs/icons/btns/menu-blk.svg',
-        caret_wht: '/imgs/icons/btns/caret-wht.svg',
-        caret_blk: '/imgs/icons/btns/caret-blk.svg'
-      },
-      manifest: {
-        android_192: '/imgs/icons/manifest/android-chrome-192x192.png',
-        android_512: '/imgs/icons/manifest/android-chrome-512x512.png',
-        apple_touch: '/imgs/icons/manifest/apple-touch-icon.png',
-        favicon_16: '/imgs/icons/manifest/favicon-16x16.png',
-        favicon_32: '/imgs/icons/manifest/favicon-32x32.png',
-        favicon: '/imgs/icons/manifest/favicon.ico',
-        favicon_wht: '/imgs/icons/manifest/favicon-wht.png',
-        mstile_150: '/imgs/icons/manifest/mstile-150x150.png',
-        safari_pinned_tab: '/imgs/icons/manifest/safari-pinned-tab.svg'
-      },
-      network: {
-        no_wifi_1: '/imgs/icons/network/no-wifi-1.svg',
-        no_wifi_2: '/imgs/icons/network/no-wifi-2.svg',
-        wifi: '/imgs/icons/network/wifi.svg'
-      },
-      sm: {
-        dl_blk: '/imgs/icons/sm/dl-blk.svg',
-        dl_wht: '/imgs/icons/sm/dl-wht.svg',
-        resume_blk: '/imgs/icons/sm/resume-blk.svg',
-        resume_wht: '/imgs/icons/sm/resume-wht.svg',
-        email_blk: '/imgs/icons/sm/email-blk.svg',
-        email_wht: '/imgs/icons/sm/email-wht.svg',
-        fb: '/imgs/icons/sm/fb.svg',
-        git_blk: '/imgs/icons/sm/git-blk.svg',
-        git_wht: '/imgs/icons/sm/git-wht.svg',
-        jc_pbc_blk: '/imgs/icons/sm/jc-pcb-blk.svg',
-        jc_pbc_wht: '/imgs/icons/manifest/mstile-150x150.png',
-        li_blk: '/imgs/icons/sm/li-blk.svg',
-        li_wht: '/imgs/icons/sm/li-wht.svg',
-        phone_blk: '/imgs/icons/sm/phone-blk.svg',
-        phone_wht: '/imgs/icons/sm/phone-wht.svg',
-        twt_blk: '/imgs/icons/sm/twt-blk.svg',
-        twt_wht: '/imgs/icons/sm/twt-wht.svg',
-        usa: '/imgs/icons/sm/united-states.svg',
-        web_blk: '/imgs/icons/sm/web-blk.svg',
-        web_wht: '/imgs/icons/sm/web-wht.svg'
-      }
-    },
-    me: {
-      loaf: '/imgs/me/loaf.jpg',
-      win_bed: '/imgs/me/win-bed.jpg',
-      win: '/imgs/me/win.jpg'
-    },
-    thumbs: {
-      pagespeed: '/imgs/thumbs/google-pagespeed.jpg',
-      hello: '/imgs/thumbs/hello.png',
-      ht_bridge: '/imgs/thumbs/ht-bridge.svg',
-      linear: '/imgs/thumbs/linear.jpg',
-      logistic: '/imgs/thumbs/logistic.jpg',
-      qualys: '/imgs/thumbs/qualys.png',
-      svm: '/imgs/thumbs/svm.jpg',
-      linear_gif: '/imgs/thumbs/linear_regression.gif',
-      iot: '/imgs/thumbs/iot.jpg',
-      mcu: '/imgs/thumbs/mcu.jpg',
-      ai: '/imgs/thumbs/ai.jpg',
-    },
-    wp: {
-      fragmented: '/imgs/wp/fragmented.jpg',
-      geo_sphere: '/imgs/wp/geo-sphere.jpg',
-      math: '/imgs/wp/math.jpg',
-      pnw: '/imgs/wp/pnw.jpg',
-      seattle: '/imgs/wp/seattle.jpg',
-      yolo: '/imgs/wp/yolo.jpg',
-      net: `
-        background-color: #000000; background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='769' cy='229' r='5'/%3E%3Ccircle cx='539' cy='269' r='5'/%3E%3Ccircle cx='603' cy='493' r='5'/%3E%3Ccircle cx='731' cy='737' r='5'/%3E%3Ccircle cx='520' cy='660' r='5'/%3E%3Ccircle cx='309' cy='538' r='5'/%3E%3Ccircle cx='295' cy='764' r='5'/%3E%3Ccircle cx='40' cy='599' r='5'/%3E%3Ccircle cx='102' cy='382' r='5'/%3E%3Ccircle cx='127' cy='80' r='5'/%3E%3Ccircle cx='370' cy='105' r='5'/%3E%3Ccircle cx='578' cy='42' r='5'/%3E%3Ccircle cx='237' cy='261' r='5'/%3E%3Ccircle cx='390' cy='382' r='5'/%3E%3C/g%3E%3C/svg%3E");
-      `,
-      scales: `
-        background-color: #b459ff; background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='100' y1='33' x2='100' y2='-3'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='100' y1='135' x2='100' y2='97'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23994cd9' fill-opacity='0.6'%3E%3Crect x='100' width='100' height='100'/%3E%3Crect y='100' width='100' height='100'/%3E%3C/g%3E%3Cg fill-opacity='0.5'%3E%3Cpolygon fill='url(%23a)' points='100 30 0 0 200 0'/%3E%3Cpolygon fill='url(%23b)' points='100 100 0 130 0 100 200 100 200 130'/%3E%3C/g%3E%3C/svg%3E");
-      `,
-      tiled: `
-        background-color: #ffffff; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50' height='25' viewBox='0 0 50 25'%3E%3Cdefs%3E%3Crect stroke='%23ffffff' stroke-width='0.1' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='2' height='2' patternUnits='userSpaceOnUse'%3E%3Cg stroke='%23ffffff' stroke-width='0.1'%3E%3Crect fill='%23fafafa' width='1' height='1'/%3E%3Crect fill='%23ffffff' width='1' height='1' x='1' y='1'/%3E%3Crect fill='%23f5f5f5' width='1' height='1' y='1'/%3E%3Crect fill='%23f0f0f0' width='1' height='1' x='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='b' width='5' height='11' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ebebeb'%3E%3Cuse xlink:href='%23s' x='2' y='0'/%3E%3Cuse xlink:href='%23s' x='4' y='1'/%3E%3Cuse xlink:href='%23s' x='1' y='2'/%3E%3Cuse xlink:href='%23s' x='2' y='4'/%3E%3Cuse xlink:href='%23s' x='4' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='8'/%3E%3Cuse xlink:href='%23s' x='3' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='7' height='7' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23e5e5e5'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='3' y='4'/%3E%3Cuse xlink:href='%23s' x='5' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='11' height='5' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ffffff'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='6' y='3'/%3E%3Cuse xlink:href='%23s' x='8' y='2'/%3E%3Cuse xlink:href='%23s' x='3' y='0'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3Cg fill='%23e0e0e0'%3E%3Cuse xlink:href='%23s' x='8' y='3'/%3E%3Cuse xlink:href='%23s' x='4' y='2'/%3E%3Cuse xlink:href='%23s' x='5' y='4'/%3E%3Cuse xlink:href='%23s' x='10' y='0'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='23' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='2' y='5'/%3E%3Cuse xlink:href='%23s' x='23' y='13'/%3E%3Cuse xlink:href='%23s' x='4' y='18'/%3E%3Cuse xlink:href='%23s' x='35' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='61' height='31' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='16' y='0'/%3E%3Cuse xlink:href='%23s' x='13' y='22'/%3E%3Cuse xlink:href='%23s' x='44' y='15'/%3E%3Cuse xlink:href='%23s' x='12' y='11'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='50' height='25'/%3E%3Crect fill='url(%23b)' width='50' height='25'/%3E%3Crect fill='url(%23c)' width='50' height='25'/%3E%3Crect fill='url(%23d)' width='50' height='25'/%3E%3Crect fill='url(%23e)' width='50' height='25'/%3E%3Crect fill='url(%23f)' width='50' height='25'/%3E%3C/svg%3E");background-attachment: fixed;background-size: cover;
-      `
-    }
-  },
-  js: {
-    app: '/js/app.js'
-  },
-  browserconfig: '/browserconfig.xml',
-  favicon: '/favicon.ico',
-  index: '/index.html',
-  license: '/LICENSE',
-  webmanifest: '/site.webmanifest'
-};
-
-/* ---------------------------------- Blueprint ----------------------------------- *
- *                            Specifies inital app state.                           *
- * -------------------------------------------------------------------------------- */
-const Blueprint = {
-  app: {
-    about: {},
-    history: {
-      actions: ['@@INIT'],
-      views: ['@@INIT']
-    },
-    reports: [
-      {org: 'Qualys SSL Labs', score: 'A+', img: Assets.imgs.thumbs.qualys, link: 'https://www.ssllabs.com/ssltest/analyze.html?d=chivington.io'},
-      {org: 'ImmuniWeb SSLScan', score: 'A+', img: Assets.imgs.thumbs.ht_bridge, link: 'https://www.htbridge.com/ssl/?id=uAXLxfew'},
-      {org: 'Google PageSpeed', score: '100%', img: Assets.imgs.thumbs.pagespeed, link: 'https://developers.google.com/speed/pagespeed/insights/?url=chivington.io'}
-    ],
-    security: [
-      'https/http2', 'hsts', 'TLSv1.2', 'CAA Compliant', 'POODLE', 'CVE-2016-2017', 'Insecure Renegotiation', 'ROBOT', 'HEARTBLEED', 'CVE-2014-0224'
-    ],
-    features: [
-      'Unity/Unity-Style Architecture', 'Responsive Design', 'Offline Capable', 'Network Detection', 'Customizable Themes'
-    ]
-  },
-  device: {
-    network: {
-      downlink: navigator.connection ? navigator.connection.downlink : 10,
-      effectiveType: navigator.connection ? navigator.connection.effectiveType : 'Connecting...',
-      previousType: '@@INIT'
-    },
-    battery: 100
-  },
-  user: {
-    name: 'Johnathan Chivington',
-    employer: `University of Washington`,
-    title: `Fiscal Analyst`,
-    school: `University of Washington`,
-    major: `Physics & Electrical Engineering`,
-    phones: [['Mobile Number', '303-900-2861'], ['Work Number', '206-897-1407']],
-    emails: [['Personal Email', 'j.chivington@outlook.com'], ['Work Email', 'johnchiv@uw.edu']],
-    web: {
-      linkedin: 'https://linkedin.com/in/johnathan-chivington',
-      github: 'https://github.com/chivington',
-      twitter: 'https://twitter.com/jt_chivington',
-      facebook: 'https://facebook.com/jt.chivington'
-    },
-    locations: [
-      ['Home Address', '16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus'],
-      ['Work Address', '185 E Stevens Way NE, Seattle, WA 98195', 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2687.591733504735!2d-122.3053456!3d47.6535!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x549014ed3251f07f%3A0x12de8b2d1ad8504a!2sPaul%20G.%20Allen%20Center%20for%20Computer%20Science%20%26%20Engineering!5e0!3m2!1sen!2sus!4v1585208912448!5m2!1sen!2sus']
-    ],
-    bio: {
-      work: [
-        `I'm a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering.`,
-        `I have a background in sales and business development, working in the retail, automotive parts, and SaaS industries.`,
-        `I transitioned into Finance in 2018 while working at ABC Legal Services, a legal process service & e-filing automation company headquartered here in Seattle.`,
-        `After working in temporary positions at UW for most of 2019, I found my current position in ECE.`,
-        `I am truly blessed to work in such a great field, with such wonderful people at one of the best research institutions in the world.`,
-        `However my aspirations lie at the intersection of Computer Science, Electrical & Computer Engineering, and Applied Physics so I'm pursuing an undergraduate Physics degree at UW.`
-      ],
-      education: [
-        `I'm a student at North Seattle College and auditing a graduate Machine Learning course at the University of Washington this Spring.`,
-        `One amazing benefit of working at UW is their employee tuition waiver program which enables employees to take up to 6 credit hours per quarter.`,
-        `This was the primary motivating factor for me in seeking employment with UW and I'm utilizing this benefit to begin taking classes at UW this Summer as well.`,
-        `After completing the required credits, I'll apply to UW's Physics program with the goal of pursuing a double major in Physics and Electrical Engineering.`
-      ],
-      personal: [
-        `In my spare time I work on various research projects, study and care for my microscopic "pets" and spend time with my amazing girlfriend.`,
-        `My research focus is in the interdisciplinary use of Artificial Intelligence, Wireless Embedded Systems, Power Electronics and MEMS/NEMS technologies in applications for Autonomous Manufacturing & Fabrication, as well as Energy Generation & Storage.`,
-        `I'm currently researching Computer Architectures via a two-course series that culminates in a fully working 16-bit computer built from first principles of NAND gates.`,
-        `I'm also acquiring various microscopic "pets" like Tardigrades and Planaria to research and care for.`,
-        `When we're not terribly busy or quarantined by a global pandemic, my girlfriend and I also like to go hiking, swimming, walking our dog or anything outdoors.`,
-        `Lately we've been focused on propogating our house plants and building a greenhouse in our back yard so we have a personal jungle year-round.`,
-        `My "career" goals are also very personal to me though, so I tend to spend most of my spare time pursuing those.`
-      ]
-    }
-  },
-  ui: {
-    map: {
-      home: 'HOME',
-      contact: 'CONTACT_ME',
-      profile: 'PERSONAL_PROFILE',
-      All_Research: ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'EMBEDDED_RESEARCH', 'WIRELESS_NETWORKING_RESEARCH']
-    },
-    theme: {
-      selected: 'dark',
-      dark: {
-        header: `rgba(21,32,43,1)`,
-        header_txt: `rgba(255,255,255,1)`,
-        header_bdr: `rgba(70,122,194,0.7)`,
-        menu: `rgba(21,32,43,0.9)`,
-        menu_bdr: `rgba(70,122,194,0.9)`,
-        menu_btn: `rgba(21,32,43,0.9)`,
-        menu_sub: `rgba(70,87,117,0.5)`,
-        menu_txt: `rgba(255,255,255,1)`,
-        view: `rgba(70,77,97,0.9)`,
-        view_bdr: `rgba(70,122,194,0.9)`,
-        view_txt: `rgba(255,255,255,1)`,
-        well: `rgba(70,87,117,0.9)`,
-        panel_lt: `rgba(35,43,59,0.5)`,
-        panel: `rgba(35,43,59,0.7)`,
-        panel_drk: `rgba(50,50,75,0.7)`,
-        btn: `rgba(53,92,146,1)`,
-        btn_lt: `rgba(70,122,194,1)`,
-        btn_bdr: `rgba(70,122,194,0.9)`,
-        footer: `rgba(21,32,43,0.9)`,
-        footer_bdr: `rgba(70,122,194,0.9)`,
-        footer_txt: `rgba(255,255,255,1)`,
-        success: '#4e4',
-        error: '#e44'
-      },
-      light: {
-        header: `rgba(255,255,255,1)`,
-        header_txt: `rgba(55,55,75,0.9)`,
-        header_bdr: `rgba(25,25,25,1)`,
-        menu: `rgba(112,140,188,0.5)`,
-        menu_bdr: `rgba(25,25,25,0.9)`,
-        menu_btn: `rgba(95,125,180,1)`,
-        menu_sub: `rgba(112,140,188,0.5)`,
-        menu_txt: `rgba(255,255,255,1)`,
-        view: `rgba(255,255,255,1)`,
-        view_bdr: `rgba(75,75,75,0.9)`,
-        view_txt: `rgba(55,55,75,0.9)`,
-        well: `rgba(255,255,255,1)`,
-        panel_lt: `rgba(112,140,200,0.3)`,
-        panel: `rgba(112,140,188,0.5)`,
-        panel_drk: `rgba(50,50,75,0.7)`,
-        btn: `rgba(81,128,193,1)`,
-        btn_lt: `rgba(105,155,225,1)`,
-        btn_bdr: `rgba(25,25,25,0.9)`,
-        footer: `rgba(255,255,255,1)`,
-        footer_bdr: `rgba(25,25,25,0.9)`,
-        footer_btn: `rgba(70,87,117,0.4)`,
-        footer_txt: `rgba(55,55,75,0.9)`,
-        success: '#7e7',
-        error: '#e77'
-      },
-      wp: {
-        view: Assets.imgs.wp.pnw
-      }
-    },
-    window: {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      mode: window.innerWidth < 600 ? 'mobile' : (
-        window.innerWidth < 750 ? 'small_tab' : (window.innerWidth < 900 ? 'large_tab' : 'desktop')
-      )
-    },
-    header: {
-      icon: Assets.imgs.icons.manifest.favicon,
-      alt: 'chivington.io Icon',
-      menu_btn: Assets.imgs.icons.btns.menu
-    },
-    menu: {
-      current: 'CLOSED',
-      previous: 'CLOSED',
-      scrollTop: 0
-    },
-    view: {
-      current: ['HOME', 'Home'],
-      previous: '@@INIT',
-      scrollTop: 0
-    }
-  }
 };
 
 /* ----------------------------------- Reducers ----------------------------------- *
@@ -487,10 +186,10 @@ const Reducers = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIRELESS_NETWORKING_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_COMPUTER_ARCHITECTURE_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_HOME_FOOTER_MENU': (s,a) => ({
@@ -502,10 +201,10 @@ const Reducers = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIRELESS_NETWORKING_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_COMPUTER_ARCHITECTURE_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'RESIZE': (s,a) => ({
@@ -519,10 +218,6 @@ const Reducers = {
       networkState: Unity.createReducer(Blueprint.device.network, {
         'NET_STATE_CHANGE': (s,a) => a.payload,
         'NET_STATE_INIT': (s,a) => a.payload
-      }),
-      batteryState: Unity.createReducer(Blueprint.device.battery, {
-        'BATTERY_STATE_CHANGE': (s,a) => a.payload,
-        'BATTERY_STATE_INIT': (s,a) => a.payload
       })
     })(state, action);
   },
@@ -533,6 +228,7 @@ const Reducers = {
   },
   uiState: function (state = Blueprint.ui, action) {
     return Unity.combineReducers({
+      mapState: Unity.createReducer(Blueprint.ui.map, {}),
       headerState: Unity.createReducer(Blueprint.ui.header, {
         'CHANGE_HEADER_ICON': (s,a) => ({icon: a.payload.icon, title: s.title}),
         'CHANGE_HEADER_TITLE': (s,a) => ({icon: s.icon, title: a.payload.title})
@@ -578,32 +274,16 @@ const Middlewares = {
 const Components = {
   Router: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { current, previous } = state.uiState.viewState;
-    const sameView = current == previous;
+    const { mapState, viewState } = state.uiState;
+    const { flat, tree } = mapState;
+    const { current, previous } = viewState;
+    const sameView = viewState.current == viewState.previous;
     const lastActionNav = state.appState.historyState.actions.slice(-1) == 'NAV_TO';
-    const animate = lastActionNav && !sameView;
-
-    const styles = {
-      router: `position: fixed; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; z-index: 5;`
-    };
-
-    const views = {
-      'HOME': [Views.Home, 'Home'],
-      'BLOG': [Views.Blog, 'Blog'],
-      'CONTACT_ME': [Views.Contact, 'Contact Me'],
-      'PERSONAL_PROFILE': [Views.Profile, 'Profile'],
-      'ALL_RESEARCH': [Views.All_Research, 'All Research'],
-      'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.Artificial_Intelligence_Research, 'Artificial Intelligence Research'],
-      'EMBEDDED_RESEARCH': [Views.Embedded_Research, 'Embedded Research'],
-      'WIRELESS_NETWORKING_RESEARCH': [Views.Wireless_Networking_Research, 'Wireless & Networking Research'],
-      'DEFAULT': [Views.Home, 'Home']
-    };
-
-    const selected = views[current[0]] ? views[current[0]] : views['DEFAULT'];
-    const animation = animate ? `animation: viewSlideIn 250ms 1 forwards;` : ``;
+    const styles = {router: `position:fixed; top:0; right:0; bottom:0; left:0; overflow:hidden; z-index:5;`};
+    const selected = flat[current[0]][0] ? flat[current[0]][0] : flat['DEFAULT'][0];
+    const animation = lastActionNav && !sameView ? `animation: viewSlideIn 250ms 1 forwards;` : ``;
     document.title = `${state.userState.infoState.name} | ${selected[1]}`;
-
-    return Unity.createElement('div', {style:styles.router}, [Components.View(store, selected[0], animation)]);
+    return Unity.createElement('div', {style:styles.router}, [Components.View(store, selected, animation)]);
   },
   Network: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -721,8 +401,8 @@ const Components = {
 
     const superscript = E('sup', {style:styles.super}, [viewState.current[1]]);
 
-    const header_menu = E('div', {style: styles.header_menu}, [
-      ['HOME', 'Home'], ['BLOG', 'Blog'], ['CONTACT_ME', 'Contact Me'], ['PERSONAL_PROFILE', 'Profile'], ['ALL_RESEARCH', 'Research']
+    const header_menu = E('div', {style:styles.header_menu}, [
+      ['HOME', 'Home'], ['BLOG', 'Blog'], ['CONTACT_ME', 'Contact Me'], ['ABOUT_ME', 'About Me'], ['ALL_RESEARCH', 'Research']
     ].map((view, i, arr) => {
       const btn = E('h2', {style: i == arr.length-1 ? styles.header_qt : styles.header_btn}, [view[1]]);
       btn.addEventListener('click', () => {
@@ -731,12 +411,12 @@ const Components = {
       return btn;
     }));
 
-    const menu_btn = E('img', {style: styles.menu_btn, src: menu_img, alt: 'Menu Button Icon'}, []);
+    const menu_btn = E('img', {style:styles.menu_btn, src: menu_img, alt: 'Menu Button Icon'}, []);
     menu_btn.addEventListener('click', function(event) { dispatch({type: 'TOGGLE_MENU'}); });
 
     return E('div', {style:styles.header}, [
-      E('div', {style: styles.header_left}, [ header_icon, superscript ]),
-      E('div', {style: styles.header_right}, windowState.mode == 'desktop' ? [header_menu, menu_btn] : [menu_btn]),
+      E('div', {style:styles.header_left}, [ header_icon, superscript ]),
+      E('div', {style:styles.header_right}, windowState.mode == 'desktop' ? [header_menu, menu_btn] : [menu_btn]),
     ]);
   },
   Menu: function(store) {
@@ -776,28 +456,31 @@ const Components = {
         ['HOME', 'Home'],
         ['BLOG', 'Blog'],
         ['CONTACT_ME', 'Contact Me'],
-        ['PERSONAL_PROFILE', 'Profile'],
+        ['ABOUT_ME', 'About Me'],
         ['ALL_RESEARCH', 'All Research', [
-          ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research'], ['EMBEDDED_RESEARCH', 'Embedded Research'], ['WIRELESS_NETWORKING_RESEARCH', 'Wireless & Networking Research']
+          ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research'],
+          ['WIRELESS_EMBEDDED_RESEARCH', 'Embedded Research'],
+          ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research'],
+          ['USER_INTERFACE_RESEARCH', 'User Interface Research']
         ]]
       ]
     };
 
-    const copy = E('div', {style: styles.copy}, [
-      E('img', {src: icons.sm.usa, alt: `USA Icon `, style: styles.usa}, ['United States']),
-      E('p', {style: styles.usa}, ['United States']),
-      E('p', {style: styles.copy_txt}, ['Copyright © 2020 chivington.io']),
+    const copy = E('div', {style:styles.copy}, [
+      E('img', {src: icons.sm.usa, alt: `USA Icon `, style:styles.usa}, ['United States']),
+      E('p', {style:styles.usa}, ['United States']),
+      E('p', {style:styles.copy_txt}, ['Copyright © 2020 chivington.io']),
     ]);
 
-    const toggle_theme = E('div', {style: styles.toggle_theme}, [
-      E('h4', {style: styles.toggle_theme_txt}, [`Toggle dark mode`]),
-      E('div', {style: styles.toggle_theme_btn}, [ E('div', {style: styles.toggle_theme_btn_slider}, []) ])
+    const toggle_theme = E('div', {style:styles.toggle_theme}, [
+      E('h4', {style:styles.toggle_theme_txt}, [`Toggle dark mode`]),
+      E('div', {style:styles.toggle_theme_btn}, [ E('div', {style:styles.toggle_theme_btn_slider}, []) ])
     ]);
     toggle_theme.lastChild.addEventListener('click', () => dispatch({type: 'TOGGLE_THEME', payload: store.getState().uiState.menuState.scrollTop}));
 
     const submenu = Components.Submenu(store, submenu_config);
 
-    const Menu = Unity.createElement('div', {style: styles.menu}, [submenu, toggle_theme, copy]);
+    const Menu = Unity.createElement('div', {style:styles.menu}, [submenu, toggle_theme, copy]);
     setTimeout(event => Menu.scrollTo({top: menuState.scrollTop, left: 0, behavior: 'auto'}), 50);
 
     let scroll_ctr = 0;
@@ -860,15 +543,15 @@ const Components = {
             event.target.style.cssText = `${styles.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform: rotate(-90deg);` : `transform: rotate(-180deg);`}`;
           });
 
-          return E('div', {style: styles.subnemu_wrapper}, [
-            E('div', {style: styles.parent_row}, [b, dropdown]),
+          return E('div', {style:styles.subnemu_wrapper}, [
+            E('div', {style:styles.parent_row}, [b, dropdown]),
             E('div', {style: `${styles.submenu} ${submenu_style}`}, create_submenu(btn[2], true))
           ]);
         } else return b;
       })
     };
 
-    return E('div', {style: styles.container}, create_submenu(submenu_config, false));
+    return E('div', {style:styles.container}, create_submenu(submenu_config, false));
   },
   View: function(store, view, animation) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -900,7 +583,7 @@ const Components = {
 
     return View;
   },
-  Product: function(store, product_config) {
+  Project: function(store, product_config) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { mode } = state.uiState.windowState;
     const lg_device = ((mode == 'desktop') || (mode == 'large_tab')) ? true : false;
@@ -925,18 +608,18 @@ const Components = {
       description_txt: `margin: 0.25em; padding: 0; text-align: ${lg_device?'left':'center'}; color: ${theme.view_txt};`
     };
 
-    const title = E('h1', {style: styles.title}, [product_config.title]);
+    const title = E('h1', {style:styles.title}, [product_config.title]);
 
-    const subtitle = E('p', {style: styles.subtitle}, [product_config.subtitle]);
+    const subtitle = E('p', {style:styles.subtitle}, [product_config.subtitle]);
 
-    const description = E('div', {style: styles.description}, [
-      E('img', {style: styles.description_img, src: product_config.img, alt: `${product_config.title} Image`}, []),
-      E('div', {style: styles.description_txt_wrapper}, product_config.description.map((sentence, i) =>
-        E('p', {style: styles.description_txt}, [`${i > product_config.idx ? '• ' : ''}${sentence}`])
+    const description = E('div', {style:styles.description}, [
+      E('img', {style:styles.description_img, src: product_config.img, alt: `${product_config.title} Image`}, []),
+      E('div', {style:styles.description_txt_wrapper}, product_config.description.map((sentence, i) =>
+        E('p', {style:styles.description_txt}, [`${i > product_config.idx ? '• ' : ''}${sentence}`])
       ))
     ]);
 
-    return E('div', {style: styles.product}, [ title, subtitle, description ])
+    return E('div', {style:styles.product}, [ title, subtitle, description ])
   },
   Tiles: function(store, tile_config) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -948,30 +631,30 @@ const Components = {
     const styles = {
       tiles_component: `
         display: flex; flex-direction: column; justify-content: space-around; align-items: stretch;
-        margin: ${lg_device?'2':'1'}em; padding: 0.5em; background-color: ${theme.well};
+        margin: ${lg_device?2:1}em; padding: 0.5em; background-color: ${theme.well};
       `,
       title: `margin: 0 0.5em; padding: 0.5em; border-bottom: 1pt solid ${theme.view_bdr}; font-size: 1.5em; text-align: center; color: ${theme.view_txt};`,
       subtitle: `margin: 0.75em; padding: 0; font-size: 1.15em; text-align: center; color: ${theme.view_txt};`,
       tiles: `
-        display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: flex-start; align-items: stretch; padding: ${lg_device?'1.5':'0.5'}em;
-        margin: ${lg_device?'1em 2':'0.5'}em; background-color: ${theme.panel}; ${lg_device?'overflow-x: scroll;':''} border: solid ${theme.footer_bdr}; border-width: 1pt 0;
+        display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: flex-start; align-items: stretch; padding: ${lg_device?1.5:0.5}em;
+        margin: ${lg_device?'0.5em 1.5':'0.5'}em; background-color: ${theme.panel}; ${lg_device?'overflow-x: scroll;':''} border: solid ${theme.footer_bdr}; border-width: 1pt 0;
       `,
       tile: `
-        display: flex; flex-direction: column; justify-content: space-around; align-items: stretch; padding: ${lg_device?'1.5':'1'}em;
-        margin: ${lg_device?'1.5':'0.5'}em; background-color: ${theme.panel};
+        display: flex; flex-direction: column; justify-content: space-around; align-items: stretch; padding: ${lg_device?1:0.5}em;
+        margin: ${lg_device?1:0.5}em; background-color: ${theme.panel};
         border: 1pt solid ${theme.view_bdr}; border-radius: 5pt; cursor: pointer;
       `,
-      tile_img: `margin: ${lg_device?`0.5`:`0.25`}em auto; ${lg_device?'height:125pt':`max-width:80%`}; border: 1pt solid ${theme.view_bdr};`,
-      tile_title: `margin: 1em auto 0.5em; color: ${theme.menu_txt}; font-size: ${lg_device?`1.25`:`1`}em; font-weight: 500; text-align: center; color: ${theme.view_txt};`
+      tile_img: `margin: ${lg_device?0.5:0.25}em auto; ${lg_device?'height:125pt':`max-width:80%`}; border: 1pt solid ${theme.view_bdr};`,
+      tile_title: `margin: 0.75em auto 0.5em; color: ${theme.menu_txt}; font-size: ${lg_device?1.25:1}em; font-weight: 500; text-align: center; color: ${theme.view_txt};`
     };
 
-    const title = E('h1', {style: styles.title}, [tile_config.title]);
+    const title = E('h1', {style:styles.title}, [tile_config.title]);
 
-    const subtitle = E('h2', {style: styles.subtitle}, [tile_config.subtitle]);
+    const subtitle = E('h2', {style:styles.subtitle}, [tile_config.subtitle]);
 
-    const tiles = E('div', {style: styles.tiles}, tile_config.tiles.map((tile,i) => {
-      const t = E('div', {style: styles.tile}, [
-        E('img', {style: styles.tile_img, src: tile[2], alt: `${tile[1]} Thumbnail`}, []), E('h3', {style: styles.tile_title}, [tile[1]])
+    const tiles = E('div', {style:styles.tiles}, tile_config.tiles.map((tile,i) => {
+      const t = E('div', {style:styles.tile}, [
+        E('img', {style:styles.tile_img, src: tile[2], alt: `${tile[1]} Thumbnail`}, []), E('h3', {style:styles.tile_title}, [tile[1]])
       ]);
       t.addEventListener('click', () => dispatch({type: 'NAV_TO', payload: [tile[0], tile[1]]}));
       return t;
@@ -987,7 +670,7 @@ const Components = {
       }
     }, 250);
 
-    return E('div', {style: styles.tiles_component}, [ title, subtitle, tiles ]);
+    return E('div', {style:styles.tiles_component}, [ title, subtitle, tiles ]);
   },
   Footer: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -1019,7 +702,7 @@ const Components = {
       copy_txt: `font-size: 1em; color: ${theme.footer_txt};`
     };
 
-    const msg = E('div', {style: styles.msg}, [`
+    const msg = E('div', {style:styles.msg}, [`
       Makers of durable and reliable products for the aerosol can and commercial candy making industries. Our EVAC systems
       include aerosol can crusher machines and aerosol can disposal systems for recycling. Our innovative candy making
       equipment for production of candy sticks and canes and the sizing and cane forming of hard candy, taffy and caramel.
@@ -1029,25 +712,25 @@ const Components = {
       orientation: `LANDSCAPE`,
       btns: [
         ['HOME', 'Home', [
-          ['BLOG', 'Blog'], ['CONTACT_ME', 'Contact Me'], ['PERSONAL_PROFILE', 'Profile']
+          ['BLOG', 'Blog'], ['CONTACT_ME', 'Contact Me'], ['ABOUT_ME', 'About Me']
         ]],
         ['ALL_RESEARCH', 'All Research', [
-          ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research'], ['EMBEDDED_RESEARCH', 'Embedded Research'], ['WIRELESS_NETWORKING_RESEARCH', 'Wireless & Networking Research']
+          ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research'], ['WIRELESS_EMBEDDED_RESEARCH', 'Embedded Research'], ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research']
         ]]
       ]
     };
 
-    const submenus = E('div', {style: styles.submenus}, [ Components.Submenu(store, submenu_config) ]);
+    const submenus = E('div', {style:styles.submenus}, [ Components.Submenu(store, submenu_config) ]);
 
-    const copy = E('div', {style: styles.copy}, [
-      E('div', {style: styles.copy_left}, [ E('p', {style: styles.copy_txt}, ['Copyright © 2020 chivington.io']) ]),
-      E('div', {style: styles.copy_right}, [
-        E('p', {style: styles.usa}, ['Site designed & built by Johnathan Chivington']),
-        E('img', {src: icons.sm.usa, alt: `USA Icon `, style: styles.usa}, ['United States'])
+    const copy = E('div', {style:styles.copy}, [
+      E('div', {style:styles.copy_left}, [ E('p', {style:styles.copy_txt}, ['Copyright © 2020 chivington.io']) ]),
+      E('div', {style:styles.copy_right}, [
+        E('p', {style:styles.usa}, ['Site designed & built by Johnathan Chivington']),
+        E('img', {src: icons.sm.usa, alt: `USA Icon `, style:styles.usa}, ['United States'])
       ])
     ]);
 
-    return E('div', {style: styles.footer}, [submenus, copy]);
+    return E('div', {style:styles.footer}, [submenus, copy]);
   },
   App: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -1088,24 +771,21 @@ const Views = {
     const E = Unity.createElement;
 
     const styles = {
-      home: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; padding: 0; width: 100%; text-align: center;
-         ${landing?'animation: app_fade_in 900ms ease-in-out 1 forwards;':''}
-      `,
-      intro: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin: ${lg_device?'10em 1em 3':'7em 1em 2'}em;`,
-      name: `margin: ${lg_device?`0.1`:`0.05`}em 0; color: #fff; font-size: ${lg_device?`5`:`4`}em; font-weight: 500;`,
-      title: `margin: ${lg_device?`0.1`:`0.05`}em; color: #fff; font-size: ${lg_device?`2.5`:`1.5`}em; font-weight: 500;`,
-      actions: `display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: center; align-items: ${lg_device?'center':'stretch'}; margin: 0 auto; padding: 0; ${lg_device?'':'width: 90%;'}`,
-      action_btn: `margin: 0.5em ${lg_device?'':'auto'}; padding: 0.5em 1em; width: ${lg_device?'15em':'60%'}; border: 1pt solid #aaa; cursor: pointer;`,
-      bio: `margin: ${lg_device?'2':'1'}em; padding: 1.5em ${lg_device?'0.5':'2.5'}em; border: 1px solid ${theme.view_bdr}; border-radius: 5px; background-color: ${theme.well};`,
-      sentence: `color: ${theme.view_txt}; font-size: ${lg_device?'1.25':'1'}em; font-weight: 900; margin: 0.5em;`
+      home: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; width:100%; text-align:center; ${landing?'animation: app_fade_in 900ms ease-in-out 1 forwards;':''}`,
+      intro: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${lg_device?'10em 1em 3':'7em 1em 2'}em;`,
+      name: `margin:${lg_device?0.1:0.05}em 0; color:#fff; font-size:${lg_device?5:4}em; font-weight:500;`,
+      title: `margin:${lg_device?0.1:0.05}em; color:#fff; font-size:${lg_device?2.5:1.5}em; font-weight:500;`,
+      actions: `display:flex; flex-direction:${lg_device?'row':'column'}; justify-content:center; align-items:${lg_device?'center':'stretch'}; margin:0 auto; padding:0; width:${lg_device?80:90}%;`,
+      action_btn: `margin:0.5em ${lg_device?'':'auto'}; padding:0.5em 1em; width:${lg_device?50:80}%; border:1pt solid #aaa; cursor:pointer;`,
+      bio: `margin:${lg_device?'2':'1'}em; padding:${lg_device?`1`:`0.5`}em; border:1px solid ${theme.view_bdr}; border-radius:5px; background-color:${theme.well};`,
+      sentence: `color:${theme.view_txt}; font-size:${lg_device?1.25:1}em; font-weight:900; margin:0.5em;`
     };
 
-    const intro = E('div', {style: styles.intro}, [
-      E('h1', {style: styles.name}, [ name ]), E('h2', {style: styles.title}, [ `${major} Student at ${school}` ])
+    const intro = E('div', {style:styles.intro}, [
+      E('h1', {style:styles.name}, [name]), E('h2', {style:styles.title}, [`${title} & ${major} Student at ${school}`])
     ]);
 
-    const actions = E('div', {style: styles.actions}, [
+    const actions = E('div', {style:styles.actions}, [
       ['CONTACT_ME', 'Contact Me'], ['ALL_RESEARCH', 'View My Research']
     ].map((action_btn,i,arr) => {
       const b = E('h2', {style: `${styles.action_btn} background-color: ${i==0?theme.btn_lt:theme.btn_lt};`}, [action_btn[1]]);
@@ -1113,15 +793,16 @@ const Views = {
       return b;
     }));
 
-    const work_bio = E('div', {style: styles.bio}, bio.work.map(s => E('p', {style: styles.sentence}, [s])));
+    const work_bio = E('div', {style:styles.bio}, bio.work.map(s => E('p', {style:styles.sentence}, [s])));
 
     const tile_config = {
       title: `Research Areas`,
-      subtitle: ``,
+      subtitle: `These are a few of the areas I try to stay most active in as I pursue my education. I'm always very interested in collaborations so please feel free to reach out.`,
       tiles: [
         ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research', thumbs.ai],
-        ['EMBEDDED_RESEARCH', 'Embedded Controls Systems Research', thumbs.mcu],
-        ['WIRELESS_NETWORKING_RESEARCH', 'Wireless & Networking Research', thumbs.iot]
+        ['WIRELESS_EMBEDDED_RESEARCH', 'Wireless Embedded Controls Systems Research', thumbs.mcu],
+        ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research', thumbs.iot],
+        ['USER_INTERFACE_RESEARCH', 'User Interface Research', thumbs.ui]
       ]
     };
 
@@ -1188,9 +869,9 @@ const Views = {
     }];
 
     return E('div', {style:styles.blogView}, [
-      E('h1', {style: styles.viewTitle}, ['Johnathan Chivington Blog']),
+      E('h1', {style:styles.viewTitle}, ['Johnathan Chivington Blog']),
       ...posts.map(post => E('div', {style:styles.blogPost}, [
-        E('img', {style: styles.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
+        E('img', {style:styles.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
         E('div', {style:styles.blogBody}, post.body.map(p => E('p', {style:styles.paragraph}, [p]))),
         E('div', {style:styles.blogTags}, post.tags.map(t => E('span', {style:styles.tag}, [t])))
       ]))
@@ -1200,6 +881,7 @@ const Views = {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { wp, thumbs } = Assets.imgs;
     const { infoState } = state.userState;
+    const { emails, phones, locations } = infoState;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.createElement;
     const { mode } = state.uiState.windowState;
@@ -1208,32 +890,28 @@ const Views = {
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`,
       contact: `margin: ${lg_device?'7em 2em 5':'5em 1em 3'}em; padding: 1em; background-color: ${theme.well}; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;`,
-      title: `margin: 0 1em 1em; padding: 0.75em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.view_txt};`,
+      title: `margin: 0 1em; padding: 0.75em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.view_txt};`,
       intro: `margin: 0; padding: 0; text-align: center; color: ${theme.view_txt};`,
-      sections: `margin: 1em; padding: 0; display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: space-around; align-items: center;`,
-      section: `margin: 0.5em; padding: 0; text-align: center;`,
-      section_title: `margin: 0; padding: 0; font-weight: bold; font-size: 1.1em; color: ${theme.view_txt};`,
+      section: `margin:  ${lg_device?'1':'0.25'}em; padding: 0; display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: space-around; align-items: center;`,
+      section_col: `flex: 1; margin: ${lg_device?'0.5':'0.25'}em; padding: 0; text-align: center;`,
+      section_title: `margin: 0; padding: 0; font-weight: bold; font-size: 1em; color: ${theme.view_txt};`,
       section_txt: `margin: 0; padding: 0; color: ${theme.view_txt};`,
       map: `border: 1px solid ${theme.footer}; margin: 1em auto; width: 95%; height: 250pt;`
     };
 
-    const title = E('h1', {style: styles.title}, ['Contact Me']);
+    const title = E('h1', {style:styles.title}, ['Stay In Touch']);
 
-    const addresses = E('div', {style: styles.sections}, infoState.locations.map(section => E('div', {style: styles.section}, [
-      E('h2', {style: styles.section_title}, [section[0]]), E('p', {style: styles.section_txt}, [section[1]])
+    const section = (info, name) => E('div', {style:styles.section}, Object.keys(info).map(key => E('div', {style:styles.section_col}, [
+      E('h2', {style:styles.section_title}, [`${key[0].toUpperCase()}${key.slice(1)} ${name}`]), E('p', {style:styles.section_txt}, [info[key].length==2?info[key][0]:info[key]])
     ])));
 
-    const phones = E('div', {style: styles.sections}, infoState.phones.map(section => E('div', {style: styles.section}, [
-      E('h2', {style: styles.section_title}, [section[0]]), E('p', {style: styles.section_txt}, [section[1]])
-    ])));
+    const map = E('iframe', { frameborder: '0', style:styles.map, allowfullscreen: '', src: locations.work[1] }, []);
 
-    const map = E('iframe', { frameborder: '0', style: styles.map, allowfullscreen: '', src: infoState.locations[1][2] }, []);
-
-    return E('div', {style: styles.view}, [
-      E('div', {style: styles.contact}, [title, addresses, phones, map])
+    return E('div', {style:styles.view}, [
+      E('div', {style:styles.contact}, [title, section(phones, 'Number'), section(emails, 'Email'), section(locations, 'Address'), map])
     ]);
   },
-  Profile: function(store) {
+  About: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { wp, thumbs } = Assets.imgs;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
@@ -1244,8 +922,8 @@ const Views = {
 
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`,
-      profile: `margin: ${lg_device?'7em 2em 5':'5em 1em 3'}em; padding: 1em; background-color: ${theme.well};`,
-      title: `margin: 0; padding: 0.25em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.view_txt};`,
+      about: `margin: ${lg_device?'1em 2em':'0.5em 1em'} 3em; padding: ${lg_device?1:0.25}em; background-color: ${theme.well};`,
+      title: `margin: ${lg_device?3:2.5}em auto 0.25em; padding: ${lg_device?0.25:0.15}em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.view_txt};`,
       intro: `margin: 0.5em; padding: 0; text-align: center; color: ${theme.view_txt};`,
       bio: `margin: 1em 0 0; padding: 0;`,
       section: `margin: 1.5em 1em 1em; padding: 0;`,
@@ -1254,17 +932,18 @@ const Views = {
       sentence: `margin: 0.25em; color: ${theme.view_txt};`
     };
 
-    const title = E('h1', {style: styles.title}, ['Personal Profile']);
+    const title = E('h1', {style:styles.title}, ['About Me']);
 
-    const intro = E('p', {style: styles.intro}, [`intro`]);
+    const intro = E('p', {style:styles.intro}, [`intro`]);
 
-    const full_bio = E('div', {style: styles.bio}, Object.keys(bio).map(section => E('div', {style: styles.section}, [
-      E('h2', {style: styles.section_title}, [section.toUpperCase()]),
-      ...bio[section].map((sentence, i) => E('span', {style: `${styles.sentence} ${i==0?'margin-left:3em;':''}`}, [sentence]))
+    const full_bio = E('div', {style:styles.bio}, Object.keys(bio).map(section => E('div', {style:styles.section}, [
+      E('h2', {style:styles.section_title}, [`${section.toUpperCase()} HISTORY`]),
+      ...bio[section].map((sentence, i) => E('span', {style: `${styles.sentence} ${i==0?'margin-left:1em;':''}`}, [sentence]))
     ])));
 
-    return E('div', {style: styles.view}, [
-      E('div', {style: styles.profile}, [title, full_bio])
+    return E('div', {style:styles.view}, [
+      title,
+      E('div', {style:styles.about}, [full_bio])
     ]);
   },
   All_Research: function(store) {
@@ -1279,12 +958,13 @@ const Views = {
       subtitle: `Choose an area to see specific projects.`,
       tiles: [
         ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research', thumbs.ai],
-        ['EMBEDDED_RESEARCH', 'Embedded Controls Systems Research', thumbs.mcu],
-        ['WIRELESS_NETWORKING_RESEARCH', 'Wireless & Networking Research', thumbs.iot]
+        ['WIRELESS_EMBEDDED_RESEARCH', 'Wireless Embedded Controls Systems Research', thumbs.iot],
+        ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research', thumbs.mcu],
+        ['USER_INTERFACE_RESEARCH', 'User Interface Research', thumbs.ui],
       ]
     };
 
-    return Unity.createElement('div', {style: styles.view}, [ Components.Tiles(store, tile_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [ Components.Tiles(store, tile_config) ]);
   },
   Artificial_Intelligence_Research: function(store) {
     const styles = {
@@ -1304,7 +984,7 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style: styles.view}, [ Components.Product(store, product_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
   },
   Embedded_Research: function(store) {
 
@@ -1324,7 +1004,7 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style: styles.view}, [ Components.Product(store, product_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
   },
   Wireless_Networking_Research: function(store) {
 
@@ -1333,7 +1013,7 @@ const Views = {
     };
 
     const product_config = {
-      title: `Wireless & Networking Research`,
+      title: `Computer Architecture Research`,
       subtitle: `Low power, long range, control & monitoring systems.`,
       img: Assets.imgs.thumbs.iot,
       description: [
@@ -1344,7 +1024,406 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style: styles.view}, [ Components.Product(store, product_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
+  },
+  User_Interface_Research: function(store) {
+
+    const styles = {
+      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
+    };
+
+    const product_config = {
+      title: `User Interface Research`,
+      subtitle: `Modular, portable, complex user interface frameworks for local or remote controls systems.`,
+      img: Assets.imgs.thumbs.ui,
+      description: [
+        `My current interface research invloves creating highly complex user interfaces that:`,
+        `Are hardware & software agnostic.`,
+        `Can be ported to any programming language.`,
+        `Can be replicated, scale and deployed rapidly.`
+      ],
+      idx: 0
+    };
+
+    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
+  }
+};
+
+/* ------------------------------- Asset Manifest --------------------------------- *
+ *                         Everything needed to cache app.                          *
+ * -------------------------------------------------------------------------------- */
+const Assets = {
+  css: {
+    fonts: {
+      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Book.otf',
+      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Light.otf',
+      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Roman.otf'
+    },
+    only_css_file: '/css/only.css'
+  },
+  imgs: {
+    icons: {
+      btns: {
+        close_wht: '/imgs/icons/btns/close-wht.svg',
+        close_blk: '/imgs/icons/btns/close-blk.svg',
+        scroll: '/imgs/icons/btns/scroll.svg',
+        menu_wht: '/imgs/icons/btns/menu-wht.svg',
+        menu_blk: '/imgs/icons/btns/menu-blk.svg',
+        caret_wht: '/imgs/icons/btns/caret-wht.svg',
+        caret_blk: '/imgs/icons/btns/caret-blk.svg'
+      },
+      manifest: {
+        android_192: '/imgs/icons/manifest/android-chrome-192x192.png',
+        android_512: '/imgs/icons/manifest/android-chrome-512x512.png',
+        apple_touch: '/imgs/icons/manifest/apple-touch-icon.png',
+        favicon_16: '/imgs/icons/manifest/favicon-16x16.png',
+        favicon_32: '/imgs/icons/manifest/favicon-32x32.png',
+        favicon: '/imgs/icons/manifest/favicon.ico',
+        favicon_wht: '/imgs/icons/manifest/favicon-wht.png',
+        mstile_150: '/imgs/icons/manifest/mstile-150x150.png',
+        safari_pinned_tab: '/imgs/icons/manifest/safari-pinned-tab.svg'
+      },
+      network: {
+        no_wifi_1: '/imgs/icons/network/no-wifi-1.svg',
+        no_wifi_2: '/imgs/icons/network/no-wifi-2.svg',
+        wifi: '/imgs/icons/network/wifi.svg'
+      },
+      sm: {
+        dl_blk: '/imgs/icons/sm/dl-blk.svg',
+        dl_wht: '/imgs/icons/sm/dl-wht.svg',
+        resume_blk: '/imgs/icons/sm/resume-blk.svg',
+        resume_wht: '/imgs/icons/sm/resume-wht.svg',
+        email_blk: '/imgs/icons/sm/email-blk.svg',
+        email_wht: '/imgs/icons/sm/email-wht.svg',
+        fb: '/imgs/icons/sm/fb.svg',
+        git_blk: '/imgs/icons/sm/git-blk.svg',
+        git_wht: '/imgs/icons/sm/git-wht.svg',
+        jc_pbc_blk: '/imgs/icons/sm/jc-pcb-blk.svg',
+        jc_pbc_wht: '/imgs/icons/manifest/mstile-150x150.png',
+        li_blk: '/imgs/icons/sm/li-blk.svg',
+        li_wht: '/imgs/icons/sm/li-wht.svg',
+        phone_blk: '/imgs/icons/sm/phone-blk.svg',
+        phone_wht: '/imgs/icons/sm/phone-wht.svg',
+        twt_blk: '/imgs/icons/sm/twt-blk.svg',
+        twt_wht: '/imgs/icons/sm/twt-wht.svg',
+        usa: '/imgs/icons/sm/united-states.svg',
+        web_blk: '/imgs/icons/sm/web-blk.svg',
+        web_wht: '/imgs/icons/sm/web-wht.svg'
+      }
+    },
+    me: {
+      loaf: '/imgs/me/loaf.jpg',
+      win_bed: '/imgs/me/win-bed.jpg',
+      win: '/imgs/me/win.jpg'
+    },
+    thumbs: {
+      pagespeed: '/imgs/thumbs/google-pagespeed.jpg',
+      hello: '/imgs/thumbs/hello.png',
+      ht_bridge: '/imgs/thumbs/ht-bridge.svg',
+      linear: '/imgs/thumbs/linear.jpg',
+      logistic: '/imgs/thumbs/logistic.jpg',
+      qualys: '/imgs/thumbs/qualys.png',
+      svm: '/imgs/thumbs/svm.jpg',
+      linear_gif: '/imgs/thumbs/linear_regression.gif',
+      iot: '/imgs/thumbs/iot.jpg',
+      mcu: '/imgs/thumbs/mcu.jpg',
+      ai: '/imgs/thumbs/ai.jpg',
+      ui: '/imgs/thumbs/ui.jpg'
+    },
+    wp: {
+      fragmented: '/imgs/wp/fragmented.jpg',
+      geo_sphere: '/imgs/wp/geo-sphere.jpg',
+      math: '/imgs/wp/math.jpg',
+      pnw: '/imgs/wp/pnw.jpg',
+      seattle: '/imgs/wp/seattle.jpg',
+      yolo: '/imgs/wp/yolo.jpg',
+      net: `
+        background-color: #000000; background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='769' cy='229' r='5'/%3E%3Ccircle cx='539' cy='269' r='5'/%3E%3Ccircle cx='603' cy='493' r='5'/%3E%3Ccircle cx='731' cy='737' r='5'/%3E%3Ccircle cx='520' cy='660' r='5'/%3E%3Ccircle cx='309' cy='538' r='5'/%3E%3Ccircle cx='295' cy='764' r='5'/%3E%3Ccircle cx='40' cy='599' r='5'/%3E%3Ccircle cx='102' cy='382' r='5'/%3E%3Ccircle cx='127' cy='80' r='5'/%3E%3Ccircle cx='370' cy='105' r='5'/%3E%3Ccircle cx='578' cy='42' r='5'/%3E%3Ccircle cx='237' cy='261' r='5'/%3E%3Ccircle cx='390' cy='382' r='5'/%3E%3C/g%3E%3C/svg%3E");
+      `,
+      scales: `
+        background-color: #b459ff; background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='100' y1='33' x2='100' y2='-3'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='100' y1='135' x2='100' y2='97'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23994cd9' fill-opacity='0.6'%3E%3Crect x='100' width='100' height='100'/%3E%3Crect y='100' width='100' height='100'/%3E%3C/g%3E%3Cg fill-opacity='0.5'%3E%3Cpolygon fill='url(%23a)' points='100 30 0 0 200 0'/%3E%3Cpolygon fill='url(%23b)' points='100 100 0 130 0 100 200 100 200 130'/%3E%3C/g%3E%3C/svg%3E");
+      `,
+      tiled: `
+        background-color: #ffffff; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50' height='25' viewBox='0 0 50 25'%3E%3Cdefs%3E%3Crect stroke='%23ffffff' stroke-width='0.1' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='2' height='2' patternUnits='userSpaceOnUse'%3E%3Cg stroke='%23ffffff' stroke-width='0.1'%3E%3Crect fill='%23fafafa' width='1' height='1'/%3E%3Crect fill='%23ffffff' width='1' height='1' x='1' y='1'/%3E%3Crect fill='%23f5f5f5' width='1' height='1' y='1'/%3E%3Crect fill='%23f0f0f0' width='1' height='1' x='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='b' width='5' height='11' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ebebeb'%3E%3Cuse xlink:href='%23s' x='2' y='0'/%3E%3Cuse xlink:href='%23s' x='4' y='1'/%3E%3Cuse xlink:href='%23s' x='1' y='2'/%3E%3Cuse xlink:href='%23s' x='2' y='4'/%3E%3Cuse xlink:href='%23s' x='4' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='8'/%3E%3Cuse xlink:href='%23s' x='3' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='7' height='7' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23e5e5e5'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='3' y='4'/%3E%3Cuse xlink:href='%23s' x='5' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='11' height='5' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ffffff'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='6' y='3'/%3E%3Cuse xlink:href='%23s' x='8' y='2'/%3E%3Cuse xlink:href='%23s' x='3' y='0'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3Cg fill='%23e0e0e0'%3E%3Cuse xlink:href='%23s' x='8' y='3'/%3E%3Cuse xlink:href='%23s' x='4' y='2'/%3E%3Cuse xlink:href='%23s' x='5' y='4'/%3E%3Cuse xlink:href='%23s' x='10' y='0'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='23' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='2' y='5'/%3E%3Cuse xlink:href='%23s' x='23' y='13'/%3E%3Cuse xlink:href='%23s' x='4' y='18'/%3E%3Cuse xlink:href='%23s' x='35' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='61' height='31' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='16' y='0'/%3E%3Cuse xlink:href='%23s' x='13' y='22'/%3E%3Cuse xlink:href='%23s' x='44' y='15'/%3E%3Cuse xlink:href='%23s' x='12' y='11'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='50' height='25'/%3E%3Crect fill='url(%23b)' width='50' height='25'/%3E%3Crect fill='url(%23c)' width='50' height='25'/%3E%3Crect fill='url(%23d)' width='50' height='25'/%3E%3Crect fill='url(%23e)' width='50' height='25'/%3E%3Crect fill='url(%23f)' width='50' height='25'/%3E%3C/svg%3E");background-attachment: fixed;background-size: cover;
+      `
+    }
+  },
+  js: {
+    app: '/js/app.js'
+  },
+  browserconfig: '/browserconfig.xml',
+  favicon: '/favicon.ico',
+  index: '/index.html',
+  license: '/LICENSE',
+  webmanifest: '/site.webmanifest'
+};
+
+/* ---------------------------------- Blueprint ----------------------------------- *
+ *                            Specifies inital app state.                           *
+ * -------------------------------------------------------------------------------- */
+const Blueprint = {
+  app: {
+    about: {
+      '@@ACTIONS': {}
+    },
+    history: {
+      '@@ACTIONS': {
+        'NAV_TO': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type],
+          views: s.views.length == 5 ? [...s.views.slice(1), a.payload] : [...s.views, a.payload]
+        }),
+        'NET_STATE_CHANGE': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'NET_STATE_INIT': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'BATTERY_STATE_CHANGE': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'BATTERY_STATE_INIT': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'CHANGE_HEADER_ICON': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'CHANGE_HEADER_TITLE': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'OPEN_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'CLOSE_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'CHANGE_THEME': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'OPEN_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_ALL_RESEARCH_SUBMENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_COMPUTER_ARCHITECTURE_SUBMENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_HOME_FOOTER_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_ALL_RESEARCH_FOOTER_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'TOGGLE_COMPUTER_ARCHITECTURE_FOOTER_MENU': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        }),
+        'RESIZE': (s,a) => ({
+          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
+        })
+      },
+      actions: ['@@INIT'],
+      views: ['@@INIT']
+    },
+    reports: [
+      {org: 'Qualys SSL Labs', score: 'A+', img: Assets.imgs.thumbs.qualys, link: 'https://www.ssllabs.com/ssltest/analyze.html?d=chivington.io'},
+      {org: 'ImmuniWeb SSLScan', score: 'A+', img: Assets.imgs.thumbs.ht_bridge, link: 'https://www.htbridge.com/ssl/?id=uAXLxfew'},
+      {org: 'Google PageSpeed', score: '100%', img: Assets.imgs.thumbs.pagespeed, link: 'https://developers.google.com/speed/pagespeed/insights/?url=chivington.io'}
+    ],
+    security: [
+      'https/http2', 'hsts', 'TLSv1.2', 'CAA Compliant', 'POODLE', 'CVE-2016-2017', 'Insecure Renegotiation', 'ROBOT', 'HEARTBLEED', 'CVE-2014-0224'
+    ],
+    features: [
+      'Unity/Unity-Style Architecture', 'Responsive Design', 'Offline Capable', 'Network Detection', 'Customizable Themes'
+    ]
+  },
+  device: {
+    network: {
+      '@@ACTIONS': {
+        'NET_STATE_CHANGE': (s,a) => a.payload,
+        'NET_STATE_INIT': (s,a) => a.payload
+      },
+      downlink: navigator.connection ? navigator.connection.downlink : 10,
+      effectiveType: navigator.connection ? navigator.connection.effectiveType : 'Connecting...',
+      previousType: '@@INIT'
+    },
+    battery: 100
+  },
+  user: {
+    name: 'Johnathan Chivington',
+    employer: `University of Washington`,
+    title: `Fiscal Analyst`,
+    school: `University of Washington`,
+    major: `Physics`,
+    phones: {
+      mobile: '303-900-2861',
+      work: '206-897-1407'
+    },
+    emails: {
+      personal: 'j.chivington@outlook.com',
+      work: 'johnchiv@uw.edu'
+    },
+    web: {
+      linkedin: 'https://linkedin.com/in/johnathan-chivington',
+      github: 'https://github.com/chivington',
+      twitter: 'https://twitter.com/jt_chivington',
+      facebook: 'https://facebook.com/jt.chivington'
+    },
+    locations: {
+      home: ['16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus'],
+      work: ['185 E Stevens Way NE, Seattle, WA 98195', 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2687.591733504735!2d-122.3053456!3d47.6535!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x549014ed3251f07f%3A0x12de8b2d1ad8504a!2sPaul%20G.%20Allen%20Center%20for%20Computer%20Science%20%26%20Engineering!5e0!3m2!1sen!2sus!4v1585208912448!5m2!1sen!2sus']
+    },
+    bio: {
+      work: [
+        `I'm currently a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering.`,
+        `My work history has been primarily in sales and business development and I transitioned into finance in 2018 while working at ABC Legal Services, a legal process service & e-filing automation company headquartered in Seattle.`,
+        `I have a Computer Science background mostly focused in Machine Learning & Artificial Intelligence, Computer Architecture, Wireless Embedded Controls, Networking and UI/UX design.`,
+        `I'm interested in pursuing MEMS/NEMS research, quantum optics, quantum computation and other research that intersects with my CS background so I'm pursuing an undergraduate Physics degree at UW as well.`
+      ],
+      education: [
+        `This quarter I'm auditing CSE 546 "Machine Learning" at the University of Washington.`,
+        `One amazing benefit of working at UW is their employee tuition exemption program which covers 6 credits per quarter.`,
+        `This was a primary motivation for me seeking employment with UW and I'm using it to continue taking my preliminary math & physics courses at UW, starting this summer.`
+      ],
+      personal: [
+        `In my spare time I work on various research projects, study and care for my microscopic "pets" and spend time with my amazing girlfriend.`,
+        `I'm currently taking a Computer Architecture course that culminates in a fully working 16-bit computer built from first principles using only NAND gates.`,
+        `I'm also acquiring various microscopic "pets" like Tardigrades and Planaria to study and care for.`,
+        `When we're not terribly busy or quarantined by a global pandemic, my girlfriend and I also like to go hiking, kayaking, walking our dog, etc.`,
+        `Lately we've been focused on propogating exotic plants and building a greenhouse in our back yard so we have a personal jungle and can provide our own produce year-round.`,
+        `My "career" goals are also very personal to me though, so I tend to spend most of my spare time pursuing those.`
+      ]
+    }
+  },
+  ui: {
+    '@@ACTIONS': {},
+    map: {
+      flat: {
+        'HOME': [Views.Home, 'Home'],
+        'BLOG': [Views.Blog, 'Blog'],
+        'CONTACT_ME': [Views.Contact, 'Contact Me'],
+        'ABOUT_ME': [Views.About, 'About Me'],
+        'ALL_RESEARCH': [Views.All_Research, 'All Research'],
+        'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.Artificial_Intelligence_Research, 'Artificial Intelligence Research'],
+        'WIRELESS_EMBEDDED_RESEARCH': [Views.Embedded_Research, 'Embedded Research'],
+        'COMPUTER_ARCHITECTURE': [Views.Wireless_Networking_Research, 'Computer Architecture Research'],
+        'USER_INTERFACE_RESEARCH': [Views.User_Interface_Research, 'User Interface Research'],
+        'DEFAULT': [Views.Home, 'Home']
+      },
+      tree: [
+        'HOME','BLOG','CONTACT_ME','ABOUT_ME',
+        ['ALL_RESEARCH','ARTIFICIAL_INTELLIGENCE_RESEARCH','WIRELESS_EMBEDDED_RESEARCH','COMPUTER_ARCHITECTURE','USER_INTERFACE_RESEARCH']
+      ]
+    },
+    theme: {
+      selected: 'dark',
+      dark: {
+        header: `rgba(21,32,43,1)`,
+        header_txt: `rgba(255,255,255,1)`,
+        header_bdr: `rgba(70,122,194,0.7)`,
+        menu: `rgba(21,32,43,0.9)`,
+        menu_bdr: `rgba(70,122,194,0.9)`,
+        menu_btn: `rgba(21,32,43,0.9)`,
+        menu_sub: `rgba(70,87,117,0.5)`,
+        menu_txt: `rgba(255,255,255,1)`,
+        view: `rgba(70,77,97,0.9)`,
+        view_bdr: `rgba(70,122,194,0.9)`,
+        view_txt: `rgba(255,255,255,1)`,
+        well: `rgba(70,87,117,0.9)`,
+        panel_lt: `rgba(35,43,59,0.5)`,
+        panel: `rgba(35,43,59,0.7)`,
+        panel_drk: `rgba(50,50,75,0.7)`,
+        btn: `rgba(53,92,146,1)`,
+        btn_lt: `rgba(70,122,194,1)`,
+        btn_bdr: `rgba(70,122,194,0.9)`,
+        footer: `rgba(21,32,43,0.9)`,
+        footer_bdr: `rgba(70,122,194,0.9)`,
+        footer_txt: `rgba(255,255,255,1)`,
+        success: '#4e4',
+        error: '#e44'
+      },
+      light: {
+        header: `rgba(255,255,255,1)`,
+        header_txt: `rgba(55,55,75,0.9)`,
+        header_bdr: `rgba(25,25,25,1)`,
+        menu: `rgba(112,140,188,0.5)`,
+        menu_bdr: `rgba(25,25,25,0.9)`,
+        menu_btn: `rgba(95,125,180,1)`,
+        menu_sub: `rgba(112,140,188,0.5)`,
+        menu_txt: `rgba(255,255,255,1)`,
+        view: `rgba(255,255,255,1)`,
+        view_bdr: `rgba(75,75,75,0.9)`,
+        view_txt: `rgba(55,55,75,0.9)`,
+        well: `rgba(255,255,255,1)`,
+        panel_lt: `rgba(112,140,200,0.3)`,
+        panel: `rgba(112,140,188,0.5)`,
+        panel_drk: `rgba(50,50,75,0.7)`,
+        btn: `rgba(81,128,193,1)`,
+        btn_lt: `rgba(105,155,225,1)`,
+        btn_bdr: `rgba(25,25,25,0.9)`,
+        footer: `rgba(255,255,255,1)`,
+        footer_bdr: `rgba(25,25,25,0.9)`,
+        footer_btn: `rgba(70,87,117,0.4)`,
+        footer_txt: `rgba(55,55,75,0.9)`,
+        success: '#7e7',
+        error: '#e77'
+      },
+      wp: {
+        view: Assets.imgs.wp.pnw
+      }
+    },
+    window: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      mode: window.innerWidth < 600 ? 'mobile' : (
+        window.innerWidth < 750 ? 'small_tab' : (window.innerWidth < 900 ? 'large_tab' : 'desktop')
+      )
+    },
+    header: {
+      '@@ACTIONS': {
+        'CHANGE_HEADER_ICON': (s,a) => ({icon: a.payload.icon, title: s.title}),
+        'CHANGE_HEADER_TITLE': (s,a) => ({icon: s.icon, title: a.payload.title})
+      },
+      icon: Assets.imgs.icons.manifest.favicon,
+      alt: 'chivington.io Icon',
+      menu_btn: Assets.imgs.icons.btns.menu
+    },
+    menu: {
+      '@@ACTIONS': {
+        'UPDATE_MENU_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload}),
+        'NAV_TO': (s,a) => ({current: 'CLOSED', previous: s.current, scrollTop: 0}),
+        'TOGGLE_MENU': (s,a) => ({current: s.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: s.current, scrollTop: 0}),
+        'OPEN_MENU': (s,a) => ({current: 'OPEN', previous: s.current, scrollTop: 0}),
+        'CLOSE_MENU': (s,a) => ({current: 'CLOSED', previous: s.current, scrollTop: 0}),
+        'TOGGLE_THEME': (s,a) => ({current: 'OPEN', previous: s.current, scrollTop: a.payload})
+      },
+      current: 'CLOSED',
+      previous: 'CLOSED',
+      scrollTop: 0
+    },
+    view: {
+      '@@ACTIONS': {
+        'NAV_TO': (s,a) => ({current: a.payload, previous: s.current, scrollTop: 0}),
+        'UPDATE_VIEW_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload})
+      },
+      current: ['HOME', 'Home'],
+      previous: '@@INIT',
+      scrollTop: 0
+    }
   }
 };
 

@@ -1,7 +1,7 @@
 {
   "name": "chivington.io",
   "short_name": "chivington.io",
-  "description": "Personal blog, projects, etc. in a custom, single page web app, modeled after React & Redux.",
+  "description": "My personal blog, research portfolio, resume and more in the Unity UI application framework - a custom, native-app-like web application framework of my design.",
   "icons": [
         {
             "src": "/imgs/icons/manifest/android-chrome-192x192.png",
