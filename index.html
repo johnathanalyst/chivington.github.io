@@ -50,10 +50,6 @@
 
           <!-- FOOTER -->
           <div style="display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; padding: 1em; margin: 0; z-index: 75; background-color: rgba(255,255,255,1); border-top: 1pt solid rgba(25,25,25,0.9);">
-            <div style="display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: rgba(112,140,188,0.7); margin: 0.25em; padding: 2em; border: solid rgba(25,25,25,0.9); border-width: 1pt 0; font-size: 1.25em; font-weight: 700; text-align: center; color: rgba(255,255,255,1); background: linear-gradient(rgba(112,140,188,0.7), rgba(112,140,188,0.7)), url('/imgs/beacon/blueprints/batch-roller.gif'); background-position: center; background-size: cover; background-repeat: no-repeat;">
-              Makers of durable and reliable products for the aerosol can and commercial candy making industries. Our EVAC systems include aerosol can crusher machines and aerosol can disposal systems for recycling. Our innovative candy making equipment for production of candy sticks and canes and the sizing and cane forming of hard candy, taffy and caramel.
-            </div>
-
             <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-top: 1px solid rgba(25,25,25,0.9); margin: 1em 0 0; padding: 1em 2em 0; font-size: 1em;">
               <div style="display: flex; flex-direction: row; justify-content: flex-start; align-items: flex-start; margin: 0; padding: 0;">
                 <p style="font-size: 1em; color: rgba(55,55,75,0.9);">Copyright © 2019 chivington.io Inc. All rights reserved.</p>
@@ -73,14 +69,13 @@
 
     <!-- Display Loading Screen -->
     <script type="text/javascript">
-      const alrt = (msg) => {document.title = msg; console.log(msg);};
-      alrt(`Johnathan Chivington | Static application initialized`);
-      alrt(`Johnathan Chivington | Testing Javascript...`);
-      alrt(`Johnathan Chivington | Retrieving Application...`);
-      alrt(`Johnathan Chivington | Displaying load screen...`);
+      const status = (msg) => {document.title = msg; console.log(msg);};
+      status(`Johnathan Chivington | Static application initialized`);
+      status(`Johnathan Chivington | Testing Javascript...`);
+      status(`Johnathan Chivington | Retrieving Application...`);
+      status(`Johnathan Chivington | Displaying load screen...`);
       document.getElementById('Load_Screen_Root').style.visibility = 'visible';
     </script>
-
     <script src="/js/app.js" charset="utf-8"></script>
   </body>
 </html>

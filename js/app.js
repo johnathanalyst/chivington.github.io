@@ -1,15 +1,15 @@
-/* -------------------------------------------------------------------------------- *
- * Author: Johnathan Chivington                                                     *
- * Project: Personal blog, resume and research portfolio.                           *
- * Description: Personal web application built in my custom UI/UX framework, Unity. *
- * Version: 2.0.0 - (production - see README.md)                                    *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+// Author: Johnathan Chivington
+// Project: Personal blog, resume and research portfolio.
+// Description: Personal web application built in my custom UI/UX framework, Unity.
+// Version: 2.0.0 - (production - see README.md)
+// -------------------------------------------------------------------------------------
 
-/* ----------------------------------- Unity -------------------------------------- *
- *    A minimal framework used to build complex "native-like" web applications.     *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+//  Unity - A minimal framework used to build complex "native-like" web applications.
+// -------------------------------------------------------------------------------------
 const Unity = {
-  createReducer: function(defaultState, map) {
+  createReducer: function(defaultState,map) {
     return function(state = defaultState, action) {
       return map[action.type] ? map[action.type](state, action) : state;
     }
@@ -22,7 +22,7 @@ const Unity = {
       }, {});
     }
   },
-  createStore: function(rootReducer, middlewares = {}, history_length) {
+  createStore: function(rootReducer,middlewares={},history_length) {
     var state = {}, listeners = [], history = [];
     const { logActions, listenerBypass } = middlewares;
 
@@ -49,7 +49,7 @@ const Unity = {
       }
     }
 
-    dispatch({type: '@@INIT'});
+    dispatch({type:'@@INIT'});
     return { getState, getHistory, dispatch, subscribe };
   },
   storeMiddlewares: {
@@ -71,75 +71,51 @@ const Unity = {
       }
     }
   },
-  createElement: function(elem, attrs, children) {
+  createElement: function(elem,attrs,children) {
     const element = document.createElement(elem);
-
     if (attrs) Object.keys(attrs).forEach(k => element.setAttribute(k, attrs[k]));
-
     if (children.length >= 1) children.forEach(child => element.appendChild((typeof child == 'string')
       ? document.createTextNode(child) : ((child.elem) ? child.elem(child.props, child.dispatch, child.children) : child)
     ));
-
     return element;
   },
-  render: function(component, store, root) {
+  render: function(component,store,root) {
     while (root.lastChild) root.lastChild.remove();
     root.appendChild(component(store));
   },
-  initializeApplication: function(app_root, load_screen_root, blueprint, state_reducers, store_middlewares) {
+  initializeApplication: function(app_root,load_screen_root,blueprint,reducers,middlewares) {
     const app_title = blueprint.user.name ? blueprint.user.name : 'Unity Application';
     document.title = `${app_title} | Home`;
 
-   const terminate = function(msg) {
-     const body_root = document.getElementById('body');
-     while (body_root.lastChild) body_root.lastChild.remove();
-     const no_app = document.createElement('div');
-     const attrs = {position: `absolute`, left: 0, top: 0, bottom: 0, right: 0, index: 1000, background: `linear-gradient(#fff,#eee)`};
-     Object.keys(attrs).forEach(k => no_app.setAttribute(k, attrs[k]));
-     no_app.appendChild(document.createTextNode(msg));
-     html_root.appendChild(no_app);
-     throw `[Unity] - ${msg}`
-   };
+    if (!app_root) Unity.terminate(app_root,`No Application Root supplied...`);
+    if (!blueprint) Unity.terminate(app_root,`No Blueprint supplied...`);
+    if (!!load_screen_root) {console.log(`${app_title} | Killing load screen...`);load_screen_root.style.display='none';};
 
-   if (!app_root) terminate(`No Application Root supplied...`);
-   if (!blueprint) terminate(`No Blueprint supplied...`);
-   if (!!load_screen_root) {
-     console.log(`${app_title} | Killing load screen...`);
-     load_screen_root.style.display = 'none';
-   };
+    console.log(`${app_title} | Killing static application...`);
+    app_root.firstElementChild.style.display = 'none';
 
-   console.log(`${app_title} | Killing static application...`);
-   app_root.firstElementChild.style.display = 'none';
+    const init_state = Unity.combineReducers(reducers);
+    const UnityStore = Unity.createStore(init_state, middlewares);
 
-   // const inital_state = Object.keys(blueprint).reduce((s,b) => {
-   //   s[`${b}State`] = function(state = blueprint[b], action) {
-   //     return Unity.combineReducers(Object.keys(blueprint[b]).reduce((ss,sb) => {
-   //       if (!!blueprint[b][sb]['@@ACTIONS']) ss[`${sb}State`] = Unity.createReducer(blueprint[b][sb],blueprint[b][sb]['@@ACTIONS']);
-   //       else ss[sb] = blueprint[b][sb];
-   //       return ss;
-   //     }, {}))(state,action);
-   //   };
-   //   return s;
-   // }, {});
-
-   // const state_root = Unity.combineReducers(inital_state);
-   const state_root = Unity.combineReducers(state_reducers);
-   const UnityStore = Unity.createStore(state_root, store_middlewares);
-
-   Unity.render(Components.App, UnityStore, App_Root);
-   UnityStore.subscribe({
+    Unity.render(Modules.App, UnityStore, App_Root);
+    UnityStore.subscribe({
      name: 'Render_App',
      function: Unity.render,
-     params: [Components.App, UnityStore, App_Root]
-   });
- }
+     params: [Modules.App, UnityStore, App_Root]
+    });
+  },
+  terminate: function(app_root,msg) {
+    while (app_root.lastChild) app_root.lastChild.remove();
+    app_root.appendChild(Unity.createElement('div',{position:`absolute`,left:0,top:0,bottom:0,right:0,index:1000,background:`linear-gradient(#fff,#eee)`},[msg]));
+    throw `[Unity] - ${msg}`;
+  }
 };
 
-/* ----------------------------------- Reducers ----------------------------------- *
- *        Functions that initialize state & reduce it on each state change.         *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+//  Reducers - Functions that initialize state & reduce it on each state change.
+// -------------------------------------------------------------------------------------
 const Reducers = {
-  appState: function(state = Blueprint.app, action) {
+  appState: function(state=Blueprint.app, action) {
     return Unity.combineReducers({
       aboutState: Unity.createReducer(Blueprint.app.about, {}),
       historyState: Unity.createReducer(Blueprint.app.history, {
@@ -213,7 +189,7 @@ const Reducers = {
       })
     })(state, action);
   },
-  deviceState: function(state = Blueprint.device, action) {
+  deviceState: function(state=Blueprint.device, action) {
     return Unity.combineReducers({
       networkState: Unity.createReducer(Blueprint.device.network, {
         'NET_STATE_CHANGE': (s,a) => a.payload,
@@ -221,12 +197,12 @@ const Reducers = {
       })
     })(state, action);
   },
-  userState: function(state = Blueprint.user, action) {
+  userState: function(state=Blueprint.user, action) {
     return Unity.combineReducers({
       infoState: Unity.createReducer(Blueprint.user, {})
     })(state, action);
   },
-  uiState: function (state = Blueprint.ui, action) {
+  uiState: function (state=Blueprint.ui, action) {
     return Unity.combineReducers({
       mapState: Unity.createReducer(Blueprint.ui.map, {}),
       headerState: Unity.createReducer(Blueprint.ui.header, {
@@ -256,9 +232,9 @@ const Reducers = {
   }
 };
 
-/* --------------------------------- Middlewares ---------------------------------- *
- *                      Functions that intercept state changes.                     *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+//  Middlewares - Functions that intercept state changes.
+// -------------------------------------------------------------------------------------
 const Middlewares = {
   // logActions: Unity.storeMiddlewares.logActions('@@INIT'),
   listenerBypass: Unity.storeMiddlewares.listenerBypass({
@@ -268,22 +244,21 @@ const Middlewares = {
   })
 };
 
-/* ---------------------------------- Components ---------------------------------- *
- *                        Important/reused modules, UI, etc.                        *
- * -------------------------------------------------------------------------------- */
-const Components = {
+// -------------------------------------------------------------------------------------
+//  Modules - Important/reused modules, UI, etc.
+// -------------------------------------------------------------------------------------
+const Modules = {
   Router: function(store) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { mapState, viewState } = state.uiState;
-    const { flat, tree } = mapState;
-    const { current, previous } = viewState;
-    const sameView = viewState.current == viewState.previous;
-    const lastActionNav = state.appState.historyState.actions.slice(-1) == 'NAV_TO';
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {mapState,viewState} = state.uiState;
+    const {current,previous} = viewState;
+    const sameView = viewState.current==viewState.previous;
+    const lastActionNav = state.appState.historyState.actions.slice(-1)=='NAV_TO';
     const styles = {router: `position:fixed; top:0; right:0; bottom:0; left:0; overflow:hidden; z-index:5;`};
-    const selected = flat[current[0]][0] ? flat[current[0]][0] : flat['DEFAULT'][0];
-    const animation = lastActionNav && !sameView ? `animation: viewSlideIn 250ms 1 forwards;` : ``;
+    const selected = mapState.flat[current[0]]?mapState.flat[current[0]]:mapState.flat['DEFAULT'];
+    const animation = lastActionNav && !sameView ? `animation:viewSlideIn 250ms 1 forwards;` : ``;
     document.title = `${state.userState.infoState.name} | ${selected[1]}`;
-    return Unity.createElement('div', {style:styles.router}, [Components.View(store, selected, animation)]);
+    return Unity.createElement('div', {style:styles.router}, [Modules.View(store,selected[0],animation)]);
   },
   Network: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -293,11 +268,11 @@ const Components = {
     const menu_opening = state.uiState.menuState.current == 'OPEN';
     const prevAction = state.appState.historyState.actions.slice(-1);
     const display = offline || prevAction == '@@INIT' || prevAction == 'NET_STATE_CHANGE';
-    const lg_device = (state.uiState.windowState.mode == 'large_tab' || state.uiState.windowState.mode == 'desktop');
+    const lg_dev = (state.uiState.windowState.mode == 'large_tab' || state.uiState.windowState.mode == 'desktop');
 
     const styles = {
       net: `
-        position: absolute; top: ${lg_device?'5':'4'}em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 85;
+        position: absolute; top: ${lg_dev?'5':'4'}em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 85;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         background-color: ${offline?theme.error:theme.success}; border-bottom: ${offline?theme.error:theme.success}; font-size: 1em; color: #252525;
         font-weight: bold; ${display ? `animation: flash_network 1700ms ease-in-out 1 forwards;` : `display: none;`}
@@ -307,7 +282,7 @@ const Components = {
     const Net = Unity.createElement('div', {style:styles.net}, [offline?'Offline':'Connected']);
 
     window.addEventListener('online', function(event) {
-      if (effectiveType != previousType) dispatch({type: 'NET_STATE_CHANGE',  payload: {
+      if (effectiveType != previousType) dispatch({type:'NET_STATE_CHANGE',  payload: {
         downlink: !!navigator.connection ? navigator.connection.downlink : 10,
         effectiveType: navigator.connection ? navigator.connection.effectiveType : 'Connecting...',
         previousType: effectiveType
@@ -315,7 +290,7 @@ const Components = {
     });
 
     window.addEventListener('offline', function(event) {
-      if (effectiveType != previousType) dispatch({type: 'NET_STATE_CHANGE',  payload: {
+      if (effectiveType != previousType) dispatch({type:'NET_STATE_CHANGE',  payload: {
         downlink: !!navigator.connection ? navigator.connection.downlink : 0,
         effectiveType: 'OFFLINE',
         previousType: effectiveType
@@ -373,13 +348,13 @@ const Components = {
     const open_action = !!(previous == 'CLOSED' && current == 'OPEN');
     const close_action = !!(previous == 'OPEN' && current == 'CLOSED');
     const menu_action = !!(last_action == 'OPEN_MENU' || last_action == 'CLOSE_MENU' || last_action == 'TOGGLE_MENU');
-    const lg_device = (windowState.mode == 'desktop' || windowState.mode == 'large_tab');
+    const lg_dev = (windowState.mode == 'desktop' || windowState.mode == 'large_tab');
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.createElement;
 
     const styles = {
       header: `
-        position: fixed; top: 0; left: 0; width: 100%; height: ${lg_device?'5':'4'}em; margin: 0; padding: 0; z-index: 90;
+        position: fixed; top: 0; left: 0; width: 100%; height: ${lg_dev?'5':'4'}em; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
         background-color: ${theme.header}; border-bottom: 1pt solid ${theme.header_bdr}; -webkit-box-shadow: 1pt 1pt ${dark_theme?'5':'15'}pt 0 ${theme.header_bdr};
       `,
@@ -395,8 +370,8 @@ const Components = {
 
     const header_icon = E('img', {style:styles.icon, src: icon_img, alt: headerState.alt}, []);
     header_icon.addEventListener('click', function(event) {
-      if (viewState.current[0] != 'HOME') dispatch({type: 'NAV_TO', payload: ['HOME', 'Home']});
-      if (viewState.current[0] == 'HOME' && current == 'OPEN') dispatch({type: 'CLOSE_MENU'});
+      if (viewState.current[0] != 'HOME') dispatch({type:'NAV_TO',payload:['HOME', 'Home']});
+      if (viewState.current[0] == 'HOME' && current == 'OPEN') dispatch({type:'CLOSE_MENU'});
     });
 
     const superscript = E('sup', {style:styles.super}, [viewState.current[1]]);
@@ -406,13 +381,13 @@ const Components = {
     ].map((view, i, arr) => {
       const btn = E('h2', {style: i == arr.length-1 ? styles.header_qt : styles.header_btn}, [view[1]]);
       btn.addEventListener('click', () => {
-        if (viewState.current[0] != view[0]) dispatch({type: 'NAV_TO', payload: view});
+        if (viewState.current[0] != view[0]) dispatch({type:'NAV_TO',payload:view});
       });
       return btn;
     }));
 
     const menu_btn = E('img', {style:styles.menu_btn, src: menu_img, alt: 'Menu Button Icon'}, []);
-    menu_btn.addEventListener('click', function(event) { dispatch({type: 'TOGGLE_MENU'}); });
+    menu_btn.addEventListener('click', function(event) { dispatch({type:'TOGGLE_MENU'}); });
 
     return E('div', {style:styles.header}, [
       E('div', {style:styles.header_left}, [ header_icon, superscript ]),
@@ -420,79 +395,58 @@ const Components = {
     ]);
   },
   Menu: function(store) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { menuState, windowState } = state.uiState;
-    const dark_theme = state.uiState.themeState.selected == 'dark';
-    const { icons } = Assets.imgs;
-    const menuWidth = windowState.mode == `desktop` ? `45%` : `100%`;
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {menuState,windowState,themeState,mapState} = state.uiState;
+    const dark_theme = themeState.selected=='dark';
+    const {icons} = Assets.imgs;
+    const menuWidth = windowState.mode==`desktop`?`45%`:`100%`;
     const current_view = state.uiState.viewState.current[0];
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const last_action = state.appState.historyState.actions.slice(-1);
-    const closed_menu_last = !!(last_action == 'CLOSE_MENU' || last_action == 'TOGGLE_MENU');
-    const lg_device = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
+    const closed_menu_last = !!(last_action=='CLOSE_MENU'||last_action=='TOGGLE_MENU');
+    const lg_dev = (windowState.mode=='large_tab'||windowState.mode=='desktop');
     const E = Unity.createElement;
 
     const styles = {
       menu: `
-        position: fixed; top: ${lg_device?'5':'4'}em; left: 0; bottom: 0; width: ${menuWidth}; padding: 0; z-index: 80;
-        background-color: ${theme.menu}; overflow-y: scroll; ${lg_device?`border-right: 1pt solid ${theme.menu_bdr};`:''}
-        ${(menuState.current == 'OPEN') ? (menuState.previous == 'OPEN' ? `` : `animation: menu_opening 300ms ease-in-out 1 forwards;`) : (closed_menu_last ? `animation: menu_closing 300ms ease-in-out 1 forwards;` : ` display: none;`)}
+        position:fixed; top:${lg_dev?'5':'4'}em; left:0; bottom:0; width:${menuWidth}; padding:0; z-index:80; background-color:${theme.menu}; overflow-y:scroll; ${lg_dev?`border-right:1pt solid ${theme.menu_bdr};`:''}
+        ${(menuState.current=='OPEN')?(menuState.previous=='OPEN'?``:`animation:menu_opening 300ms ease-in-out 1 forwards;`):(closed_menu_last?`animation:menu_closing 300ms ease-in-out 1 forwards;`:`display:none;`)}
       `,
-      toggle_theme: `display: flex; flex-direction: row; justify-content: center; align-items: center; margin: 2em; padding: 0;`,
-      toggle_theme_txt: `margin: 0; padding: 0; color: ${theme.menu_txt}`,
-      toggle_theme_btn: `margin: 1em; padding: ${dark_theme?'0 1.5em 0 0':'0 0 0 1.5em'}; background-color: ${theme.panel}; border: 1.25pt solid ${dark_theme?theme.success:theme.menu_btn}; border-radius: 1.5em; cursor: pointer;`,
-      toggle_theme_btn_slider: `height: 1.5em; width: 1.5em; margin: 0; padding: 0; background-color: ${dark_theme?theme.success:theme.panel}; border-radius: 100%;`,
+      toggle: `display:flex; flex-direction:row; justify-content:center; align-items:center; margin:2em; padding:0;`,
+      tgl_txt: `margin:0; padding:0; color:${theme.menu_txt}`,
+      tgl_btn: `margin:1em; padding:${dark_theme?'0 1.5em 0 0':'0 0 0 1.5em'}; background-color:${theme.panel}; border:1.25pt solid ${dark_theme?theme.success:theme.menu_bdr}; border-radius:1.5em; cursor:pointer;`,
+      slider: `height:1.5em; width:1.5em; margin:0; padding:0; background-color:${dark_theme?theme.success:theme.btn}; border-radius:100%;`,
       copy: `
-        display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; text-align: center; color: ${theme.menu_bdr};
-        border-top: 1px solid ${theme.menu_bdr}; margin: 1em ${lg_device?'5em 5':'2em 2em 1'}em; padding: 1.5em; font-size: ${lg_device?'1':'0.9'}em;
+        display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; text-align:center; color:${theme.menu_bdr};
+        border-top:1px solid ${theme.menu_bdr}; margin:1em ${lg_dev?'5em 5':'2em 2em 1'}em; padding:1.5em; font-size:${lg_dev?'1':'0.9'}em;
       `,
-      usa: `height: 1.5em; margin: 0.25em; font-size: 1.1em; color: ${theme.menu_txt};`,
-      copy_txt: `font-size: 1.1em; margin: 0; color: ${theme.menu_txt};`
-    };
-
-    const submenu_config = {
-      orientation: `PORTRAIT`,
-      btns: [
-        ['HOME', 'Home'],
-        ['BLOG', 'Blog'],
-        ['CONTACT_ME', 'Contact Me'],
-        ['ABOUT_ME', 'About Me'],
-        ['ALL_RESEARCH', 'All Research', [
-          ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research'],
-          ['WIRELESS_EMBEDDED_RESEARCH', 'Embedded Research'],
-          ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research'],
-          ['USER_INTERFACE_RESEARCH', 'User Interface Research']
-        ]]
-      ]
+      usa: `height:1.5em; margin:0.25em; font-size:1.1em; color:${theme.menu_txt};`,
+      copy_txt: `font-size:1.1em; margin:0; color:${theme.menu_txt};`
     };
 
     const copy = E('div', {style:styles.copy}, [
-      E('img', {src: icons.sm.usa, alt: `USA Icon `, style:styles.usa}, ['United States']),
-      E('p', {style:styles.usa}, ['United States']),
-      E('p', {style:styles.copy_txt}, ['Copyright © 2020 chivington.io']),
+      E('img',{src:icons.sm.usa,alt:`USA Icon`,style:styles.usa},[]),
+      E('p',{style:styles.usa},['United States']),
+      E('p',{style:styles.copy_txt},['Copyright © 2020 chivington.io']),
     ]);
 
-    const toggle_theme = E('div', {style:styles.toggle_theme}, [
-      E('h4', {style:styles.toggle_theme_txt}, [`Toggle dark mode`]),
-      E('div', {style:styles.toggle_theme_btn}, [ E('div', {style:styles.toggle_theme_btn_slider}, []) ])
-    ]);
-    toggle_theme.lastChild.addEventListener('click', () => dispatch({type: 'TOGGLE_THEME', payload: store.getState().uiState.menuState.scrollTop}));
+    const toggle = E('div',{style:styles.toggle},[E('h4',{style:styles.tgl_txt},[`Toggle dark mode`]),E('div',{style:styles.tgl_btn},[E('div',{style:styles.slider},[])])]);
+    toggle.lastChild.addEventListener('click',()=>dispatch({type:'TOGGLE_THEME',payload:store.getState().uiState.menuState.scrollTop}));
 
-    const submenu = Components.Submenu(store, submenu_config);
-
-    const Menu = Unity.createElement('div', {style:styles.menu}, [submenu, toggle_theme, copy]);
-    setTimeout(event => Menu.scrollTo({top: menuState.scrollTop, left: 0, behavior: 'auto'}), 50);
+    const submenu = Modules.Submenu(store,{orientation:`PORTRAIT`,btns:mapState.tree});
+    const Menu = Unity.createElement('div',{style:styles.menu},[submenu,toggle,copy]);
+    setTimeout(event=>Menu.scrollTo({top:menuState.scrollTop,left:0,behavior:'auto'}),50);
 
     let scroll_ctr = 0;
     Menu.addEventListener('scroll', function(event) {
-      const [ current_st, event_st ] = [ menuState.scrollTop, event.target.scrollTop ];
-      const diff = (event_st - current_st) < 0 ? -(event_st - current_st) : (event_st - current_st);
-      if (scroll_ctr++ % 2 == 0 && diff > 5) dispatch({type: 'UPDATE_MENU_SCROLL', payload: event_st});
-    }, false);
+      const [current_st,event_st] = [menuState.scrollTop,event.target.scrollTop];
+      const diff = (event_st-current_st)<0?-(event_st-current_st):(event_st-current_st);
+      if (scroll_ctr++ %2==0 && diff>5) dispatch({type:'UPDATE_MENU_SCROLL',payload:event_st});
+    },false);
 
     return Menu;
   },
-  Submenu: function(store, submenu_config) {
+  Submenu: function(store,config) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { menuState, windowState } = state.uiState;
     const { icons } = Assets.imgs;
@@ -502,15 +456,15 @@ const Components = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const last_action = state.appState.historyState.actions.slice(-1);
     const closed_menu_last = !!(last_action == 'CLOSE_MENU' || last_action == 'TOGGLE_MENU');
-    const lg_device = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
-    const landscape = submenu_config.orientation == 'LANDSCAPE' && lg_device;
+    const lg_dev = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
+    const landscape = config.orientation == 'LANDSCAPE' && lg_dev;
     const E = Unity.createElement;
 
     const styles = {
-      container: `display: flex; flex-direction: ${landscape?'row':'column'}; justify-content: ${landscape?'center':'flex-start'}; align-items: ${landscape?'flex-start':'stretch'}; ${lg_device?``:`border-top: 1pt solid ${theme.menu_bdr};`}`,
+      container: `display: flex; flex-direction: ${landscape?'row':'column'}; justify-content: ${landscape?'center':'flex-start'}; align-items: ${landscape?'flex-start':'stretch'}; ${lg_dev?``:`border-top: 1pt solid ${theme.menu_bdr};`}`,
       subnemu_wrapper: `margin: ${landscape?'0.5em':'0'}; padding: 0; display: flex; ${landscape?'flex: 1;':''} flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: ${theme.menu_sub};`,
       parent_row: `margin: 0; padding: 0; width: 100%; max-height: 5em; display: flex; flex-direction: row; justify-content: stretch; align-items: center; background-color: ${theme.btn}; border-bottom: 1pt solid ${theme.menu_bdr};`,
-      btn: `display: flex; flex: 1; margin: 0; padding: 1em; max-height: 2em; font-size: 1.1em; color: ${theme.menu_txt}; cursor: pointer; background-color: ${theme.btn}; border-bottom: 1pt solid ${theme.menu_bdr};`,
+      btn: `display: flex; flex: 1; margin: 0; padding: 0.9em; max-height: 2em; font-size: 1.1em; color: ${theme.menu_txt}; cursor: pointer; background-color: ${theme.btn}; border-bottom: 1pt solid ${theme.menu_bdr};`,
       dropdown: `width: 1.75em; margin: 0 1em; color: ${theme.menu_txt}; cursor: pointer;`,
       submenu: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin: 0; padding: 0; color: ${theme.menu_txt};`,
       sub_btn: `display: flex; flex: 1; margin: 0 0.25em; padding: 0.75em 2em; font-size: 1.1em; color: ${theme.menu_txt}; border-bottom: 1pt solid ${theme.menu_bdr}; cursor: pointer;`
@@ -522,12 +476,12 @@ const Components = {
       const btns = flag ? sub_config : sub_config.btns;
 
       return btns.map((btn, i, arr) => {
-        sub_states[btn[0]] = {current: lg_device?'OPEN':'CLOSED', previous: 'CLOSED'};
+        sub_states[btn[0]] = {current: lg_dev?'OPEN':'CLOSED', previous: 'CLOSED'};
 
         const b = E('h3', {style: `${flag ? (i==btns.length-1 ? `${styles.sub_btn} border:none;` : styles.sub_btn) : styles.btn}`}, [btn[1]]);
         b.addEventListener('click', function(event) {
-          if (state.uiState.viewState.current[0] != btn[0]) dispatch({type: `NAV_TO`, payload: [btn[0], btn[1]]});
-          else if (menuState.current == 'OPEN') dispatch({type: 'CLOSE_MENU'});
+          if (state.uiState.viewState.current[0] != btn[0]) dispatch({type: `NAV_TO`,payload:[btn[0], btn[1]]});
+          else if (menuState.current == 'OPEN') dispatch({type:'CLOSE_MENU'});
         });
 
         if (!!btn[2]) {
@@ -544,193 +498,141 @@ const Components = {
           });
 
           return E('div', {style:styles.subnemu_wrapper}, [
-            E('div', {style:styles.parent_row}, [b, dropdown]),
-            E('div', {style: `${styles.submenu} ${submenu_style}`}, create_submenu(btn[2], true))
+            E('div',{style:styles.parent_row},[b,dropdown]),E('div',{style:`${styles.submenu}${submenu_style}`},create_submenu(btn[2],true))
           ]);
         } else return b;
       })
     };
 
-    return E('div', {style:styles.container}, create_submenu(submenu_config, false));
+    return E('div', {style:styles.container}, create_submenu(config, false));
   },
-  View: function(store, view, animation) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { windowState, viewState, menuState, themeState } = state.uiState;
+  View: function(store,view,animation) {
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {windowState,viewState,menuState,themeState} = state.uiState;
     const theme = themeState[themeState.selected];
-    const { width, height, mode } = windowState;
+    const {width,height,mode} = windowState;
 
     const styles = {
-      view: `position: fixed; top: 0; right: 0; bottom: 0; left: 0; margin: 0; padding: 0; overflow-x: hidden; overflow-y: scroll; z-index: 10;
-      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${themeState.wp.view}');
-      background-position: center; background-size: cover; background-repeat: no-repeat;
-      ${menuState.current == 'OPEN' ? ' filter: blur(5pt);' : ''} -webkit-overflow-scrolling: touch; background-color: ${theme.view}; ${animation}
+      view: `
+        position:fixed; top:0; right:0; bottom:0; left:0; margin:0; padding:0; overflow-x:hidden; overflow-y:scroll; z-index:10;
+        background:linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${themeState.wp.view}'); background-position:center; background-size:cover; background-repeat:no-repeat;
+        ${menuState.current=='OPEN'?'filter:blur(5pt);':''} -webkit-overflow-scrolling:touch; background-color:${theme.view}; ${animation}
       `
     };
 
-    const View = Unity.createElement('div', {style:styles.view, content: `minimal-ui`}, [view(store), Components.Footer(store)]);
-    setTimeout(event => View.scrollTo({top: viewState.scrollTop, left: 0, behavior: 'auto'}), 50);
+    const View = Unity.createElement('div', {style:styles.view,content:`minimal-ui`}, [view(store),Modules.Footer(store)]);
+    setTimeout(event=>View.scrollTo({top:viewState.scrollTop,left:0,behavior:'auto'}),50);
 
     let scroll_ctr = 0;
     View.addEventListener('scroll', function(event) {
       const [ current_st, event_st ] = [ viewState.scrollTop, event.target.scrollTop ];
       const diff = (event_st - current_st) < 0 ? -(event_st - current_st) : (event_st - current_st);
-      if (scroll_ctr++ % 2 == 0 && diff > 5) dispatch({type: 'UPDATE_VIEW_SCROLL', payload: event_st});
-    }, false);
+      if (scroll_ctr++ % 2 == 0 && diff > 5) dispatch({type:'UPDATE_VIEW_SCROLL',payload:event_st});
+    },false);
 
-    View.addEventListener('click', function(event) {
-      if (menuState.current == 'OPEN') dispatch({type: 'CLOSE_MENU'});
-    });
-
+    View.addEventListener('click', function(event) { if (menuState.current=='OPEN') dispatch({type:'CLOSE_MENU'}); });
     return View;
   },
-  Project: function(store, product_config) {
+  Project: function(store, config) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { mode } = state.uiState.windowState;
-    const lg_device = ((mode == 'desktop') || (mode == 'large_tab')) ? true : false;
+    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const { beacon } = Assets.imgs;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.createElement;
 
     const styles = {
-      product: `margin: ${lg_device?'7em 2em 5':'5em 1em 3'}em; padding: 1em; background-color: ${theme.well};`,
-      title: `margin: 0; padding: 0; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.view_txt};`,
-      subtitle: `margin: 0.75em; padding: 0; text-align: center; color: ${theme.view_txt};`,
+      project: `margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well};`,
+      title: `margin:0; padding:0 0 0.5em 0; border-bottom:1pt solid ${theme.view_bdr}; font-size:1.25em; text-align:center; color:${theme.view_txt};`,
+      subtitle: `margin:0.75em; padding:0; text-align:center; color:${theme.view_txt};`,
       description: `
-        display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: ${lg_device?'space-around':'flex-start'};
-        align-items: ${lg_device?'center':'stretch'}; margin: 0; padding: 0; background-color: ${theme.panel}; color: ${theme.view_txt};
-        border: 1pt solid ${theme.view_bdr};
+        display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'space-around':'flex-start'}; align-items:${lg_dev?'center':'stretch'};
+        margin:0; padding:0; background-color:${theme.panel}; color:${theme.view_txt}; border:1pt solid ${theme.view_bdr};
       `,
-      description_img: `margin: ${lg_device?'1em':'1em auto'}; padding: 0; border: 1pt solid ${theme.view_bdr}; ${lg_device?'height:225pt':`max-width:80%`};`,
-      description_txt_wrapper: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-        margin: ${lg_device?'1em 1em 1em 0':'1em'}; padding: 1em; background-color: ${theme.panel};
-      `,
-      description_txt: `margin: 0.25em; padding: 0; text-align: ${lg_device?'left':'center'}; color: ${theme.view_txt};`
+      img: `margin:0; padding:0; border-bottom:1pt solid ${theme.view_bdr}; ${lg_dev?'height:250pt':`width:100%`};`,
+      wrapper: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin:0; padding:0; background-color: ${theme.panel};`,
+      txt: `margin:0; padding:0.75em 0.25em; text-align:${lg_dev?'left':'center'}; color:${theme.view_txt};`
     };
 
-    const title = E('h1', {style:styles.title}, [product_config.title]);
-
-    const subtitle = E('p', {style:styles.subtitle}, [product_config.subtitle]);
-
     const description = E('div', {style:styles.description}, [
-      E('img', {style:styles.description_img, src: product_config.img, alt: `${product_config.title} Image`}, []),
-      E('div', {style:styles.description_txt_wrapper}, product_config.description.map((sentence, i) =>
-        E('p', {style:styles.description_txt}, [`${i > product_config.idx ? '• ' : ''}${sentence}`])
-      ))
+      E('img', {style:styles.img, src:config.img, alt:`${config.title} Image`}, []),
+      E('div', {style:styles.wrapper}, config.description.map((s,i)=>E('p',{style:styles.txt},[`${i>config.idx?'• ':''}${s}`])))
     ]);
 
-    return E('div', {style:styles.product}, [ title, subtitle, description ])
+    return E('div',{style:styles.project},[
+      E('h1',{style:styles.title},[config.title]),E('p',{style:styles.subtitle},[config.subtitle]),description
+    ])
   },
   Tiles: function(store, tile_config) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { mode } = state.uiState.windowState;
-    const lg_device = ((mode == 'desktop') || (mode == 'large_tab')) ? true : false;
+    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.createElement;
 
     const styles = {
-      tiles_component: `
-        display: flex; flex-direction: column; justify-content: space-around; align-items: stretch;
-        margin: ${lg_device?2:1}em; padding: 0.5em; background-color: ${theme.well};
-      `,
-      title: `margin: 0 0.5em; padding: 0.5em; border-bottom: 1pt solid ${theme.view_bdr}; font-size: 1.5em; text-align: center; color: ${theme.view_txt};`,
-      subtitle: `margin: 0.75em; padding: 0; font-size: 1.15em; text-align: center; color: ${theme.view_txt};`,
+      tiles_component: `display: flex; flex-direction: column; justify-content: space-around; align-items: stretch; margin: 0; padding: 0.5em; background-color: ${theme.well};`,
+      title: `margin: 0 0.5em; padding: 0.25em; border-bottom: 1pt solid ${theme.view_bdr}; font-size: 1.5em; text-align: center; color: ${theme.view_txt};`,
+      subtitle: `margin: 0.75em; padding: 0; font-size: 1em; text-align: center; color: ${theme.view_txt};`,
       tiles: `
-        display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: flex-start; align-items: stretch; padding: ${lg_device?1.5:0.5}em;
-        margin: ${lg_device?'0.5em 1.5':'0.5'}em; background-color: ${theme.panel}; ${lg_device?'overflow-x: scroll;':''} border: solid ${theme.footer_bdr}; border-width: 1pt 0;
+        display: flex; flex-direction: ${lg_dev?'row':'column'}; justify-content: flex-start; align-items: stretch; padding: ${lg_dev?0.5:0.25}em;
+        margin: ${lg_dev?0.5:0.25}em; background-color: ${theme.panel}; ${lg_dev?'overflow-x: scroll;':''} border: solid ${theme.footer_bdr}; border-width: 1pt 0;
       `,
-      tile: `
-        display: flex; flex-direction: column; justify-content: space-around; align-items: stretch; padding: ${lg_device?1:0.5}em;
-        margin: ${lg_device?1:0.5}em; background-color: ${theme.panel};
-        border: 1pt solid ${theme.view_bdr}; border-radius: 5pt; cursor: pointer;
-      `,
-      tile_img: `margin: ${lg_device?0.5:0.25}em auto; ${lg_device?'height:125pt':`max-width:80%`}; border: 1pt solid ${theme.view_bdr};`,
-      tile_title: `margin: 0.75em auto 0.5em; color: ${theme.menu_txt}; font-size: ${lg_device?1.25:1}em; font-weight: 500; text-align: center; color: ${theme.view_txt};`
+      tile: `display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 0; margin: ${lg_dev?0.75:0.5}em; background-color: ${theme.panel}; border: 1pt solid ${theme.view_bdr}; cursor: pointer;`,
+      img: `margin:0; ${lg_dev?'height:200pt':`width:100%`}; border-bottom: 1pt solid ${theme.view_bdr};`,
+      name: `margin:${lg_dev?1:0.75}em; color: ${theme.menu_txt}; font-size: 1em; font-weight: 900; text-align:center; color: ${theme.view_txt};`
     };
 
-    const title = E('h1', {style:styles.title}, [tile_config.title]);
-
-    const subtitle = E('h2', {style:styles.subtitle}, [tile_config.subtitle]);
-
     const tiles = E('div', {style:styles.tiles}, tile_config.tiles.map((tile,i) => {
-      const t = E('div', {style:styles.tile}, [
-        E('img', {style:styles.tile_img, src: tile[2], alt: `${tile[1]} Thumbnail`}, []), E('h3', {style:styles.tile_title}, [tile[1]])
-      ]);
-      t.addEventListener('click', () => dispatch({type: 'NAV_TO', payload: [tile[0], tile[1]]}));
-      return t;
+      const t = E('div',{style:styles.tile},[E('img',{style:styles.img,src:tile[2],alt:`${tile[1]} Thumbnail`},[]),E('h3',{style:styles.name},[tile[1]])]);
+      t.addEventListener('click',()=>dispatch({type:'NAV_TO',payload:[tile[0],tile[1]]})); return t;
     }));
 
     setTimeout(e => {
-      if (lg_device) {
-        const container_width = tiles.clientWidth;
-        const tile_width = Object.keys(tiles.children).reduce((acc,cur,idx,arr) => tiles.children[arr[idx]].offsetWidth + acc, 0);
-        if (tile_width > container_width) {
-          tiles.style.cssText = `${styles.tiles} border-right: 1.5pt solid ${theme.view_bdr}; -webkit-box-shadow: inset -25px 5 50px -25px #000; padding: 3em;`
-        }
+      if (lg_dev) {
+        const tile_width = Object.keys(tiles.children).reduce((acc,cur,idx,arr) => tiles.children[arr[idx]].offsetWidth+acc,0);
+        if (tile_width>tiles.clientWidth) tiles.style.cssText = `${styles.tiles} border-right:1.5pt solid ${theme.view_bdr}; -webkit-box-shadow:inset -25px 5 50px -25px #000; padding:3em;`
       }
     }, 250);
 
-    return E('div', {style:styles.tiles_component}, [ title, subtitle, tiles ]);
+    return E('div', {style:styles.tiles_component}, [
+      E('h1',{style:styles.title},[tile_config.title]), E('h2',{style:styles.subtitle},[tile_config.subtitle]), tiles
+    ]);
   },
   Footer: function(store) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { footerState, windowState } = state.uiState;
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {footerState,windowState,mapState} = state.uiState;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
-    const lg_device = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
-    const { icons, wp } = Assets.imgs;
+    const lg_dev = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
+    const {icons,wp} = Assets.imgs;
     const E = Unity.createElement;
 
     const styles = {
-      footer: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; padding: ${lg_device?'1em':'0'};
-        margin: 0; z-index: 75; background-color: ${theme.footer}; border-top: 1pt solid ${theme.footer_bdr};
-      `,
+      footer: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:${lg_dev?'1em':'0'}; margin:0; z-index:75; background-color:${theme.footer}; border-top:1pt solid ${theme.footer_bdr};`,
       msg: `
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: ${theme.panel};
-        margin: 1em 1em 0; padding: ${lg_device?'2':'1'}em; border: solid ${theme.footer_bdr}; border-width: 1pt 0; font-size: 1.25em; font-weight: 700; text-align: center; color: ${theme.menu_txt};
-        background: linear-gradient(${theme.panel}, ${theme.panel}), url('${wp.net}'); background-position: center; background-size: cover; background-repeat: no-repeat;
+        display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; background-color:${theme.panel};
+        margin:1em 1em 0; padding:${lg_dev?'2':'1'}em; border:solid ${theme.footer_bdr}; border-width:1pt 0; font-size:1.25em; font-weight:700; text-align:center; color:${theme.menu_txt};
+        background:linear-gradient(${theme.panel},${theme.panel}), url('${wp.net}'); background-position:center; background-size:cover; background-repeat:no-repeat;
       `,
-      quote_btn: `margin: 1em auto 0; padding: 0.5em 1em; background-color: ${theme.btn}; border: 1pt solid ${theme.menu_bdr}; color: ${theme.menu_txt}; cursor: pointer;`,
-      submenus: `margin: 1em; padding: 0.5em;`,
-      copy: `
-        display: flex; flex-direction: row; justify-content: space-between; align-items: center; text-align: center;
-        border-top: 1px solid ${theme.footer_bdr}; margin: 0; padding: ${lg_device?'1em 2em 0':'1em 1em 3em'}; font-size: 1em;
-      `,
-      copy_left: `display: flex; flex-direction: row; justify-content: flex-start; align-items: flex-start; padding: 0;`,
-      copy_right: `display: flex; flex-direction: row; justify-content: flex-end; align-items: flex-start; padding: 0; min-width: 30%;`,
-      usa: `height: 1.5em; margin: 0 0.5em; color: ${theme.footer_txt};`,
-      copy_txt: `font-size: 1em; color: ${theme.footer_txt};`
+      quote_btn: `margin:1em auto 0; padding:0.5em 1em; background-color:${theme.btn}; border:1pt solid ${theme.menu_bdr}; color:${theme.menu_txt}; cursor:pointer;`,
+      submenus: `margin:1em; padding:0.5em;`,
+      copy: `display:flex; flex-direction:row; justify-content:space-between; align-items:center; text-align:center; border-top:1px solid ${theme.footer_bdr}; margin:0; padding:1em 2em; font-size:1em;`,
+      copy_left: `display:flex; flex-direction:row; justify-content:flex-start; align-items:flex-start; padding:0; margin:0;`,
+      copy_right: `display:flex; flex-direction:row; justify-content:flex-end; align-items:flex-start; padding:0; margin:0;`,
+      usa: `height:1.25em; margin:0; color:${theme.footer_txt};`,
+      copy_txt: `font-size:1em; margin:0; color:${theme.footer_txt};`
     };
 
-    const msg = E('div', {style:styles.msg}, [`
-      Makers of durable and reliable products for the aerosol can and commercial candy making industries. Our EVAC systems
-      include aerosol can crusher machines and aerosol can disposal systems for recycling. Our innovative candy making
-      equipment for production of candy sticks and canes and the sizing and cane forming of hard candy, taffy and caramel.
-    `]);
-
-    const submenu_config = {
-      orientation: `LANDSCAPE`,
-      btns: [
-        ['HOME', 'Home', [
-          ['BLOG', 'Blog'], ['CONTACT_ME', 'Contact Me'], ['ABOUT_ME', 'About Me']
-        ]],
-        ['ALL_RESEARCH', 'All Research', [
-          ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research'], ['WIRELESS_EMBEDDED_RESEARCH', 'Embedded Research'], ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research']
-        ]]
-      ]
-    };
-
-    const submenus = E('div', {style:styles.submenus}, [ Components.Submenu(store, submenu_config) ]);
-
-    const copy = E('div', {style:styles.copy}, [
-      E('div', {style:styles.copy_left}, [ E('p', {style:styles.copy_txt}, ['Copyright © 2020 chivington.io']) ]),
-      E('div', {style:styles.copy_right}, [
-        E('p', {style:styles.usa}, ['Site designed & built by Johnathan Chivington']),
-        E('img', {src: icons.sm.usa, alt: `USA Icon `, style:styles.usa}, ['United States'])
-      ])
+    // const msg = E('div', {style:styles.msg}, [``]);
+    const submenus = E('div', {style:styles.submenus}, [
+      Modules.Submenu(store,{orientation:`LANDSCAPE`,btns:[[...mapState.tree[0],[mapState.tree[1],mapState.tree[2],mapState.tree[3]]],mapState.tree[4]]})
     ]);
 
-    return E('div', {style:styles.footer}, [submenus, copy]);
+    const copy = E('div', {style:styles.copy}, [
+      E('div', {style:styles.copy_left}, [E('p', {style:styles.copy_txt}, [`Copyright © 2020 chivington.io`])]),
+      E('div', {style:styles.copy_right}, [E('img', {src:icons.sm.usa,alt:`USA Icon`,style:styles.usa}, ['United States'])])
+    ]);
+
+    return E('div', {style:styles.footer}, [submenus,copy]);
   },
   App: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -743,107 +645,78 @@ const Components = {
     let resizeCtr = 0;
     window.addEventListener('resize', function(event) {
       if (resizeCtr++ % 5 == 0) {
-        const [ nw, nh ] = [ window.innerWidth, window.innerHeight ];
-        const nm = nw < 600 ? 'mobile' : (nw < 750 ? 'small_tab' : (nw < 900 ? 'large_tab' : 'desktop'));
-        if (nm != mode) dispatch({type: 'RESIZE', payload: {width: nw, height: nh, mode: nm} });
+        const [nw,nh] = [window.innerWidth,window.innerHeight];
+        const nm = nw<600?'mobile':(nw<750?'small_tab':(nw<900?'large_tab':'desktop'));
+        if (nm!=mode) dispatch({type:'RESIZE',payload:{width:nw,height:nh,mode:nm}});
       }
     });
 
     return Unity.createElement('div', {style:styles.app}, [
-      Components.Header(store), Components.Menu(store), Components.Router(store), Components.Network(store)
+      Modules.Header(store), Modules.Menu(store), Modules.Router(store), Modules.Network(store)
     ]);
   }
 };
 
-/* ------------------------------------ Views ------------------------------------- *
- *                        Groups Components to fit device.                          *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+//  Views - Groups Modules to fit device.
+// -------------------------------------------------------------------------------------
 const Views = {
   Home: function(store) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { appState, userState, uiState } = state;
-    const { name, phone, email, directions, employer, title, major, school, bio } = userState.infoState;
-    const { windowState } = uiState;
-    const lg_device = ((windowState.mode == 'desktop') || (windowState.mode == 'large_tab')) ? true : false;
-    const landing = ((appState.historyState.views.slice(-1)=='@@INIT') && (appState.historyState.actions.slice(-1)=='@@INIT')) ? true : false;
-    const { thumbs } = Assets.imgs;
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {appState,userState,uiState} = state;
+    const {name,phone,email,directions,employer,title,major,school,bio} = userState.infoState;
+    const {windowState,mapState} = uiState;
+    const lg_dev = ((windowState.mode=='desktop')||(windowState.mode=='large_tab'))?true:false;
+    const landing = ((appState.historyState.views.slice(-1)=='@@INIT')&&(appState.historyState.actions.slice(-1)=='@@INIT'))?true:false;
     const theme = uiState.themeState[uiState.themeState.selected];
     const E = Unity.createElement;
 
     const styles = {
       home: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; width:100%; text-align:center; ${landing?'animation: app_fade_in 900ms ease-in-out 1 forwards;':''}`,
-      intro: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${lg_device?'10em 1em 3':'7em 1em 2'}em;`,
-      name: `margin:${lg_device?0.1:0.05}em 0; color:#fff; font-size:${lg_device?5:4}em; font-weight:500;`,
-      title: `margin:${lg_device?0.1:0.05}em; color:#fff; font-size:${lg_device?2.5:1.5}em; font-weight:500;`,
-      actions: `display:flex; flex-direction:${lg_device?'row':'column'}; justify-content:center; align-items:${lg_device?'center':'stretch'}; margin:0 auto; padding:0; width:${lg_device?80:90}%;`,
-      action_btn: `margin:0.5em ${lg_device?'':'auto'}; padding:0.5em 1em; width:${lg_device?50:80}%; border:1pt solid #aaa; cursor:pointer;`,
-      bio: `margin:${lg_device?'2':'1'}em; padding:${lg_device?`1`:`0.5`}em; border:1px solid ${theme.view_bdr}; border-radius:5px; background-color:${theme.well};`,
-      sentence: `color:${theme.view_txt}; font-size:${lg_device?1.25:1}em; font-weight:900; margin:0.5em;`
+      intro: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${lg_dev?'7em 1em 2':'6em 1em 2'}em;`,
+      name: `margin:0 auto; color:#fff; font-size:4em; font-weight:400;`,
+      title: `margin:0.25em; color:#fff; font-size:${lg_dev?1.5:1.3}em; font-weight:300;`,
+      actions: `display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:center; align-items:${lg_dev?'center':'stretch'}; margin:0 auto; padding:0; width:${lg_dev?80:90}%;`,
+      btn: `margin:0.5em ${lg_dev?'':'auto'}; padding:0.4em 0.6em; width:${lg_dev?50:80}%; background-color:${theme.btn}; border:1pt solid #aaa; cursor:pointer;`,
+      bio: `margin:${lg_dev?1.5:1}em; padding:${lg_dev?`0.5`:`0.25`}em; border:1px solid ${theme.view_bdr}; background-color:${theme.well};`,
+      sentence: `color:${theme.view_txt}; font-size:${lg_dev?1.25:1}em; font-weight:700; margin:0.5em;`,
+      research: `margin:0 ${lg_dev?`1.5em 1.5`:`1em 1`}em;`
     };
 
-    const intro = E('div', {style:styles.intro}, [
-      E('h1', {style:styles.name}, [name]), E('h2', {style:styles.title}, [`${title} & ${major} Student at ${school}`])
-    ]);
+    const intro = E('div',{style:styles.intro},[E('h1',{style:styles.name},[name]),E('h2',{style:styles.title},[`${major} Student at ${school}`])]);
 
-    const actions = E('div', {style:styles.actions}, [
-      ['CONTACT_ME', 'Contact Me'], ['ALL_RESEARCH', 'View My Research']
-    ].map((action_btn,i,arr) => {
-      const b = E('h2', {style: `${styles.action_btn} background-color: ${i==0?theme.btn_lt:theme.btn_lt};`}, [action_btn[1]]);
-      b.addEventListener('click', (event) => dispatch({type: 'NAV_TO', payload: [action_btn[0], action_btn[1]]}));
-      return b;
+    const actions = E('div',{style:styles.actions},[['CONTACT_ME','Contact Me'],['ALL_RESEARCH','View My Research']].map((b,i,arr) => {
+      const btn = E('h2', {style: styles.btn}, [b[1]]);
+      btn.addEventListener('click', (event) => dispatch({type:'NAV_TO',payload:[b[0], b[1]]})); return btn;
     }));
 
-    const work_bio = E('div', {style:styles.bio}, bio.work.map(s => E('p', {style:styles.sentence}, [s])));
+    const bioe = E('div',{style:styles.bio},bio.work.map(s=>E('p',{style:styles.sentence},[s])));
 
-    const tile_config = {
+    const tiles = E('div',{style:styles.research},[Modules.Tiles(store,{
       title: `Research Areas`,
-      subtitle: `These are a few of the areas I try to stay most active in as I pursue my education. I'm always very interested in collaborations so please feel free to reach out.`,
-      tiles: [
-        ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research', thumbs.ai],
-        ['WIRELESS_EMBEDDED_RESEARCH', 'Wireless Embedded Controls Systems Research', thumbs.mcu],
-        ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research', thumbs.iot],
-        ['USER_INTERFACE_RESEARCH', 'User Interface Research', thumbs.ui]
-      ]
-    };
+      subtitle: `These are the areas I try to stay most active in as I pursue my education.`,
+      tiles: mapState.tree[4][2].map(route=>([route[0],route[1],mapState.flat[route[0]][2]]))
+    })]);
 
-    const research_tiles = Components.Tiles(store, tile_config);
-
-    return E('div', {style:styles.home}, [ intro, actions, work_bio, research_tiles ]);
+    return E('div',{style:styles.home},[intro,actions,bioe,tiles]);
   },
   Blog: function(store) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { wp, thumbs } = Assets.imgs;
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {wp,thumbs} = Assets.imgs;
+    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.createElement;
 
     const styles = {
-      blogView: `
-        margin: 4em auto; padding: 1em 0 0 0; width: 100%; min-height: 100%;
-        display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-      `,
-      viewTitle: `margin: 0.75em auto 0.25em; color: ${theme.header_txt};`,
-      blogPost: `
-        margin: 1.25em auto 0; padding: 1.5em 0 0; width: 85%; border: 1pt solid ${theme.view_bdr}; border-radius: 6pt;
-        background-color: ${theme.well}; text-align: center;
-      `,
-      blogImg: `border: 1px solid ${theme.view_bdr}; border-radius: 5pt;`,
-      blogBody: `
-        margin: 1.5em; display: flex; flex-direction: column; justify-content: space-around; text-align: left;
-      `,
+      blogView: `margin: 3.5em auto 3em; padding: 1em 0 0 0; width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;`,
+      viewTitle: `margin: 0.75em auto 0.25em; color: ${theme.menu_txt};`,
+      blogPost: `margin: ${lg_dev?1.5:0.5}em; padding: 0.5em; border: 1pt solid ${theme.view_bdr}; background-color: ${theme.well}; text-align: center;`,
+      blogImg: `border: 1px solid ${theme.view_bdr};`,
+      blogBody: `margin: ${lg_dev?1:0.5}em; display: flex; flex-direction: column; justify-content: space-around; text-align: left;`,
       paragraph: `margin: 0.5em 0.25em; text-indent: 50px; color: ${theme.view_txt};`,
-      blogTags: `
-        margin: 0 1em; padding: 1em; border-top: 1pt solid ${theme.view_bdr};
-        display: flex; flex-direction: row; justify-content: space-around; align-items: center; flex-wrap: wrap;
-      `,
+      blogTags: `margin: 0 1em; padding: ${lg_dev?1:0.5}em; border-top: 1pt solid ${theme.view_bdr}; display: flex; flex-direction: row; justify-content: space-around; align-items: center; flex-wrap: wrap;`,
       tag: `margin: 0.25em; color: ${theme.view_txt};`
     };
-
-    // First Blog Post - Deploy & Secure a Server
-    // 1. https/http2
-    // 2. TLSv1.2
-    // 3. A+ Qualsys SSL Labs Score (https://www.ssllabs.com/ssltest/analyze.html?d=chivington.io)
-    // 4. A+ ImmuniWeb SSLScan Score (https://www.immuniweb.com/ssl/?id=RdHwgWdq)
-    // 5. 100% on Google PageSpeed Insights (https://developers.google.com/speed/pagespeed/insights/?url=chivington.io)
 
     const posts = [{
       img: [thumbs.linear_gif, 'Linear Regression Thumbnail'],
@@ -852,9 +725,7 @@ const Views = {
         `If you're interested in Machine Learning, Data Science, or Artificial Intelligence, this is a must have tool that will lay foundations for more complex and capable models like Neural Networks. `,
         `I'm really excited about it and will share more soon. Thanks for standing by.`
       ],
-      tags: [
-        `#LinearRegression `, `#DataScience`, `#MachineLearning`, `#Regularization`
-      ]
+      tags: [`#LinearRegression`,`#DataScience`,`#MachineLearning`,`#Regularization`]
     },{
       img: [thumbs.qualys, 'Qualys Thumbnail'],
       body: [
@@ -863,13 +734,11 @@ const Views = {
         `This setup will have an A/A+ Qualsys SSL Labs Score, an A/A+ ImmuniWeb SSLScan Score, and will only cost you the price of your domain name (usually ~$15/year or less) and $5/month for the server. With this, you can host a number of web apps, databases, etc. and it'll take less than an hour to set up. `,
         `P.S. If you don't want to pay anything for a domain name or server at all, I'll be covering that shortly after so stay tuned.`
       ],
-      tags: [
-        `#ServerAdmin `, `#Security`, `#SSL`, `#TLS`, `#http2`, `#NameCheap`, `#DigitalOcean`, `#LetsEncrypt`, `#Nginx`, `#Linux`, `#NodeJs`
-      ]
+      tags: [`#ServerAdmin`,`#Security`,`#SSL`,`#TLS`,`#http2`,`#NameCheap`,`#DigitalOcean`,`#LetsEncrypt`,`#Nginx`,`#Linux`,`#NodeJs`]
     }];
 
     return E('div', {style:styles.blogView}, [
-      E('h1', {style:styles.viewTitle}, ['Johnathan Chivington Blog']),
+      E('h1', {style:styles.viewTitle}, ['Blog Posts']),
       ...posts.map(post => E('div', {style:styles.blogPost}, [
         E('img', {style:styles.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
         E('div', {style:styles.blogBody}, post.body.map(p => E('p', {style:styles.paragraph}, [p]))),
@@ -878,37 +747,34 @@ const Views = {
     ]);
   },
   Contact: function(store) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
-    const { wp, thumbs } = Assets.imgs;
-    const { infoState } = state.userState;
-    const { emails, phones, locations } = infoState;
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {wp,thumbs} = Assets.imgs;
+    const {emails,phones,locations} = state.userState.infoState;
+    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.createElement;
-    const { mode } = state.uiState.windowState;
-    const lg_device = ((mode == 'desktop') || (mode == 'large_tab')) ? true : false;
 
     const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`,
-      contact: `margin: ${lg_device?'7em 2em 5':'5em 1em 3'}em; padding: 1em; background-color: ${theme.well}; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;`,
-      title: `margin: 0 1em; padding: 0.75em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.view_txt};`,
-      intro: `margin: 0; padding: 0; text-align: center; color: ${theme.view_txt};`,
-      section: `margin:  ${lg_device?'1':'0.25'}em; padding: 0; display: flex; flex-direction: ${lg_device?'row':'column'}; justify-content: space-around; align-items: center;`,
-      section_col: `flex: 1; margin: ${lg_device?'0.5':'0.25'}em; padding: 0; text-align: center;`,
-      section_title: `margin: 0; padding: 0; font-weight: bold; font-size: 1em; color: ${theme.view_txt};`,
-      section_txt: `margin: 0; padding: 0; color: ${theme.view_txt};`,
-      map: `border: 1px solid ${theme.footer}; margin: 1em auto; width: 95%; height: 250pt;`
+      view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`,
+      contact:`margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well}; display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;`,
+      title:`margin:0 1em; padding:0.75em; border-bottom:1pt solid ${theme.view_bdr}; text-align:center; color:${theme.view_txt};`,
+      intro:`margin:0; padding:0; text-align:center; color:${theme.view_txt};`,
+      section:`margin:${lg_dev?'1':'0.25'}em; padding:0; text-align:center; display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:space-around; align-items:center;`,
+      row:`display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'center':'flex-start'}; align-items:stretch;`,
+      sxn_title:`margin:${lg_dev?`0 0.5em 0 0`:`0.5em 0 0 0`}; padding:0; font-weight:bold; font-size:1em; color:${theme.view_txt};`,
+      txt:`margin:0; padding:0; color:${theme.view_txt};`,
+      map:`border:1px solid ${theme.footer_bdr}; margin:1em auto; width:95%; height:250pt;`
     };
 
-    const title = E('h1', {style:styles.title}, ['Stay In Touch']);
-
-    const section = (info, name) => E('div', {style:styles.section}, Object.keys(info).map(key => E('div', {style:styles.section_col}, [
-      E('h2', {style:styles.section_title}, [`${key[0].toUpperCase()}${key.slice(1)} ${name}`]), E('p', {style:styles.section_txt}, [info[key].length==2?info[key][0]:info[key]])
+    const section = (info,name)=>E('div',{style:styles.section},Object.keys(info).map(key=>E('div',{style:styles.row},[
+      E('h2',{style:styles.sxn_title},[`${name}${lg_dev?`: `:``}`]),E('p',{style:styles.txt},[info[key].length==2?info[key][0]:info[key]])
     ])));
 
-    const map = E('iframe', { frameborder: '0', style:styles.map, allowfullscreen: '', src: locations.work[1] }, []);
-
     return E('div', {style:styles.view}, [
-      E('div', {style:styles.contact}, [title, section(phones, 'Number'), section(emails, 'Email'), section(locations, 'Address'), map])
+      E('div',{style:styles.contact},[
+        E('h1',{style:styles.title},['StayInTouch']),section(phones,'Number'),section(emails,'Email'),
+        E('iframe',{frameborder:'0',style:styles.map,allowfullscreen:'',src:locations.home[1]},[])
+      ])
     ]);
   },
   About: function(store) {
@@ -917,18 +783,17 @@ const Views = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const { bio } = state.userState.infoState;
     const E = Unity.createElement;
-    const { mode } = state.uiState.windowState;
-    const lg_device = ((mode == 'desktop') || (mode == 'large_tab')) ? true : false;
+    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
 
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`,
-      about: `margin: ${lg_device?'1em 2em':'0.5em 1em'} 3em; padding: ${lg_device?1:0.25}em; background-color: ${theme.well};`,
-      title: `margin: ${lg_device?3:2.5}em auto 0.25em; padding: ${lg_device?0.25:0.15}em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.view_txt};`,
+      about: `margin: ${lg_dev?'1em 2em':'0.5em 1em'} 3em; padding: ${lg_dev?1:0.25}em; background-color: ${theme.well};`,
+      title: `margin: ${lg_dev?3:2.5}em auto 0.25em; padding: ${lg_dev?0.25:0.15}em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.menu_txt};`,
       intro: `margin: 0.5em; padding: 0; text-align: center; color: ${theme.view_txt};`,
       bio: `margin: 1em 0 0; padding: 0;`,
       section: `margin: 1.5em 1em 1em; padding: 0;`,
-      section_title: `margin: 0 0 0.5em; padding: 0 1em 0.5em; font-size: 1em; color: ${theme.view_txt}; border-bottom: 1pt solid ${theme.menu_bdr};`,
-      section_txt: `margin: 0 0.5em; padding: 0; color: ${theme.view_txt};`,
+      sxn_title: `margin: 0 0 0.5em; padding: 0 1em 0.5em; font-size: 1em; color: ${theme.view_txt}; border-bottom: 1pt solid ${theme.menu_bdr};`,
+      txt: `margin: 0 0.5em; padding: 0; color: ${theme.view_txt};`,
       sentence: `margin: 0.25em; color: ${theme.view_txt};`
     };
 
@@ -937,7 +802,7 @@ const Views = {
     const intro = E('p', {style:styles.intro}, [`intro`]);
 
     const full_bio = E('div', {style:styles.bio}, Object.keys(bio).map(section => E('div', {style:styles.section}, [
-      E('h2', {style:styles.section_title}, [`${section.toUpperCase()} HISTORY`]),
+      E('h2', {style:styles.sxn_title}, [`${section.toUpperCase()} HISTORY`]),
       ...bio[section].map((sentence, i) => E('span', {style: `${styles.sentence} ${i==0?'margin-left:1em;':''}`}, [sentence]))
     ])));
 
@@ -947,24 +812,21 @@ const Views = {
     ]);
   },
   All_Research: function(store) {
-    const { thumbs } = Assets.imgs;
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {windowState,mapState} = state.uiState;
+    const {thumbs} = Assets.imgs;
 
     const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%; padding: 6em 1em 3em;`
+      view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%; padding:6em 1em 3em;`
     };
 
-    const tile_config = {
+    const tiles = Modules.Tiles(store,{
       title: `All Research Areas`,
       subtitle: `Choose an area to see specific projects.`,
-      tiles: [
-        ['ARTIFICIAL_INTELLIGENCE_RESEARCH', 'Artificial Intelligence Research', thumbs.ai],
-        ['WIRELESS_EMBEDDED_RESEARCH', 'Wireless Embedded Controls Systems Research', thumbs.iot],
-        ['COMPUTER_ARCHITECTURE', 'Computer Architecture Research', thumbs.mcu],
-        ['USER_INTERFACE_RESEARCH', 'User Interface Research', thumbs.ui],
-      ]
-    };
+      tiles: mapState.tree[4][2].map(route=>([route[0],route[1],mapState.flat[route[0]][2]]))
+    });
 
-    return Unity.createElement('div', {style:styles.view}, [ Components.Tiles(store, tile_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [tiles]);
   },
   Artificial_Intelligence_Research: function(store) {
     const styles = {
@@ -984,7 +846,7 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [Modules.Project(store,product_config)]);
   },
   Embedded_Research: function(store) {
 
@@ -1004,7 +866,7 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
   },
   Wireless_Networking_Research: function(store) {
 
@@ -1024,7 +886,7 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
   },
   User_Interface_Research: function(store) {
 
@@ -1033,8 +895,8 @@ const Views = {
     };
 
     const product_config = {
-      title: `User Interface Research`,
-      subtitle: `Modular, portable, complex user interface frameworks for local or remote controls systems.`,
+      title: `UI Architectures Research`,
+      subtitle: `Modular, portable, complex user interface architectures designed for any platform.`,
       img: Assets.imgs.thumbs.ui,
       description: [
         `My current interface research invloves creating highly complex user interfaces that:`,
@@ -1045,13 +907,13 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [ Components.Project(store, product_config) ]);
+    return Unity.createElement('div', {style:styles.view}, [Modules.Project(store,product_config)]);
   }
 };
 
-/* ------------------------------- Asset Manifest --------------------------------- *
- *                         Everything needed to cache app.                          *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+//  Asset Manifest - Everything needed to cache app.
+// -------------------------------------------------------------------------------------
 const Assets = {
   css: {
     fonts: {
@@ -1158,9 +1020,9 @@ const Assets = {
   webmanifest: '/site.webmanifest'
 };
 
-/* ---------------------------------- Blueprint ----------------------------------- *
- *                            Specifies inital app state.                           *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+//  Blueprint - Specifies inital app state.
+// -------------------------------------------------------------------------------------
 const Blueprint = {
   app: {
     about: {
@@ -1267,16 +1129,10 @@ const Blueprint = {
     name: 'Johnathan Chivington',
     employer: `University of Washington`,
     title: `Fiscal Analyst`,
-    school: `University of Washington`,
-    major: `Physics`,
-    phones: {
-      mobile: '303-900-2861',
-      work: '206-897-1407'
-    },
-    emails: {
-      personal: 'j.chivington@outlook.com',
-      work: 'johnchiv@uw.edu'
-    },
+    school: `North Seattle College`,
+    major: `Physics & Computer Science`,
+    phones: {mobile:'303-900-2861'},
+    emails: {personal: 'j.chivington@outlook.com'},
     web: {
       linkedin: 'https://linkedin.com/in/johnathan-chivington',
       github: 'https://github.com/chivington',
@@ -1284,28 +1140,21 @@ const Blueprint = {
       facebook: 'https://facebook.com/jt.chivington'
     },
     locations: {
-      home: ['16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus'],
-      work: ['185 E Stevens Way NE, Seattle, WA 98195', 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2687.591733504735!2d-122.3053456!3d47.6535!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x549014ed3251f07f%3A0x12de8b2d1ad8504a!2sPaul%20G.%20Allen%20Center%20for%20Computer%20Science%20%26%20Engineering!5e0!3m2!1sen!2sus!4v1585208912448!5m2!1sen!2sus']
+      home: ['16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus']
     },
     bio: {
       work: [
-        `I'm currently a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering.`,
-        `My work history has been primarily in sales and business development and I transitioned into finance in 2018 while working at ABC Legal Services, a legal process service & e-filing automation company headquartered in Seattle.`,
-        `I have a Computer Science background mostly focused in Machine Learning & Artificial Intelligence, Computer Architecture, Wireless Embedded Controls, Networking and UI/UX design.`,
-        `I'm interested in pursuing MEMS/NEMS research, quantum optics, quantum computation and other research that intersects with my CS background so I'm pursuing an undergraduate Physics degree at UW as well.`
+        `I'm currently a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering and my experience has been primarily in finance, business development and sales.`,
+        `My background is in Computer Science with extensive experience in the areas of Machine Learning & Artificial Intelligence, Computer Architecture, Networked Embedded Systems, and User Interface Architectures.`,
+        `My future endeavours will be in the areas of MEMS/NEMS systems, quantum optics, quantum computation, biophysical interactions, and other nano-scale physical systems.`
       ],
       education: [
         `This quarter I'm auditing CSE 546 "Machine Learning" at the University of Washington.`,
-        `One amazing benefit of working at UW is their employee tuition exemption program which covers 6 credits per quarter.`,
-        `This was a primary motivation for me seeking employment with UW and I'm using it to continue taking my preliminary math & physics courses at UW, starting this summer.`
       ],
       personal: [
-        `In my spare time I work on various research projects, study and care for my microscopic "pets" and spend time with my amazing girlfriend.`,
-        `I'm currently taking a Computer Architecture course that culminates in a fully working 16-bit computer built from first principles using only NAND gates.`,
-        `I'm also acquiring various microscopic "pets" like Tardigrades and Planaria to study and care for.`,
-        `When we're not terribly busy or quarantined by a global pandemic, my girlfriend and I also like to go hiking, kayaking, walking our dog, etc.`,
-        `Lately we've been focused on propogating exotic plants and building a greenhouse in our back yard so we have a personal jungle and can provide our own produce year-round.`,
-        `My "career" goals are also very personal to me though, so I tend to spend most of my spare time pursuing those.`
+        `My "career" goals are also very personal to me, so I tend to spend most of my spare time pursuing those.`,
+        `I'm currently taking Computer Architecture and Convex Optimization courses online and auditing CSE 546 at the University of Washington. `,
+        `When we're not terribly busy or quarantined by a global pandemic, my girlfriend and I also like to go hiking, kayaking, walking our dog, etc.`
       ]
     }
   },
@@ -1313,24 +1162,39 @@ const Blueprint = {
     '@@ACTIONS': {},
     map: {
       flat: {
-        'HOME': [Views.Home, 'Home'],
-        'BLOG': [Views.Blog, 'Blog'],
-        'CONTACT_ME': [Views.Contact, 'Contact Me'],
-        'ABOUT_ME': [Views.About, 'About Me'],
-        'ALL_RESEARCH': [Views.All_Research, 'All Research'],
-        'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.Artificial_Intelligence_Research, 'Artificial Intelligence Research'],
-        'WIRELESS_EMBEDDED_RESEARCH': [Views.Embedded_Research, 'Embedded Research'],
-        'COMPUTER_ARCHITECTURE': [Views.Wireless_Networking_Research, 'Computer Architecture Research'],
-        'USER_INTERFACE_RESEARCH': [Views.User_Interface_Research, 'User Interface Research'],
-        'DEFAULT': [Views.Home, 'Home']
+        'HOME': [Views.Home,'Home',Assets.imgs.thumbs.ai],
+        'BLOG': [Views.Blog,'Blog',Assets.imgs.thumbs.ai],
+        'CONTACT_ME': [Views.Contact,'Contact Me',Assets.imgs.thumbs.ai],
+        'ABOUT_ME': [Views.About,'About Me',Assets.imgs.thumbs.ai],
+        'ALL_RESEARCH': [Views.All_Research,'All Research',Assets.imgs.thumbs.ai],
+        'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.Artificial_Intelligence_Research,'Artificial Intelligence Research',Assets.imgs.thumbs.ai],
+        'WIRELESS_EMBEDDED_RESEARCH': [Views.Embedded_Research,'Embedded Research',Assets.imgs.thumbs.iot],
+        'COMPUTER_ARCHITECTURE': [Views.Wireless_Networking_Research,'Computer Architecture Research',Assets.imgs.thumbs.mcu],
+        'UI_ARCHITECTURES_RESEARCH': [Views.User_Interface_Research,'UI Architectures Research',Assets.imgs.thumbs.ui],
+        'DEFAULT': [Views.Home,'Home',Assets.imgs.thumbs.ai]
       },
       tree: [
-        'HOME','BLOG','CONTACT_ME','ABOUT_ME',
-        ['ALL_RESEARCH','ARTIFICIAL_INTELLIGENCE_RESEARCH','WIRELESS_EMBEDDED_RESEARCH','COMPUTER_ARCHITECTURE','USER_INTERFACE_RESEARCH']
+        ['HOME','Home'],
+        ['BLOG','Blog'],
+        ['CONTACT_ME','Contact Me'],
+        ['ABOUT_ME','About Me'],
+        ['ALL_RESEARCH','All Research', [
+          ['ARTIFICIAL_INTELLIGENCE_RESEARCH','Artificial Intelligence Research'],
+          ['WIRELESS_EMBEDDED_RESEARCH','Embedded Research'],
+          ['COMPUTER_ARCHITECTURE','Computer Architecture Research'],
+          ['UI_ARCHITECTURES_RESEARCH','UI Architectures Research']
+        ]]
+      ],
+      tre: [
+        ['HOME'],
+        ['BLOG'],
+        ['CONTACT_ME'],
+        ['ABOUT_ME'],
+        ['ALL_RESEARCH', [['ARTIFICIAL_INTELLIGENCE_RESEARCH'],['WIRELESS_EMBEDDED_RESEARCH'],['COMPUTER_ARCHITECTURE'],['UI_ARCHITECTURES_RESEARCH']]]
       ]
     },
     theme: {
-      selected: 'dark',
+      selected: 'light',
       dark: {
         header: `rgba(21,32,43,1)`,
         header_txt: `rgba(255,255,255,1)`,
@@ -1360,10 +1224,10 @@ const Blueprint = {
         header: `rgba(255,255,255,1)`,
         header_txt: `rgba(55,55,75,0.9)`,
         header_bdr: `rgba(25,25,25,1)`,
-        menu: `rgba(112,140,188,0.5)`,
-        menu_bdr: `rgba(25,25,25,0.9)`,
-        menu_btn: `rgba(95,125,180,1)`,
-        menu_sub: `rgba(112,140,188,0.5)`,
+        menu: `rgba(112,140,188,0.9)`,
+        menu_bdr: `rgba(35,45,75,0.9)`,
+        menu_btn: `rgba(66,103,178,1)`,
+        menu_sub: `rgba(120,160,195,1)`,
         menu_txt: `rgba(255,255,255,1)`,
         view: `rgba(255,255,255,1)`,
         view_bdr: `rgba(75,75,75,0.9)`,
@@ -1382,9 +1246,7 @@ const Blueprint = {
         success: '#7e7',
         error: '#e77'
       },
-      wp: {
-        view: Assets.imgs.wp.pnw
-      }
+      wp: {view:Assets.imgs.wp.pnw}
     },
     window: {
       width: window.innerWidth,
@@ -1427,9 +1289,9 @@ const Blueprint = {
   }
 };
 
-/* -------------------------------- Initialization -------------------------------- *
- *              Initialize application with Blueprint & Asset Manifest.             *
- * -------------------------------------------------------------------------------- */
+// -------------------------------------------------------------------------------------
+//  Initialization - Initialize application with Blueprint & Asset Manifest.
+// -------------------------------------------------------------------------------------
 const App_Root = document.getElementById('App_Root');
 const Load_Screen_Root = document.getElementById('Load_Screen_Root');
-Unity.initializeApplication(App_Root, Load_Screen_Root, Blueprint, Reducers, Middlewares);
+Unity.initializeApplication(App_Root,Load_Screen_Root,Blueprint,Reducers,Middlewares);
