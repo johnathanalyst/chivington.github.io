@@ -9,12 +9,12 @@
 //  Unity - A minimal framework used to build complex "native-like" web applications.
 // -------------------------------------------------------------------------------------
 const Unity = {
-  createReducer: function(defaultState,map) {
+  reducer: function(defaultState,map) {
     return function(state = defaultState, action) {
       return map[action.type] ? map[action.type](state, action) : state;
     }
   },
-  combineReducers: function(reducers) {
+  combine: function(reducers) {
     return function(state, action) {
       return Object.keys(reducers).reduce((combined, k) => {
         combined[k] = reducers[k](state[k], action);
@@ -22,7 +22,7 @@ const Unity = {
       }, {});
     }
   },
-  createStore: function(rootReducer,middlewares={},history_length) {
+  store: function(rootReducer,middlewares={},history_length) {
     var state = {}, listeners = [], history = [];
     const { logActions, listenerBypass } = middlewares;
 
@@ -52,7 +52,7 @@ const Unity = {
     dispatch({type:'@@INIT'});
     return { getState, getHistory, dispatch, subscribe };
   },
-  storeMiddlewares: {
+  middlewares: {
     logActions: function(initAction = '') {
       return function(stage, state, action) {
         if  (action.type != initAction) {
@@ -71,7 +71,7 @@ const Unity = {
       }
     }
   },
-  createElement: function(elem,attrs,children) {
+  element: function(elem,attrs,children) {
     const element = document.createElement(elem);
     if (attrs) Object.keys(attrs).forEach(k => element.setAttribute(k, attrs[k]));
     if (children.length >= 1) children.forEach(child => element.appendChild((typeof child == 'string')
@@ -83,30 +83,22 @@ const Unity = {
     while (root.lastChild) root.lastChild.remove();
     root.appendChild(component(store));
   },
-  initializeApplication: function(app_root,load_screen_root,blueprint,reducers,middlewares) {
+  initialize: function(app_root,load_screen_root,blueprint,reducers,middlewares) {
     const app_title = blueprint.user.name ? blueprint.user.name : 'Unity Application';
     document.title = `${app_title} | Home`;
-
     if (!app_root) Unity.terminate(app_root,`No Application Root supplied...`);
     if (!blueprint) Unity.terminate(app_root,`No Blueprint supplied...`);
     if (!!load_screen_root) {console.log(`${app_title} | Killing load screen...`);load_screen_root.style.display='none';};
-
     console.log(`${app_title} | Killing static application...`);
     app_root.firstElementChild.style.display = 'none';
-
-    const init_state = Unity.combineReducers(reducers);
-    const UnityStore = Unity.createStore(init_state, middlewares);
-
+    const init_state = Unity.combine(reducers);
+    const UnityStore = Unity.store(init_state, middlewares);
     Unity.render(Modules.App, UnityStore, App_Root);
-    UnityStore.subscribe({
-     name: 'Render_App',
-     function: Unity.render,
-     params: [Modules.App, UnityStore, App_Root]
-    });
+    UnityStore.subscribe({name:'Render_App',function:Unity.render,params:[Modules.App,UnityStore,App_Root]});
   },
   terminate: function(app_root,msg) {
     while (app_root.lastChild) app_root.lastChild.remove();
-    app_root.appendChild(Unity.createElement('div',{position:`absolute`,left:0,top:0,bottom:0,right:0,index:1000,background:`linear-gradient(#fff,#eee)`},[msg]));
+    app_root.appendChild(Unity.element('div',{position:`absolute`,left:0,top:0,bottom:0,right:0,index:1000,background:`linear-gradient(#fff,#eee)`},[msg]));
     throw `[Unity] - ${msg}`;
   }
 };
@@ -116,9 +108,9 @@ const Unity = {
 // -------------------------------------------------------------------------------------
 const Reducers = {
   appState: function(state=Blueprint.app, action) {
-    return Unity.combineReducers({
-      aboutState: Unity.createReducer(Blueprint.app.about, {}),
-      historyState: Unity.createReducer(Blueprint.app.history, {
+    return Unity.combine({
+      aboutState: Unity.reducer(Blueprint.app.about, {}),
+      historyState: Unity.reducer(Blueprint.app.history, {
         'NAV_TO': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type],
           views: s.views.length == 5 ? [...s.views.slice(1), a.payload] : [...s.views, a.payload]
@@ -162,7 +154,7 @@ const Reducers = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_WIFI_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_SUBMENU': (s,a) => ({
@@ -177,7 +169,7 @@ const Reducers = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_WIFI_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_FOOTER_MENU': (s,a) => ({
@@ -190,26 +182,26 @@ const Reducers = {
     })(state, action);
   },
   deviceState: function(state=Blueprint.device, action) {
-    return Unity.combineReducers({
-      networkState: Unity.createReducer(Blueprint.device.network, {
+    return Unity.combine({
+      networkState: Unity.reducer(Blueprint.device.network, {
         'NET_STATE_CHANGE': (s,a) => a.payload,
         'NET_STATE_INIT': (s,a) => a.payload
       })
     })(state, action);
   },
   userState: function(state=Blueprint.user, action) {
-    return Unity.combineReducers({
-      infoState: Unity.createReducer(Blueprint.user, {})
+    return Unity.combine({
+      infoState: Unity.reducer(Blueprint.user, {})
     })(state, action);
   },
   uiState: function (state=Blueprint.ui, action) {
-    return Unity.combineReducers({
-      mapState: Unity.createReducer(Blueprint.ui.map, {}),
-      headerState: Unity.createReducer(Blueprint.ui.header, {
+    return Unity.combine({
+      mapState: Unity.reducer(Blueprint.ui.map, {}),
+      headerState: Unity.reducer(Blueprint.ui.header, {
         'CHANGE_HEADER_ICON': (s,a) => ({icon: a.payload.icon, title: s.title}),
         'CHANGE_HEADER_TITLE': (s,a) => ({icon: s.icon, title: a.payload.title})
       }),
-      menuState: Unity.createReducer(Blueprint.ui.menu, {
+      menuState: Unity.reducer(Blueprint.ui.menu, {
         'UPDATE_MENU_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload}),
         'NAV_TO': (s,a) => ({current: 'CLOSED', previous: s.current, scrollTop: 0}),
         'TOGGLE_MENU': (s,a) => ({current: s.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: s.current, scrollTop: 0}),
@@ -217,15 +209,15 @@ const Reducers = {
         'CLOSE_MENU': (s,a) => ({current: 'CLOSED', previous: s.current, scrollTop: 0}),
         'TOGGLE_THEME': (s,a) => ({current: 'OPEN', previous: s.current, scrollTop: a.payload})
       }),
-      themeState: Unity.createReducer(Blueprint.ui.theme, {
+      themeState: Unity.reducer(Blueprint.ui.theme, {
         'TOGGLE_THEME': (s,a) => Object.assign({}, s, {selected: s.selected == 'dark' ? 'light' : 'dark'}),
         'TOGGLE_WP': (s,a) => Object.assign({}, s, Object.assign({}, s.wp, a.payload))
       }),
-      viewState: Unity.createReducer(Blueprint.ui.view, {
+      viewState: Unity.reducer(Blueprint.ui.view, {
         'NAV_TO': (s,a) => ({current: a.payload, previous: s.current, scrollTop: 0}),
         'UPDATE_VIEW_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload})
       }),
-      windowState: Unity.createReducer(Blueprint.ui.window, {
+      windowState: Unity.reducer(Blueprint.ui.window, {
         'RESIZE': (s,a) => a.payload
       })
     })(state, action);
@@ -236,8 +228,8 @@ const Reducers = {
 //  Middlewares - Functions that intercept state changes.
 // -------------------------------------------------------------------------------------
 const Middlewares = {
-  // logActions: Unity.storeMiddlewares.logActions('@@INIT'),
-  listenerBypass: Unity.storeMiddlewares.listenerBypass({
+  // logActions: Unity.middlewares.logActions('@@INIT'),
+  listenerBypass: Unity.middlewares.listenerBypass({
     'NET_STATE_INIT': ['Render_App'],
     'UPDATE_VIEW_SCROLL': ['Render_App'],
     'UPDATE_MENU_SCROLL': ['Render_App']
@@ -258,7 +250,7 @@ const Modules = {
     const selected = mapState.flat[current[0]]?mapState.flat[current[0]]:mapState.flat['DEFAULT'];
     const animation = lastActionNav && !sameView ? `animation:viewSlideIn 250ms 1 forwards;` : ``;
     document.title = `${state.userState.infoState.name} | ${selected[1]}`;
-    return Unity.createElement('div', {style:styles.router}, [Modules.View(store,selected[0],animation)]);
+    return Unity.element('div', {style:styles.router}, [Modules.View(store,selected[0],animation)]);
   },
   Network: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -279,7 +271,7 @@ const Modules = {
       `
     };
 
-    const Net = Unity.createElement('div', {style:styles.net}, [offline?'Offline':'Connected']);
+    const Net = Unity.element('div', {style:styles.net}, [offline?'Offline':'Connected']);
 
     window.addEventListener('online', function(event) {
       if (effectiveType != previousType) dispatch({type:'NET_STATE_CHANGE',  payload: {
@@ -350,7 +342,7 @@ const Modules = {
     const menu_action = !!(last_action == 'OPEN_MENU' || last_action == 'CLOSE_MENU' || last_action == 'TOGGLE_MENU');
     const lg_dev = (windowState.mode == 'desktop' || windowState.mode == 'large_tab');
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
       header: `
@@ -405,7 +397,7 @@ const Modules = {
     const last_action = state.appState.historyState.actions.slice(-1);
     const closed_menu_last = !!(last_action=='CLOSE_MENU'||last_action=='TOGGLE_MENU');
     const lg_dev = (windowState.mode=='large_tab'||windowState.mode=='desktop');
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
       menu: `
@@ -434,7 +426,7 @@ const Modules = {
     toggle.lastChild.addEventListener('click',()=>dispatch({type:'TOGGLE_THEME',payload:store.getState().uiState.menuState.scrollTop}));
 
     const submenu = Modules.Submenu(store,{orientation:`PORTRAIT`,btns:mapState.tree});
-    const Menu = Unity.createElement('div',{style:styles.menu},[submenu,toggle,copy]);
+    const Menu = Unity.element('div',{style:styles.menu},[submenu,toggle,copy]);
     setTimeout(event=>Menu.scrollTo({top:menuState.scrollTop,left:0,behavior:'auto'}),50);
 
     let scroll_ctr = 0;
@@ -458,7 +450,7 @@ const Modules = {
     const closed_menu_last = !!(last_action == 'CLOSE_MENU' || last_action == 'TOGGLE_MENU');
     const lg_dev = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
     const landscape = config.orientation == 'LANDSCAPE' && lg_dev;
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
       container: `display: flex; flex-direction: ${landscape?'row':'column'}; justify-content: ${landscape?'center':'flex-start'}; align-items: ${landscape?'flex-start':'stretch'}; ${lg_dev?``:`border-top: 1pt solid ${theme.menu_bdr};`}`,
@@ -520,7 +512,7 @@ const Modules = {
       `
     };
 
-    const View = Unity.createElement('div', {style:styles.view,content:`minimal-ui`}, [view(store),Modules.Footer(store)]);
+    const View = Unity.element('div', {style:styles.view,content:`minimal-ui`}, [view(store),Modules.Footer(store)]);
     setTimeout(event=>View.scrollTo({top:viewState.scrollTop,left:0,behavior:'auto'}),50);
 
     let scroll_ctr = 0;
@@ -533,13 +525,13 @@ const Modules = {
     View.addEventListener('click', function(event) { if (menuState.current=='OPEN') dispatch({type:'CLOSE_MENU'}); });
     return View;
   },
-  Project: function(store, config) {
+  Project: function(store, conf) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { mode } = state.uiState.windowState;
     const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const { beacon } = Assets.imgs;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
       project: `margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well};`,
@@ -555,48 +547,40 @@ const Modules = {
     };
 
     const description = E('div', {style:styles.description}, [
-      E('img', {style:styles.img, src:config.img, alt:`${config.title} Image`}, []),
-      E('div', {style:styles.wrapper}, config.description.map((s,i)=>E('p',{style:styles.txt},[`${i>config.idx?'• ':''}${s}`])))
+      E('img', {style:styles.img, src:conf.img, alt:`${conf.title} Image`}, []),
+      E('div', {style:styles.wrapper}, conf.description.map((s,i)=>E('p',{style:styles.txt},[`${i>conf.idx?'• ':''}${s}`])))
     ]);
 
     return E('div',{style:styles.project},[
-      E('h1',{style:styles.title},[config.title]),E('p',{style:styles.subtitle},[config.subtitle]),description
+      E('h1',{style:styles.title},[conf.title]),E('p',{style:styles.subtitle},[conf.subtitle]),description
     ])
   },
-  Tiles: function(store, tile_config) {
-    const [ state, dispatch ] = [ store.getState(), store.dispatch ];
+  Tiles: function(store,conf) {
+    const [state,dispatch] = [store.getState(),store.dispatch];
     const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
-      tiles_component: `display: flex; flex-direction: column; justify-content: space-around; align-items: stretch; margin: 0; padding: 0.5em; background-color: ${theme.well};`,
-      title: `margin: 0 0.5em; padding: 0.25em; border-bottom: 1pt solid ${theme.view_bdr}; font-size: 1.5em; text-align: center; color: ${theme.view_txt};`,
-      subtitle: `margin: 0.75em; padding: 0; font-size: 1em; text-align: center; color: ${theme.view_txt};`,
+      component: `display:flex; flex-direction:column; justify-content:space-around; align-items:stretch; margin:0; padding:0.5em; background-color:${theme.well};`,
+      title: `margin:0 0.5em; padding:0.25em; border-bottom:1pt solid ${theme.view_bdr}; font-size:1.5em; text-align:center; color:${theme.view_txt};`,
+      sub: `margin:0.75em; padding:0; font-size:1em; text-align:center; color:${theme.view_txt};`,
       tiles: `
-        display: flex; flex-direction: ${lg_dev?'row':'column'}; justify-content: flex-start; align-items: stretch; padding: ${lg_dev?0.5:0.25}em;
-        margin: ${lg_dev?0.5:0.25}em; background-color: ${theme.panel}; ${lg_dev?'overflow-x: scroll;':''} border: solid ${theme.footer_bdr}; border-width: 1pt 0;
+        display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'space-between':'flex-start'}; align-items:${lg_dev?'center':'stretch'};
+        margin:${lg_dev?0.5:0.25}em; background-color:${theme.panel}; ${lg_dev?'overflow-x:scroll;':''} border:solid ${theme.view_bdr}; border-width:1pt 0;
+        ${lg_dev?`border-right:1.5pt solid ${theme.view_bdr}; padding: 1em;`:''} -moz-box-shadow:inset 0 5px 10px #000000;
       `,
-      tile: `display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 0; margin: ${lg_dev?0.75:0.5}em; background-color: ${theme.panel}; border: 1pt solid ${theme.view_bdr}; cursor: pointer;`,
-      img: `margin:0; ${lg_dev?'height:200pt':`width:100%`}; border-bottom: 1pt solid ${theme.view_bdr};`,
-      name: `margin:${lg_dev?1:0.75}em; color: ${theme.menu_txt}; font-size: 1em; font-weight: 900; text-align:center; color: ${theme.view_txt};`
+      tile: `display:flex; flex-direction:column; justify-content:flex-start; align-items:center; padding:0; margin:${lg_dev?'0 0.75':0.5}em; background-color:${theme.panel}; border:1pt solid ${theme.view_bdr}; cursor:pointer;`,
+      img: `margin:0; ${lg_dev?'height:200pt':`width:100%`}; border-bottom:1pt solid ${theme.view_bdr};`,
+      name: `margin:${lg_dev?1:0.75}em; color:${theme.menu_txt}; font-size:1em; font-weight:900; text-align:center; color:${theme.view_txt};`
     };
 
-    const tiles = E('div', {style:styles.tiles}, tile_config.tiles.map((tile,i) => {
-      const t = E('div',{style:styles.tile},[E('img',{style:styles.img,src:tile[2],alt:`${tile[1]} Thumbnail`},[]),E('h3',{style:styles.name},[tile[1]])]);
-      t.addEventListener('click',()=>dispatch({type:'NAV_TO',payload:[tile[0],tile[1]]})); return t;
+    const tiles = E('div', {style:styles.tiles}, conf.tiles.map((t,i) => {
+      const e = E('div',{style:styles.tile},[E('img',{style:styles.img,src:t[2],alt:`${t[1]} Thumbnail`},[]),E('h3',{style:styles.name},[t[1]])]);
+      e.addEventListener('click',()=>dispatch({type:'NAV_TO',payload:[t[0],t[1]]})); return e;
     }));
 
-    setTimeout(e => {
-      if (lg_dev) {
-        const tile_width = Object.keys(tiles.children).reduce((acc,cur,idx,arr) => tiles.children[arr[idx]].offsetWidth+acc,0);
-        if (tile_width>tiles.clientWidth) tiles.style.cssText = `${styles.tiles} border-right:1.5pt solid ${theme.view_bdr}; -webkit-box-shadow:inset -25px 5 50px -25px #000; padding:3em;`
-      }
-    }, 250);
-
-    return E('div', {style:styles.tiles_component}, [
-      E('h1',{style:styles.title},[tile_config.title]), E('h2',{style:styles.subtitle},[tile_config.subtitle]), tiles
-    ]);
+    return E('div', {style:styles.component}, [E('h1',{style:styles.title},[conf.title]), E('h2',{style:styles.sub},[conf.subtitle]), tiles]);
   },
   Footer: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
@@ -604,10 +588,10 @@ const Modules = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const lg_dev = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
     const {icons,wp} = Assets.imgs;
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
-      footer: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:${lg_dev?'1em':'0'}; margin:0; z-index:75; background-color:${theme.footer}; border-top:1pt solid ${theme.footer_bdr};`,
+      footer: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; margin:0; z-index:75; background-color:${theme.footer}; border-top:1pt solid ${theme.footer_bdr};`,
       msg: `
         display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; background-color:${theme.panel};
         margin:1em 1em 0; padding:${lg_dev?'2':'1'}em; border:solid ${theme.footer_bdr}; border-width:1pt 0; font-size:1.25em; font-weight:700; text-align:center; color:${theme.menu_txt};
@@ -651,7 +635,7 @@ const Modules = {
       }
     });
 
-    return Unity.createElement('div', {style:styles.app}, [
+    return Unity.element('div', {style:styles.app}, [
       Modules.Header(store), Modules.Menu(store), Modules.Router(store), Modules.Network(store)
     ]);
   }
@@ -669,7 +653,7 @@ const Views = {
     const lg_dev = ((windowState.mode=='desktop')||(windowState.mode=='large_tab'))?true:false;
     const landing = ((appState.historyState.views.slice(-1)=='@@INIT')&&(appState.historyState.actions.slice(-1)=='@@INIT'))?true:false;
     const theme = uiState.themeState[uiState.themeState.selected];
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
       home: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; width:100%; text-align:center; ${landing?'animation: app_fade_in 900ms ease-in-out 1 forwards;':''}`,
@@ -694,7 +678,7 @@ const Views = {
 
     const tiles = E('div',{style:styles.research},[Modules.Tiles(store,{
       title: `Research Areas`,
-      subtitle: `These are the areas I try to stay most active in as I pursue my education.`,
+      subtitle: `All currently active and past research areas.`,
       tiles: mapState.tree[4][2].map(route=>([route[0],route[1],mapState.flat[route[0]][2]]))
     })]);
 
@@ -705,7 +689,7 @@ const Views = {
     const {wp,thumbs} = Assets.imgs;
     const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
       blogView: `margin: 3.5em auto 3em; padding: 1em 0 0 0; width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;`,
@@ -752,13 +736,14 @@ const Views = {
     const {emails,phones,locations} = state.userState.infoState;
     const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
-    const E = Unity.createElement;
+    const E = Unity.element;
 
     const styles = {
       view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`,
       contact:`margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well}; display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;`,
       title:`margin:0 1em; padding:0.75em; border-bottom:1pt solid ${theme.view_bdr}; text-align:center; color:${theme.view_txt};`,
       intro:`margin:0; padding:0; text-align:center; color:${theme.view_txt};`,
+      sections: `display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'space-around':'flex-start'};`,
       section:`margin:${lg_dev?'1':'0.25'}em; padding:0; text-align:center; display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:space-around; align-items:center;`,
       row:`display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'center':'flex-start'}; align-items:stretch;`,
       sxn_title:`margin:${lg_dev?`0 0.5em 0 0`:`0.5em 0 0 0`}; padding:0; font-weight:bold; font-size:1em; color:${theme.view_txt};`,
@@ -772,7 +757,8 @@ const Views = {
 
     return E('div', {style:styles.view}, [
       E('div',{style:styles.contact},[
-        E('h1',{style:styles.title},['StayInTouch']),section(phones,'Number'),section(emails,'Email'),
+        E('h1',{style:styles.title},['StayInTouch']),
+        E('div',{style:styles.sections},[section(phones,'Number'),section(emails,'Email')]),
         E('iframe',{frameborder:'0',style:styles.map,allowfullscreen:'',src:locations.home[1]},[])
       ])
     ]);
@@ -782,7 +768,7 @@ const Views = {
     const { wp, thumbs } = Assets.imgs;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const { bio } = state.userState.infoState;
-    const E = Unity.createElement;
+    const E = Unity.element;
     const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
 
     const styles = {
@@ -813,8 +799,6 @@ const Views = {
   },
   All_Research: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
-    const {windowState,mapState} = state.uiState;
-    const {thumbs} = Assets.imgs;
 
     const styles = {
       view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%; padding:6em 1em 3em;`
@@ -823,32 +807,31 @@ const Views = {
     const tiles = Modules.Tiles(store,{
       title: `All Research Areas`,
       subtitle: `Choose an area to see specific projects.`,
-      tiles: mapState.tree[4][2].map(route=>([route[0],route[1],mapState.flat[route[0]][2]]))
+      tiles: state.uiState.mapState.tree[4][2].map(route=>([route[0],route[1],state.uiState.mapState.flat[route[0]][2]]))
     });
 
-    return Unity.createElement('div', {style:styles.view}, [tiles]);
+    return Unity.element('div', {style:styles.view}, [tiles]);
   },
-  Artificial_Intelligence_Research: function(store) {
+  AI_Research: function(store) {
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
     };
 
-    const product_config = {
+    const conf = {
       title: `Artificial Intelligence Research`,
-      subtitle: `Custom Neural Network architecture research.`,
+      subtitle: `Neural Network architecture research.`,
       img: Assets.imgs.thumbs.ai,
       description: [
-        `My current AI research is focused on:`,
-        `Computer Vision`,
-        `Natural Language Processing`,
-        `Simultaneous Localization & Mapping`
-      ],
-      idx: 0
+        `My current Artificial Intelligence and Machine Learning research is focused in:`,
+        `Computer Vision: classification, object detection, tracking, vision-based 3D environment mapping.`,
+        `Natural Language Processing: speech recognition; speech synthesis; sentiment analysis; speech-based real-time embedded controls systems; researching RNN & LSTM implementations from first principles to help develop a better understanding of GANs and Transformers.`,
+        `Machine Learning: auditing CSE 546 at University of Washington; taking Convex Optimization certificate course through Stanford on Edx; gaining deeper statistical foundational knowledge to further develop my skills in designing and implementing ML/AI architectures.`
+      ],idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [Modules.Project(store,product_config)]);
+    return Unity.element('div', {style:styles.view}, [Modules.Project(store,conf)]);
   },
-  Embedded_Research: function(store) {
+  Wifi_Embedded_Research: function(store) {
 
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
@@ -859,16 +842,16 @@ const Views = {
       subtitle: `Custom chip design & SoC research.`,
       img: Assets.imgs.thumbs.mcu,
       description: [
-        `My current Embedded research focuses on a Computer Architecture course that culminates in the design & fabrication of a 16-bit machine from first principles with NAND gates.`,
-        `Tensor Processing Units (TPUs) for use in a stand-alone capacity.`,
+        `My current Embedded research focuses on:`,
+        `A Computer Architecture course that culminates in the design & fabrication of a 16-bit machine from first principles with NAND gates.`,
         `Embedded neural circuits for use in subroutines of custom SoCs.`
       ],
       idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
+    return Unity.element('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
   },
-  Wireless_Networking_Research: function(store) {
+  CPU_Achitecture_Research: function(store) {
 
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
@@ -886,9 +869,9 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
+    return Unity.element('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
   },
-  User_Interface_Research: function(store) {
+  UI_Research: function(store) {
 
     const styles = {
       view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
@@ -907,7 +890,7 @@ const Views = {
       idx: 0
     };
 
-    return Unity.createElement('div', {style:styles.view}, [Modules.Project(store,product_config)]);
+    return Unity.element('div', {style:styles.view}, [Modules.Project(store,product_config)]);
   }
 };
 
@@ -1073,7 +1056,7 @@ const Blueprint = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_WIFI_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_SUBMENU': (s,a) => ({
@@ -1088,7 +1071,7 @@ const Blueprint = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIRELESS_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_WIFI_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_FOOTER_MENU': (s,a) => ({
@@ -1129,7 +1112,7 @@ const Blueprint = {
     name: 'Johnathan Chivington',
     employer: `University of Washington`,
     title: `Fiscal Analyst`,
-    school: `North Seattle College`,
+    school: `University of Washington`,
     major: `Physics & Computer Science`,
     phones: {mobile:'303-900-2861'},
     emails: {personal: 'j.chivington@outlook.com'},
@@ -1167,10 +1150,10 @@ const Blueprint = {
         'CONTACT_ME': [Views.Contact,'Contact Me',Assets.imgs.thumbs.ai],
         'ABOUT_ME': [Views.About,'About Me',Assets.imgs.thumbs.ai],
         'ALL_RESEARCH': [Views.All_Research,'All Research',Assets.imgs.thumbs.ai],
-        'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.Artificial_Intelligence_Research,'Artificial Intelligence Research',Assets.imgs.thumbs.ai],
-        'WIRELESS_EMBEDDED_RESEARCH': [Views.Embedded_Research,'Embedded Research',Assets.imgs.thumbs.iot],
-        'COMPUTER_ARCHITECTURE': [Views.Wireless_Networking_Research,'Computer Architecture Research',Assets.imgs.thumbs.mcu],
-        'UI_ARCHITECTURES_RESEARCH': [Views.User_Interface_Research,'UI Architectures Research',Assets.imgs.thumbs.ui],
+        'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.AI_Research,'Artificial Intelligence Research',Assets.imgs.thumbs.ai],
+        'WIFI_EMBEDDED_RESEARCH': [Views.Wifi_Embedded_Research,'Wireless Embedded Research',Assets.imgs.thumbs.iot],
+        'COMPUTER_ARCHITECTURE': [Views.CPU_Achitecture_Research,'Computer Architecture Research',Assets.imgs.thumbs.mcu],
+        'UI_ARCHITECTURES_RESEARCH': [Views.UI_Research,'UI Architectures Research',Assets.imgs.thumbs.ui],
         'DEFAULT': [Views.Home,'Home',Assets.imgs.thumbs.ai]
       },
       tree: [
@@ -1180,7 +1163,7 @@ const Blueprint = {
         ['ABOUT_ME','About Me'],
         ['ALL_RESEARCH','All Research', [
           ['ARTIFICIAL_INTELLIGENCE_RESEARCH','Artificial Intelligence Research'],
-          ['WIRELESS_EMBEDDED_RESEARCH','Embedded Research'],
+          ['WIFI_EMBEDDED_RESEARCH','Embedded Research'],
           ['COMPUTER_ARCHITECTURE','Computer Architecture Research'],
           ['UI_ARCHITECTURES_RESEARCH','UI Architectures Research']
         ]]
@@ -1190,7 +1173,7 @@ const Blueprint = {
         ['BLOG'],
         ['CONTACT_ME'],
         ['ABOUT_ME'],
-        ['ALL_RESEARCH', [['ARTIFICIAL_INTELLIGENCE_RESEARCH'],['WIRELESS_EMBEDDED_RESEARCH'],['COMPUTER_ARCHITECTURE'],['UI_ARCHITECTURES_RESEARCH']]]
+        ['ALL_RESEARCH', [['ARTIFICIAL_INTELLIGENCE_RESEARCH'],['WIFI_EMBEDDED_RESEARCH'],['COMPUTER_ARCHITECTURE'],['UI_ARCHITECTURES_RESEARCH']]]
       ]
     },
     theme: {
@@ -1294,4 +1277,4 @@ const Blueprint = {
 // -------------------------------------------------------------------------------------
 const App_Root = document.getElementById('App_Root');
 const Load_Screen_Root = document.getElementById('Load_Screen_Root');
-Unity.initializeApplication(App_Root,Load_Screen_Root,Blueprint,Reducers,Middlewares);
+Unity.initialize(App_Root,Load_Screen_Root,Blueprint,Reducers,Middlewares);
