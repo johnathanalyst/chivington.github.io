@@ -750,7 +750,7 @@ const Views = {
       row:`display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'center':'flex-start'}; align-items:stretch;`,
       sec_ttl:`margin:${lg_dev?`0 0.5em 0 0`:`0.5em 0 0 0`}; padding:0; font-weight:bold; font-size:1em; color:${theme.view_txt};`,
       wrp:`display:flex; flex-direction:${lg_dev?`row`:`column`}; margin:0;`,
-      txt:`margin:0 1em; padding:0; color:${theme.view_txt};`,
+      lnk: ` color:#09f; margin: 0 0.5em; text-decorate:underline;`,
       map:`border:1px solid ${theme.footer_bdr}; margin:1em auto; width:95%; height:250pt;`
     };
 
@@ -758,9 +758,9 @@ const Views = {
       E('div',{style:st.contact},[
         E('h1',{style:st.title},['Get In Touch']),
         E('div',{style:st.sections},[
-          E(`div`,{style:st.section},[`Phone Numbers`,E(`div`,{style:st.wrp},[E(`p`,{style:st.txt},[work.phone]),E(`p`,{style:st.txt},[personal.phone])])]),
-          E(`div`,{style:st.section},[`Emails`,E(`div`,{style:st.wrp},[E(`p`,{style:st.txt},[work.email]),E(`p`,{style:st.txt},[personal.email])])]),
-          E(`div`,{style:st.section},[`Web`,E(`div`,{style:st.wrp},[E(`p`,{style:st.txt},[work.web]),E(`p`,{style:st.txt},[personal.web])])]),
+          E(`div`,{style:st.section},[`Phones`,E(`div`,{style:st.wrp},[E(`a`,{href:`tel:${work.phone}`,target:`_blank`,style:st.lnk},[work.phone]),E(`a`,{href:`tel:${personal.phone}`,target:`_blank`,style:st.lnk},[personal.phone])])]),
+          E(`div`,{style:st.section},[`Emails`,E(`div`,{style:st.wrp},[E(`a`,{href:`mailto:${work.email}`,target:`_blank`,style:st.lnk},[work.email]),E(`a`,{href:`mailto:${personal.email}`,target:`_blank`,style:st.lnk},[personal.email])])]),
+          E(`div`,{style:st.section},[`Web`,E(`div`,{style:st.wrp},[E(`a`,{href:work.web,target:`_blank`,style:st.lnk},[work.web]),E(`a`,{href:personal.web,target:`_blank`,style:st.lnk},[personal.web])])]),
           E('iframe',{frameborder:'0',style:st.map,allowfullscreen:'',src:work.address[1]},[])
         ])])
       ])
