@@ -7,7 +7,7 @@ A copy of my personal web application that serves to highlight my UI Architectur
 
 ![Build Status](https://img.shields.io/badge/build-Stable-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-<br/><br/><br/>
+<br/><br/>
 
 ## Contents
 * [Usage](https://github.com/chivington/chivington.io/tree/master#usage)
@@ -23,7 +23,7 @@ A copy of my personal web application that serves to highlight my UI Architectur
 ## Usage
 This repository is a copy of my personal web application that serves to highlight my UI Architecture research. View it live at [chivington.io](https://chivington.io) If you're learning and have questions or are a prospective employer who would like a detailed walkthrough and/or to set up a meeting, you can find my contact information on the "Contact Me" area of my application.
 
-Feel free to ask me questions on [GitHub](https://github.com/chivington), [LinkedIn](https://www.linkedin.com/in/johnathan-chivington/)
+Feel free to ask me questions on [GitHub](https://github.com/chivington) or [LinkedIn](https://www.linkedin.com/in/johnathan-chivington/)
 <br/><br/>
 
 ## Prerequisites
@@ -45,8 +45,8 @@ Feel free to ask me questions on [GitHub](https://github.com/chivington), [Linke
 ## Contributing
 Not currently accepting outside contributors, but feel free to clone, fork, modify and use as you wish.
 
-## Acknowledgments
-   * N/A
+<!-- ## Acknowledgments
+   * N/A -->
 
 ## License
 This project is licensed under the MIT License - see the [MIT](https://github.com/chivington/chivington.io/tree/master/blob/master/LICENSE) file for details
