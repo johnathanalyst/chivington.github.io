@@ -1,5 +1,5 @@
 <p align="center">
-  <img width='350' height='350' src='https://github.com/chivington/chivington.github.io/blob/master/imgs/jc-pcb-black.svg' alt='My Logo' />
+  <img width='350' height='350' src='https://github.com/chivington/chivington.github.io/blob/master/imgs/win.png' alt='My Logo' />
 </p>
 
 # chivington.io
