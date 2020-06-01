@@ -21,7 +21,7 @@ A copy of my personal web application that serves to highlight my UI Architectur
 <br/>
 
 ## Usage
-This repository is a copy of my personal web application that serves to highlight my UI Architecture research. View it live at [chivington.io](https://chivington.io) If you're learning and have questions or are a prospective employer who would like a detailed walkthrough and/or to set up a meeting, you can find my contact information on the "Contact Me" area of my application.
+This repository is a copy of my personal web application that serves to highlight my UI Architecture research. View it live at [chivington.io](https://chivington.io) or [chivington.github.io](https://chivington.github.io) If you're learning and have questions or are a prospective employer who would like a detailed walkthrough and/or to set up a meeting, you can find my contact information on the "Contact Me" area of my application.
 
 Feel free to ask me questions on [GitHub](https://github.com/chivington) or [LinkedIn](https://www.linkedin.com/in/johnathan-chivington/)
 <br/><br/>
