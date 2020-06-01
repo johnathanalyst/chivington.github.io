@@ -1,13 +1,14 @@
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 // Author: Johnathan Chivington
 // Project: Personal blog, resume and research portfolio.
 // Description: Personal web application built in my custom UI/UX framework, Unity.
 // Version: 2.0.0 - (production - see README.md)
-// -------------------------------------------------------------------------------------
+// License: None
+// --------------------------------------------------------------------------------------------
 
-// -------------------------------------------------------------------------------------
-//  Unity - A minimal framework used to build complex "native-like" web applications.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
+//  Unity - A minimal state/UI framework for building complex "native-like" web applications.
+// --------------------------------------------------------------------------------------------
 const Unity = {
   reducer: function(defaultState,map) {
     return function(state = defaultState, action) {
@@ -103,9 +104,9 @@ const Unity = {
   }
 };
 
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 //  Reducers - Functions that initialize state & reduce it on each state change.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 const Reducers = {
   appState: function(state=Blueprint.app, action) {
     return Unity.combine({
@@ -154,7 +155,7 @@ const Reducers = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIFI_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_NETWORKING_RESEARCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_SUBMENU': (s,a) => ({
@@ -169,7 +170,7 @@ const Reducers = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIFI_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_NETWORKING_RESEARCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_FOOTER_MENU': (s,a) => ({
@@ -224,9 +225,9 @@ const Reducers = {
   }
 };
 
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 //  Middlewares - Functions that intercept state changes.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 const Middlewares = {
   // logActions: Unity.middlewares.logActions('@@INIT'),
   listenerBypass: Unity.middlewares.listenerBypass({
@@ -236,9 +237,9 @@ const Middlewares = {
   })
 };
 
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 //  Modules - Important/reused modules, UI, etc.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 const Modules = {
   Router: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
@@ -246,11 +247,11 @@ const Modules = {
     const {current,previous} = viewState;
     const sameView = viewState.current==viewState.previous;
     const lastActionNav = state.appState.historyState.actions.slice(-1)=='NAV_TO';
-    const styles = {router: `position:fixed; top:0; right:0; bottom:0; left:0; overflow:hidden; z-index:5;`};
+    const st = {router: `position:fixed; top:0; right:0; bottom:0; left:0; overflow:hidden; z-index:5;`};
     const selected = mapState.flat[current[0]]?mapState.flat[current[0]]:mapState.flat['DEFAULT'];
     const animation = lastActionNav && !sameView ? `animation:viewSlideIn 250ms 1 forwards;` : ``;
     document.title = `${state.userState.infoState.name} | ${selected[1]}`;
-    return Unity.element('div', {style:styles.router}, [Modules.View(store,selected[0],animation)]);
+    return Unity.element('div', {style:st.router}, [Modules.View(store,selected[0],animation)]);
   },
   Network: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -262,7 +263,7 @@ const Modules = {
     const display = offline || prevAction == '@@INIT' || prevAction == 'NET_STATE_CHANGE';
     const lg_dev = (state.uiState.windowState.mode == 'large_tab' || state.uiState.windowState.mode == 'desktop');
 
-    const styles = {
+    const st = {
       net: `
         position: absolute; top: ${lg_dev?'5':'4'}em; left: 0; width: 100%; margin: 0; padding: 0.5em; z-index: 85;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -271,7 +272,7 @@ const Modules = {
       `
     };
 
-    const Net = Unity.element('div', {style:styles.net}, [offline?'Offline':'Connected']);
+    const Net = Unity.element('div', {style:st.net}, [offline?'Offline':'Connected']);
 
     window.addEventListener('online', function(event) {
       if (effectiveType != previousType) dispatch({type:'NET_STATE_CHANGE',  payload: {
@@ -344,7 +345,7 @@ const Modules = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       header: `
         position: fixed; top: 0; left: 0; width: 100%; height: ${lg_dev?'5':'4'}em; margin: 0; padding: 0; z-index: 90;
         display: flex; flex-direction: row; justify-content: space-between; align-items: center;
@@ -360,30 +361,30 @@ const Modules = {
       header_qt: `margin: 0 0.25em; padding: 0.5em 1.25em; font-size: 1em; text-align: center; color: ${theme.menu_txt}; background-color: ${theme.btn}; border: 1pt solid ${theme.menu_bdr}; cursor: pointer;`
     };
 
-    const header_icon = E('img', {style:styles.icon, src: icon_img, alt: headerState.alt}, []);
+    const header_icon = E('img', {style:st.icon, src: icon_img, alt: headerState.alt}, []);
     header_icon.addEventListener('click', function(event) {
       if (viewState.current[0] != 'HOME') dispatch({type:'NAV_TO',payload:['HOME', 'Home']});
       if (viewState.current[0] == 'HOME' && current == 'OPEN') dispatch({type:'CLOSE_MENU'});
     });
 
-    const superscript = E('sup', {style:styles.super}, [viewState.current[1]]);
+    const superscript = E('sup', {style:st.super}, [viewState.current[1]]);
 
-    const header_menu = E('div', {style:styles.header_menu}, [
+    const header_menu = E('div', {style:st.header_menu}, [
       ['HOME', 'Home'], ['BLOG', 'Blog'], ['CONTACT_ME', 'Contact Me'], ['ABOUT_ME', 'About Me'], ['ALL_RESEARCH', 'Research']
     ].map((view, i, arr) => {
-      const btn = E('h2', {style: i == arr.length-1 ? styles.header_qt : styles.header_btn}, [view[1]]);
+      const btn = E('h2', {style: i == arr.length-1 ? st.header_qt : st.header_btn}, [view[1]]);
       btn.addEventListener('click', () => {
         if (viewState.current[0] != view[0]) dispatch({type:'NAV_TO',payload:view});
       });
       return btn;
     }));
 
-    const menu_btn = E('img', {style:styles.menu_btn, src: menu_img, alt: 'Menu Button Icon'}, []);
+    const menu_btn = E('img', {style:st.menu_btn, src: menu_img, alt: 'Menu Button Icon'}, []);
     menu_btn.addEventListener('click', function(event) { dispatch({type:'TOGGLE_MENU'}); });
 
-    return E('div', {style:styles.header}, [
-      E('div', {style:styles.header_left}, [ header_icon, superscript ]),
-      E('div', {style:styles.header_right}, windowState.mode == 'desktop' ? [header_menu, menu_btn] : [menu_btn]),
+    return E('div', {style:st.header}, [
+      E('div', {style:st.header_left}, [ header_icon, superscript ]),
+      E('div', {style:st.header_right}, windowState.mode == 'desktop' ? [header_menu, menu_btn] : [menu_btn]),
     ]);
   },
   Menu: function(store) {
@@ -399,7 +400,7 @@ const Modules = {
     const lg_dev = (windowState.mode=='large_tab'||windowState.mode=='desktop');
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       menu: `
         position:fixed; top:${lg_dev?'5':'4'}em; left:0; bottom:0; width:${menuWidth}; padding:0; z-index:80; background-color:${theme.menu}; overflow-y:scroll; ${lg_dev?`border-right:1pt solid ${theme.menu_bdr};`:''}
         ${(menuState.current=='OPEN')?(menuState.previous=='OPEN'?``:`animation:menu_opening 300ms ease-in-out 1 forwards;`):(closed_menu_last?`animation:menu_closing 300ms ease-in-out 1 forwards;`:`display:none;`)}
@@ -416,17 +417,17 @@ const Modules = {
       copy_txt: `font-size:1.1em; margin:0; color:${theme.menu_txt};`
     };
 
-    const copy = E('div', {style:styles.copy}, [
-      E('img',{src:icons.sm.usa,alt:`USA Icon`,style:styles.usa},[]),
-      E('p',{style:styles.usa},['United States']),
-      E('p',{style:styles.copy_txt},['Copyright © 2020 chivington.io']),
+    const copy = E('div', {style:st.copy}, [
+      E('img',{src:icons.sm.usa,alt:`USA Icon`,style:st.usa},[]),
+      E('p',{style:st.usa},['United States']),
+      E('p',{style:st.copy_txt},['Copyright © 2020 chivington.io']),
     ]);
 
-    const toggle = E('div',{style:styles.toggle},[E('h4',{style:styles.tgl_txt},[`Toggle dark mode`]),E('div',{style:styles.tgl_btn},[E('div',{style:styles.slider},[])])]);
+    const toggle = E('div',{style:st.toggle},[E('h4',{style:st.tgl_txt},[`Toggle dark mode`]),E('div',{style:st.tgl_btn},[E('div',{style:st.slider},[])])]);
     toggle.lastChild.addEventListener('click',()=>dispatch({type:'TOGGLE_THEME',payload:store.getState().uiState.menuState.scrollTop}));
 
     const submenu = Modules.Submenu(store,{orientation:`PORTRAIT`,btns:mapState.tree});
-    const Menu = Unity.element('div',{style:styles.menu},[submenu,toggle,copy]);
+    const Menu = Unity.element('div',{style:st.menu},[submenu,toggle,copy]);
     setTimeout(event=>Menu.scrollTo({top:menuState.scrollTop,left:0,behavior:'auto'}),50);
 
     let scroll_ctr = 0;
@@ -452,7 +453,7 @@ const Modules = {
     const landscape = config.orientation == 'LANDSCAPE' && lg_dev;
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       container: `display: flex; flex-direction: ${landscape?'row':'column'}; justify-content: ${landscape?'center':'flex-start'}; align-items: ${landscape?'flex-start':'stretch'}; ${lg_dev?``:`border-top: 1pt solid ${theme.menu_bdr};`}`,
       subnemu_wrapper: `margin: ${landscape?'0.5em':'0'}; padding: 0; display: flex; ${landscape?'flex: 1;':''} flex-direction: column; justify-content: flex-start; align-items: stretch; background-color: ${theme.menu_sub};`,
       parent_row: `margin: 0; padding: 0; width: 100%; max-height: 5em; display: flex; flex-direction: row; justify-content: stretch; align-items: center; background-color: ${theme.btn}; border-bottom: 1pt solid ${theme.menu_bdr};`,
@@ -470,7 +471,7 @@ const Modules = {
       return btns.map((btn, i, arr) => {
         sub_states[btn[0]] = {current: lg_dev?'OPEN':'CLOSED', previous: 'CLOSED'};
 
-        const b = E('h3', {style: `${flag ? (i==btns.length-1 ? `${styles.sub_btn} border:none;` : styles.sub_btn) : styles.btn}`}, [btn[1]]);
+        const b = E('h3', {style: `${flag ? (i==btns.length-1 ? `${st.sub_btn} border:none;` : st.sub_btn) : st.btn}`}, [btn[1]]);
         b.addEventListener('click', function(event) {
           if (state.uiState.viewState.current[0] != btn[0]) dispatch({type: `NAV_TO`,payload:[btn[0], btn[1]]});
           else if (menuState.current == 'OPEN') dispatch({type:'CLOSE_MENU'});
@@ -479,24 +480,24 @@ const Modules = {
         if (!!btn[2]) {
           b.style.cssText += `border: none;`;
           const submenu_style = sub_states[btn[0]].current == 'CLOSED' ? `height: 0; visibility: hidden;` : `height: auto; visibility: visible`;
-          const dropdown = E('img', {style: `${styles.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform: rotate(-90deg);` : `transform: rotate(-180deg);`}`, src: dark_theme ? icons.btns.caret_wht : icons.btns.caret_blk, alt: 'Sub-Menu Button Icon'}, []);
+          const dropdown = E('img', {style: `${st.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform: rotate(-90deg);` : `transform: rotate(-180deg);`}`, src: dark_theme ? icons.btns.caret_wht : icons.btns.caret_blk, alt: 'Sub-Menu Button Icon'}, []);
           dropdown.addEventListener('click', function(event) {
             const selected_sub = b.parentNode.parentNode.children[1];
             sub_states[btn[0]].current = sub_states[btn[0]].current == 'OPEN' ? 'CLOSED' : 'OPEN';
             sub_states[btn[0]].previous = sub_states[btn[0]].current;
             const new_style = sub_states[btn[0]].current == 'CLOSED' ? `height: 0; visibility: hidden;` : `height: auto; visibility: visible`;
-            selected_sub.style.cssText = `${styles.submenu} ${new_style}`;
-            event.target.style.cssText = `${styles.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform: rotate(-90deg);` : `transform: rotate(-180deg);`}`;
+            selected_sub.style.cssText = `${st.submenu} ${new_style}`;
+            event.target.style.cssText = `${st.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform: rotate(-90deg);` : `transform: rotate(-180deg);`}`;
           });
 
-          return E('div', {style:styles.subnemu_wrapper}, [
-            E('div',{style:styles.parent_row},[b,dropdown]),E('div',{style:`${styles.submenu}${submenu_style}`},create_submenu(btn[2],true))
+          return E('div', {style:st.subnemu_wrapper}, [
+            E('div',{style:st.parent_row},[b,dropdown]),E('div',{style:`${st.submenu}${submenu_style}`},create_submenu(btn[2],true))
           ]);
         } else return b;
       })
     };
 
-    return E('div', {style:styles.container}, create_submenu(config, false));
+    return E('div', {style:st.container}, create_submenu(config, false));
   },
   View: function(store,view,animation) {
     const [state,dispatch] = [store.getState(),store.dispatch];
@@ -504,7 +505,7 @@ const Modules = {
     const theme = themeState[themeState.selected];
     const {width,height,mode} = windowState;
 
-    const styles = {
+    const st = {
       view: `
         position:fixed; top:0; right:0; bottom:0; left:0; margin:0; padding:0; overflow-x:hidden; overflow-y:scroll; z-index:10;
         background:linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${themeState.wp.view}'); background-position:center; background-size:cover; background-repeat:no-repeat;
@@ -512,7 +513,7 @@ const Modules = {
       `
     };
 
-    const View = Unity.element('div', {style:styles.view,content:`minimal-ui`}, [view(store),Modules.Footer(store)]);
+    const View = Unity.element('div', {style:st.view,content:`minimal-ui`}, [view(store),Modules.Footer(store)]);
     setTimeout(event=>View.scrollTo({top:viewState.scrollTop,left:0,behavior:'auto'}),50);
 
     let scroll_ctr = 0;
@@ -533,7 +534,7 @@ const Modules = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       project: `margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well};`,
       title: `margin:0; padding:0 0 0.5em 0; border-bottom:1pt solid ${theme.view_bdr}; font-size:1.25em; text-align:center; color:${theme.view_txt};`,
       subtitle: `margin:0.75em; padding:0; text-align:center; color:${theme.view_txt};`,
@@ -542,17 +543,17 @@ const Modules = {
         margin:0; padding:0; background-color:${theme.panel}; color:${theme.view_txt}; border:1pt solid ${theme.view_bdr};
       `,
       img: `margin:0; padding:0; border-bottom:1pt solid ${theme.view_bdr}; ${lg_dev?'height:250pt':`width:100%`};`,
-      wrapper: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin:0; padding:0; background-color: ${theme.panel};`,
-      txt: `margin:0; padding:0.75em 0.25em; text-align:${lg_dev?'left':'center'}; color:${theme.view_txt};`
+      wrapper: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin:0; padding:1em;`,
+      txt: `margin:0; padding:0.5em 0.25em; text-align:${lg_dev?'left':'center'}; color:${theme.view_txt};`
     };
 
-    const description = E('div', {style:styles.description}, [
-      E('img', {style:styles.img, src:conf.img, alt:`${conf.title} Image`}, []),
-      E('div', {style:styles.wrapper}, conf.description.map((s,i)=>E('p',{style:styles.txt},[`${i>conf.idx?'• ':''}${s}`])))
+    const description = E('div', {style:st.description}, [
+      E('img', {style:st.img, src:conf.img, alt:`${conf.title} Image`}, []),
+      E('div', {style:st.wrapper}, conf.description.map((s,i,a)=>E('p',{style:st.txt},[i==0||i==a.length-1?s:`• ${s}`])))
     ]);
 
-    return E('div',{style:styles.project},[
-      E('h1',{style:styles.title},[conf.title]),E('p',{style:styles.subtitle},[conf.subtitle]),description
+    return E('div',{style:st.project},[
+      E('h1',{style:st.title},[conf.title]),E('p',{style:st.subtitle},[conf.subtitle]),description
     ])
   },
   Tiles: function(store,conf) {
@@ -561,7 +562,7 @@ const Modules = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       component: `display:flex; flex-direction:column; justify-content:space-around; align-items:stretch; margin:0; padding:0.5em; background-color:${theme.well};`,
       title: `margin:0 0.5em; padding:0.25em; border-bottom:1pt solid ${theme.view_bdr}; font-size:1.5em; text-align:center; color:${theme.view_txt};`,
       sub: `margin:0.75em; padding:0; font-size:1em; text-align:center; color:${theme.view_txt};`,
@@ -575,12 +576,12 @@ const Modules = {
       name: `margin:${lg_dev?1:0.75}em; color:${theme.menu_txt}; font-size:1em; font-weight:900; text-align:center; color:${theme.view_txt};`
     };
 
-    const tiles = E('div', {style:styles.tiles}, conf.tiles.map((t,i) => {
-      const e = E('div',{style:styles.tile},[E('img',{style:styles.img,src:t[2],alt:`${t[1]} Thumbnail`},[]),E('h3',{style:styles.name},[t[1]])]);
+    const tiles = E('div', {style:st.tiles}, conf.tiles.map((t,i) => {
+      const e = E('div',{style:st.tile},[E('img',{style:st.img,src:t[2],alt:`${t[1]} Thumbnail`},[]),E('h3',{style:st.name},[t[1]])]);
       e.addEventListener('click',()=>dispatch({type:'NAV_TO',payload:[t[0],t[1]]})); return e;
     }));
 
-    return E('div', {style:styles.component}, [E('h1',{style:styles.title},[conf.title]), E('h2',{style:styles.sub},[conf.subtitle]), tiles]);
+    return E('div', {style:st.component}, [E('h1',{style:st.title},[conf.title]), E('h2',{style:st.sub},[conf.subtitle]), tiles]);
   },
   Footer: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
@@ -590,7 +591,7 @@ const Modules = {
     const {icons,wp} = Assets.imgs;
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       footer: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; margin:0; z-index:75; background-color:${theme.footer}; border-top:1pt solid ${theme.footer_bdr};`,
       msg: `
         display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; background-color:${theme.panel};
@@ -599,30 +600,30 @@ const Modules = {
       `,
       quote_btn: `margin:1em auto 0; padding:0.5em 1em; background-color:${theme.btn}; border:1pt solid ${theme.menu_bdr}; color:${theme.menu_txt}; cursor:pointer;`,
       submenus: `margin:1em; padding:0.5em;`,
-      copy: `display:flex; flex-direction:row; justify-content:space-between; align-items:center; text-align:center; border-top:1px solid ${theme.footer_bdr}; margin:0; padding:1em 2em; font-size:1em;`,
+      copy: `display:flex; flex-direction:row; justify-content:space-between; align-items:center; text-align:center; border-top:1px solid ${theme.footer_bdr}; margin:0; padding:2em; font-size:1em;`,
       copy_left: `display:flex; flex-direction:row; justify-content:flex-start; align-items:flex-start; padding:0; margin:0;`,
       copy_right: `display:flex; flex-direction:row; justify-content:flex-end; align-items:flex-start; padding:0; margin:0;`,
       usa: `height:1.25em; margin:0; color:${theme.footer_txt};`,
       copy_txt: `font-size:1em; margin:0; color:${theme.footer_txt};`
     };
 
-    // const msg = E('div', {style:styles.msg}, [``]);
-    const submenus = E('div', {style:styles.submenus}, [
+    // const msg = E('div', {style:st.msg}, [``]);
+    const submenus = E('div', {style:st.submenus}, [
       Modules.Submenu(store,{orientation:`LANDSCAPE`,btns:[[...mapState.tree[0],[mapState.tree[1],mapState.tree[2],mapState.tree[3]]],mapState.tree[4]]})
     ]);
 
-    const copy = E('div', {style:styles.copy}, [
-      E('div', {style:styles.copy_left}, [E('p', {style:styles.copy_txt}, [`Copyright © 2020 chivington.io`])]),
-      E('div', {style:styles.copy_right}, [E('img', {src:icons.sm.usa,alt:`USA Icon`,style:styles.usa}, ['United States'])])
+    const copy = E('div', {style:st.copy}, [
+      E('div', {style:st.copy_left}, [E('p', {style:st.copy_txt}, [`Copyright © 2020 chivington.io`])]),
+      E('div', {style:st.copy_right}, [E('img', {src:icons.sm.usa,alt:`USA Icon`,style:st.usa}, ['United States'])])
     ]);
 
-    return E('div', {style:styles.footer}, [submenus,copy]);
+    return E('div', {style:st.footer}, [submenus,copy]);
   },
   App: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { width, height, mode } = state.uiState.windowState;
 
-    const styles = {
+    const st = {
       app: `position: fixed; top: 0; left: 0; height: 0%; width: 100%; margin: 0; padding: 0; z-index: 0;`
     };
 
@@ -635,15 +636,15 @@ const Modules = {
       }
     });
 
-    return Unity.element('div', {style:styles.app}, [
+    return Unity.element('div', {style:st.app}, [
       Modules.Header(store), Modules.Menu(store), Modules.Router(store), Modules.Network(store)
     ]);
   }
 };
 
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 //  Views - Groups Modules to fit device.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 const Views = {
   Home: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
@@ -655,34 +656,35 @@ const Views = {
     const theme = uiState.themeState[uiState.themeState.selected];
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       home: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; width:100%; text-align:center; ${landing?'animation: app_fade_in 900ms ease-in-out 1 forwards;':''}`,
-      intro: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${lg_dev?'7em 1em 2':'6em 1em 2'}em;`,
+      intro: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${lg_dev?'8em 1em 2':'6em 1em 2'}em;`,
       name: `margin:0 auto; color:#fff; font-size:4em; font-weight:400;`,
       title: `margin:0.25em; color:#fff; font-size:${lg_dev?1.5:1.3}em; font-weight:300;`,
       actions: `display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:center; align-items:${lg_dev?'center':'stretch'}; margin:0 auto; padding:0; width:${lg_dev?80:90}%;`,
       btn: `margin:0.5em ${lg_dev?'':'auto'}; padding:0.4em 0.6em; width:${lg_dev?50:80}%; background-color:${theme.btn}; border:1pt solid #aaa; cursor:pointer;`,
-      bio: `margin:${lg_dev?1.5:1}em; padding:${lg_dev?`0.5`:`0.25`}em; border:1px solid ${theme.view_bdr}; background-color:${theme.well};`,
+      bio: `margin:${lg_dev?2:1}em; padding:${lg_dev?`1`:`0.25`}em; border:1px solid ${theme.view_bdr}; background-color:${theme.well};`,
       sentence: `color:${theme.view_txt}; font-size:${lg_dev?1.25:1}em; font-weight:700; margin:0.5em;`,
-      research: `margin:0 ${lg_dev?`1.5em 1.5`:`1em 1`}em;`
+      research: `margin:${lg_dev?`0 2em 2`:`0 1em 1`}em;`
     };
 
-    const intro = E('div',{style:styles.intro},[E('h1',{style:styles.name},[name]),E('h2',{style:styles.title},[`${major} Student at ${school}`])]);
+    const intro = E('div',{style:st.intro},[
+      E('h1',{style:st.name},[name]), E('h2',{style:st.title},[`${title} and ${major} Student at ${school}`
+    ])]);
 
-    const actions = E('div',{style:styles.actions},[['CONTACT_ME','Contact Me'],['ALL_RESEARCH','View My Research']].map((b,i,arr) => {
-      const btn = E('h2', {style: styles.btn}, [b[1]]);
-      btn.addEventListener('click', (event) => dispatch({type:'NAV_TO',payload:[b[0], b[1]]})); return btn;
+    const actions = E('div',{style:st.actions},[['CONTACT_ME','Contact Me'],['ALL_RESEARCH','View My Research']].map((b,i,arr) => {
+      const btn = E('h2', {style: st.btn}, [b[1]]); btn.addEventListener('click', (event)=>dispatch({type:'NAV_TO',payload:[b[0], b[1]]})); return btn;
     }));
 
-    const bioe = E('div',{style:styles.bio},bio.work.map(s=>E('p',{style:styles.sentence},[s])));
+    const work = E('div',{style:st.bio},bio.work.map(s=>E('p',{style:st.sentence},[s])));
 
-    const tiles = E('div',{style:styles.research},[Modules.Tiles(store,{
+    const tiles = E('div',{style:st.research},[Modules.Tiles(store,{
       title: `Research Areas`,
       subtitle: `All currently active and past research areas.`,
       tiles: mapState.tree[4][2].map(route=>([route[0],route[1],mapState.flat[route[0]][2]]))
     })]);
 
-    return E('div',{style:styles.home},[intro,actions,bioe,tiles]);
+    return E('div',{style:st.home},[intro,actions,work,tiles]);
   },
   Blog: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
@@ -691,15 +693,15 @@ const Views = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
-    const styles = {
-      blogView: `margin: 3.5em auto 3em; padding: 1em 0 0 0; width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;`,
-      viewTitle: `margin: 0.75em auto 0.25em; color: ${theme.menu_txt};`,
-      blogPost: `margin: ${lg_dev?1.5:0.5}em; padding: 0.5em; border: 1pt solid ${theme.view_bdr}; background-color: ${theme.well}; text-align: center;`,
-      blogImg: `border: 1px solid ${theme.view_bdr};`,
-      blogBody: `margin: ${lg_dev?1:0.5}em; display: flex; flex-direction: column; justify-content: space-around; text-align: left;`,
-      paragraph: `margin: 0.5em 0.25em; text-indent: 50px; color: ${theme.view_txt};`,
-      blogTags: `margin: 0 1em; padding: ${lg_dev?1:0.5}em; border-top: 1pt solid ${theme.view_bdr}; display: flex; flex-direction: row; justify-content: space-around; align-items: center; flex-wrap: wrap;`,
-      tag: `margin: 0.25em; color: ${theme.view_txt};`
+    const st = {
+      blogView:`margin:3.5em auto 3em; padding:1em 0 0 0; width:100%; min-height:100%; display:flex; flex-direction:column; justify-content:flex-start; align-items:center;`,
+      viewTitle:`margin:0.75em auto 0.25em; color:${theme.menu_txt};`,
+      blogPost:`margin:${lg_dev?1.5:0.5}em; padding:1.25em 0; border:1pt solid ${theme.view_bdr}; background-color:${theme.well}; text-align:center;`,
+      blogImg:`border:1px solid ${theme.view_bdr};`,
+      blogBody:`margin:${lg_dev?1:0.5}em; display:flex; flex-direction:column; justify-content:space-around; text-align:left;`,
+      paragraph:`margin:0.5em 0.25em; text-indent:50px; color:${theme.view_txt};`,
+      blogTags:`margin:0 1em; padding:${lg_dev?1:0.5}em; border-top:1pt solid ${theme.view_bdr}; display:flex; flex-direction:row; justify-content:space-around; align-items:center; flex-wrap:wrap;`,
+      tag:`margin:0.25em; color:${theme.view_txt};`
     };
 
     const posts = [{
@@ -721,47 +723,47 @@ const Views = {
       tags: [`#ServerAdmin`,`#Security`,`#SSL`,`#TLS`,`#http2`,`#NameCheap`,`#DigitalOcean`,`#LetsEncrypt`,`#Nginx`,`#Linux`,`#NodeJs`]
     }];
 
-    return E('div', {style:styles.blogView}, [
-      E('h1', {style:styles.viewTitle}, ['Blog Posts']),
-      ...posts.map(post => E('div', {style:styles.blogPost}, [
-        E('img', {style:styles.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
-        E('div', {style:styles.blogBody}, post.body.map(p => E('p', {style:styles.paragraph}, [p]))),
-        E('div', {style:styles.blogTags}, post.tags.map(t => E('span', {style:styles.tag}, [t])))
+    return E('div', {style:st.blogView}, [
+      E('h1', {style:st.viewTitle}, ['Blog Posts']),
+      ...posts.map(post => E('div', {style:st.blogPost}, [
+        E('img', {style:st.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
+        E('div', {style:st.blogBody}, post.body.map(p => E('p', {style:st.paragraph}, [p]))),
+        E('div', {style:st.blogTags}, post.tags.map(t => E('span', {style:st.tag}, [t])))
       ]))
     ]);
   },
   Contact: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
     const {wp,thumbs} = Assets.imgs;
-    const {emails,phones,locations} = state.userState.infoState;
+    const {personal,work,social} = state.userState.infoState;
     const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
-    const styles = {
+    const st = {
       view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`,
       contact:`margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well}; display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;`,
-      title:`margin:0 1em; padding:0.75em; border-bottom:1pt solid ${theme.view_bdr}; text-align:center; color:${theme.view_txt};`,
+      title:`margin:0 1em; padding:0 0.5em; border-bottom:1pt solid ${theme.view_bdr}; text-align:center; color:${theme.view_txt};`,
       intro:`margin:0; padding:0; text-align:center; color:${theme.view_txt};`,
-      sections: `display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'space-around':'flex-start'};`,
-      section:`margin:${lg_dev?'1':'0.25'}em; padding:0; text-align:center; display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:space-around; align-items:center;`,
+      sections:`display:flex; flex-direction:column; justify-content:${lg_dev?'space-around':'flex-start'};`,
+      section:`margin:${lg_dev?'1':'0.25'}em; padding:0; text-align:center; display:flex; flex-direction:column; justify-content:space-around; align-items:center; color:${theme.view_txt}; font-weight:bold; margin:${lg_dev?1:0.5}em;`,
       row:`display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'center':'flex-start'}; align-items:stretch;`,
-      sxn_title:`margin:${lg_dev?`0 0.5em 0 0`:`0.5em 0 0 0`}; padding:0; font-weight:bold; font-size:1em; color:${theme.view_txt};`,
-      txt:`margin:0; padding:0; color:${theme.view_txt};`,
+      sec_ttl:`margin:${lg_dev?`0 0.5em 0 0`:`0.5em 0 0 0`}; padding:0; font-weight:bold; font-size:1em; color:${theme.view_txt};`,
+      wrp:`display:flex; flex-direction:${lg_dev?`row`:`column`}; margin:0;`,
+      txt:`margin:0 1em; padding:0; color:${theme.view_txt};`,
       map:`border:1px solid ${theme.footer_bdr}; margin:1em auto; width:95%; height:250pt;`
     };
 
-    const section = (info,name)=>E('div',{style:styles.section},Object.keys(info).map(key=>E('div',{style:styles.row},[
-      E('h2',{style:styles.sxn_title},[`${name}${lg_dev?`: `:``}`]),E('p',{style:styles.txt},[info[key].length==2?info[key][0]:info[key]])
-    ])));
-
-    return E('div', {style:styles.view}, [
-      E('div',{style:styles.contact},[
-        E('h1',{style:styles.title},['StayInTouch']),
-        E('div',{style:styles.sections},[section(phones,'Number'),section(emails,'Email')]),
-        E('iframe',{frameborder:'0',style:styles.map,allowfullscreen:'',src:locations.home[1]},[])
+    return E('div', {style:st.view}, [
+      E('div',{style:st.contact},[
+        E('h1',{style:st.title},['Get In Touch']),
+        E('div',{style:st.sections},[
+          E(`div`,{style:st.section},[`Phone Numbers`,E(`div`,{style:st.wrp},[E(`p`,{style:st.txt},[work.phone]),E(`p`,{style:st.txt},[personal.phone])])]),
+          E(`div`,{style:st.section},[`Emails`,E(`div`,{style:st.wrp},[E(`p`,{style:st.txt},[work.email]),E(`p`,{style:st.txt},[personal.email])])]),
+          E(`div`,{style:st.section},[`Web`,E(`div`,{style:st.wrp},[E(`p`,{style:st.txt},[work.web]),E(`p`,{style:st.txt},[personal.web])])]),
+          E('iframe',{frameborder:'0',style:st.map,allowfullscreen:'',src:work.address[1]},[])
+        ])])
       ])
-    ]);
   },
   About: function(store) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
@@ -771,36 +773,36 @@ const Views = {
     const E = Unity.element;
     const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
 
-    const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`,
-      about: `margin: ${lg_dev?'1em 2em':'0.5em 1em'} 3em; padding: ${lg_dev?1:0.25}em; background-color: ${theme.well};`,
-      title: `margin: ${lg_dev?3:2.5}em auto 0.25em; padding: ${lg_dev?0.25:0.15}em; border-bottom: 1pt solid ${theme.view_bdr}; text-align: center; color: ${theme.menu_txt};`,
-      intro: `margin: 0.5em; padding: 0; text-align: center; color: ${theme.view_txt};`,
-      bio: `margin: 1em 0 0; padding: 0;`,
-      section: `margin: 1.5em 1em 1em; padding: 0;`,
-      sxn_title: `margin: 0 0 0.5em; padding: 0 1em 0.5em; font-size: 1em; color: ${theme.view_txt}; border-bottom: 1pt solid ${theme.menu_bdr};`,
-      txt: `margin: 0 0.5em; padding: 0; color: ${theme.view_txt};`,
-      sentence: `margin: 0.25em; color: ${theme.view_txt};`
+    const st = {
+      view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`,
+      about: `margin:${lg_dev?'1em 2em':'0.5em 1em'} 3em; padding:${lg_dev?1:0.25}em; background-color:${theme.well};`,
+      title: `margin:${lg_dev?3:2.5}em auto 0.25em; padding:${lg_dev?0.25:0.15}em; border-bottom:1pt solid ${theme.view_bdr}; text-align:center; color:${theme.menu_txt};`,
+      intro: `margin:0.5em; padding:0; text-align:center; color:${theme.view_txt};`,
+      bio: `margin:1em 0 0; padding:0;`,
+      section: `margin:1.5em 1em 1em; padding:0;`,
+      sec_ttl: `margin:0 0 0.5em; padding:0 1em 0.5em; font-size:1em; color:${theme.view_txt}; border-bottom:1pt solid ${theme.menu_bdr};`,
+      txt: `margin:0 0.5em; padding:0; color:${theme.view_txt};`,
+      sentence: `margin:0.25em; color:${theme.view_txt};`
     };
 
-    const title = E('h1', {style:styles.title}, ['About Me']);
+    const title = E('h1', {style:st.title}, ['About Me']);
 
-    const intro = E('p', {style:styles.intro}, [`intro`]);
+    const intro = E('p', {style:st.intro}, [`intro`]);
 
-    const full_bio = E('div', {style:styles.bio}, Object.keys(bio).map(section => E('div', {style:styles.section}, [
-      E('h2', {style:styles.sxn_title}, [`${section.toUpperCase()} HISTORY`]),
-      ...bio[section].map((sentence, i) => E('span', {style: `${styles.sentence} ${i==0?'margin-left:1em;':''}`}, [sentence]))
+    const full_bio = E('div', {style:st.bio}, Object.keys(bio).map(section => E('div', {style:st.section}, [
+      E('h2', {style:st.sec_ttl}, [`${section.toUpperCase()} HISTORY`]),
+      ...bio[section].map((sentence, i) => E('span', {style: `${st.sentence} ${i==0?'margin-left:1em;':''}`}, [sentence]))
     ])));
 
-    return E('div', {style:styles.view}, [
+    return E('div', {style:st.view}, [
       title,
-      E('div', {style:styles.about}, [full_bio])
+      E('div', {style:st.about}, [full_bio])
     ]);
   },
   All_Research: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
 
-    const styles = {
+    const st = {
       view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%; padding:6em 1em 3em;`
     };
 
@@ -810,93 +812,96 @@ const Views = {
       tiles: state.uiState.mapState.tree[4][2].map(route=>([route[0],route[1],state.uiState.mapState.flat[route[0]][2]]))
     });
 
-    return Unity.element('div', {style:styles.view}, [tiles]);
+    return Unity.element('div', {style:st.view}, [tiles]);
   },
   AI_Research: function(store) {
-    const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
+    const st = {
+      view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`
     };
 
     const conf = {
       title: `Artificial Intelligence Research`,
-      subtitle: `Neural Network architecture research.`,
+      subtitle: `Vision-based mapping and controls systems; attention mechanisms.`,
       img: Assets.imgs.thumbs.ai,
       description: [
         `My current Artificial Intelligence and Machine Learning research is focused in:`,
-        `Computer Vision: classification, object detection, tracking, vision-based 3D environment mapping.`,
-        `Natural Language Processing: speech recognition; speech synthesis; sentiment analysis; speech-based real-time embedded controls systems; researching RNN & LSTM implementations from first principles to help develop a better understanding of GANs and Transformers.`,
-        `Machine Learning: auditing CSE 546 at University of Washington; taking Convex Optimization certificate course through Stanford on Edx; gaining deeper statistical foundational knowledge to further develop my skills in designing and implementing ML/AI architectures.`
+        `Computer Vision: classification, object detection, tracking, vision-based 3D environment mapping; for use in controls applications.`,
+        `Sequence Learning and Attention: researching RNN & LSTM implementations first principles to develop a better understanding of GANs and Transformers; for future research of more "genenal" intelligences.`,
+        `Machine Learning: auditing CSE 546 at University of Washington; taking Convex Optimization certificate course through Stanford on Edx; for deeper statistical foundational ML/AI knowledge.`
       ],idx: 0
     };
 
-    return Unity.element('div', {style:styles.view}, [Modules.Project(store,conf)]);
+    return Unity.element('div', {style:st.view}, [Modules.Project(store,conf)]);
   },
-  Wifi_Embedded_Research: function(store) {
+  Networking_Research: function(store) {
 
-    const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
+    const st = {
+      view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`
     };
 
-    const product_config = {
-      title: `Embedded Research`,
-      subtitle: `Custom chip design & SoC research.`,
-      img: Assets.imgs.thumbs.mcu,
+    const conf = {
+      title: `Networking Research`,
+      subtitle: `Distributed computing applications`,
+      img: Assets.imgs.thumbs.iot,
       description: [
-        `My current Embedded research focuses on:`,
-        `A Computer Architecture course that culminates in the design & fabrication of a 16-bit machine from first principles with NAND gates.`,
-        `Embedded neural circuits for use in subroutines of custom SoCs.`
-      ],
-      idx: 0
+        `My current Networking research focuses on:`,
+        `Building fast, efficient proprietary file servers, proxies, load balancers, traffic monitors, etc. to manage my own cloud resources and sesrvices.`,
+        `Remote data acquisition and controls systems running on embedded/real-time targets. Particularly, I've been focuse on optimizing a MicroPython runtime on the ESP8266/ESP32 SoC's, which have full HTTP and BLE directly on the chip, 16 GPIO pins, and is about the size of a quarter.`
+      ]
     };
 
-    return Unity.element('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
+    return Unity.element('div', {style:st.view}, [Modules.Project(store,conf)]);
   },
   CPU_Achitecture_Research: function(store) {
 
-    const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
+    const st = {
+      view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`
     };
 
-    const product_config = {
-      title: `Computer Architecture Research`,
-      subtitle: `Low power, long range, control & monitoring systems.`,
-      img: Assets.imgs.thumbs.iot,
+    const conf = {
+      title: `Embedded Research`,
+      subtitle: `General computer architectures.`,
+      img: Assets.imgs.thumbs.mcu,
       description: [
-        `My current research focuses on the use of low-power networked embedded devices to:`,
-        `Monitor various sensors and feeback loops for data collection and analysis`,
-        `Decentralizing Deep Learning models across collections of embeeded TPUs`
-      ],
-      idx: 0
+        `My current Embedded research focuses on:`,
+        `Studying Computer Architecture through a course that culminates in the design of a 16-bit machine from first principles with NAND gates.`
+      ]
     };
 
-    return Unity.element('div', {style:styles.view}, [ Modules.Project(store, product_config) ]);
+    return Unity.element('div', {style:st.view}, [Modules.Project(store,conf)]);
   },
   UI_Research: function(store) {
+    E = Unity.element;
 
-    const styles = {
-      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`
+    const st = {
+      view: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 75%;`,
+      txt: `color: #fff`,
+      lnk: ` color:#09f; margin: 0 0 0 0.5em; text-decorate:underline;`
     };
 
-    const product_config = {
+    const conf = {
       title: `UI Architectures Research`,
-      subtitle: `Modular, portable, complex user interface architectures designed for any platform.`,
+      subtitle: `Modular, portable, complex UI architectures.`,
       img: Assets.imgs.thumbs.ui,
       description: [
-        `My current interface research invloves creating highly complex user interfaces that:`,
-        `Are hardware & software agnostic.`,
+        `My current interface research focuses on creating highly complex UI architectures that:`,
         `Can be ported to any programming language.`,
-        `Can be replicated, scale and deployed rapidly.`
-      ],
-      idx: 0
+        `Can be replicated, scaled and deployed rapidly.`,
+        `Can run on any target but are optimized for web and embedded/real-time targets, where resources are constrained.`,
+        E(`p`,{style:st.txt},[
+          `• This web application is an example of such a design that uses "vanilla" Javascript. View the source on`,
+          E(`a`,{style:st.lnk,href:`https://github.com/chivington/chivington.github.io`,target:`_blank`},[`Github`])
+        ])
+      ]
     };
 
-    return Unity.element('div', {style:styles.view}, [Modules.Project(store,product_config)]);
+    return Unity.element('div', {style:st.view}, [Modules.Project(store,conf)]);
   }
 };
 
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 //  Asset Manifest - Everything needed to cache app.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 const Assets = {
   css: {
     fonts: {
@@ -965,9 +970,10 @@ const Assets = {
       pagespeed: '/imgs/thumbs/google-pagespeed.jpg',
       hello: '/imgs/thumbs/hello.png',
       ht_bridge: '/imgs/thumbs/ht-bridge.svg',
+      qualys: '/imgs/thumbs/qualys.png',
+      plot: '/imgs/thumbs/plot.png',
       linear: '/imgs/thumbs/linear.jpg',
       logistic: '/imgs/thumbs/logistic.jpg',
-      qualys: '/imgs/thumbs/qualys.png',
       svm: '/imgs/thumbs/svm.jpg',
       linear_gif: '/imgs/thumbs/linear_regression.gif',
       iot: '/imgs/thumbs/iot.jpg',
@@ -1003,16 +1009,16 @@ const Assets = {
   webmanifest: '/site.webmanifest'
 };
 
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 //  Blueprint - Specifies inital app state.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 const Blueprint = {
-  app: {
-    about: {
-      '@@ACTIONS': {}
+  app:{
+    about:{
+      '@@ACTIONS':{}
     },
-    history: {
-      '@@ACTIONS': {
+    history:{
+      '@@ACTIONS':{
         'NAV_TO': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type],
           views: s.views.length == 5 ? [...s.views.slice(1), a.payload] : [...s.views, a.payload]
@@ -1056,7 +1062,7 @@ const Blueprint = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIFI_EMBEDDED_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_NETWORKING_RESEARCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_SUBMENU': (s,a) => ({
@@ -1071,7 +1077,7 @@ const Blueprint = {
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_WIFI_EMBEDDED_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_NETWORKING_RESEARCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_COMPUTER_ARCHITECTURE_FOOTER_MENU': (s,a) => ({
@@ -1096,9 +1102,9 @@ const Blueprint = {
       'Unity/Unity-Style Architecture', 'Responsive Design', 'Offline Capable', 'Network Detection', 'Customizable Themes'
     ]
   },
-  device: {
-    network: {
-      '@@ACTIONS': {
+  device:{
+    network:{
+      '@@ACTIONS':{
         'NET_STATE_CHANGE': (s,a) => a.payload,
         'NET_STATE_INIT': (s,a) => a.payload
       },
@@ -1108,50 +1114,60 @@ const Blueprint = {
     },
     battery: 100
   },
-  user: {
-    name: 'Johnathan Chivington',
-    employer: `University of Washington`,
-    title: `Fiscal Analyst`,
-    school: `University of Washington`,
-    major: `Physics & Computer Science`,
-    phones: {mobile:'303-900-2861'},
-    emails: {personal: 'j.chivington@outlook.com'},
-    web: {
-      linkedin: 'https://linkedin.com/in/johnathan-chivington',
-      github: 'https://github.com/chivington',
-      twitter: 'https://twitter.com/jt_chivington',
-      facebook: 'https://facebook.com/jt.chivington'
+  user:{
+    name:'Johnathan Chivington',
+    employer:`University of Washington`,
+    title:`Fiscal Analyst`,
+    school:`University of Washington`,
+    major:`Physics`,
+    work:{
+      address:['185 Stevens Way Paul Allen Center Seattle, WA 98195-2500', 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10750.402713483165!2d-122.3059001!3d47.6533262!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x12de8b2d1ad8504a!2sPaul%20G.%20Allen%20Center%20for%20Computer%20Science%20%26%20Engineering!5e0!3m2!1sen!2sus!4v1589709435841!5m2!1sen!2sus'],
+      email:'johnchiv@uw.edu',
+      phone:'206.897.1407',
+      web: `https://github.com/chivington`
     },
-    locations: {
-      home: ['16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus']
+    personal:{
+      address:['16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus'],
+      email:'john@chivington.io',
+      phone:'303-900-2861',
+      web:'https://chivington.io'
     },
-    bio: {
+    social:{
+      facebook:'https://facebook.com/jt.chivington',
+      github:'https://github.com/chivington',
+      linkedin:'https://linkedin.com/in/johnathan-chivington',
+      twitter:'https://twitter.com/jt_chivington'
+    },
+    bio:{
       work: [
-        `I'm currently a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering and my experience has been primarily in finance, business development and sales.`,
-        `My background is in Computer Science with extensive experience in the areas of Machine Learning & Artificial Intelligence, Computer Architecture, Networked Embedded Systems, and User Interface Architectures.`,
-        `My future endeavours will be in the areas of MEMS/NEMS systems, quantum optics, quantum computation, biophysical interactions, and other nano-scale physical systems.`
+        `I'm currently a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering, supporting a diverse portfolio of research faculty in Grant & Contract Management.`,
+        `My professional background has been primarily in finance, business development and sales management, and my personal background is in Computer Science with extensive experience in Machine Learning & Artificial Intelligence, Networked Embedded Real-Time Data Acquisition & Controls Systems, and User Interface Architectures.`,
+        `This summer, I'm excited to begin taking courses at UW while transitioning into a part-time role supporting a team working on a large Power Electronics research project in ECE.`,
+        `I'm working towards a Physics/Math double-major undergraduate degree at UW and my future endeavours will build on my CS/EE work, as well as move into the areas of MEMS/NEMS systems, quantum optics & quantum computation, biophysical interactions, and other micro/nano-scale physical systems.`
       ],
       education: [
-        `This quarter I'm auditing CSE 546 "Machine Learning" at the University of Washington.`,
+        `For Spring 2020, I'm auditing CSE 546 "Machine Learning" at the University of Washington and working through online courses in Convex Optimization and Computer Architecture in my spare time, as able.`,
+        `For Summer 2020, I'm excited to take my first classes at UW (MATH 125 & PHYS 121), while also serving in a support capacity for a large Power Electronics research project in ECE at UW.`,
+        `My goal is to continue my undergraduate studies at UW while taking on research positions in ECE as able in an effort to both increase my hands-on research experience as well as to be helpful wherever I can within the department.`,
+        `After graduation, I intend to continue into a graduate program at UW and to continue working in various research and teaching capacities for the forseeable future, attempting to bring as much value as I can to the awesome, hardworking teams there.`
       ],
       personal: [
-        `My "career" goals are also very personal to me, so I tend to spend most of my spare time pursuing those.`,
-        `I'm currently taking Computer Architecture and Convex Optimization courses online and auditing CSE 546 at the University of Washington. `,
-        `When we're not terribly busy or quarantined by a global pandemic, my girlfriend and I also like to go hiking, kayaking, walking our dog, etc.`
+        `My "career" goals are also very personal to me, so I tend to spend most of my spare time pursuing those. I've tried to center my career goals around helping people so it's easy to incorporate that work into everyday life without it feeling like work.`,
+        `When we're not terribly busy and/or quarantined by a global pandemic, my girlfriend and I also like to go hiking, kayaking, walking our dog, etc. This summer we're working on greenhouse to grow our own produce year-round and to grow more exotic plants.`
       ]
     }
   },
-  ui: {
-    '@@ACTIONS': {},
-    map: {
-      flat: {
+  ui:{
+    '@@ACTIONS':{},
+    map:{
+      flat:{
         'HOME': [Views.Home,'Home',Assets.imgs.thumbs.ai],
         'BLOG': [Views.Blog,'Blog',Assets.imgs.thumbs.ai],
         'CONTACT_ME': [Views.Contact,'Contact Me',Assets.imgs.thumbs.ai],
         'ABOUT_ME': [Views.About,'About Me',Assets.imgs.thumbs.ai],
         'ALL_RESEARCH': [Views.All_Research,'All Research',Assets.imgs.thumbs.ai],
         'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.AI_Research,'Artificial Intelligence Research',Assets.imgs.thumbs.ai],
-        'WIFI_EMBEDDED_RESEARCH': [Views.Wifi_Embedded_Research,'Wireless Embedded Research',Assets.imgs.thumbs.iot],
+        'NETWORKING_RESEARCH': [Views.Networking_Research,'Wireless Embedded Research',Assets.imgs.thumbs.iot],
         'COMPUTER_ARCHITECTURE': [Views.CPU_Achitecture_Research,'Computer Architecture Research',Assets.imgs.thumbs.mcu],
         'UI_ARCHITECTURES_RESEARCH': [Views.UI_Research,'UI Architectures Research',Assets.imgs.thumbs.ui],
         'DEFAULT': [Views.Home,'Home',Assets.imgs.thumbs.ai]
@@ -1163,7 +1179,7 @@ const Blueprint = {
         ['ABOUT_ME','About Me'],
         ['ALL_RESEARCH','All Research', [
           ['ARTIFICIAL_INTELLIGENCE_RESEARCH','Artificial Intelligence Research'],
-          ['WIFI_EMBEDDED_RESEARCH','Embedded Research'],
+          ['NETWORKING_RESEARCH','Embedded Research'],
           ['COMPUTER_ARCHITECTURE','Computer Architecture Research'],
           ['UI_ARCHITECTURES_RESEARCH','UI Architectures Research']
         ]]
@@ -1173,12 +1189,12 @@ const Blueprint = {
         ['BLOG'],
         ['CONTACT_ME'],
         ['ABOUT_ME'],
-        ['ALL_RESEARCH', [['ARTIFICIAL_INTELLIGENCE_RESEARCH'],['WIFI_EMBEDDED_RESEARCH'],['COMPUTER_ARCHITECTURE'],['UI_ARCHITECTURES_RESEARCH']]]
+        ['ALL_RESEARCH', [['ARTIFICIAL_INTELLIGENCE_RESEARCH'],['NETWORKING_RESEARCH'],['COMPUTER_ARCHITECTURE'],['UI_ARCHITECTURES_RESEARCH']]]
       ]
     },
-    theme: {
-      selected: 'light',
-      dark: {
+    theme:{
+      selected: 'dark',
+      dark:{
         header: `rgba(21,32,43,1)`,
         header_txt: `rgba(255,255,255,1)`,
         header_bdr: `rgba(70,122,194,0.7)`,
@@ -1203,7 +1219,7 @@ const Blueprint = {
         success: '#4e4',
         error: '#e44'
       },
-      light: {
+      light:{
         header: `rgba(255,255,255,1)`,
         header_txt: `rgba(55,55,75,0.9)`,
         header_bdr: `rgba(25,25,25,1)`,
@@ -1229,17 +1245,17 @@ const Blueprint = {
         success: '#7e7',
         error: '#e77'
       },
-      wp: {view:Assets.imgs.wp.pnw}
+      wp:{view:Assets.imgs.wp.pnw}
     },
-    window: {
+    window:{
       width: window.innerWidth,
       height: window.innerHeight,
       mode: window.innerWidth < 600 ? 'mobile' : (
         window.innerWidth < 750 ? 'small_tab' : (window.innerWidth < 900 ? 'large_tab' : 'desktop')
       )
     },
-    header: {
-      '@@ACTIONS': {
+    header:{
+      '@@ACTIONS':{
         'CHANGE_HEADER_ICON': (s,a) => ({icon: a.payload.icon, title: s.title}),
         'CHANGE_HEADER_TITLE': (s,a) => ({icon: s.icon, title: a.payload.title})
       },
@@ -1247,8 +1263,8 @@ const Blueprint = {
       alt: 'chivington.io Icon',
       menu_btn: Assets.imgs.icons.btns.menu
     },
-    menu: {
-      '@@ACTIONS': {
+    menu:{
+      '@@ACTIONS':{
         'UPDATE_MENU_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload}),
         'NAV_TO': (s,a) => ({current: 'CLOSED', previous: s.current, scrollTop: 0}),
         'TOGGLE_MENU': (s,a) => ({current: s.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: s.current, scrollTop: 0}),
@@ -1260,7 +1276,7 @@ const Blueprint = {
       previous: 'CLOSED',
       scrollTop: 0
     },
-    view: {
+    view:{
       '@@ACTIONS': {
         'NAV_TO': (s,a) => ({current: a.payload, previous: s.current, scrollTop: 0}),
         'UPDATE_VIEW_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload})
@@ -1272,9 +1288,9 @@ const Blueprint = {
   }
 };
 
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 //  Initialization - Initialize application with Blueprint & Asset Manifest.
-// -------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 const App_Root = document.getElementById('App_Root');
 const Load_Screen_Root = document.getElementById('Load_Screen_Root');
 Unity.initialize(App_Root,Load_Screen_Root,Blueprint,Reducers,Middlewares);
