@@ -149,7 +149,7 @@ const Reducers = {
         'OPEN_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_ALL_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_RESEARCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
@@ -164,7 +164,7 @@ const Reducers = {
         'TOGGLE_HOME_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_ALL_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_RESEARCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
@@ -238,7 +238,7 @@ const Middlewares = {
 };
 
 // --------------------------------------------------------------------------------------------
-//  Modules - Important/reused modules, UI, etc.
+//  Modules - Important/reused widgets, UI, etc.
 // --------------------------------------------------------------------------------------------
 const Modules = {
   Router: function(store) {
@@ -248,6 +248,7 @@ const Modules = {
     const sameView = viewState.current==viewState.previous;
     const lastActionNav = state.appState.historyState.actions.slice(-1)=='NAV_TO';
     const st = {router: `position:fixed; top:0; right:0; bottom:0; left:0; overflow:hidden; z-index:5;`};
+    // const selected = mapState.flat[current[0]]?mapState.flat['MESSAGES']:mapState.flat['DEFAULT'];
     const selected = mapState.flat[current[0]]?mapState.flat[current[0]]:mapState.flat['DEFAULT'];
     const animation = lastActionNav && !sameView ? `animation:viewSlideIn 250ms 1 forwards;` : ``;
     document.title = `${state.userState.infoState.name} | ${selected[1]}`;
@@ -261,7 +262,7 @@ const Modules = {
     const menu_opening = state.uiState.menuState.current == 'OPEN';
     const prevAction = state.appState.historyState.actions.slice(-1);
     const display = offline || prevAction == '@@INIT' || prevAction == 'NET_STATE_CHANGE';
-    const lg_dev = (state.uiState.windowState.mode == 'large_tab' || state.uiState.windowState.mode == 'desktop');
+    const lg_dev = (state.uiState.windowState.mode == 'lg_tab' || state.uiState.windowState.mode == 'pc');
 
     const st = {
       net: `
@@ -341,7 +342,7 @@ const Modules = {
     const open_action = !!(previous == 'CLOSED' && current == 'OPEN');
     const close_action = !!(previous == 'OPEN' && current == 'CLOSED');
     const menu_action = !!(last_action == 'OPEN_MENU' || last_action == 'CLOSE_MENU' || last_action == 'TOGGLE_MENU');
-    const lg_dev = (windowState.mode == 'desktop' || windowState.mode == 'large_tab');
+    const lg_dev = (windowState.mode == 'pc' || windowState.mode == 'lg_tab');
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
@@ -370,7 +371,7 @@ const Modules = {
     const superscript = E('sup', {style:st.super}, [viewState.current[1]]);
 
     const header_menu = E('div', {style:st.header_menu}, [
-      ['HOME', 'Home'], ['BLOG', 'Blog'], ['CONTACT_ME', 'Contact Me'], ['ABOUT_ME', 'About Me'], ['ALL_RESEARCH', 'Research']
+      ['HOME', 'Home'], ['BLOG', 'Blog'], ['CONTACT', 'Contact Me'], ['ABOUT', 'About Me'], ['RESEARCH', 'Research']
     ].map((view, i, arr) => {
       const btn = E('h2', {style: i == arr.length-1 ? st.header_qt : st.header_btn}, [view[1]]);
       btn.addEventListener('click', () => {
@@ -384,7 +385,7 @@ const Modules = {
 
     return E('div', {style:st.header}, [
       E('div', {style:st.header_left}, [ header_icon, superscript ]),
-      E('div', {style:st.header_right}, windowState.mode == 'desktop' ? [header_menu, menu_btn] : [menu_btn]),
+      E('div', {style:st.header_right}, windowState.mode == 'pc' ? [header_menu, menu_btn] : [menu_btn]),
     ]);
   },
   Menu: function(store) {
@@ -392,41 +393,44 @@ const Modules = {
     const {menuState,windowState,themeState,mapState} = state.uiState;
     const dark_theme = themeState.selected=='dark';
     const {icons} = Assets.imgs;
-    const menuWidth = windowState.mode==`desktop`?`45%`:`100%`;
+    const menu_width = windowState.mode==`pc`?`40%`:(windowState.mode==`lg_tab`?`40%`:(windowState.mode==`md_tab`?`45%`:`100%`));
     const current_view = state.uiState.viewState.current[0];
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const last_action = state.appState.historyState.actions.slice(-1);
     const closed_menu_last = !!(last_action=='CLOSE_MENU'||last_action=='TOGGLE_MENU');
-    const lg_dev = (windowState.mode=='large_tab'||windowState.mode=='desktop');
+    const lg_dev = (windowState.mode=='lg_tab'||windowState.mode=='pc');
     const E = Unity.element;
 
     const st = {
       menu: `
-        position:fixed; top:${lg_dev?'5':'4'}em; left:0; bottom:0; width:${menuWidth}; padding:0; z-index:80; background-color:${theme.menu}; overflow-y:scroll; ${lg_dev?`border-right:1pt solid ${theme.menu_bdr};`:''}
+        position:fixed; top:${lg_dev?'5':'4'}em; left:0; bottom:0; width:${menu_width}; padding:0; z-index:80; background-color:${theme.menu}; overflow-y:scroll; ${lg_dev?`border-right:1pt solid ${theme.menu_bdr};`:''}
         ${(menuState.current=='OPEN')?(menuState.previous=='OPEN'?``:`animation:menu_opening 300ms ease-in-out 1 forwards;`):(closed_menu_last?`animation:menu_closing 300ms ease-in-out 1 forwards;`:`display:none;`)}
       `,
+      settings: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:0; padding:1em;`,
       toggle: `display:flex; flex-direction:row; justify-content:center; align-items:center; margin:2em; padding:0;`,
-      tgl_txt: `margin:0; padding:0; color:${theme.menu_txt}`,
-      tgl_btn: `margin:1em; padding:${dark_theme?'0 1.5em 0 0':'0 0 0 1.5em'}; background-color:${theme.panel}; border:1.25pt solid ${dark_theme?theme.success:theme.menu_bdr}; border-radius:1.5em; cursor:pointer;`,
+      tg_txt: `margin:0; padding:0; color:${theme.menu_txt}`,
+      tg_btn: `margin:1em; padding:${dark_theme?'0 0 0 1.5em':'0 1.5em 0 0'}; background-color:${theme.panel}; border:1.25pt solid ${dark_theme?theme.success:theme.menu_bdr}; border-radius:1.5em; cursor:pointer;`,
       slider: `height:1.5em; width:1.5em; margin:0; padding:0; background-color:${dark_theme?theme.success:theme.btn}; border-radius:100%;`,
       copy: `
         display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; text-align:center; color:${theme.menu_bdr};
         border-top:1px solid ${theme.menu_bdr}; margin:1em ${lg_dev?'5em 5':'2em 2em 1'}em; padding:1.5em; font-size:${lg_dev?'1':'0.9'}em;
       `,
-      usa: `height:1.5em; margin:0.25em; font-size:1.1em; color:${theme.menu_txt};`,
-      copy_txt: `font-size:1.1em; margin:0; color:${theme.menu_txt};`
+      copy_txt: `font-size:1.1em; margin:0; color:${theme.menu_txt};`,
+      usa: `height:1.5em; margin:0.25em; font-size:1.1em; color:${theme.menu_txt};`
     };
+
+    const submenu = Modules.Submenu(store,{orientation:`PORTRAIT`,btns:mapState.tree});
+
+    const toggle = E('div',{style:st.toggle},[E('h4',{style:st.tg_txt},[`Toggle dark mode`]),E('div',{style:st.tg_btn},[E('div',{style:st.slider},[])])]);
+    toggle.lastChild.addEventListener('click',()=>dispatch({type:'TOGGLE_THEME',payload:store.getState().uiState.menuState.scrollTop}));
 
     const copy = E('div', {style:st.copy}, [
       E('img',{src:icons.sm.usa,alt:`USA Icon`,style:st.usa},[]),
       E('p',{style:st.usa},['United States']),
       E('p',{style:st.copy_txt},['Copyright © 2020 chivington.io']),
     ]);
+    copy.firstChild.addEventListener('click',e=>dispatch({type:`NAV_TO`,payload:[`MESSAGES`,`Messages`]}));
 
-    const toggle = E('div',{style:st.toggle},[E('h4',{style:st.tgl_txt},[`Toggle dark mode`]),E('div',{style:st.tgl_btn},[E('div',{style:st.slider},[])])]);
-    toggle.lastChild.addEventListener('click',()=>dispatch({type:'TOGGLE_THEME',payload:store.getState().uiState.menuState.scrollTop}));
-
-    const submenu = Modules.Submenu(store,{orientation:`PORTRAIT`,btns:mapState.tree});
     const Menu = Unity.element('div',{style:st.menu},[submenu,toggle,copy]);
     setTimeout(event=>Menu.scrollTo({top:menuState.scrollTop,left:0,behavior:'auto'}),50);
 
@@ -444,12 +448,12 @@ const Modules = {
     const { menuState, windowState } = state.uiState;
     const { icons } = Assets.imgs;
     const dark_theme = state.uiState.themeState.selected == 'dark';
-    const menuWidth = ((windowState.mode == `desktop`) || (windowState.mode == `large_tab`)) ? `35%` : `100%`;
+    const menu_width = ((windowState.mode == `pc`) || (windowState.mode == `lg_tab`)) ? `35%` : `100%`;
     const current_view = state.uiState.viewState.current[0];
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const last_action = state.appState.historyState.actions.slice(-1);
     const closed_menu_last = !!(last_action == 'CLOSE_MENU' || last_action == 'TOGGLE_MENU');
-    const lg_dev = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
+    const lg_dev = (windowState.mode == 'lg_tab' || windowState.mode == 'pc');
     const landscape = config.orientation == 'LANDSCAPE' && lg_dev;
     const E = Unity.element;
 
@@ -465,7 +469,7 @@ const Modules = {
 
     const sub_states = {};
 
-    const create_submenu = (sub_config, flag) => {
+    const create_submenu = (sub_config,flag=false) => {
       const btns = flag ? sub_config : sub_config.btns;
 
       return btns.map((btn, i, arr) => {
@@ -478,16 +482,16 @@ const Modules = {
         });
 
         if (!!btn[2]) {
-          b.style.cssText += `border: none;`;
-          const submenu_style = sub_states[btn[0]].current == 'CLOSED' ? `height: 0; visibility: hidden;` : `height: auto; visibility: visible`;
-          const dropdown = E('img', {style: `${st.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform: rotate(-90deg);` : `transform: rotate(-180deg);`}`, src: dark_theme ? icons.btns.caret_wht : icons.btns.caret_blk, alt: 'Sub-Menu Button Icon'}, []);
+          b.style.cssText += `border:none;`;
+          const submenu_style = sub_states[btn[0]].current == 'CLOSED' ? `height:0; visibility:hidden;` :`height:auto; visibility:visible`;
+          const dropdown = E('img', {style:`${st.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform:rotate(-90deg);` :`transform:rotate(-180deg);`}`, src:dark_theme ? icons.btns.caret_wht :icons.btns.caret_blk, alt:'Sub-Menu Button Icon'}, []);
           dropdown.addEventListener('click', function(event) {
             const selected_sub = b.parentNode.parentNode.children[1];
-            sub_states[btn[0]].current = sub_states[btn[0]].current == 'OPEN' ? 'CLOSED' : 'OPEN';
+            sub_states[btn[0]].current = sub_states[btn[0]].current == 'OPEN' ? 'CLOSED' :'OPEN';
             sub_states[btn[0]].previous = sub_states[btn[0]].current;
-            const new_style = sub_states[btn[0]].current == 'CLOSED' ? `height: 0; visibility: hidden;` : `height: auto; visibility: visible`;
+            const new_style = sub_states[btn[0]].current == 'CLOSED' ? `height:0; visibility:hidden;` :`height:auto; visibility:visible`;
             selected_sub.style.cssText = `${st.submenu} ${new_style}`;
-            event.target.style.cssText = `${st.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform: rotate(-90deg);` : `transform: rotate(-180deg);`}`;
+            event.target.style.cssText = `${st.dropdown} ${sub_states[btn[0]].current == 'CLOSED' ? `transform:rotate(-90deg);` :`transform:rotate(-180deg);`}`;
           });
 
           return E('div', {style:st.subnemu_wrapper}, [
@@ -497,7 +501,7 @@ const Modules = {
       })
     };
 
-    return E('div', {style:st.container}, create_submenu(config, false));
+    return E('div', {style:st.container}, create_submenu(config));
   },
   View: function(store,view,animation) {
     const [state,dispatch] = [store.getState(),store.dispatch];
@@ -506,7 +510,7 @@ const Modules = {
     const {width,height,mode} = windowState;
 
     const st = {
-      view: `
+      view:`
         position:fixed; top:0; right:0; bottom:0; left:0; margin:0; padding:0; overflow-x:hidden; overflow-y:scroll; z-index:10;
         background:linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${themeState.wp.view}'); background-position:center; background-size:cover; background-repeat:no-repeat;
         ${menuState.current=='OPEN'?'filter:blur(5pt);':''} -webkit-overflow-scrolling:touch; background-color:${theme.view}; ${animation}
@@ -526,25 +530,24 @@ const Modules = {
     View.addEventListener('click', function(event) { if (menuState.current=='OPEN') dispatch({type:'CLOSE_MENU'}); });
     return View;
   },
-  Project: function(store, conf) {
+  Project: function(store,conf) {
     const [ state, dispatch ] = [ store.getState(), store.dispatch ];
     const { mode } = state.uiState.windowState;
-    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
-    const { beacon } = Assets.imgs;
+    const lg_dev = ((mode=='pc')||(mode=='lg_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
     const st = {
-      project: `margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well};`,
-      title: `margin:0; padding:0 0 0.5em 0; border-bottom:1pt solid ${theme.view_bdr}; font-size:1.25em; text-align:center; color:${theme.view_txt};`,
-      subtitle: `margin:0.75em; padding:0; text-align:center; color:${theme.view_txt};`,
-      description: `
-        display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'space-around':'flex-start'}; align-items:${lg_dev?'center':'stretch'};
+      project:`margin:${lg_dev?'7em 2em 5':'5em 1em 3'}em; padding:1em; background-color:${theme.well};`,
+      title:`margin:0; padding:0 0 0.5em 0; border-bottom:1pt solid ${theme.view_bdr}; font-size:1.25em; text-align:center; color:${theme.view_txt};`,
+      subtitle:`margin:0.75em; padding:0; text-align:center; color:${theme.view_txt};`,
+      description:`
+        display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'space-around':'flex-start'}; align-items:${lg_dev||mode==`md_tab`?'center':'stretch'};
         margin:0; padding:0; background-color:${theme.panel}; color:${theme.view_txt}; border:1pt solid ${theme.view_bdr};
       `,
-      img: `margin:0; padding:0; border-bottom:1pt solid ${theme.view_bdr}; ${lg_dev?'height:250pt':`width:100%`};`,
-      wrapper: `display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; margin:0; padding:1em;`,
-      txt: `margin:0; padding:0.5em 0.25em; text-align:${lg_dev?'left':'center'}; color:${theme.view_txt};`
+      img:`margin:0; padding:0; border-bottom:1pt solid ${theme.view_bdr}; ${lg_dev?'height:250pt':`width:${mode==`md_tab`?80:100}%`};`,
+      wrapper:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:0; padding:1em;`,
+      txt:`margin:0; padding:0.5em 0.25em; text-align:${lg_dev?'left':'center'}; color:${theme.view_txt};`
     };
 
     const description = E('div', {style:st.description}, [
@@ -558,7 +561,8 @@ const Modules = {
   },
   Tiles: function(store,conf) {
     const [state,dispatch] = [store.getState(),store.dispatch];
-    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
+    const m = state.uiState.windowState.mode;
+    const lg_dev = ((m=='pc')||(m=='lg_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
@@ -566,28 +570,30 @@ const Modules = {
       component: `display:flex; flex-direction:column; justify-content:space-around; align-items:stretch; margin:0; padding:0.5em; background-color:${theme.well};`,
       title: `margin:0 0.5em; padding:0.25em; border-bottom:1pt solid ${theme.view_bdr}; font-size:1.5em; text-align:center; color:${theme.view_txt};`,
       sub: `margin:0.75em; padding:0; font-size:1em; text-align:center; color:${theme.view_txt};`,
-      tiles: `
-        display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:${lg_dev?'space-between':'flex-start'}; align-items:${lg_dev?'center':'stretch'};
-        margin:${lg_dev?0.5:0.25}em; background-color:${theme.panel}; ${lg_dev?'overflow-x:scroll;':''} border:solid ${theme.view_bdr}; border-width:1pt 0;
-        ${lg_dev?`border-right:1.5pt solid ${theme.view_bdr}; padding: 1em;`:''} -moz-box-shadow:inset 0 5px 10px #000000;
-      `,
-      tile: `display:flex; flex-direction:column; justify-content:flex-start; align-items:center; padding:0; margin:${lg_dev?'0 0.75':0.5}em; background-color:${theme.panel}; border:1pt solid ${theme.view_bdr}; cursor:pointer;`,
-      img: `margin:0; ${lg_dev?'height:200pt':`width:100%`}; border-bottom:1pt solid ${theme.view_bdr};`,
-      name: `margin:${lg_dev?1:0.75}em; color:${theme.menu_txt}; font-size:1em; font-weight:900; text-align:center; color:${theme.view_txt};`
+      tiles: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${lg_dev?0.5:0.25}em; background-color:${theme.panel}; border:solid ${theme.view_bdr}; border-width:1pt 0;`,
+      tile_row:`display:flex; flex-direction:row; justify-content:${lg_dev?`space-between`:`center`}; align-items:center; padding:0.25em 0 0.25em 0.25em;`,
+      tile: `display:flex; flex-direction:column; justify-content:flex-start; align-items:center; width:${m==`mb`||m==`sm_tab`?50:(m==`md_tab`||m==`lg_tab`?33:25)}%; padding:0; margin:${lg_dev?'0 0.75':0.5}em; background-color:${theme.panel}; border:1pt solid ${theme.view_bdr}; cursor:pointer;`,
+      img: `margin:0; border-bottom:1pt solid ${theme.view_bdr}; width: 100%; max-height:${(m==`mb`||m==`sm_tab`?150:(m==`md_tab`||m==`lg_tab`?200:250))};`,
+      name: `margin:${lg_dev?0.5:0.25}em; min-height:${({'mb':2.5,'sm_tab':2.5,'md_tab':2,'lg_tab':1.5,'pc':1.25}[m])}em; align-self:center; color:${theme.menu_txt}; font-size:1em; font-weight:900; text-align:center; color:${theme.view_txt};`
     };
 
-    const tiles = E('div', {style:st.tiles}, conf.tiles.map((t,i) => {
+    const tile_rows = E('div', {style:st.tiles}, conf.tiles.reduce((tr,t,i,arr) => {
       const e = E('div',{style:st.tile},[E('img',{style:st.img,src:t[2],alt:`${t[1]} Thumbnail`},[]),E('h3',{style:st.name},[t[1]])]);
-      e.addEventListener('click',()=>dispatch({type:'NAV_TO',payload:[t[0],t[1]]})); return e;
-    }));
+      e.addEventListener('click',()=>dispatch({type:'NAV_TO',payload:[t[0],t[1]]}));
 
-    return E('div', {style:st.component}, [E('h1',{style:st.title},[conf.title]), E('h2',{style:st.sub},[conf.subtitle]), tiles]);
+      const new_row = tr[tr.length-1].children.length == (m==`mb`||m==`sm_tab`?2:(m==`md_tab`||m==`lg_tab`?3:4));
+      if (new_row) tr.push(E(`div`,{style:st.tile_row},[e])); else tr[tr.length-1].appendChild(e);
+
+      return tr;
+    },[E(`div`,{style:st.tile_row},[])]));
+
+    return E('div', {style:st.component}, [E('h1',{style:st.title},[conf.title]), E('h2',{style:st.sub},[conf.subtitle]), tile_rows]);
   },
   Footer: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
     const {footerState,windowState,mapState} = state.uiState;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
-    const lg_dev = (windowState.mode == 'large_tab' || windowState.mode == 'desktop');
+    const lg_dev = (windowState.mode == 'lg_tab' || windowState.mode == 'pc');
     const {icons,wp} = Assets.imgs;
     const E = Unity.element;
 
@@ -607,9 +613,11 @@ const Modules = {
       copy_txt: `font-size:1em; margin:0; color:${theme.footer_txt};`
     };
 
-    // const msg = E('div', {style:st.msg}, [``]);
     const submenus = E('div', {style:st.submenus}, [
-      Modules.Submenu(store,{orientation:`LANDSCAPE`,btns:[[...mapState.tree[0],[mapState.tree[1],mapState.tree[2],mapState.tree[3]]],mapState.tree[4]]})
+      Modules.Submenu(store,{
+        orientation:`LANDSCAPE`,
+        btns:[[...mapState.tree[0],[mapState.tree[1],mapState.tree[2],mapState.tree[3]]],mapState.tree[4],mapState.tree[5]]
+      })
     ]);
 
     const copy = E('div', {style:st.copy}, [
@@ -631,7 +639,7 @@ const Modules = {
     window.addEventListener('resize', function(event) {
       if (resizeCtr++ % 5 == 0) {
         const [nw,nh] = [window.innerWidth,window.innerHeight];
-        const nm = nw<600?'mobile':(nw<750?'small_tab':(nw<900?'large_tab':'desktop'));
+        const nm = nw<600?'mb':(nw<700?'sm_tab':(nw<800?'md_tab':(nw<900?'lg_tab':'pc')))
         if (nm!=mode) dispatch({type:'RESIZE',payload:{width:nw,height:nh,mode:nm}});
       }
     });
@@ -643,7 +651,7 @@ const Modules = {
 };
 
 // --------------------------------------------------------------------------------------------
-//  Views - Groups Modules to fit device.
+//  Views - Groups Modules together to fit device.
 // --------------------------------------------------------------------------------------------
 const Views = {
   Home: function(store) {
@@ -651,7 +659,7 @@ const Views = {
     const {appState,userState,uiState} = state;
     const {name,phone,email,directions,employer,title,major,school,bio} = userState.infoState;
     const {windowState,mapState} = uiState;
-    const lg_dev = ((windowState.mode=='desktop')||(windowState.mode=='large_tab'))?true:false;
+    const lg_dev = ((windowState.mode=='pc')||(windowState.mode=='lg_tab'))?true:false;
     const landing = ((appState.historyState.views.slice(-1)=='@@INIT')&&(appState.historyState.actions.slice(-1)=='@@INIT'))?true:false;
     const theme = uiState.themeState[uiState.themeState.selected];
     const E = Unity.element;
@@ -659,37 +667,62 @@ const Views = {
     const st = {
       home: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; width:100%; text-align:center; ${landing?'animation: app_fade_in 900ms ease-in-out 1 forwards;':''}`,
       intro: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${lg_dev?'8em 1em 2':'6em 1em 2'}em;`,
-      name: `margin:0 auto; color:#fff; font-size:4em; font-weight:400;`,
-      title: `margin:0.25em; color:#fff; font-size:${lg_dev?1.5:1.3}em; font-weight:300;`,
+      name: `margin:0 auto; color:${theme.lt_txt}; font-size:4em; font-weight:400;`,
+      title: `margin:0.25em; color:${theme.lt_txt}; font-size:${lg_dev?1.5:1.3}em; font-weight:300;`,
       actions: `display:flex; flex-direction:${lg_dev?'row':'column'}; justify-content:center; align-items:${lg_dev?'center':'stretch'}; margin:0 auto; padding:0; width:${lg_dev?80:90}%;`,
-      btn: `margin:0.5em ${lg_dev?'':'auto'}; padding:0.4em 0.6em; width:${lg_dev?50:80}%; background-color:${theme.btn}; border:1pt solid #aaa; cursor:pointer;`,
+      btn: `margin:0.5em ${lg_dev?'':'auto'}; padding:0.4em 0.6em; width:${lg_dev?50:80}%; background-color:${theme.btn}; border:1pt solid ${theme.btn_bdr}; color:${theme.lt_txt}; cursor:pointer;`,
       bio: `margin:${lg_dev?2:1}em; padding:${lg_dev?`1`:`0.25`}em; border:1px solid ${theme.view_bdr}; background-color:${theme.well};`,
       sentence: `color:${theme.view_txt}; font-size:${lg_dev?1.25:1}em; font-weight:700; margin:0.5em;`,
-      research: `margin:${lg_dev?`0 2em 2`:`0 1em 1`}em;`
+      tiles: `margin:${lg_dev?`0 2em 2`:`0 1em 1`}em;`
     };
 
     const intro = E('div',{style:st.intro},[
-      E('h1',{style:st.name},[name]), E('h2',{style:st.title},[`${title} and ${major} Student at ${school}`
+      E('h1',{style:st.name},[name]), E('h2',{style:st.title},[`${major} Student at ${school}`
     ])]);
 
-    const actions = E('div',{style:st.actions},[['CONTACT_ME','Contact Me'],['ALL_RESEARCH','View My Research']].map((b,i,arr) => {
+    const actions = E('div',{style:st.actions},[['CONTACT','Contact Me'],['RESEARCH','View My Research']].map((b,i,arr) => {
       const btn = E('h2', {style: st.btn}, [b[1]]); btn.addEventListener('click', (event)=>dispatch({type:'NAV_TO',payload:[b[0], b[1]]})); return btn;
     }));
 
     const work = E('div',{style:st.bio},bio.work.map(s=>E('p',{style:st.sentence},[s])));
 
-    const tiles = E('div',{style:st.research},[Modules.Tiles(store,{
+    const research_tiles = E('div',{style:st.tiles},[Modules.Tiles(store,{
       title: `Research Areas`,
       subtitle: `All currently active and past research areas.`,
       tiles: mapState.tree[4][2].map(route=>([route[0],route[1],mapState.flat[route[0]][2]]))
     })]);
 
-    return E('div',{style:st.home},[intro,actions,work,tiles]);
+    const blog_tiles = E('div',{style:st.tiles},[Modules.Tiles(store,{
+      title: `Blog Toics`,
+      subtitle: `Topics I care about most and enjoy discussing.`,
+      tiles: state.uiState.mapState.tree[5][2].map(route=>([route[0],route[1],state.uiState.mapState.flat[route[0]][2]]))
+    })]);
+
+    return E('div',{style:st.home},[intro,actions,work,research_tiles,blog_tiles]);
   },
   Blog: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
     const {wp,thumbs} = Assets.imgs;
-    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
+    const lg_dev = ((state.uiState.windowState.mode=='pc')||(state.uiState.windowState.mode=='lg_tab'))?true:false;
+    const theme = state.uiState.themeState[state.uiState.themeState.selected];
+    const E = Unity.element;
+
+    const st = {
+      view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%; padding:6em 1em 3em;`
+    };
+
+    const tiles = Modules.Tiles(store,{
+      title: `Blog Toics`,
+      subtitle: `Choose a topic to see specific blogs.`,
+      tiles: state.uiState.mapState.tree[5][2].map(route=>([route[0],route[1],state.uiState.mapState.flat[route[0]][2]]))
+    });
+
+    return Unity.element('div', {style:st.view}, [tiles]);
+  },
+  TechBlog: function(store) {
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {wp,thumbs} = Assets.imgs;
+    const lg_dev = ((state.uiState.windowState.mode=='pc')||(state.uiState.windowState.mode=='lg_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
@@ -697,7 +730,7 @@ const Views = {
       blogView:`margin:3.5em auto 3em; padding:1em 0 0 0; width:100%; min-height:100%; display:flex; flex-direction:column; justify-content:flex-start; align-items:center;`,
       viewTitle:`margin:0.75em auto 0.25em; color:${theme.menu_txt};`,
       blogPost:`margin:${lg_dev?1.5:0.5}em; padding:1.25em 0; border:1pt solid ${theme.view_bdr}; background-color:${theme.well}; text-align:center;`,
-      blogImg:`border:1px solid ${theme.view_bdr};`,
+      blogImg:``,
       blogBody:`margin:${lg_dev?1:0.5}em; display:flex; flex-direction:column; justify-content:space-around; text-align:left;`,
       paragraph:`margin:0.5em 0.25em; text-indent:50px; color:${theme.view_txt};`,
       blogTags:`margin:0 1em; padding:${lg_dev?1:0.5}em; border-top:1pt solid ${theme.view_bdr}; display:flex; flex-direction:row; justify-content:space-around; align-items:center; flex-wrap:wrap;`,
@@ -724,7 +757,130 @@ const Views = {
     }];
 
     return E('div', {style:st.blogView}, [
-      E('h1', {style:st.viewTitle}, ['Blog Posts']),
+      E('h1', {style:st.viewTitle}, ['Technology Blog Posts']),
+      ...posts.map(post => E('div', {style:st.blogPost}, [
+        E('img', {style:st.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
+        E('div', {style:st.blogBody}, post.body.map(p => E('p', {style:st.paragraph}, [p]))),
+        E('div', {style:st.blogTags}, post.tags.map(t => E('span', {style:st.tag}, [t])))
+      ]))
+    ]);
+  },
+  EconBlog: function(store) {
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {wp,thumbs} = Assets.imgs;
+    const lg_dev = ((state.uiState.windowState.mode=='pc')||(state.uiState.windowState.mode=='lg_tab'))?true:false;
+    const theme = state.uiState.themeState[state.uiState.themeState.selected];
+    const E = Unity.element;
+
+    const st = {
+      blogView:`margin:3.5em auto 3em; padding:1em 0 0 0; width:100%; min-height:100%; display:flex; flex-direction:column; justify-content:flex-start; align-items:center;`,
+      viewTitle:`margin:0.75em auto 0.25em; color:${theme.menu_txt};`,
+      blogPost:`margin:${lg_dev?1.5:0.5}em; padding:1.25em 0; border:1pt solid ${theme.view_bdr}; background-color:${theme.well}; text-align:center;`,
+      blogImg:`border:1px solid ${theme.view_bdr};`,
+      blogBody:`margin:${lg_dev?1:0.5}em; display:flex; flex-direction:column; justify-content:space-around; text-align:left;`,
+      paragraph:`margin:0.5em 0.25em; text-indent:50px; color:${theme.view_txt};`,
+      blogTags:`margin:0 1em; padding:${lg_dev?1:0.5}em; border-top:1pt solid ${theme.view_bdr}; display:flex; flex-direction:row; justify-content:space-around; align-items:center; flex-wrap:wrap;`,
+      tag:`margin:0.25em; color:${theme.view_txt};`
+    };
+
+    const posts = [{
+      img: [thumbs.econ, 'Economics Post 1'],
+      body: [
+        `Economics placeholder post #1.`
+      ],
+      tags: [`#Economics`,`#Finance`]
+    },{
+      img: [thumbs.econ, 'Economics Post 2'],
+      body: [
+        `Economics placeholder post #2.`
+      ],
+      tags: [`#Economics`,`#Finance`]
+    }];
+
+    return E('div', {style:st.blogView}, [
+      E('h1', {style:st.viewTitle}, ['Economics Blog Posts']),
+      ...posts.map(post => E('div', {style:st.blogPost}, [
+        E('img', {style:st.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
+        E('div', {style:st.blogBody}, post.body.map(p => E('p', {style:st.paragraph}, [p]))),
+        E('div', {style:st.blogTags}, post.tags.map(t => E('span', {style:st.tag}, [t])))
+      ]))
+    ]);
+  },
+  HistBlog: function(store) {
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {wp,thumbs} = Assets.imgs;
+    const lg_dev = ((state.uiState.windowState.mode=='pc')||(state.uiState.windowState.mode=='lg_tab'))?true:false;
+    const theme = state.uiState.themeState[state.uiState.themeState.selected];
+    const E = Unity.element;
+
+    const st = {
+      blogView:`margin:3.5em auto 3em; padding:1em 0 0 0; width:100%; min-height:100%; display:flex; flex-direction:column; justify-content:flex-start; align-items:center;`,
+      viewTitle:`margin:0.75em auto 0.25em; color:${theme.menu_txt};`,
+      blogPost:`margin:${lg_dev?1.5:0.5}em; padding:1.25em 0; border:1pt solid ${theme.view_bdr}; background-color:${theme.well}; text-align:center;`,
+      blogImg:`border:1px solid ${theme.view_bdr};`,
+      blogBody:`margin:${lg_dev?1:0.5}em; display:flex; flex-direction:column; justify-content:space-around; text-align:left;`,
+      paragraph:`margin:0.5em 0.25em; text-indent:50px; color:${theme.view_txt};`,
+      blogTags:`margin:0 1em; padding:${lg_dev?1:0.5}em; border-top:1pt solid ${theme.view_bdr}; display:flex; flex-direction:row; justify-content:space-around; align-items:center; flex-wrap:wrap;`,
+      tag:`margin:0.25em; color:${theme.view_txt};`
+    };
+
+    const posts = [{
+      img: [thumbs.hist, 'History Post 1'],
+      body: [
+        `History placeholder post #1.`
+      ],
+      tags: [`#History`,`#OldStuff`]
+    },{
+      img: [thumbs.hist, 'History Post 2'],
+      body: [
+        `History placeholder post #2.`
+      ],
+      tags: [`#History`,`#OldStuff`]
+    }];
+
+    return E('div', {style:st.blogView}, [
+      E('h1', {style:st.viewTitle}, ['Economics Blog Posts']),
+      ...posts.map(post => E('div', {style:st.blogPost}, [
+        E('img', {style:st.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
+        E('div', {style:st.blogBody}, post.body.map(p => E('p', {style:st.paragraph}, [p]))),
+        E('div', {style:st.blogTags}, post.tags.map(t => E('span', {style:st.tag}, [t])))
+      ]))
+    ]);
+  },
+  PoliBlog: function(store) {
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const {wp,thumbs} = Assets.imgs;
+    const lg_dev = ((state.uiState.windowState.mode=='pc')||(state.uiState.windowState.mode=='lg_tab'))?true:false;
+    const theme = state.uiState.themeState[state.uiState.themeState.selected];
+    const E = Unity.element;
+
+    const st = {
+      blogView:`margin:3.5em auto 3em; padding:1em 0 0 0; width:100%; min-height:100%; display:flex; flex-direction:column; justify-content:flex-start; align-items:center;`,
+      viewTitle:`margin:0.75em auto 0.25em; color:${theme.menu_txt};`,
+      blogPost:`margin:${lg_dev?1.5:0.5}em; padding:1.25em 0; border:1pt solid ${theme.view_bdr}; background-color:${theme.well}; text-align:center;`,
+      blogImg:`border:1px solid ${theme.view_bdr};`,
+      blogBody:`margin:${lg_dev?1:0.5}em; display:flex; flex-direction:column; justify-content:space-around; text-align:left;`,
+      paragraph:`margin:0.5em 0.25em; text-indent:50px; color:${theme.view_txt};`,
+      blogTags:`margin:0 1em; padding:${lg_dev?1:0.5}em; border-top:1pt solid ${theme.view_bdr}; display:flex; flex-direction:row; justify-content:space-around; align-items:center; flex-wrap:wrap;`,
+      tag:`margin:0.25em; color:${theme.view_txt};`
+    };
+
+    const posts = [{
+      img: [thumbs.poli, 'Politics Post 1'],
+      body: [
+        `Politics placeholder post #1.`
+      ],
+      tags: [`#Politics`,`#Society`]
+    },{
+      img: [thumbs.poli, 'Politics Post 2'],
+      body: [
+        `Politics placeholder post #2.`
+      ],
+      tags: [`#Politics`,`#Society`]
+    }];
+
+    return E('div', {style:st.blogView}, [
+      E('h1', {style:st.viewTitle}, ['Politics Blog Posts']),
       ...posts.map(post => E('div', {style:st.blogPost}, [
         E('img', {style:st.blogImg, width: '80%', src: post.img[0], alt: post.img[1]}, []),
         E('div', {style:st.blogBody}, post.body.map(p => E('p', {style:st.paragraph}, [p]))),
@@ -736,7 +892,7 @@ const Views = {
     const [state,dispatch] = [store.getState(),store.dispatch];
     const {wp,thumbs} = Assets.imgs;
     const {personal,work,social} = state.userState.infoState;
-    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
+    const lg_dev = ((state.uiState.windowState.mode=='pc')||(state.uiState.windowState.mode=='lg_tab'))?true:false;
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const E = Unity.element;
 
@@ -758,9 +914,9 @@ const Views = {
       E('div',{style:st.contact},[
         E('h1',{style:st.title},['Get In Touch']),
         E('div',{style:st.sections},[
-          E(`div`,{style:st.section},[`Phones`,E(`div`,{style:st.wrp},[E(`a`,{href:`tel:${work.phone}`,target:`_blank`,style:st.lnk},[work.phone]),E(`a`,{href:`tel:${personal.phone}`,target:`_blank`,style:st.lnk},[personal.phone])])]),
-          E(`div`,{style:st.section},[`Emails`,E(`div`,{style:st.wrp},[E(`a`,{href:`mailto:${work.email}`,target:`_blank`,style:st.lnk},[work.email]),E(`a`,{href:`mailto:${personal.email}`,target:`_blank`,style:st.lnk},[personal.email])])]),
-          E(`div`,{style:st.section},[`Web`,E(`div`,{style:st.wrp},[E(`a`,{href:work.web,target:`_blank`,style:st.lnk},[work.web]),E(`a`,{href:personal.web,target:`_blank`,style:st.lnk},[personal.web])])]),
+          E(`div`,{style:st.section},[`Phone`,E(`div`,{style:st.wrp},[E(`a`,{href:`tel:${work.phone}`,target:`_blank`,style:st.lnk},[work.phone])])]),
+          E(`div`,{style:st.section},[`Email`,E(`div`,{style:st.wrp},[E(`a`,{href:`mailto:${work.email}`,target:`_blank`,style:st.lnk},[work.email])])]),
+          E(`div`,{style:st.section},[`Web`,E(`div`,{style:st.wrp},[E(`a`,{href:work.web,target:`_blank`,style:st.lnk},[work.web])])]),
           E('iframe',{frameborder:'0',style:st.map,allowfullscreen:'',src:work.address[1]},[])
         ])])
       ])
@@ -771,7 +927,7 @@ const Views = {
     const theme = state.uiState.themeState[state.uiState.themeState.selected];
     const { bio } = state.userState.infoState;
     const E = Unity.element;
-    const lg_dev = ((state.uiState.windowState.mode=='desktop')||(state.uiState.windowState.mode=='large_tab'))?true:false;
+    const lg_dev = ((state.uiState.windowState.mode=='pc')||(state.uiState.windowState.mode=='lg_tab'))?true:false;
 
     const st = {
       view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`,
@@ -799,7 +955,7 @@ const Views = {
       E('div', {style:st.about}, [full_bio])
     ]);
   },
-  All_Research: function(store) {
+  Research: function(store) {
     const [state,dispatch] = [store.getState(),store.dispatch];
 
     const st = {
@@ -807,7 +963,7 @@ const Views = {
     };
 
     const tiles = Modules.Tiles(store,{
-      title: `All Research Areas`,
+      title: `Research Areas`,
       subtitle: `Choose an area to see specific projects.`,
       tiles: state.uiState.mapState.tree[4][2].map(route=>([route[0],route[1],state.uiState.mapState.flat[route[0]][2]]))
     });
@@ -825,46 +981,30 @@ const Views = {
       img: Assets.imgs.thumbs.ai,
       description: [
         `My current Artificial Intelligence and Machine Learning research is focused in:`,
-        `Computer Vision: classification, object detection, tracking, vision-based 3D environment mapping; for use in controls applications.`,
-        `Sequence Learning and Attention: researching RNN & LSTM implementations first principles to develop a better understanding of GANs and Transformers; for future research of more "genenal" intelligences.`,
-        `Machine Learning: auditing CSE 546 at University of Washington; taking Convex Optimization certificate course through Stanford on Edx; for deeper statistical foundational ML/AI knowledge.`
+        `Developing an autonomous household consumer electronics product that utilizes proprietary VisualSLAM and Object Detection & Tracking algorithms for completing a particular set of tasks.`,
+        `• Machine Learning: auditing CSE 546 at University of Washington; taking Convex Optimization certificate course through Stanford on Edx; for deeper statistical foundational ML/AI knowledge.`
       ],idx: 0
     };
 
     return Unity.element('div', {style:st.view}, [Modules.Project(store,conf)]);
   },
-  Networking_Research: function(store) {
+  CPU_EGR_Research: function(store) {
+    const E = Unity.element;
 
     const st = {
       view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`
     };
 
     const conf = {
-      title: `Networking Research`,
-      subtitle: `Distributed computing applications`,
-      img: Assets.imgs.thumbs.iot,
-      description: [
-        `My current Networking research focuses on:`,
-        `Building fast, efficient proprietary file servers, proxies, load balancers, traffic monitors, etc. to manage my own cloud resources and sesrvices.`,
-        `Remote data acquisition and controls systems running on embedded/real-time targets. Particularly, I've been focuse on optimizing a MicroPython runtime on the ESP8266/ESP32 SoC's, which have full HTTP and BLE directly on the chip, 16 GPIO pins, and is about the size of a quarter.`
-      ]
-    };
-
-    return Unity.element('div', {style:st.view}, [Modules.Project(store,conf)]);
-  },
-  CPU_Achitecture_Research: function(store) {
-
-    const st = {
-      view: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:75%;`
-    };
-
-    const conf = {
-      title: `Embedded Research`,
+      title: `Computer Engineering Research`,
       subtitle: `General computer architectures.`,
       img: Assets.imgs.thumbs.mcu,
       description: [
         `My current Embedded research focuses on:`,
-        `Studying Computer Architecture through a course that culminates in the design of a 16-bit machine from first principles with NAND gates.`
+        `Building an automated photo-resistive Printed Circuit Board chemical etching station to enable a rapid, iterative, high-throughput design workflow.`,
+        `Researching piezo-electric controls for application in Atomic Force Microscopy. With nano-scale imaging, I can work towards Atomic Manufacturing & Computing techniques, similar to the work discussed by Dr. Wolkow ${E(`a`,{src:`https://www.youtube.com/watch?v=78xUNNQv0ro`,alt:`Dr. Wolkow TED Talk`},[`here`])}.`,
+        `Remote data acquisition and controls systems running on embedded, real-time targets. Particularly, I've been optimizing a MicroPython runtime for the ESP32 SoC, which has a full HTTP and BLE stack on the chip, 16 GPIO pins, and is approximately the size of a quarter.`,
+        `• Pursuing a two-course ${E(`a`,{src:`https://www.coursera.org/learn/build-a-computer`,alt:`Coursera Computer Architecture certificate`},[`Coursera Computer Architecture certificate`])} that culminates in the design of a 16-bit machine from first principles with NAND gates. The machine is complete with ISA, VM, compiler, Java-like language, and OS. It's is capable of interfacing with a VGA monitor, and USB mouse and keyboard. Upon completion these designs will be fabricated and tested, and will serve as a foundation for building more complex machines, as well as TPUs and other embedded neural systems.`
       ]
     };
 
@@ -880,22 +1020,71 @@ const Views = {
     };
 
     const conf = {
-      title: `UI Architectures Research`,
-      subtitle: `Modular, portable, complex UI architectures.`,
+      title: `UI Architecture Research`,
+      subtitle: `Embedded & web-optimized modular, portable, complex UI architectures.`,
       img: Assets.imgs.thumbs.ui,
       description: [
-        `My current interface research focuses on creating highly complex UI architectures that:`,
-        `Can be ported to any programming language.`,
-        `Can be replicated, scaled and deployed rapidly.`,
-        `Can run on any target but are optimized for web and embedded/real-time targets, where resources are constrained.`,
+        `My current UI research is focused in creating highly complex interfaces that:`,
+        `Port easily to multiple programming languages.`,
+        `Deploy and scale rapidly.`,
+        `Are optimized for embedded/real-time & web deployment.`,
         E(`p`,{style:st.txt},[
-          `• This web application is an example of such a design that uses "vanilla" Javascript. View the source on`,
+          `• This application is an example of such an architecture that utilizes "vanilla" Javascript. View the source on`,
           E(`a`,{style:st.lnk,href:`https://github.com/chivington/chivington.github.io`,target:`_blank`},[`Github`])
         ])
       ]
     };
 
     return Unity.element('div', {style:st.view}, [Modules.Project(store,conf)]);
+  },
+  Messages: function(store) {
+    E = Unity.element;
+    const [state,dispatch] = [store.getState(),store.dispatch];
+    const m = state.uiState.windowState.mode;
+
+    const st = {
+      view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:center; min-height:75%; padding:7em 0 0 0;`,
+      cmds:`display:flex; flex-direction:row; justify-content:space-between; align-items:center;`,
+      msgs:`margin:0.25em; padding:0.5em; width:${({'mb':98,'sm_tab':95,'md_tab':80,'lg_tab':60,'pc':50}[m])}%; color:#fff; border:1px solid #09f;`,
+      txt:`margin:0.25em; color:#fff; border:1px solid #00f;`,
+      btn:`margin:0.25em; padding:0.25em 0.5em; pointer:cursor; border:1px solid #09f; border-radius:2pt; color:#09f; background-color:#024;`
+    };
+
+    const msgs = E(`div`,{style:st.msgs},[`No current messages.`]);
+    const id = E(`p`,{style:st.txt},[`1234`]);
+    const send = E(`div`,{style:st.btn},[`send`]);
+    const end = E(`div`,{style:st.btn},[`end`]);
+    const cmds = E(`div`,{style:st.cmds},[id,end,send]);
+    const txt = E(`textarea`,{style:st.txtarea},[`Enter message.`]);
+    const msg = {user:``,msg:``};
+
+    const opts = {
+      method: 'POST',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {'Content-Type':'application/json'},
+      body: `Empty message.`
+    };
+
+    send.addEventListener(`click`, e => {
+      console.log('body >> ', opts.body);
+      console.log('txtv >> ', txt.value);
+      opts.body = JSON.stringify(txt.value);
+      return fetch('https://chivington.io',opts)
+      .then(response => {
+        console.log(`response: `,response);
+        const json = response.json();
+        console.log(`json: `,json);
+        return json;
+      })
+      .then(data => {
+        console.log(`data: `,data);
+        msgs.appendChild(E(`div`,{style:st.msg},[data]));
+      });
+    });
+
+    return Unity.element('div', {style:st.view}, [msgs,cmds,txt]);
+    // return Unity.element('div', {style:st.view}, [E('p',{style:st.txt},[`Welcome to Messages`, btn])]);
   }
 };
 
@@ -903,110 +1092,115 @@ const Views = {
 //  Asset Manifest - Everything needed to cache app.
 // --------------------------------------------------------------------------------------------
 const Assets = {
-  css: {
-    fonts: {
-      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Book.otf',
-      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Light.otf',
-      Avenir_Book: '/css/fonts/Avenir-Free/Avenir-Roman.otf'
+  css:{
+    fonts:{
+      Avenir_Book:'/css/fonts/Avenir-Free/Avenir-Book.otf',
+      Avenir_Book:'/css/fonts/Avenir-Free/Avenir-Light.otf',
+      Avenir_Book:'/css/fonts/Avenir-Free/Avenir-Roman.otf'
     },
-    only_css_file: '/css/only.css'
+    only_css_file:'/css/only.css'
   },
-  imgs: {
-    icons: {
-      btns: {
-        close_wht: '/imgs/icons/btns/close-wht.svg',
-        close_blk: '/imgs/icons/btns/close-blk.svg',
-        scroll: '/imgs/icons/btns/scroll.svg',
-        menu_wht: '/imgs/icons/btns/menu-wht.svg',
-        menu_blk: '/imgs/icons/btns/menu-blk.svg',
-        caret_wht: '/imgs/icons/btns/caret-wht.svg',
-        caret_blk: '/imgs/icons/btns/caret-blk.svg'
+  imgs:{
+    icons:{
+      btns:{
+        close_wht:'/imgs/icons/btns/close-wht.svg',
+        close_blk:'/imgs/icons/btns/close-blk.svg',
+        scroll:'/imgs/icons/btns/scroll.svg',
+        menu_wht:'/imgs/icons/btns/menu-wht.svg',
+        menu_blk:'/imgs/icons/btns/menu-blk.svg',
+        caret_wht:'/imgs/icons/btns/caret-wht.svg',
+        caret_blk:'/imgs/icons/btns/caret-blk.svg'
       },
-      manifest: {
-        android_192: '/imgs/icons/manifest/android-chrome-192x192.png',
-        android_512: '/imgs/icons/manifest/android-chrome-512x512.png',
-        apple_touch: '/imgs/icons/manifest/apple-touch-icon.png',
-        favicon_16: '/imgs/icons/manifest/favicon-16x16.png',
-        favicon_32: '/imgs/icons/manifest/favicon-32x32.png',
-        favicon: '/imgs/icons/manifest/favicon.ico',
-        favicon_wht: '/imgs/icons/manifest/favicon-wht.png',
-        mstile_150: '/imgs/icons/manifest/mstile-150x150.png',
-        safari_pinned_tab: '/imgs/icons/manifest/safari-pinned-tab.svg'
+      manifest:{
+        android_192:'/imgs/icons/manifest/android-chrome-192x192.png',
+        android_512:'/imgs/icons/manifest/android-chrome-512x512.png',
+        apple_touch:'/imgs/icons/manifest/apple-touch-icon.png',
+        favicon_16:'/imgs/icons/manifest/favicon-16x16.png',
+        favicon_32:'/imgs/icons/manifest/favicon-32x32.png',
+        favicon:'/imgs/icons/manifest/favicon.ico',
+        favicon_wht:'/imgs/icons/manifest/favicon-wht.png',
+        mstile_150:'/imgs/icons/manifest/mstile-150x150.png',
+        safari_pinned_tab:'/imgs/icons/manifest/safari-pinned-tab.svg'
       },
-      network: {
-        no_wifi_1: '/imgs/icons/network/no-wifi-1.svg',
-        no_wifi_2: '/imgs/icons/network/no-wifi-2.svg',
-        wifi: '/imgs/icons/network/wifi.svg'
+      network:{
+        no_wifi_1:'/imgs/icons/network/no-wifi-1.svg',
+        no_wifi_2:'/imgs/icons/network/no-wifi-2.svg',
+        wifi:'/imgs/icons/network/wifi.svg'
       },
-      sm: {
-        dl_blk: '/imgs/icons/sm/dl-blk.svg',
-        dl_wht: '/imgs/icons/sm/dl-wht.svg',
-        resume_blk: '/imgs/icons/sm/resume-blk.svg',
-        resume_wht: '/imgs/icons/sm/resume-wht.svg',
-        email_blk: '/imgs/icons/sm/email-blk.svg',
-        email_wht: '/imgs/icons/sm/email-wht.svg',
-        fb: '/imgs/icons/sm/fb.svg',
-        git_blk: '/imgs/icons/sm/git-blk.svg',
-        git_wht: '/imgs/icons/sm/git-wht.svg',
-        jc_pbc_blk: '/imgs/icons/sm/jc-pcb-blk.svg',
-        jc_pbc_wht: '/imgs/icons/manifest/mstile-150x150.png',
-        li_blk: '/imgs/icons/sm/li-blk.svg',
-        li_wht: '/imgs/icons/sm/li-wht.svg',
-        phone_blk: '/imgs/icons/sm/phone-blk.svg',
-        phone_wht: '/imgs/icons/sm/phone-wht.svg',
-        twt_blk: '/imgs/icons/sm/twt-blk.svg',
-        twt_wht: '/imgs/icons/sm/twt-wht.svg',
-        usa: '/imgs/icons/sm/united-states.svg',
-        web_blk: '/imgs/icons/sm/web-blk.svg',
-        web_wht: '/imgs/icons/sm/web-wht.svg'
+      sm:{
+        dl_blk:'/imgs/icons/sm/dl-blk.svg',
+        dl_wht:'/imgs/icons/sm/dl-wht.svg',
+        resume_blk:'/imgs/icons/sm/resume-blk.svg',
+        resume_wht:'/imgs/icons/sm/resume-wht.svg',
+        email_blk:'/imgs/icons/sm/email-blk.svg',
+        email_wht:'/imgs/icons/sm/email-wht.svg',
+        fb:'/imgs/icons/sm/fb.svg',
+        git_blk:'/imgs/icons/sm/git-blk.svg',
+        git_wht:'/imgs/icons/sm/git-wht.svg',
+        jc_pbc_blk:'/imgs/icons/sm/jc-pcb-blk.svg',
+        jc_pbc_wht:'/imgs/icons/manifest/mstile-150x150.png',
+        li_blk:'/imgs/icons/sm/li-blk.svg',
+        li_wht:'/imgs/icons/sm/li-wht.svg',
+        phone_blk:'/imgs/icons/sm/phone-blk.svg',
+        phone_wht:'/imgs/icons/sm/phone-wht.svg',
+        twt_blk:'/imgs/icons/sm/twt-blk.svg',
+        twt_wht:'/imgs/icons/sm/twt-wht.svg',
+        usa:'/imgs/icons/sm/united-states.svg',
+        web_blk:'/imgs/icons/sm/web-blk.svg',
+        web_wht:'/imgs/icons/sm/web-wht.svg'
       }
     },
-    me: {
-      loaf: '/imgs/me/loaf.jpg',
-      win_bed: '/imgs/me/win-bed.jpg',
-      win: '/imgs/me/win.jpg'
+    me:{
+      loaf:'/imgs/me/loaf.jpg',
+      win_bed:'/imgs/me/win-bed.jpg',
+      win:'/imgs/me/win.jpg'
     },
-    thumbs: {
-      pagespeed: '/imgs/thumbs/google-pagespeed.jpg',
-      hello: '/imgs/thumbs/hello.png',
-      ht_bridge: '/imgs/thumbs/ht-bridge.svg',
-      qualys: '/imgs/thumbs/qualys.png',
-      plot: '/imgs/thumbs/plot.png',
-      linear: '/imgs/thumbs/linear.jpg',
-      logistic: '/imgs/thumbs/logistic.jpg',
-      svm: '/imgs/thumbs/svm.jpg',
-      linear_gif: '/imgs/thumbs/linear_regression.gif',
-      iot: '/imgs/thumbs/iot.jpg',
-      mcu: '/imgs/thumbs/mcu.jpg',
-      ai: '/imgs/thumbs/ai.jpg',
-      ui: '/imgs/thumbs/ui.jpg'
+    thumbs:{
+      ai:'/imgs/thumbs/ai.jpg',
+      blog:'/imgs/thumbs/blog.jpg',
+      cpu_egr:'/imgs/thumbs/cpu_egr.jpg',
+      econ:'/imgs/thumbs/econ.jpg',
+      hello:'/imgs/thumbs/hello.png',
+      hist:'/imgs/thumbs/hist.jpg',
+      ht_bridge:'/imgs/thumbs/ht-bridge.svg',
+      iot:'/imgs/thumbs/iot.jpg',
+      linear_gif:'/imgs/thumbs/linear.gif',
+      linear_jpg:'/imgs/thumbs/linear.jpg',
+      logistic:'/imgs/thumbs/logistic.jpg',
+      mcu:'/imgs/thumbs/mcu.jpg',
+      plot:'/imgs/thumbs/plot.png',
+      poli:'/imgs/thumbs/poli.jpg',
+      qualys:'/imgs/thumbs/qualys.png',
+      svm:'/imgs/thumbs/svm.jpg',
+      tech:'/imgs/thumbs/tech.jpg',
+      ui:'/imgs/thumbs/ui.jpg'
     },
-    wp: {
-      fragmented: '/imgs/wp/fragmented.jpg',
-      geo_sphere: '/imgs/wp/geo-sphere.jpg',
-      math: '/imgs/wp/math.jpg',
-      pnw: '/imgs/wp/pnw.jpg',
-      seattle: '/imgs/wp/seattle.jpg',
-      yolo: '/imgs/wp/yolo.jpg',
-      net: `
-        background-color: #000000; background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='769' cy='229' r='5'/%3E%3Ccircle cx='539' cy='269' r='5'/%3E%3Ccircle cx='603' cy='493' r='5'/%3E%3Ccircle cx='731' cy='737' r='5'/%3E%3Ccircle cx='520' cy='660' r='5'/%3E%3Ccircle cx='309' cy='538' r='5'/%3E%3Ccircle cx='295' cy='764' r='5'/%3E%3Ccircle cx='40' cy='599' r='5'/%3E%3Ccircle cx='102' cy='382' r='5'/%3E%3Ccircle cx='127' cy='80' r='5'/%3E%3Ccircle cx='370' cy='105' r='5'/%3E%3Ccircle cx='578' cy='42' r='5'/%3E%3Ccircle cx='237' cy='261' r='5'/%3E%3Ccircle cx='390' cy='382' r='5'/%3E%3C/g%3E%3C/svg%3E");
+    wp:{
+      fragmented:'/imgs/wp/fragmented.jpg',
+      geo_sphere:'/imgs/wp/geo-sphere.jpg',
+      math:'/imgs/wp/math.jpg',
+      pnw:'/imgs/wp/pnw.jpg',
+      seattle:'/imgs/wp/seattle.jpg',
+      yolo:'/imgs/wp/yolo.jpg',
+      net:`
+        background-color:#000000; background-image:linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='769' cy='229' r='5'/%3E%3Ccircle cx='539' cy='269' r='5'/%3E%3Ccircle cx='603' cy='493' r='5'/%3E%3Ccircle cx='731' cy='737' r='5'/%3E%3Ccircle cx='520' cy='660' r='5'/%3E%3Ccircle cx='309' cy='538' r='5'/%3E%3Ccircle cx='295' cy='764' r='5'/%3E%3Ccircle cx='40' cy='599' r='5'/%3E%3Ccircle cx='102' cy='382' r='5'/%3E%3Ccircle cx='127' cy='80' r='5'/%3E%3Ccircle cx='370' cy='105' r='5'/%3E%3Ccircle cx='578' cy='42' r='5'/%3E%3Ccircle cx='237' cy='261' r='5'/%3E%3Ccircle cx='390' cy='382' r='5'/%3E%3C/g%3E%3C/svg%3E");
       `,
-      scales: `
-        background-color: #b459ff; background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='100' y1='33' x2='100' y2='-3'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='100' y1='135' x2='100' y2='97'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23994cd9' fill-opacity='0.6'%3E%3Crect x='100' width='100' height='100'/%3E%3Crect y='100' width='100' height='100'/%3E%3C/g%3E%3Cg fill-opacity='0.5'%3E%3Cpolygon fill='url(%23a)' points='100 30 0 0 200 0'/%3E%3Cpolygon fill='url(%23b)' points='100 100 0 130 0 100 200 100 200 130'/%3E%3C/g%3E%3C/svg%3E");
+      scales:`
+        background-color:#b459ff; background-image:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='100' y1='33' x2='100' y2='-3'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='100' y1='135' x2='100' y2='97'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23994cd9' fill-opacity='0.6'%3E%3Crect x='100' width='100' height='100'/%3E%3Crect y='100' width='100' height='100'/%3E%3C/g%3E%3Cg fill-opacity='0.5'%3E%3Cpolygon fill='url(%23a)' points='100 30 0 0 200 0'/%3E%3Cpolygon fill='url(%23b)' points='100 100 0 130 0 100 200 100 200 130'/%3E%3C/g%3E%3C/svg%3E");
       `,
-      tiled: `
-        background-color: #ffffff; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50' height='25' viewBox='0 0 50 25'%3E%3Cdefs%3E%3Crect stroke='%23ffffff' stroke-width='0.1' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='2' height='2' patternUnits='userSpaceOnUse'%3E%3Cg stroke='%23ffffff' stroke-width='0.1'%3E%3Crect fill='%23fafafa' width='1' height='1'/%3E%3Crect fill='%23ffffff' width='1' height='1' x='1' y='1'/%3E%3Crect fill='%23f5f5f5' width='1' height='1' y='1'/%3E%3Crect fill='%23f0f0f0' width='1' height='1' x='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='b' width='5' height='11' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ebebeb'%3E%3Cuse xlink:href='%23s' x='2' y='0'/%3E%3Cuse xlink:href='%23s' x='4' y='1'/%3E%3Cuse xlink:href='%23s' x='1' y='2'/%3E%3Cuse xlink:href='%23s' x='2' y='4'/%3E%3Cuse xlink:href='%23s' x='4' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='8'/%3E%3Cuse xlink:href='%23s' x='3' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='7' height='7' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23e5e5e5'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='3' y='4'/%3E%3Cuse xlink:href='%23s' x='5' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='11' height='5' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ffffff'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='6' y='3'/%3E%3Cuse xlink:href='%23s' x='8' y='2'/%3E%3Cuse xlink:href='%23s' x='3' y='0'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3Cg fill='%23e0e0e0'%3E%3Cuse xlink:href='%23s' x='8' y='3'/%3E%3Cuse xlink:href='%23s' x='4' y='2'/%3E%3Cuse xlink:href='%23s' x='5' y='4'/%3E%3Cuse xlink:href='%23s' x='10' y='0'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='23' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='2' y='5'/%3E%3Cuse xlink:href='%23s' x='23' y='13'/%3E%3Cuse xlink:href='%23s' x='4' y='18'/%3E%3Cuse xlink:href='%23s' x='35' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='61' height='31' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='16' y='0'/%3E%3Cuse xlink:href='%23s' x='13' y='22'/%3E%3Cuse xlink:href='%23s' x='44' y='15'/%3E%3Cuse xlink:href='%23s' x='12' y='11'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='50' height='25'/%3E%3Crect fill='url(%23b)' width='50' height='25'/%3E%3Crect fill='url(%23c)' width='50' height='25'/%3E%3Crect fill='url(%23d)' width='50' height='25'/%3E%3Crect fill='url(%23e)' width='50' height='25'/%3E%3Crect fill='url(%23f)' width='50' height='25'/%3E%3C/svg%3E");background-attachment: fixed;background-size: cover;
+      tiled:`
+        background-color:#ffffff; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50' height='25' viewBox='0 0 50 25'%3E%3Cdefs%3E%3Crect stroke='%23ffffff' stroke-width='0.1' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='2' height='2' patternUnits='userSpaceOnUse'%3E%3Cg stroke='%23ffffff' stroke-width='0.1'%3E%3Crect fill='%23fafafa' width='1' height='1'/%3E%3Crect fill='%23ffffff' width='1' height='1' x='1' y='1'/%3E%3Crect fill='%23f5f5f5' width='1' height='1' y='1'/%3E%3Crect fill='%23f0f0f0' width='1' height='1' x='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='b' width='5' height='11' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ebebeb'%3E%3Cuse xlink:href='%23s' x='2' y='0'/%3E%3Cuse xlink:href='%23s' x='4' y='1'/%3E%3Cuse xlink:href='%23s' x='1' y='2'/%3E%3Cuse xlink:href='%23s' x='2' y='4'/%3E%3Cuse xlink:href='%23s' x='4' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='8'/%3E%3Cuse xlink:href='%23s' x='3' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='7' height='7' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23e5e5e5'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='3' y='4'/%3E%3Cuse xlink:href='%23s' x='5' y='6'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='11' height='5' patternUnits='userSpaceOnUse'%3E%3Cg fill='%23ffffff'%3E%3Cuse xlink:href='%23s' x='1' y='1'/%3E%3Cuse xlink:href='%23s' x='6' y='3'/%3E%3Cuse xlink:href='%23s' x='8' y='2'/%3E%3Cuse xlink:href='%23s' x='3' y='0'/%3E%3Cuse xlink:href='%23s' x='0' y='3'/%3E%3C/g%3E%3Cg fill='%23e0e0e0'%3E%3Cuse xlink:href='%23s' x='8' y='3'/%3E%3Cuse xlink:href='%23s' x='4' y='2'/%3E%3Cuse xlink:href='%23s' x='5' y='4'/%3E%3Cuse xlink:href='%23s' x='10' y='0'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='23' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='2' y='5'/%3E%3Cuse xlink:href='%23s' x='23' y='13'/%3E%3Cuse xlink:href='%23s' x='4' y='18'/%3E%3Cuse xlink:href='%23s' x='35' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='61' height='31' patternUnits='userSpaceOnUse'%3E%3Cg fill='%239861bb'%3E%3Cuse xlink:href='%23s' x='16' y='0'/%3E%3Cuse xlink:href='%23s' x='13' y='22'/%3E%3Cuse xlink:href='%23s' x='44' y='15'/%3E%3Cuse xlink:href='%23s' x='12' y='11'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='50' height='25'/%3E%3Crect fill='url(%23b)' width='50' height='25'/%3E%3Crect fill='url(%23c)' width='50' height='25'/%3E%3Crect fill='url(%23d)' width='50' height='25'/%3E%3Crect fill='url(%23e)' width='50' height='25'/%3E%3Crect fill='url(%23f)' width='50' height='25'/%3E%3C/svg%3E");background-attachment:fixed;background-size:cover;
       `
     }
   },
-  js: {
-    app: '/js/app.js'
+  js:{
+    app:'/js/app.js'
   },
-  browserconfig: '/browserconfig.xml',
-  favicon: '/favicon.ico',
-  index: '/index.html',
-  license: '/LICENSE',
-  webmanifest: '/site.webmanifest'
+  browserconfig:'/browserconfig.xml',
+  favicon:'/favicon.ico',
+  index:'/index.html',
+  license:'/LICENSE',
+  webmanifest:'/site.webmanifest'
 };
 
 // --------------------------------------------------------------------------------------------
@@ -1019,7 +1213,7 @@ const Blueprint = {
     },
     history:{
       '@@ACTIONS':{
-        'NAV_TO': (s,a) => ({
+        'NAV_TO':(s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type],
           views: s.views.length == 5 ? [...s.views.slice(1), a.payload] : [...s.views, a.payload]
         }),
@@ -1056,7 +1250,7 @@ const Blueprint = {
         'OPEN_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_ALL_RESEARCH_SUBMENU': (s,a) => ({
+        'TOGGLE_RESEARCH_SUBMENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_SUBMENU': (s,a) => ({
@@ -1071,7 +1265,7 @@ const Blueprint = {
         'TOGGLE_HOME_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
-        'TOGGLE_ALL_RESEARCH_FOOTER_MENU': (s,a) => ({
+        'TOGGLE_RESEARCH_FOOTER_MENU': (s,a) => ({
           actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
         }),
         'TOGGLE_ARTIFICIAL_INTELLIGENCE_RESEARCCH_FOOTER_MENU': (s,a) => ({
@@ -1118,19 +1312,19 @@ const Blueprint = {
     name:'Johnathan Chivington',
     employer:`University of Washington`,
     title:`Fiscal Analyst`,
-    school:`University of Washington`,
+    school:`North Seattle College`,
     major:`Physics`,
     work:{
-      address:['185 Stevens Way Paul Allen Center Seattle, WA 98195-2500', 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10750.402713483165!2d-122.3059001!3d47.6533262!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x12de8b2d1ad8504a!2sPaul%20G.%20Allen%20Center%20for%20Computer%20Science%20%26%20Engineering!5e0!3m2!1sen!2sus!4v1589709435841!5m2!1sen!2sus'],
-      email:'johnchiv@uw.edu',
-      phone:'206.897.1407',
-      web: `https://github.com/chivington`
+      address:['16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus'],
+      email:'john@chivington.io',
+      phone:'303.900.2861',
+      web:'https://chivington.io'
     },
     personal:{
       address:['16th Ave NE Seattle, WA', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2684.205290399708!2d-122.3148723486745!3d47.71926458807909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490116804741175%3A0x9881011855bc85e5!2s12499-12355%2015th%20Ave%20NE%2C%20Seattle%2C%20WA%2098125!5e0!3m2!1sen!2sus!4v1585209347943!5m2!1sen!2sus'],
-      email:'john@chivington.io',
-      phone:'303-900-2861',
-      web:'https://chivington.io'
+      email:'j.chivington@outlook.com',
+      phone:'303.900.2861',
+      web: `https://github.com/chivington`
     },
     social:{
       facebook:'https://facebook.com/jt.chivington',
@@ -1140,56 +1334,60 @@ const Blueprint = {
     },
     bio:{
       work: [
-        `I'm currently a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering, supporting a diverse portfolio of research faculty in Grant & Contract Management.`,
-        `My professional background has been primarily in finance, business development and sales management, and my personal background is in Computer Science with extensive experience in Machine Learning & Artificial Intelligence, Networked Embedded Real-Time Data Acquisition & Controls Systems, and User Interface Architectures.`,
-        `This summer, I'm excited to begin taking courses at UW while transitioning into a part-time role supporting a team working on a large Power Electronics research project in ECE.`,
-        `I'm working towards a Physics/Math double-major undergraduate degree at UW and my future endeavours will build on my CS/EE work, as well as move into the areas of MEMS/NEMS systems, quantum optics & quantum computation, biophysical interactions, and other micro/nano-scale physical systems.`
+        `I'm currently a full-time student, having recently left my previous work as a Fiscal Analyst at the University of Washington in the Department of Electrical & Computer Engineering, supporting a diverse portfolio of research faculty in Grant & Contract Management.`,
+        `My professional background has been in finance, business development and sales management, and my personal research background has been in Machine Learning & Artificial Intelligence, Networked Embedded Real-Time Data Acquisition & Controls, and User Interface Architectures.`,
+        `I'm working towards a Physics-Math double-major undergraduate degree and my future research will move into MEMS/NEMS systems, quantum computation, and other atomic/nano/micro-scale systems.`
       ],
       education: [
-        `For Spring 2020, I'm auditing CSE 546 "Machine Learning" at the University of Washington and working through online courses in Convex Optimization and Computer Architecture in my spare time, as able.`,
-        `For Summer 2020, I'm excited to take my first classes at UW (MATH 125 & PHYS 121), while also serving in a support capacity for a large Power Electronics research project in ECE at UW.`,
-        `My goal is to continue my undergraduate studies at UW while taking on research positions in ECE as able in an effort to both increase my hands-on research experience as well as to be helpful wherever I can within the department.`,
-        `After graduation, I intend to continue into a graduate program at UW and to continue working in various research and teaching capacities for the forseeable future, attempting to bring as much value as I can to the awesome, hardworking teams there.`
+        `This summer I'm taking Propositional Logic and Microeconomics at North Seattle College while working on a few research projects and taking online courses in Convex Optimization and Computer Architecture in my spare time.`,
+        `This fall I start the Engineering Physics series, and continue with Integral Calculus and Macroeconomics. After completing enough credits at North Seattle, I will apply to University of Washington's Comprehensive Physics undergraduate program.`,
+        `After graduation, I'll continue into a graduate program at UW and to continue working in various research and teaching capacities for the forseeable future, attempting to bring as much value as I can to the awesome, hardworking teams there.`
       ],
       personal: [
-        `My "career" goals are also very personal to me, so I tend to spend most of my spare time pursuing those. I've tried to center my career goals around helping people so it's easy to incorporate that work into everyday life without it feeling like work.`,
-        `When we're not terribly busy and/or quarantined by a global pandemic, my girlfriend and I also like to go hiking, kayaking, walking our dog, etc. This summer we're working on greenhouse to grow our own produce year-round and to grow more exotic plants.`
+        `My career goals are also very personal to me, so I tend to spend most of my spare time pursuing those. It's easy to incorporate my interests into everyday life without it feeling like work.`,
+        `I always have a multitude of research projects going simultaneously but my current primary focuses are in 1) a household product that incorporates proprietary computer vision algorithms for Visual-SLAM as well as object detection and tracking for performing certain household tasks; 2) a piezo-electric Atmoic Force Microscope for nano-scale imaging and interactions; 3) an automated Printed Circuit Board etching station; and 4) various Power Electronics controls topologies, such as inverters, converters, motor controllers, etc.`,
+        `When we're not terribly busy and/or quarantined by a global pandemic, my girlfriend and I also like to go hiking, kayaking, walking our dog, and generally enjoying nature. This summer we're working on an automated greenhouse to grow our own produce year-round and to grow exotic house plants.`
       ]
-    }
+    },
+    conversations:[{id:`new123`,msgs:[`Welcome.`]}],
+    notifications:[{msg:`hey`}]
   },
   ui:{
     '@@ACTIONS':{},
     map:{
       flat:{
-        'HOME': [Views.Home,'Home',Assets.imgs.thumbs.ai],
-        'BLOG': [Views.Blog,'Blog',Assets.imgs.thumbs.ai],
-        'CONTACT_ME': [Views.Contact,'Contact Me',Assets.imgs.thumbs.ai],
-        'ABOUT_ME': [Views.About,'About Me',Assets.imgs.thumbs.ai],
-        'ALL_RESEARCH': [Views.All_Research,'All Research',Assets.imgs.thumbs.ai],
-        'ARTIFICIAL_INTELLIGENCE_RESEARCH': [Views.AI_Research,'Artificial Intelligence Research',Assets.imgs.thumbs.ai],
-        'NETWORKING_RESEARCH': [Views.Networking_Research,'Wireless Embedded Research',Assets.imgs.thumbs.iot],
-        'COMPUTER_ARCHITECTURE': [Views.CPU_Achitecture_Research,'Computer Architecture Research',Assets.imgs.thumbs.mcu],
-        'UI_ARCHITECTURES_RESEARCH': [Views.UI_Research,'UI Architectures Research',Assets.imgs.thumbs.ui],
-        'DEFAULT': [Views.Home,'Home',Assets.imgs.thumbs.ai]
+        'HOME':[Views.Home,'Home',Assets.imgs.me.win],
+        'ABOUT':[Views.About,'About Me',Assets.imgs.thumbs.win],
+        'CONTACT':[Views.Contact,'Contact Me',Assets.imgs.thumbs.win],
+        'EXPERIENCE':[Views.Experience,'Experience',Assets.imgs.thumbs.ai],
+        'BLOG':[Views.Blog,'Blog',Assets.imgs.thumbs.blog],
+        'TECHNOLOGY_BLOG':[Views.TechBlog,'Technology Blog',Assets.imgs.thumbs.tech],
+        'ECONOMICS_BLOG':[Views.EconBlog,'Economics Blog',Assets.imgs.thumbs.econ],
+        'HISTORY_BLOG':[Views.HistBlog,'History Blog',Assets.imgs.thumbs.hist],
+        'POLITICS_BLOG':[Views.PoliBlog,'Politics Blog',Assets.imgs.thumbs.poli],
+        'RESEARCH':[Views.Research,'Research',Assets.imgs.thumbs.ai],
+        'AI_RESEARCH':[Views.AI_Research,'Artificial Intelligence Research',Assets.imgs.thumbs.ai],
+        'CPU_EGR_RESEARCH':[Views.CPU_EGR_Research,'Computer Engineering Research',Assets.imgs.thumbs.cpu_egr],
+        'UI_RESEARCH':[Views.UI_Research,'UI Architectures Research',Assets.imgs.thumbs.ui],
+        'MESSAGES':[Views.Messages,'Messages',Assets.imgs.thumbs.ai],
+        'DEFAULT':[Views.Home,'Home',Assets.imgs.thumbs.ai]
       },
       tree: [
         ['HOME','Home'],
-        ['BLOG','Blog'],
-        ['CONTACT_ME','Contact Me'],
-        ['ABOUT_ME','About Me'],
-        ['ALL_RESEARCH','All Research', [
-          ['ARTIFICIAL_INTELLIGENCE_RESEARCH','Artificial Intelligence Research'],
-          ['NETWORKING_RESEARCH','Embedded Research'],
-          ['COMPUTER_ARCHITECTURE','Computer Architecture Research'],
-          ['UI_ARCHITECTURES_RESEARCH','UI Architectures Research']
+        ['ABOUT','About Me'],
+        ['CONTACT','Contact Me'],
+        ['EXPERIENCE','Experience'],
+        ['RESEARCH','Research', [
+          ['AI_RESEARCH','Artificial Intelligence Research'],
+          ['CPU_EGR_RESEARCH','Computer Engineering Research'],
+          ['UI_RESEARCH','UI Architectures Research']
+        ]],
+        ['BLOG','Blog', [
+          ['TECHNOLOGY_BLOG','Technology Blog'],
+          ['ECONOMICS_BLOG','Economics Blog'],
+          ['HISTORY_BLOG','History Blog'],
+          ['POLITICS_BLOG','Politics Blog']
         ]]
-      ],
-      tre: [
-        ['HOME'],
-        ['BLOG'],
-        ['CONTACT_ME'],
-        ['ABOUT_ME'],
-        ['ALL_RESEARCH', [['ARTIFICIAL_INTELLIGENCE_RESEARCH'],['NETWORKING_RESEARCH'],['COMPUTER_ARCHITECTURE'],['UI_ARCHITECTURES_RESEARCH']]]
       ]
     },
     theme:{
@@ -1206,6 +1404,8 @@ const Blueprint = {
         view: `rgba(70,77,97,0.9)`,
         view_bdr: `rgba(70,122,194,0.9)`,
         view_txt: `rgba(255,255,255,1)`,
+        lt_txt: `rgba(255,255,255,1)`,
+        dk_txt: `rgba(25,25,25,1)`,
         well: `rgba(70,87,117,0.9)`,
         panel_lt: `rgba(35,43,59,0.5)`,
         panel: `rgba(35,43,59,0.7)`,
@@ -1231,6 +1431,8 @@ const Blueprint = {
         view: `rgba(255,255,255,1)`,
         view_bdr: `rgba(75,75,75,0.9)`,
         view_txt: `rgba(55,55,75,0.9)`,
+        lt_txt: `rgba(255,255,255,1)`,
+        dk_txt: `rgba(25,25,25,1)`,
         well: `rgba(255,255,255,1)`,
         panel_lt: `rgba(112,140,200,0.3)`,
         panel: `rgba(112,140,188,0.5)`,
@@ -1250,9 +1452,7 @@ const Blueprint = {
     window:{
       width: window.innerWidth,
       height: window.innerHeight,
-      mode: window.innerWidth < 600 ? 'mobile' : (
-        window.innerWidth < 750 ? 'small_tab' : (window.innerWidth < 900 ? 'large_tab' : 'desktop')
-      )
+      mode: window.innerWidth<600?'mb':(window.innerWidth<700?'sm_tab':(window.innerWidth<800?'md_tab':(window.innerWidth<900?'lg_tab':'pc')))
     },
     header:{
       '@@ACTIONS':{
