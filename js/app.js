@@ -494,11 +494,6 @@ const Assets = {
         mstile_150:'/imgs/icons/manifest/mstile-150x150.png',
         safari_pinned_tab:'/imgs/icons/manifest/safari-pinned-tab.svg'
       },
-      network:{
-        no_wifi_1:'/imgs/icons/network/no-wifi-1.svg',
-        no_wifi_2:'/imgs/icons/network/no-wifi-2.svg',
-        wifi:'/imgs/icons/network/wifi.svg'
-      },
       sm:{
         dl_blk:'/imgs/icons/sm/dl-blk.svg',
         dl_wht:'/imgs/icons/sm/dl-wht.svg',
@@ -555,52 +550,8 @@ const Assets = {
 // --------------------------------------------------------------------------------------------
 const Blueprint = {
   app:{
-    about:{
-      '@@ACTIONS':{}
-    },
+    about:{},
     history:{
-      '@@ACTIONS':{
-        'NAV_TO':(s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type],
-          views: s.views.length == 5 ? [...s.views.slice(1), a.payload] : [...s.views, a.payload]
-        }),
-        'NET_STATE_CHANGE': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'NET_STATE_INIT': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'BATTERY_STATE_CHANGE': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'BATTERY_STATE_INIT': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'CHANGE_HEADER_ICON': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'CHANGE_HEADER_TITLE': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'TOGGLE_MENU': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'OPEN_MENU': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'CLOSE_MENU': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'CHANGE_THEME': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'OPEN_MENU': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        }),
-        'RESIZE': (s,a) => ({
-          actions: s.actions.length == 5 ? [...s.actions.slice(1), a.type] : [...s.actions, a.type], views: s.views
-        })
-      },
       actions: ['@@INIT'],
       views: ['@@INIT']
     }
@@ -646,7 +597,6 @@ const Blueprint = {
     }
   },
   ui:{
-    '@@ACTIONS':{},
     map:{
       flat:{
         'HOME':[Views.Home,'Home',Assets.imgs.me.win],
@@ -730,23 +680,11 @@ const Blueprint = {
       mode: window.innerWidth<600?'mb':(window.innerWidth<700?'sm_tab':(window.innerWidth<800?'md_tab':(window.innerWidth<900?'lg_tab':'pc')))
     },
     header:{
-      '@@ACTIONS':{
-        'CHANGE_HEADER_ICON': (s,a) => ({icon: a.payload.icon, title: s.title}),
-        'CHANGE_HEADER_TITLE': (s,a) => ({icon: s.icon, title: a.payload.title})
-      },
       icon: Assets.imgs.icons.manifest.favicon,
       alt: 'chivington.net Icon',
       menu_btn: Assets.imgs.icons.btns.menu
     },
     menu:{
-      '@@ACTIONS':{
-        'UPDATE_MENU_SCROLL': (s,a) => ({current: s.current, previous: s.previous, scrollTop: a.payload}),
-        'NAV_TO': (s,a) => ({current: 'CLOSED', previous: s.current, scrollTop: 0}),
-        'TOGGLE_MENU': (s,a) => ({current: s.current == 'OPEN' ? 'CLOSED' : 'OPEN', previous: s.current, scrollTop: 0}),
-        'OPEN_MENU': (s,a) => ({current: 'OPEN', previous: s.current, scrollTop: 0}),
-        'CLOSE_MENU': (s,a) => ({current: 'CLOSED', previous: s.current, scrollTop: 0}),
-        'TOGGLE_THEME': (s,a) => ({current: 'OPEN', previous: s.current, scrollTop: a.payload})
-      },
       current: 'CLOSED',
       previous: 'CLOSED',
       scrollTop: 0
