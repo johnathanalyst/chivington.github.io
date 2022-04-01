@@ -1,0 +1,59 @@
+{
+  "citations": {
+    "Dark Horse Podcast": "Bret Weinstein with Geer Vanden Bossche"
+  },
+  "general notes": {
+    "immune system created before birth; recognizes your cells/molecules; responds to foreign cells/molecules",
+    "allergy - system responds to non-pathenogenic substances; pollen, peanuts, etc.",
+    "auto immune disorder - system attacks own cells/molecules.",
+    "antibodies": [
+      "y-shaped protein",
+      "attaches to antigens based on electromagnetic charge"
+    ],
+  },
+  "natural immunity": {
+    "innate immunity": {
+      "notes": [
+        "no exposure or vax needed"
+      ],
+      "innate b-cells": [
+        "natural antibodies created by innate-like b-cell; b-cells present at birth",
+        "innate b-cell has no antigen specificity; recognize multiple antigens; not recalled upon re-exposure"
+      ],
+      "innate killer cells": [
+        "natural killer (nk) cells (comparable to t-cells) recognizes a variety of antigens (cancers, etc.)",
+        "no memory; reacts quickly; first line of defense",
+      ]
+    },
+    "acquired immunity": {
+      "notes": [
+        "gained after exposure",
+        "system responds when invaded by forgein bacterium/virus. weak at first when learning new pathogens.",
+        "for new pathogens, b-cells create new antibodies. antibodies that react to pathogen produce variety of offspring.",
+        "offspring that react most with pathogen are produce new, more spcific offspring. creates evolutionary process to learn new pathogen.",
+        "creates set of memory cells that code for the entire/exact genome of the new pathogen.",
+        "don't get the same virus twice",
+      ],
+      "b-cells": [
+        "produces free floating antibodies",
+      ],
+      "t-cells": [
+        "produces 'receptor' antibodies that are bound to the t-cell",
+        "t-killers (cytotoxic) attacks antigens directly",
+        "t-helpers assists/enhances b-cell response; triggers memory cells created by b-cells."
+      ]
+    }
+  },
+  "vaccine immunity": {
+    "mrna": [
+      "lipid nanoparticle (LNP) holds mrna; provides structure with high affinity to many cell types; can attach to/enter many cell types"
+      "mrna vaccines are specific in scope and only produce a limited immunity to a specific antigen sub-unit (spike protein), not the viral genome itself.",
+      "virus evolves to select for domain configurations that cause immune escape.",
+      "due to narrow immune-suppressive evolutionary pressure on spike protein alone, if virus changes spike protein slightly, the same viral genome with enhanced infectivity can spread through the population.",
+      "since specific suboptimal vaccine antibodies exist in circulation, borader innate immunity does not activate.",
+    ],
+    "historical data": [
+      "natural antibodies from SARS-COV-1 are documented to provide a variety of immunity vectors that prevent transmission and evolution."
+    ]
+  }
+}
