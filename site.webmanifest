@@ -1,6 +1,6 @@
 {
-  "name": "mydomain.com",
-  "short_name": "mydomain",
+  "name": "Unity Web App",
+  "short_name": "Unity",
   "description": "My cool new Unity web app",
   "icons": [
         {
