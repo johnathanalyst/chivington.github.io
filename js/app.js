@@ -126,7 +126,7 @@ const Modules = {
     const { icons } = Assets.imgs;
     const { current, previous } = menuState;
     const dark_theme = uiState.themeState.selected == 'dark';
-    const icon_img = dark_theme ? icons.manifest.favicon_wht : icons.manifest.favicon;
+    const icon_img = icons.manifest.favicon;
     const menu_img = dark_theme ? (current == 'OPEN' ? icons.btns.close_wht : icons.btns.menu_wht)  : (current == 'OPEN' ? icons.btns.close_blk : icons.btns.menu_blk);
     const last_action = state.appState.historyState.actions.slice(-1)[0];
     const open_action = !!(previous == 'CLOSED' && current == 'OPEN');
@@ -493,7 +493,6 @@ const Assets = {
 				favicon_16:'/imgs/icons/manifest/favicon-16x16.png',
 				favicon_32:'/imgs/icons/manifest/favicon-32x32.png',
 				favicon:'/imgs/icons/manifest/favicon.ico',
-				favicon_wht:'/imgs/icons/manifest/favicon-wht.png',
 				mstile_150:'/imgs/icons/manifest/mstile-150x150.png',
 				safari_pinned_tab:'/imgs/icons/manifest/safari-pinned-tab.svg'
 			}
