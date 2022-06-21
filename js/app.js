@@ -494,6 +494,7 @@ const Assets = {
 				favicon_32:'/imgs/icons/manifest/favicon-32x32.png',
 				favicon:'/imgs/icons/manifest/favicon.ico',
 				redux:'/imgs/icons/manifest/redux.jpg',
+				redux_no_bg:'/imgs/icons/manifest/redux-no-bg.png',
 				mstile_150:'/imgs/icons/manifest/mstile-150x150.png',
 				safari_pinned_tab:'/imgs/icons/manifest/safari-pinned-tab.svg'
 			}
