@@ -84,7 +84,7 @@ const Unity = {
     root.appendChild(component(store));
   },
   initialize: function(app_root,load_screen_root,blueprint,reducers,middlewares) {
-    const app_title = blueprint.user.name ? blueprint.user.name : 'Unity Application';
+    const app_title = blueprint.app.title ? blueprint.app.title : 'Unity Application';
     document.title = `${app_title} | Home`;
     if (!app_root) Unity.terminate(app_root,`No Application Root supplied...`);
     if (!blueprint) Unity.terminate(app_root,`No Blueprint supplied...`);
@@ -332,7 +332,7 @@ const Views = {
 		const E = Unity.element;
 
 		const st = {
-			view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:90%;`,
+			view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:92%;`,
 			home: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; padding:0; width:100%; text-align:center; ${landing?'animation: app_fade_in 1000ms ease-in-out 1 forwards;':''}`,
 			intro: `display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; margin:${landscape?'13em 1em 2':'7em 1em 2'}em;`,
 			name: `margin:0 auto; color:${theme.lt_txt}; font-size:4em; font-weight:400;`,
@@ -407,7 +407,7 @@ const Views = {
 		const E = Unity.element;
 
 		const st = {
-			view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:90%;`,
+			view:`display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch; min-height:92%;`,
 			contact:`margin:${mode=="pc"?'9em 7em 5':(mode==lg_tab?'7em 5em 5':'5em 1em 3')}em; padding:1em; background-color:${theme.well}; display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;`,
 			title:`margin:0 1em; padding:0 0.5em; border-bottom:1pt solid ${theme.view_bdr}; text-align:center; color:${theme.view_txt};`,
 			intro:`margin:0; padding:0; text-align:center; color:${theme.view_txt};`,
@@ -526,6 +526,7 @@ const Assets = {
 // --------------------------------------------------------------------------------------------
 const Blueprint = {
 	app: {
+		title: 'Unity Web App',
 		about: {},
 		history: {
 			actions: ['@@INIT'],
