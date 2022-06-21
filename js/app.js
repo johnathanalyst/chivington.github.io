@@ -115,7 +115,7 @@ const Modules = {
     const lastAction = state.appState.historyState.actions.slice(-1)[0];
     const st = {router: `position:fixed; top:0; right:0; bottom:0; left:0; overflow:hidden; z-index:5;`};
     const selected = mapState[current]?mapState[current]:mapState['DEFAULT'];
-    const animation = (lastAction=='NAV_TO' && !sameView || animateActions.includes(lastAction)) ? `animation:viewSlideIn 250ms 1 forwards;` : ``;
+    const animation = (lastAction=='NAV_TO' && !sameView) ? `animation:viewSlideIn 250ms 1 forwards;` : ``;
     document.title = `${state.userState.infoState.name} | ${selected.title}`;
     return Unity.element('div', {style: st.router}, [Modules.View(store, selected.view, animation)]);
   },
