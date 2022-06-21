@@ -36,8 +36,6 @@ const Unity = {
       state = rootReducer(state, action);
       if (logActions) logActions('after', state, action);
 
-      if (!!cacheChat.status && action.type !== '@@INIT') cacheChat.updateCache(state.userState.chatState);
-
       if (listenerBypass && listenerBypass(action.type)[0])
         listeners.forEach(listener => listenerBypass(action.type).forEach(bypassName => {
           if (bypassName != listener.name) listener.function(...listener.params);
