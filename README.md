@@ -2,7 +2,7 @@
   <img width='350' src='https://github.com/chivingtonchivington.github.io/blob/main/imgs/thumbs/unity.png' alt='Unity UI Logo'/>
 </p>
 
-# Unity UI
+# chivington.github.io
 ![Build Status](https://img.shields.io/badge/build-Stable-green.svg)
 ![License](https://img.shields.io/badge/license-NONE-lime.svg)
 
