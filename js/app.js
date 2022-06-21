@@ -1,8 +1,8 @@
 // --------------------------------------------------------------------------------------------
 // Author: Johnathan Chivington
-// Project: Personal blog, resume and research portfolio.
-// Description: Personal web application built in my custom UI/UX framework, Unity.
-// Version: 2.0.0 - (production - see README.md)
+// Project: chivington.github.io
+// Description: Demo Unity UI web app.
+// Version: 1.0.0 - (production - see README.md)
 // License: None
 // --------------------------------------------------------------------------------------------
 
