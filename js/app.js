@@ -217,7 +217,7 @@ const Modules = {
     }));
 
     const copy = E('div', {style: st.copy}, [
-      E('img',{src:icons.work.usa,alt:`USA Icon`,style: st.usa},[]),
+      E('img',{src:icons.app.usa,alt:`USA Icon`,style: st.usa},[]),
       E('p',{style: st.usa},['United States']),
       E('p',{style: st.copy_txt},['Copyright © 2021 chivington.net']),
     ]);
@@ -290,7 +290,7 @@ const Modules = {
 
     const copy = E('div', {style: st.copy}, [
       E('div', {style: st.copy_left}, [E('p', {style: st.copy_txt}, [`Copyright © 2021 chivington.net`])]),
-      E('div', {style: st.copy_right}, [E('img', {src:icons.work.usa,alt:`USA Icon`,style: st.usa}, ['United States'])])
+      E('div', {style: st.copy_right}, [E('img', {src:icons.app.usa,alt:`USA Icon`,style: st.usa}, ['United States'])])
     ]);
 
     return E('div', {style: st.footer}, [copy]);
