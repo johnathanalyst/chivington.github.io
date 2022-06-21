@@ -136,6 +136,8 @@ const Modules = {
     const theme = uiState.themeState[uiState.themeState.selected];
     const E = Unity.element;
 
+	console.log('NO BG');
+
     const st = {
       header: `
         position: fixed; top: 0; left: 0; width: 100%; height: ${lg_dev?'5':'4'}em; margin: 0; padding: 0; z-index: 90;
