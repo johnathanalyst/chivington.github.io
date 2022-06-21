@@ -1,5 +1,5 @@
 <p align="center">
-  <img width='350' src='https://github.com/chivingtonchivington.github.io/blob/main/imgs/thumbs/unity.png' alt='Unity UI Logo'/>
+  <img width='350' src='https://github.com/chivingtonchivington.github.io/blob/main/imgs/thumbs/unity.jpg' alt='Unity UI Logo'/>
 </p>
 
 # chivington.github.io
