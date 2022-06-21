@@ -126,7 +126,7 @@ const Modules = {
     const { icons } = Assets.imgs;
     const { current, previous } = menuState;
     const dark_theme = uiState.themeState.selected == 'dark';
-    const icon_img = icons.manifest.redux;
+    const icon_img = icons.manifest.redux_no_bg;
     const menu_img = dark_theme ? (current == 'OPEN' ? icons.btns.close_wht : icons.btns.menu_wht)  : (current == 'OPEN' ? icons.btns.close_blk : icons.btns.menu_blk);
     const last_action = state.appState.historyState.actions.slice(-1)[0];
     const open_action = !!(previous == 'CLOSED' && current == 'OPEN');
